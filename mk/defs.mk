@@ -24,7 +24,7 @@ ifeq ($(UNAME_S),Darwin)
 CXX=		clang++
 endif
 
-# Check taget
+# Check target
 ifeq ($(TARGET), WIN32)
 CXX=		i686-w64-mingw32-g++ -D__on__linux__
 else ifeq ($(TARGET), WIN64)
