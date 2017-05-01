@@ -21,7 +21,7 @@ namespace nope
       ~LogMessage();
 
 #ifdef DEBUG
-      LogMessage(Logger *src, std::string &&filename, size_t line);
+      LogMessage(Logger *src, std::string &&filename, std::size_t line);
 #endif
 
       LogMessage &operator=(LogMessage const &) = default;
@@ -34,7 +34,7 @@ namespace nope
       {
 	Meta();
 	std::string file;
-	size_t      line;
+	std::size_t line;
       };
       Meta meta;
 #endif

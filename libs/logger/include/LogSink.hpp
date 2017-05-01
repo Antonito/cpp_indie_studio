@@ -10,13 +10,18 @@ namespace nope
 {
   namespace log
   {
-    enum class LogLevel : int;
+    enum class LogLevel : std::size_t;
 
     class LogSink
     {
     public:
+      LogSink(LogSink const &) = default;
+      LogSink(LogSink &&) = default;
       ~LogSink() = default;
-      void operator()(LogMessage const &msg, LogLevel) const;
+
+      LogSink &operator=(LogSink const &) = default;
+      LogSink &operator=(LogSink &&) = default;
+      void     operator()(LogMessage const &msg, LogLevel) const;
 
       static LogSink makeOstream(std::ostream &os);
       static LogSink makeFile(std::string const &filename);
