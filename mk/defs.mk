@@ -1,6 +1,7 @@
 # Commands definitions
 RM=		rm -f
 RM_DIR=		rm -rf
+RM_EMPTY_DIR=	rm -d
 ECHO=		printf
 RANLIB=		ar rcs
 CP=		cp
@@ -13,8 +14,8 @@ INSTALL_PATH=	$(ROOT_DIR)/$(INSTALL_DIR)
 UNAME_S:=	$(shell uname -s)
 
 # Compilation and link definitions
-CXX=		clang++
-CPP_VER=	c++1z
+CXX=		g++
+CPP_VER=	c++14
 
 # Debug Infos
 ifeq ($(DEBUG), yes)
