@@ -15,7 +15,7 @@ namespace nope
 {
   namespace log
   {
-    enum class LogLevel : int
+    enum class LogLevel : std::size_t
     {
       LOG_TRACE,
       LOG_DEBUG,
@@ -33,7 +33,7 @@ namespace nope
       void addSink(LogSink const &s);
 
 #ifdef DEBUG
-      inline LogMessage operator()(std::string &&file, size_t line);
+      inline LogMessage operator()(std::string &&file, std::size_t line);
 #endif
 
       template <typename T>
@@ -48,6 +48,7 @@ namespace nope
       void flush(LogMessage const &) const;
 
       static void start();
+      static void stop();
 
       static LogLevel logLevel;
       static const std::chrono::time_point<std::chrono::high_resolution_clock,
@@ -67,16 +68,20 @@ namespace nope
     class EmptyLogger
     {
     public:
-      explicit EmptyLogger(LogLevel = LogLevel::LOG_INFO){};
+      explicit EmptyLogger(LogLevel = LogLevel::LOG_INFO)
+      {
+      }
       ~EmptyLogger() = default;
 
-      inline void addSink(LogSink const &){};
+      inline void addSink(LogSink const &)
+      {
+      }
 
 #ifdef DEBUG
-      inline EmptyLogger &operator()(std::string &&, size_t)
+      inline EmptyLogger &operator()(std::string &&, std::size_t)
       {
 	return *this;
-      };
+      }
 #endif
 
       template <typename T>
@@ -87,29 +92,29 @@ namespace nope
     };
 
 #if defined(NOPE_NO_LOG)
-    extern EmptyLogger Trace;
-    extern EmptyLogger Debug;
-    extern EmptyLogger Info;
-    extern EmptyLogger Warning;
-    extern EmptyLogger Error;
+    extern EmptyLogger *Trace;
+    extern EmptyLogger *Debug;
+    extern EmptyLogger *Info;
+    extern EmptyLogger *Warning;
+    extern EmptyLogger *Error;
 #else
-    extern Logger Trace;
+    extern Logger *Trace;
 #ifdef DEBUG
-    extern Logger Debug;
+    extern Logger *Debug;
 #else
-    extern EmptyLogger Debug;
+    extern EmptyLogger *Debug;
 #endif
-    extern Logger Info;
-    extern Logger Warning;
-    extern Logger Error;
+    extern Logger *Info;
+    extern Logger *Warning;
+    extern Logger *Error;
 #endif
   }
 }
 
 #ifdef DEBUG
-#define Log(logger) logger(__FILE__, __LINE__)
+#define Log(logger) (*logger)(__FILE__, __LINE__)
 #else
-#define Log(logger) logger
+#define Log(logger) (*logger)
 #endif
 
 #endif // !LOGGER_HPP_
