@@ -26,7 +26,7 @@ namespace crypto
       NB_ALGORITHM
     };
 
-    AHash(AHash::Algorithm algo)
+    explicit AHash(AHash::Algorithm algo)
         : m_algo(algo), m_hashLength(AHash::getBlockSize(algo)), m_hashStr()
     {
     }
