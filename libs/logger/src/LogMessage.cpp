@@ -22,7 +22,8 @@ namespace nope
     }
 
 #ifdef DEBUG
-    LogMessage::LogMessage(Logger *src, std::string &&filename, size_t line)
+    LogMessage::LogMessage(Logger *src, std::string &&filename,
+                           std::size_t line)
         : LogMessage(src)
     {
       meta.file = std::move(filename);
