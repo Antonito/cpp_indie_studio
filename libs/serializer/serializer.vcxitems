@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{9c3ae512-84fc-44e6-8be3-115e401d0e3c}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)include\apply.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)include\binary.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)include\byte_order.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)include\has_metadata.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)include\json.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)include\Metadata.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)include\to_binary.hpp" />
+  </ItemGroup>
+</Project>
