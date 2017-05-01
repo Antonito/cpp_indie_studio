@@ -3,9 +3,10 @@
 namespace nope::log
 {
   LogMessage::LogMessage(Logger *src)
-    : time(std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now()) -
-      Logger::startTime),
-    m_src(src)
+      : time(std::chrono::time_point_cast<std::chrono::milliseconds>(
+                 std::chrono::high_resolution_clock::now()) -
+             Logger::startTime),
+        m_buf(), m_src(src)
   {
   }
 
@@ -16,7 +17,7 @@ namespace nope::log
 
 #ifdef DEBUG
   LogMessage::LogMessage(Logger *src, std::string &&filename, size_t line)
-    : LogMessage(src)
+      : LogMessage(src)
   {
     meta.file = std::move(filename);
     meta.line = line;

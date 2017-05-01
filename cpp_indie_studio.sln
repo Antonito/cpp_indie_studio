@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "logger", "libs\logger\logge
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "serializer", "libs\serializer\serializer.vcxitems", "{9C3AE512-84FC-44E6-8BE3-115E401D0E3C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "memory", "libs\memory\MemoryAllocator.vcxproj", "{7EC61976-9DC7-44DB-AF14-67CE0EA68B65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -37,6 +39,14 @@ Global
 		{241420DC-D873-413C-AB83-B483D362558C}.Release|x64.Build.0 = Release|x64
 		{241420DC-D873-413C-AB83-B483D362558C}.Release|x86.ActiveCfg = Release|Win32
 		{241420DC-D873-413C-AB83-B483D362558C}.Release|x86.Build.0 = Release|Win32
+		{7EC61976-9DC7-44DB-AF14-67CE0EA68B65}.Debug|x64.ActiveCfg = Debug|x64
+		{7EC61976-9DC7-44DB-AF14-67CE0EA68B65}.Debug|x64.Build.0 = Debug|x64
+		{7EC61976-9DC7-44DB-AF14-67CE0EA68B65}.Debug|x86.ActiveCfg = Debug|Win32
+		{7EC61976-9DC7-44DB-AF14-67CE0EA68B65}.Debug|x86.Build.0 = Debug|Win32
+		{7EC61976-9DC7-44DB-AF14-67CE0EA68B65}.Release|x64.ActiveCfg = Release|x64
+		{7EC61976-9DC7-44DB-AF14-67CE0EA68B65}.Release|x64.Build.0 = Release|x64
+		{7EC61976-9DC7-44DB-AF14-67CE0EA68B65}.Release|x86.ActiveCfg = Release|Win32
+		{7EC61976-9DC7-44DB-AF14-67CE0EA68B65}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,5 +55,6 @@ Global
 		{A8F21223-719D-4971-A303-6FFB7C3C44EA} = {7150A050-6153-4874-BB7C-86B57B9B5C89}
 		{241420DC-D873-413C-AB83-B483D362558C} = {7150A050-6153-4874-BB7C-86B57B9B5C89}
 		{9C3AE512-84FC-44E6-8BE3-115E401D0E3C} = {7150A050-6153-4874-BB7C-86B57B9B5C89}
+		{7EC61976-9DC7-44DB-AF14-67CE0EA68B65} = {7150A050-6153-4874-BB7C-86B57B9B5C89}
 	EndGlobalSection
 EndGlobal

@@ -15,17 +15,17 @@ namespace nope::log
 {
   enum class LogLevel : int
   {
-    TRACE,
-    DBG,
-    INFO,
-    WARNING,
-    ERROR
+    LOG_TRACE,
+    LOG_DEBUG,
+    LOG_INFO,
+    LOG_WARNING,
+    LOG_ERROR
   };
 
   class Logger
   {
   public:
-    Logger(LogLevel level = LogLevel::INFO);
+    Logger(LogLevel level = LogLevel::LOG_INFO);
     ~Logger() = default;
 
     void addSink(LogSink const &s);

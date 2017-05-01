@@ -1,3 +1,4 @@
+#include "memory_stdafx.hpp"
 #include <cstdint>
 #include "MemoryManager.hpp"
 

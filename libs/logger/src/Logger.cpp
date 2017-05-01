@@ -3,33 +3,36 @@
 namespace nope::log
 {
   // Do not touch
-  std::chrono::time_point<std::chrono::high_resolution_clock, std::chrono::milliseconds> const Logger::startTime =
-    std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now());
+  std::chrono::time_point<std::chrono::high_resolution_clock,
+                          std::chrono::milliseconds> const Logger::startTime =
+      std::chrono::time_point_cast<std::chrono::milliseconds>(
+          std::chrono::high_resolution_clock::now());
 
-  LogLevel Logger::logLevel = LogLevel::INFO;
+  LogLevel Logger::logLevel = LogLevel::LOG_INFO;
 
 #if defined(NOPE_NO_LOG)
-  EmptyLogger Trace(LogLevel::TRACE);
-  EmptyLogger Debug(LogLevel::DBG);
-  EmptyLogger Info(LogLevel::INFO);
-  EmptyLogger Warning(LogLevel::WARNING);
-  EmptyLogger Error(LogLevel::ERROR);
+  EmptyLogger Trace(LogLevel::LOG_TRACE);
+  EmptyLogger Debug(LogLevel::LOG_DEBUG);
+  EmptyLogger Info(LogLevel::LOG_INFO);
+  EmptyLogger Warning(LogLevel::LOG_WARNING);
+  EmptyLogger Error(LogLevel::LOG_ERROR);
 #else
-  Logger Trace(LogLevel::TRACE);
+  Logger Trace(LogLevel::LOG_TRACE);
 #ifdef DEBUG
-  Logger Debug(LogLevel::DBG);
+  Logger Debug(LogLevel::LOG_DEBUG);
 #else
-  EmptyLogger Debug(LogLevel::DBG);
+  EmptyLogger Debug(LogLevel::LOG_DEBUG);
 #endif
-  Logger Info(LogLevel::INFO);
-  Logger Warning(LogLevel::WARNING);
-  Logger Error(LogLevel::ERROR);
+  Logger Info(LogLevel::LOG_INFO);
+  Logger Warning(LogLevel::LOG_WARNING);
+  Logger Error(LogLevel::LOG_ERROR);
 #endif
 
-
-  Logger::Logger(LogLevel level) : m_level(level)
+  Logger::Logger(LogLevel level)
+      : m_sinks(), m_level(level)
 #if defined(NOPE_LOG_MULTITHREAD)
-    , m_mutex()
+        ,
+        m_mutex()
 #endif
   {
   }
@@ -58,12 +61,12 @@ namespace nope::log
     m_mutex.lock();
 #endif
     if (m_level >= logLevel)
-    {
-      for (auto &s : m_sinks)
       {
-        s(msg, m_level);
+	for (auto &s : m_sinks)
+	  {
+	    s(msg, m_level);
+	  }
       }
-    }
 #if defined(NOPE_LOG_MULTITHREAD)
     m_mutex.unlock();
 #endif
@@ -88,27 +91,27 @@ namespace nope::log
   std::ostream &operator<<(std::ostream &os, LogLevel level)
   {
     switch (level)
-    {
-    case LogLevel::TRACE:
-      os << "{{TRACE}}";
-      break;
+      {
+      case LogLevel::LOG_TRACE:
+	os << "{{TRACE}}";
+	break;
 #ifdef DEBUG
-    case LogLevel::DBG:
-      os << "[DEBUG]\t";
-      break;
+      case LogLevel::LOG_DEBUG:
+	os << "[DEBUG]\t";
+	break;
 #endif
-    case LogLevel::INFO:
-      os << "[INFO]\t";
-      break;
-    case LogLevel::WARNING:
-      os << "**WARNING**";
-      break;
-    case LogLevel::ERROR:
-      os << "!!ERROR!!";
-      break;
-    default:
-      os << "? Unknown ?";
-    }
+      case LogLevel::LOG_INFO:
+	os << "[INFO]\t";
+	break;
+      case LogLevel::LOG_WARNING:
+	os << "**WARNING**";
+	break;
+      case LogLevel::LOG_ERROR:
+	os << "!!ERROR!!";
+	break;
+      default:
+	os << "? Unknown ?";
+      }
     os << "\t";
     return os;
   }

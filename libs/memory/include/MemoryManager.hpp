@@ -12,7 +12,7 @@ public:
   MemoryManager(MemoryManager const &) = delete;
   virtual ~MemoryManager();
   virtual void *allocate(std::size_t);
-  virtual void free(void *data);
+  virtual void  free(void *data);
 
 private:
   struct MemoryBlock
@@ -35,7 +35,7 @@ class MemoryManagerThreadSafe : public MemoryManager
   MemoryManagerThreadSafe(MemoryManagerThreadSafe const &) = delete;
   virtual ~MemoryManagerThreadSafe();
   virtual void *allocate(std::size_t);
-  virtual void free(void *data);
+  virtual void  free(void *data);
 
 private:
   std::mutex m_mut;
