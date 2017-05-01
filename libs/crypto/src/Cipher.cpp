@@ -22,6 +22,7 @@ namespace crypto
       case Algorithm::NB_ALGORITHM:
 	throw std::runtime_error("Algorithm not supported");
       }
+    return ("");
   }
 
   std::string Cipher::decode(std::uint8_t const *data,
@@ -34,6 +35,7 @@ namespace crypto
       case Algorithm::NB_ALGORITHM:
 	throw std::runtime_error("Algorithm not supported");
       }
+    return ("");
   }
 
   // Base64 Implementation

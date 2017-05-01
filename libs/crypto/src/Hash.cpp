@@ -6,7 +6,7 @@
 #pragma clang diagnostic ignored "-Wpadded"
 #endif
 
-#if defined(_WIN32)
+#if defined(_WIN32) && !defined(__on__linux__)
 #include <Winsock2.h>
 #endif
 

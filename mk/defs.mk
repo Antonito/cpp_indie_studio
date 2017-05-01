@@ -13,6 +13,8 @@ INSTALL_DIR=	bin/
 INSTALL_PATH=	$(ROOT_DIR)/$(INSTALL_DIR)
 UNAME_S:=	$(shell uname -s)
 
+TARGET=		native
+
 # Compilation and link definitions
 CXX=		g++
 CPP_VER=	c++14
@@ -20,6 +22,13 @@ CPP_VER=	c++14
 # Simple OSX check
 ifeq ($(UNAME_S),Darwin)
 CXX=		clang++
+endif
+
+# Check taget
+ifeq ($(TARGET), WIN32)
+CXX=		i686-w64-mingw32-g++ -D__on__linux__
+else ifeq ($(TARGET), WIN64)
+CXX=		x86_64-w64-mingw32-g++ -D__on__linux__
 endif
 
 # Debug Infos
