@@ -1,3 +1,4 @@
+#include "crypto_stdafx.hpp"
 #include <sstream>
 #include <iomanip>
 #include "AHash.hpp"

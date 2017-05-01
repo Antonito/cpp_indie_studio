@@ -1,3 +1,5 @@
+#include "crypto_stdafx.hpp"
+
 #if defined(_WIN32)
 #include <Winsock2.h>
 #endif
