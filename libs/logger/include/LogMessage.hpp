@@ -17,7 +17,7 @@ namespace nope
       LogMessage() = delete;
       LogMessage(LogMessage const &) = default;
       LogMessage(LogMessage &&) = default;
-      LogMessage(Logger *src);
+      explicit LogMessage(Logger *src);
       ~LogMessage();
 
 #ifdef DEBUG
@@ -27,11 +27,12 @@ namespace nope
       LogMessage &operator=(LogMessage const &) = default;
       LogMessage &operator=(LogMessage &&) = default;
 
-      std::string getMessage() const;
+      std::string                                    getMessage() const;
       std::chrono::duration<long, std::milli> const &getTime() const;
 #ifdef DEBUG
       struct Meta
       {
+	Meta();
 	std::string file;
 	size_t      line;
       };

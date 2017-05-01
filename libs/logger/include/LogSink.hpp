@@ -22,7 +22,8 @@ namespace nope
       static LogSink makeFile(std::string const &filename);
 
     private:
-      LogSink(std::function<void(LogMessage const &, LogLevel)> func);
+      explicit LogSink(
+          std::function<void(LogMessage const &, LogLevel)> const &func);
       // operator LogSink(std::function<void(LogMessage const &)>);
 
       std::function<void(LogMessage const &, LogLevel)> m_func;

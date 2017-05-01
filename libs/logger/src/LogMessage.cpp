@@ -5,7 +5,11 @@ namespace nope
   namespace log
   {
     LogMessage::LogMessage(Logger *src)
-        : time(std::chrono::time_point_cast<std::chrono::milliseconds>(
+        :
+#ifdef DEBUG
+          meta(),
+#endif
+          time(std::chrono::time_point_cast<std::chrono::milliseconds>(
                    std::chrono::high_resolution_clock::now()) -
                Logger::startTime),
           m_buf(), m_src(src)
@@ -38,6 +42,10 @@ namespace nope
     }
 
 #ifdef DEBUG
+    LogMessage::Meta::Meta() : file(), line(0)
+    {
+    }
+
     std::ostream &operator<<(std::ostream &os, LogMessage::Meta const &meta)
     {
       os << meta.file << ":" << meta.line;
