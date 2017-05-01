@@ -5,7 +5,7 @@ MK_COMMON_DIR=	./../../mk/
 # Definitions for Makefile
 NAME=		$(ROOT_DIR)/build/libindie_crypto.a
 
-LOCAL_COMP_FLAGS=
+LOCAL_COMP_FLAGS=	-O2
 
 LOCAL_LINK_FLAGS=
 

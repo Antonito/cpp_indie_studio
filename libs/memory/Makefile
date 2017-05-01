@@ -5,7 +5,7 @@ MK_COMMON_DIR=	./../../mk/
 # Definitions for Makefile
 NAME=		$(ROOT_DIR)/build/libindie_memory.a
 
-LOCAL_COMP_FLAGS=
+LOCAL_COMP_FLAGS=	-O2 -fno-exceptions
 
 LOCAL_LINK_FLAGS=
 

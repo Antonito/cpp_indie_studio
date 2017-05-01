@@ -3,21 +3,24 @@
 
 #include "MemoryManager.hpp"
 
-extern MemoryManager gMemoryManager;
-
-class AllocableObject
+namespace memory
 {
-  // TODO: Singleton
-public:
-  inline void *operator new(std::size_t size)
-  {
-    return (gMemoryManager.allocate(size));
-  }
+  extern MemoryManager gMemoryManager;
 
-  inline void operator delete(void *ptr)
+  class AllocableObject
   {
-    gMemoryManager.free(ptr);
-  }
-};
+    // TODO: Singleton
+  public:
+    inline void *operator new(std::size_t size)
+    {
+      return (gMemoryManager.allocate(size));
+    }
+
+    inline void operator delete(void *ptr)
+    {
+      gMemoryManager.free(ptr);
+    }
+  };
+}
 
 #endif // !ALLOCABLE_OBJECT_HPP_

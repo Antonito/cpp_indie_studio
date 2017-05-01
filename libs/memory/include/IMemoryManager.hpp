@@ -3,12 +3,15 @@
 
 #include <cstddef>
 
-class IMemoryManager
+namespace memory
 {
-public:
-  virtual ~IMemoryManager(){};
-  virtual void *allocate(std::size_t) = 0;
-  virtual void  free(void *) = 0;
-};
+  class IMemoryManager
+  {
+  public:
+    virtual ~IMemoryManager(){};
+    virtual void *allocate(std::size_t) = 0;
+    virtual void  free(void *) = 0;
+  };
+}
 
 #endif // !IMEMORY_MANAGER_HPP_

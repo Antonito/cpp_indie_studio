@@ -4,41 +4,45 @@
 #include <mutex>
 #include "IMemoryManager.hpp"
 
-class MemoryManager : public IMemoryManager
+namespace memory
 {
-public:
-  explicit MemoryManager(std::size_t blockSize, std::size_t poolSize);
-  MemoryManager &operator=(MemoryManager const &) = delete;
-  MemoryManager(MemoryManager const &) = delete;
-  virtual ~MemoryManager();
-  virtual void *allocate(std::size_t);
-  virtual void  free(void *data);
-
-private:
-  struct MemoryBlock
+  class MemoryManager : public IMemoryManager
   {
-    MemoryBlock *next;
+  public:
+    explicit MemoryManager(std::size_t blockSize, std::size_t poolSize);
+    MemoryManager &operator=(MemoryManager const &) = delete;
+    MemoryManager(MemoryManager const &) = delete;
+    virtual ~MemoryManager();
+    virtual void *allocate(std::size_t);
+    virtual void free(void *data);
+
+  private:
+    struct MemoryBlock
+    {
+      MemoryBlock *next;
+    };
+
+    void expandPoolSize();
+
+    std::size_t  m_blockSize;
+    std::size_t  m_poolSize;
+    MemoryBlock *m_head;
   };
 
-  void expandPoolSize();
+  class MemoryManagerThreadSafe : public MemoryManager
+  {
+    explicit MemoryManagerThreadSafe(std::size_t blockSize,
+                                     std::size_t poolSize);
+    MemoryManagerThreadSafe &
+        operator=(MemoryManagerThreadSafe const &) = delete;
+    MemoryManagerThreadSafe(MemoryManagerThreadSafe const &) = delete;
+    virtual ~MemoryManagerThreadSafe();
+    virtual void *allocate(std::size_t);
+    virtual void free(void *data);
 
-  std::size_t  m_blockSize;
-  std::size_t  m_poolSize;
-  MemoryBlock *m_head;
-};
-
-class MemoryManagerThreadSafe : public MemoryManager
-{
-  explicit MemoryManagerThreadSafe(std::size_t blockSize,
-                                   std::size_t poolSize);
-  MemoryManagerThreadSafe &operator=(MemoryManagerThreadSafe const &) = delete;
-  MemoryManagerThreadSafe(MemoryManagerThreadSafe const &) = delete;
-  virtual ~MemoryManagerThreadSafe();
-  virtual void *allocate(std::size_t);
-  virtual void  free(void *data);
-
-private:
-  std::mutex m_mut;
-};
+  private:
+    std::mutex m_mut;
+  };
+}
 
 #endif // !MEMORY_MANAGER_HPP_

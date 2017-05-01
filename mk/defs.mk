@@ -17,26 +17,39 @@ UNAME_S:=	$(shell uname -s)
 CXX=		g++
 CPP_VER=	c++14
 
-# Debug Infos
-ifeq ($(DEBUG), yes)
-CXXFLAGS=	-g -DDEBUG $(LOCAL_DEBUG_FLAGS)
-LDFLAGS=	-g
-else
-CXXFLAGS=	-DNDEBUG
-LDFLAGS=
+# Simple OSX check
+ifeq ($(UNAME_S),Darwin)
+CXX=		clang++
 endif
 
-CXXFLAGS+=	$(addprefix -I, $(INC_DIR))	\
+# Debug Infos
+ifeq ($(DEBUG), yes)
+CXXFLAGS=	-g -DDEBUG -O0 $(LOCAL_DEBUG_FLAGS)
+LDFLAGS=	-g -rdynamic -fsanitize=undefined -fsanitize=address
+else
+CXXFLAGS=	-DNDEBUG -fomit-frame-pointer -march=native
+LDFLAGS=	-s -Wl,-O1
+endif
+
+CXXFLAGS+=	-std=$(CPP_VER) -W -Wall -Wextra -Weffc++  -Wcomment 		\
+		-Wmain -Wpointer-arith -Wreturn-type -Wstrict-aliasing 		\
+		-Wtrigraphs -Wuninitialized -Wunknown-pragmas 			\
+		-Wcomment -Wconversion -Wcast-align 				\
+		-pedantic -pipe -fstack-protector -Wformat-nonliteral		\
+		-Wnon-virtual-dtor -Wreorder -Wenum-compare			\
+		-Winvalid-pch -Woverloaded-virtual -Wabi			\
+		$(addprefix -I, $(INC_DIR))					\
 		$(LOCAL_COMP_FLAGS)
 
-LDFLAGS+=	-lstdc++			\
+LDFLAGS+=	-fuse-ld=gold -Wl,--fatal-warnings -lstdc++			\
 		$(LOCAL_LINK_FLAGS)
 
 ifeq ($(CXX),clang++)
-CXXFLAGS+=	-std=$(CPP_VER) -W -Wall -Wextra -Weffc++
+CXXFLAGS+=	-Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic 	\
+		-Wno-c++11-compat
 LDFLAGS+=
 else ifeq ($(CXX),g++)
-CXXFLAGS+=	-std=$(CPP_VER) -W -Wall -Wextra -Weffc++
+CXXFLAGS+=	-Wlogical-op -Wstrict-null-sentinel
 LDFLAGS+=
 else
 CXXFLAGS+=
