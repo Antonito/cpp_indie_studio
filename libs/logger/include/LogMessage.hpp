@@ -6,55 +6,57 @@
 #include <ostream>
 #include <sstream>
 
-namespace nope::log
+namespace nope
 {
-  class Logger;
-
-  struct LogMessage
+  namespace log
   {
-    LogMessage() = delete;
-    LogMessage(LogMessage const &) = default;
-    LogMessage(LogMessage &&) = default;
-    LogMessage(Logger *src);
-    ~LogMessage();
+    class Logger;
+
+    struct LogMessage
+    {
+      LogMessage() = delete;
+      LogMessage(LogMessage const &) = default;
+      LogMessage(LogMessage &&) = default;
+      LogMessage(Logger *src);
+      ~LogMessage();
 
 #ifdef DEBUG
-    LogMessage(Logger *src, std::string &&filename, size_t line);
+      LogMessage(Logger *src, std::string &&filename, size_t line);
 #endif
 
-    LogMessage &operator=(LogMessage const &) = default;
-    LogMessage &operator=(LogMessage &&) = default;
+      LogMessage &operator=(LogMessage const &) = default;
+      LogMessage &operator=(LogMessage &&) = default;
 
-    std::string getMessage() const;
-    std::chrono::duration<long, std::milli> const &getTime() const;
+      std::string                                    getMessage() const;
+      std::chrono::duration<long, std::milli> const &getTime() const;
 #ifdef DEBUG
-    struct Meta
-    {
-      std::string file;
-      size_t      line;
+      struct Meta
+      {
+	std::string file;
+	size_t      line;
+      };
+      Meta meta;
+#endif
+
+      template <typename T>
+      LogMessage &operator<<(T const &e)
+      {
+	m_buf << e;
+	return *this;
+      }
+
+      LogMessage &operator<<(std::ostream &(*fn)(std::ostream &os));
+
+      const std::chrono::milliseconds time;
+
+    private:
+      std::stringstream m_buf;
+      Logger *          m_src;
     };
-    Meta meta;
-#endif
-
-    template <typename T>
-    LogMessage &operator<<(T const &e)
-    {
-      m_buf << e;
-      return *this;
-    }
-
-    LogMessage &operator<<(std::ostream &(*fn)(std::ostream &os));
-
-    const std::chrono::milliseconds time;
-
-  private:
-    std::stringstream m_buf;
-    Logger *          m_src;
-  };
 
 #ifdef DEBUG
-  std::ostream &operator<<(std::ostream &os, LogMessage::Meta const &meta);
+    std::ostream &operator<<(std::ostream &os, LogMessage::Meta const &meta);
 #endif
+  }
 }
-
 #endif // !LOGMESSAGE_HPP_

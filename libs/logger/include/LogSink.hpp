@@ -6,25 +6,28 @@
 #include <functional>
 #include "LogMessage.hpp"
 
-namespace nope::log
+namespace nope
 {
-  enum class LogLevel : int;
-
-  class LogSink
+  namespace log
   {
-  public:
-    ~LogSink() = default;
-    void operator()(LogMessage const &msg, LogLevel) const;
+    enum class LogLevel : int;
 
-    static LogSink makeOstream(std::ostream &os);
-    static LogSink makeFile(std::string const &filename);
+    class LogSink
+    {
+    public:
+      ~LogSink() = default;
+      void operator()(LogMessage const &msg, LogLevel) const;
 
-  private:
-    LogSink(std::function<void(LogMessage const &, LogLevel)> func);
-    // operator LogSink(std::function<void(LogMessage const &)>);
+      static LogSink makeOstream(std::ostream &os);
+      static LogSink makeFile(std::string const &filename);
 
-    std::function<void(LogMessage const &, LogLevel)> m_func;
-  };
+    private:
+      LogSink(std::function<void(LogMessage const &, LogLevel)> func);
+      // operator LogSink(std::function<void(LogMessage const &)>);
+
+      std::function<void(LogMessage const &, LogLevel)> m_func;
+    };
+  }
 }
 
 #endif // !LOGSINK_HPP_
