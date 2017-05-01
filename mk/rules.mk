@@ -52,6 +52,7 @@ else
 endif
 
 clean:
+		@$(RM) $(OBJ)
 		@$(RM_DIR) $(OBJ_DIR)
 		@$(ECHO) "$(WHITE)[$(YELLOW)RM$(WHITE)] Removed OBJs files and directory\n$(CLEAR)"
 		@$(RM_DIR_IF_EMPTY) $(MAIN_OBJ_DIR)
