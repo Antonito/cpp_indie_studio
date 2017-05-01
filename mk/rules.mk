@@ -54,7 +54,7 @@ endif
 clean:
 		@$(RM) $(OBJ)
 		@$(RM_DIR) $(OBJ_DIR)
-		@find $(MAIN_OBJ_DIR) -maxdepth 0 -empty -exec $(RM_DIR) $(MAIN_OBJ_DIR) {} \;
+		@$(RM_EMPTY_DIR) $(MAIN_OBJ_DIR) &> /dev/null || $(ECHO) ""
 		@$(ECHO) "$(WHITE)[$(YELLOW)RM$(WHITE)] Removed OBJs files and directory\n$(CLEAR)"
 
 
