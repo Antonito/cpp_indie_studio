@@ -19,8 +19,7 @@ namespace crypto
       {
       case Algorithm::BASE64:
 	return (_base64Encode(data, len));
-	break;
-      default:
+      case Algorithm::NB_ALGORITHM:
 	throw std::runtime_error("Algorithm not supported");
       }
   }
@@ -32,8 +31,7 @@ namespace crypto
       {
       case Algorithm::BASE64:
 	return (_base64Decode(data, len));
-	break;
-      default:
+      case Algorithm::NB_ALGORITHM:
 	throw std::runtime_error("Algorithm not supported");
       }
   }
@@ -45,8 +43,8 @@ namespace crypto
   std::string Cipher::_base64Encode(std::uint8_t const *data,
                                     std::size_t const   len) const
   {
-    std::string                 ret;
-    std::size_t                 i = 0;
+    std::string ret;
+    std::size_t i = 0;
     std::array<std::uint8_t, 3> ref3;
 
     // Fill string
@@ -103,8 +101,8 @@ namespace crypto
         [](std::uint8_t const c) {
           return ((std::isalnum(c) || (c == '+') || (c == '/')));
         };
-    std::string                 ret;
-    std::size_t                 i = 0;
+    std::string ret;
+    std::size_t i = 0;
     std::array<std::uint8_t, 4> ref4;
 
     // Decode

@@ -7,6 +7,12 @@
 #include <string>
 #include "AHash.hpp"
 
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 namespace crypto
 {
   // Hash utility
@@ -40,41 +46,50 @@ namespace crypto
     struct md4Context
     {
       std::uint8_t  data[md4BlockSize * 4];
-      std::uint32_t count[2];
       std::uint32_t state[4];
+      std::uint32_t count[2];
     };
 
     struct md5Context
     {
       std::uint8_t  data[md5BlockSize * 4];
-      std::uint32_t datalen;
       std::uint64_t bitlen;
       std::uint32_t state[4];
+      std::uint32_t datalen;
+
+    private:
+      std::array<std::uint8_t, 4> __padding;
     };
 
     struct sha1Context
     {
       std::uint8_t  data[64];
-      std::uint32_t datalen;
       std::uint64_t bitlen;
       std::uint32_t state[5];
       std::uint32_t k[4];
+      std::uint32_t datalen;
+
+    private:
+      std::array<std::uint8_t, 8> __padding;
     };
 
     struct sha256Context
     {
       std::uint8_t  data[64];
-      std::uint32_t datalen;
       std::uint64_t bitlen;
       std::uint32_t state[8];
+      std::uint32_t datalen;
+
+    private:
+      std::array<std::uint8_t, 4> __padding;
     };
 
     struct sha512Context
     {
       std::uint8_t  data[128];
-      std::uint32_t datalen;
-      std::uint64_t bitlen;
       std::uint64_t state[8];
+      std::uint64_t bitlen;
+      std::uint32_t datalen;
     };
 
     // Specific methods
@@ -90,5 +105,9 @@ namespace crypto
     std::array<std::uint8_t, _blockSize[A]> m_hash;
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !HASH_HPP_

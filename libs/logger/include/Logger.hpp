@@ -67,10 +67,14 @@ namespace nope
     class EmptyLogger
     {
     public:
-      EmptyLogger(LogLevel){};
+      EmptyLogger(LogLevel)
+      {
+      }
       ~EmptyLogger() = default;
 
-      inline void addSink(LogSink const &){};
+      inline void addSink(LogSink const &)
+      {
+      }
 
 #ifdef DEBUG
       inline EmptyLogger &operator()(std::string &&, size_t)

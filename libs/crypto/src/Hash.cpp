@@ -1,5 +1,11 @@
 #include "crypto_stdafx.hpp"
 
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 #if defined(_WIN32)
 #include <Winsock2.h>
 #endif
@@ -55,7 +61,11 @@ namespace crypto
       case Hash::SHA512:
 	ret = computeSHA512(data, len);
 	break;
-      default:
+      case Hash::MD6_128:
+      case Hash::MD6_256:
+      case Hash::MD6_512:
+      case Hash::SHA384:
+      case Hash::NB_ALGORITHM:
 	throw std::runtime_error("Algorithm not implemented.");
       }
     if (ret == true)
@@ -305,8 +315,8 @@ namespace crypto
   {
     md4Context ctx = {};
     std::function<void(std::uint8_t *, std::uint32_t *, std::int32_t)> encode =
-        [&](std::uint8_t *out, uint32_t *in, std::int32_t len) {
-          for (std::int32_t i = 0, j = 0; j < len; ++i, j += 4)
+        [&](std::uint8_t *out, uint32_t *in, std::int32_t _len) {
+          for (std::int32_t i = 0, j = 0; j < _len; ++i, j += 4)
 	    {
 	      out[j] = static_cast<std::uint8_t>((in[i] & 0xff));
 	      out[j + 1] = static_cast<std::uint8_t>(((in[i] >> 8) & 0xff));
@@ -720,7 +730,6 @@ namespace crypto
   }
 
 // SHA224 - SHA256 implementation
-#define ROTLEFT(a, b) (((a) << (b)) | ((a) >> (32 - (b))))
 #define ROTRIGHT(a, b) (((a) >> (b)) | ((a) << (32 - (b))))
 #define CH(x, y, z) (((x) & (y)) ^ (~(x) & (z)))
 #define MAJ(x, y, z) (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))
@@ -989,15 +998,17 @@ namespace crypto
       0x431d67c49c100d4c, 0x4cc5d4becb3e42b6, 0x597f299cfc657e2a,
       0x5fcb6fab3ad6faec, 0x6c44198c4a475817};
 
-#define W(t) m[(t)&0x0F]
-#define ROTLEFT(a, b) (((a) << (b)) | ((a) >> (64 - (b))))
-#define ROTRIGHT(a, b) (((a) >> (b)) | ((a) << (64 - (b))))
-#define CH(x, y, z) (((x) & (y)) | (~(x) & (z)))
-#define MAJ(x, y, z) (((x) & (y)) | ((x) & (z)) | ((y) & (z)))
-#define SIGMA1(x) (ROTRIGHT(x, 28) ^ ROTRIGHT(x, 34) ^ ROTRIGHT(x, 39))
-#define SIGMA2(x) (ROTRIGHT(x, 14) ^ ROTRIGHT(x, 18) ^ ROTRIGHT(x, 41))
-#define SIGMA3(x) (ROTRIGHT(x, 1) ^ ROTRIGHT(x, 8) ^ (x >> 7))
-#define SIGMA4(x) (ROTRIGHT(x, 19) ^ ROTRIGHT(x, 61) ^ (x >> 6))
+  /*
+  #define W(t) m[(t)&0x0F]
+  #define ROTLEFT(a, b) (((a) << (b)) | ((a) >> (64 - (b))))
+  #define ROTRIGHT(a, b) (((a) >> (b)) | ((a) << (64 - (b))))
+  #define CH(x, y, z) (((x) & (y)) | (~(x) & (z)))
+  #define MAJ(x, y, z) (((x) & (y)) | ((x) & (z)) | ((y) & (z)))
+  #define SIGMA1(x) (ROTRIGHT(x, 28) ^ ROTRIGHT(x, 34) ^ ROTRIGHT(x, 39))
+  #define SIGMA2(x) (ROTRIGHT(x, 14) ^ ROTRIGHT(x, 18) ^ ROTRIGHT(x, 41))
+  #define SIGMA3(x) (ROTRIGHT(x, 1) ^ ROTRIGHT(x, 8) ^ (x >> 7))
+  #define SIGMA4(x) (ROTRIGHT(x, 19) ^ ROTRIGHT(x, 61) ^ (x >> 6))
+  */
 
   template <AHash::Algorithm A>
   void Hash<A>::sha512Transform(sha512Context &ctx, std::uint8_t const *data)
@@ -1058,15 +1069,17 @@ namespace crypto
 #endif
   }
 
-#undef ROTLEFT
-#undef ROTRIGHT
-#undef CH
-#undef MAJ
-#undef SIGMA1
-#undef SIGMA2
-#undef SIGMA3
-#undef SIGMA4
-#undef W
+  /*
+  #undef ROTLEFT
+  #undef ROTRIGHT
+  #undef CH
+  #undef MAJ
+  #undef SIGMA1
+  #undef SIGMA2
+  #undef SIGMA3
+  #undef SIGMA4
+  #undef W
+  */
 
   template <AHash::Algorithm A>
   bool Hash<A>::computeSHA512(std::uint8_t const *data, std::size_t const len)
@@ -1152,3 +1165,7 @@ namespace crypto
 #endif
   }
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif

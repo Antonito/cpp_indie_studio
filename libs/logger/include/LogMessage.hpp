@@ -27,7 +27,7 @@ namespace nope
       LogMessage &operator=(LogMessage const &) = default;
       LogMessage &operator=(LogMessage &&) = default;
 
-      std::string                                    getMessage() const;
+      std::string getMessage() const;
       std::chrono::duration<long, std::milli> const &getTime() const;
 #ifdef DEBUG
       struct Meta
