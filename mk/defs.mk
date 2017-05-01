@@ -1,7 +1,6 @@
 # Commands definitions
 RM=		rm -f
 RM_DIR=		rm -rf
-RM_DIR_IF_EMPTY=rmdir --ignore-fail-on-non-empty
 ECHO=		printf
 RANLIB=		ar rcs
 CP=		cp
