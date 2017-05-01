@@ -1,5 +1,9 @@
 #!/bin/sh
 
+##
+## This script tries every possible way to compile the project.
+##
+
 echo "Debug Compilation"
 make re CXX=g++ DEBUG=yes
 make re CXX=clang++ DEBUG=yes
