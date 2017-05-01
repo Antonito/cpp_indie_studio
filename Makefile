@@ -9,7 +9,8 @@ PROJECTS=
 
 LIB_DIR=		./libs/
 
-LIBS=			logger
+LIBS=			logger		\
+			crypto
 
 PROJECTS_PATH=		$(addprefix $(LIB_DIR), $(LIBS))		\
 			$(addprefix $(PROJECT_DIR), $(PROJECTS))
