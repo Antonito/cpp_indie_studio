@@ -27,7 +27,7 @@ namespace nope
     class Logger
     {
     public:
-      Logger(LogLevel level = LogLevel::LOG_INFO);
+      explicit Logger(LogLevel level = LogLevel::LOG_INFO);
       ~Logger() = default;
 
       void addSink(LogSink const &s);
@@ -67,14 +67,10 @@ namespace nope
     class EmptyLogger
     {
     public:
-      EmptyLogger(LogLevel)
-      {
-      }
+      explicit EmptyLogger(LogLevel = LogLevel::LOG_INFO){};
       ~EmptyLogger() = default;
 
-      inline void addSink(LogSink const &)
-      {
-      }
+      inline void addSink(LogSink const &){};
 
 #ifdef DEBUG
       inline EmptyLogger &operator()(std::string &&, size_t)

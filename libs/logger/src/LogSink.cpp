@@ -4,7 +4,8 @@ namespace nope
 {
   namespace log
   {
-    LogSink::LogSink(std::function<void(LogMessage const &, LogLevel)> func)
+    LogSink::LogSink(
+        std::function<void(LogMessage const &, LogLevel)> const &func)
         : m_func(func)
     {
     }
