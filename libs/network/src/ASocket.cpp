@@ -13,8 +13,8 @@ namespace network
 {
 // Make sure you have to init / deinit WSA
 #if defined(_WIN32)
-  std::uint32_t Network::ASocket::m_nbSockets = 0;
-  bool     Network::ASocket::m_WSAInited = false;
+  std::uint32_t network::ASocket::m_nbSockets = 0;
+  bool          network::ASocket::m_WSAInited = false;
 #endif
 
   ASocket::ASocket(SocketType type)
@@ -29,20 +29,22 @@ namespace network
     // Do we need to load the network DLL ?
     if (!m_nbSockets && !initWSA())
       {
-	throw Network::SockError("Cannot load network DLL");
+	throw network::SockError("Cannot load network DLL");
       }
     ++m_nbSockets;
 #endif
   }
 
-  ASocket::ASocket(std::uint16_t port, std::string const &host, SocketType type)
+  ASocket::ASocket(std::uint16_t port, std::string const &host,
+                   SocketType type)
       : ASocket(type)
   {
     m_port = port;
     m_host = host;
   }
 
-  ASocket::ASocket(std::uint16_t port, std::uint32_t maxClients, SocketType type)
+  ASocket::ASocket(std::uint16_t port, std::uint32_t maxClients,
+                   SocketType type)
       : ASocket(type)
   {
     assert(maxClients);
@@ -161,7 +163,7 @@ namespace network
 	// Loop over all the potential addresses
 	for (addrinfo_t *ptr = res; ptr; ptr = ptr->ai_next)
 	  {
-            std::int32_t ret = 0;
+	    std::int32_t ret = 0;
 
 	    typeBackup = getType();
 	    m_type = ASocket::BLOCKING;
@@ -187,7 +189,7 @@ namespace network
 		    m_type = ASocket::NONBLOCKING;
 		    if (setSocketType() == false)
 		      {
-			throw Network::SockError("Cannot set socket type");
+			throw network::SockError("Cannot set socket type");
 		      }
 		  }
 		connected = true;
@@ -200,18 +202,19 @@ namespace network
     return (connected);
   }
 
-  void ASocket::initSocket(std::int32_t domain, std::int32_t type, std::int32_t protocol)
+  void ASocket::initSocket(std::int32_t domain, std::int32_t type,
+                           std::int32_t protocol)
   {
     char const enable = 1;
 
     m_socket = ::socket(domain, type, protocol);
     if (m_socket == -1)
       {
-	throw Network::SockError("Cannot create socket");
+	throw network::SockError("Cannot create socket");
       }
     if (setSocketType() == false)
       {
-	throw Network::SockError("Cannot set socket type");
+	throw network::SockError("Cannot set socket type");
       }
     if (m_port != 0)
       {
@@ -220,7 +223,7 @@ namespace network
 	               sizeof(enable)) < 0)
 	  {
 	    if (errno != EINVAL)
-	      throw Network::SockError("Cannot set socket options");
+	      throw network::SockError("Cannot set socket options");
 	  }
       }
   }

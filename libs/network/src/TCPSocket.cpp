@@ -12,7 +12,8 @@ namespace network
     m_ip = ip;
   }
 
-  TCPSocket::TCPSocket(std::uint16_t port, std::uint32_t maxClients, SocketType type)
+  TCPSocket::TCPSocket(std::uint16_t port, std::uint32_t maxClients,
+                       SocketType type)
       : ASocket(port, maxClients, type)
   {
   }
@@ -76,7 +77,7 @@ namespace network
   {
     std::uint8_t const *msg = static_cast<std::uint8_t const *>(data);
     std::size_t         off = 0;
-    bool           success = true;
+    bool                success = true;
 
     assert(getType() == ASocket::NONBLOCKING);
     for (;;)
@@ -136,7 +137,7 @@ namespace network
                                  ssize_t *buffLen) const
   {
     std::uint8_t *buf;
-    bool     success = true;
+    bool          success = true;
 
     assert(getType() == ASocket::NONBLOCKING);
     *buffer = new std::uint8_t[rlen];
@@ -197,7 +198,7 @@ namespace network
     if (bind(m_socket, reinterpret_cast<sockaddr_t *>(&m_addr),
              sizeof(m_addr)) == -1)
       {
-	throw Network::SockError("Cannot bind to socket");
+	throw network::SockError("Cannot bind to socket");
       }
     if (m_port == 0)
       {
@@ -208,13 +209,13 @@ namespace network
 	if (getsockname(m_socket, reinterpret_cast<sockaddr_t *>(&newAddr),
 	                &len) == -1)
 	  {
-	    throw Network::SockError("Cannot get port selected by the kernel");
+	    throw network::SockError("Cannot get port selected by the kernel");
 	  }
 	m_port = ntohs(newAddr.sin_port);
       }
     if (listen(m_socket, static_cast<std::int32_t>(m_maxClients)) == -1)
       {
-	throw Network::SockError("Cannot listen on socket");
+	throw network::SockError("Cannot listen on socket");
       }
   }
 }
