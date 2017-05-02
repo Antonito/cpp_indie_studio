@@ -76,12 +76,13 @@ namespace Network
   {
     uint8_t const *msg = static_cast<uint8_t const *>(data);
     size_t         off = 0;
-    ssize_t        ret;
     bool           success = true;
 
     assert(getType() == ASocket::NONBLOCKING);
     for (;;)
       {
+	ssize_t ret;
+
 #if defined(__linux__) || defined(__APPLE__)
 	ret = ::send(m_socket, reinterpret_cast<char const *>(msg + off),
 	             len - off, 0);
@@ -97,7 +98,7 @@ namespace Network
 	      }
 	    break;
 	  }
-	off += ret;
+	off += static_cast<std::size_t>(ret);
       }
     return (success);
   }
@@ -134,7 +135,6 @@ namespace Network
   bool TCPSocket::recNonBlocking(void **buffer, size_t rlen,
                                  ssize_t *buffLen) const
   {
-    ssize_t  ret;
     uint8_t *buf;
     bool     success = true;
 
@@ -144,16 +144,22 @@ namespace Network
     *buffLen = 0;
     for (;;)
       {
+	ssize_t ret;
+
 #if defined(__linux__) || defined(__APPLE__)
 	ret = ::recv(m_socket, reinterpret_cast<char *>(buf + *buffLen),
-	             rlen - *buffLen, 0);
+	             rlen - static_cast<std::size_t>(*buffLen), 0);
 #elif defined(_WIN32)
 	ret = ::recv(m_socket, reinterpret_cast<char *>(buf + *buffLen),
 	             static_cast<int>(rlen - *buffLen), 0);
 #endif
 	if (ret == -1)
 	  {
+#if EWOULDBLOCK == EAGAIN
+	    if (errno != EWOULDBLOCK)
+#else
 	    if (errno != EWOULDBLOCK && errno != EAGAIN)
+#endif
 	      {
 		success = false;
 	      }

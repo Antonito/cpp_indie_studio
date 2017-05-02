@@ -4,6 +4,12 @@
 #include <string>
 #include "ISocket.hpp"
 
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 // TODO: Add IPv4 / IPV6 selection, SSL / TLS
 namespace Network
 {
@@ -53,7 +59,7 @@ namespace Network
     SocketType    m_type;
 
   private:
-    ASocket(SocketType type);
+    explicit ASocket(SocketType type);
 
 // Init network DLL
 #if defined(_WIN32)
@@ -64,5 +70,9 @@ namespace Network
 #endif
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !ASOCKET_HPP_

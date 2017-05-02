@@ -55,6 +55,7 @@ namespace Network
     m_socket = other.m_socket;
     m_port = other.m_port;
     m_host = other.m_host;
+    m_ip = other.m_ip;
     m_maxClients = other.m_maxClients;
     m_curClients = other.m_curClients;
     m_addr = other.m_addr;
@@ -91,6 +92,7 @@ namespace Network
 	m_socket = other.m_socket;
 	m_port = other.m_port;
 	m_host = other.m_host;
+	m_ip = other.m_ip;
 	m_maxClients = other.m_maxClients;
 	m_curClients = other.m_curClients;
 	m_addr = other.m_addr;
