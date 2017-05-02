@@ -2,7 +2,6 @@
 #define ASOCKET_HPP_
 
 #include <string>
-#include <array>
 #include "ISocket.hpp"
 
 // TODO: Add IPv4 / IPV6 selection, SSL / TLS
@@ -63,8 +62,6 @@ namespace Network
     bool            initWSA() const;
     void            deinitWSA() const;
 #endif
-
-    std::array<std::uint8_t, 2> _padding;
   };
 }
 

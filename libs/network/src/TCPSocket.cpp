@@ -36,7 +36,7 @@ namespace Network
 	    m_addr.sin_family = AF_INET;
 	    hostConnection();
 	  }
-	catch (std::exception &e)
+	catch (std::exception &)
 	  {
 	    ret = false;
 	  }
@@ -206,7 +206,7 @@ namespace Network
 	  }
 	m_port = ntohs(newAddr.sin_port);
       }
-    if (listen(m_socket, m_maxClients) == -1)
+    if (listen(m_socket, static_cast<std::int32_t>(m_maxClients)) == -1)
       {
 	throw Network::SockError("Cannot listen on socket");
       }

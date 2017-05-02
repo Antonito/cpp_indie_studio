@@ -3,6 +3,12 @@
 
 #include "GenNetwork.hpp"
 
+// Disable clang warning for weak vtables
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wweak-vtables"
+#endif
+
 namespace Network
 {
   class ISocket
@@ -21,5 +27,9 @@ namespace Network
     virtual void hostConnection() = 0;
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !ISOCKET_HPP_

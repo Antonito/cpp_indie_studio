@@ -3,6 +3,12 @@
 
 #include "IClient.hpp"
 
+// Disable clang warning for weak vtables
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wweak-vtables"
+#endif
+
 namespace Network
 {
   class IServer
@@ -15,5 +21,9 @@ namespace Network
     virtual bool removeClient(IClient &) = 0;
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !ISERVER_HPP_
