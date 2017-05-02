@@ -52,4 +52,16 @@ $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(PROJECTS))):
 			@$(ECHO) "$(YELLOW)$(PROJECT_DIR)$(_proj)/ :$(CLEAR)\n"
 			@$(MAKE) $(ARGS) $(PROJECT_DIR)$(_proj) $(_rule);
 
-.PHONY: no_rule all $(RULES) $(PROJECTS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(PROJECTS)))
+
+$(LIBS):
+			@$(ECHO) "$(YELLOW)./$(PROJECT_DIR)$@/ :$(CLEAR)\n"
+			@$(MAKE) $(ARGS) $(PROJECT_DIR)$@
+
+$(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(LIBS))):
+			$(eval _rule := $(lastword $(subst -, ,$@)))
+			$(eval _proj := $(@:%-$(_rule)=%))
+			@$(ECHO) "$(YELLOW)$(LIB_DIR)$(_proj)/ :$(CLEAR)\n"
+			@$(MAKE) $(ARGS) $(LIB_DIR)$(_proj) $(_rule);
+
+.PHONY: no_rule all $(RULES) $(PROJECTS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(PROJECTS))) \
+	$(LIBS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(LIBS)))
