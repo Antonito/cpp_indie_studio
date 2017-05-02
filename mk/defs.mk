@@ -37,7 +37,13 @@ CXXFLAGS=	-g -DDEBUG -O0 $(LOCAL_DEBUG_FLAGS)
 LDFLAGS=	-g -rdynamic -fsanitize=undefined -fsanitize=address
 else
 CXXFLAGS=	-DNDEBUG -fomit-frame-pointer -march=native -Werror
-LDFLAGS=	-s -Wl,-O1
+
+ifeq ($(CXX),g++)
+LDFLAGS=	 -s -Wl,-O1
+else
+LDFLAGS=
+endif
+
 endif
 
 CXXFLAGS+=	-std=$(CPP_VER) -W -Wall -Wextra -Weffc++  -Wcomment 		\
@@ -50,7 +56,7 @@ CXXFLAGS+=	-std=$(CPP_VER) -W -Wall -Wextra -Weffc++  -Wcomment 		\
 		$(addprefix -I, $(INC_DIR))					\
 		$(LOCAL_COMP_FLAGS)
 
-LDFLAGS+=	-fuse-ld=gold -Wl,--fatal-warnings -lstdc++			\
+LDFLAGS+=	-lstdc++							\
 		$(LOCAL_LINK_FLAGS)
 
 ifeq ($(CXX),clang++)
@@ -59,7 +65,7 @@ CXXFLAGS+=	-Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic 	\
 LDFLAGS+=
 else ifeq ($(CXX),g++)
 CXXFLAGS+=	-Wlogical-op -Wstrict-null-sentinel
-LDFLAGS+=
+LDFLAGS+=	-fuse-ld=gold -Wl,--fatal-warnings
 else
 CXXFLAGS+=
 LDFLAGS+=
