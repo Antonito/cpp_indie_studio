@@ -26,7 +26,12 @@ function check_dir {
     cd - &> /dev/null;
 }
 
+# Add your directories here
+
 check_dir "libs/crypto/"
 check_dir "libs/logger/"
 check_dir "libs/memory/"
+check_dir "libs/exceptions/"
+check_dir "libs/network/"
+
 exit 0

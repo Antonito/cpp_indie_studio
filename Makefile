@@ -11,7 +11,9 @@ LIB_DIR=		./libs/
 
 LIBS=			logger		\
 			crypto		\
-			memory
+			memory		\
+			exceptions	\
+			network
 
 PROJECTS_PATH=		$(addprefix $(LIB_DIR), $(LIBS))		\
 			$(addprefix $(PROJECT_DIR), $(PROJECTS))
