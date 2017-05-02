@@ -9,11 +9,11 @@
 #include "ASocket.hpp"
 #include "SockError.hpp"
 
-namespace Network
+namespace network
 {
 // Make sure you have to init / deinit WSA
 #if defined(_WIN32)
-  uint32_t Network::ASocket::m_nbSockets = 0;
+  std::uint32_t Network::ASocket::m_nbSockets = 0;
   bool     Network::ASocket::m_WSAInited = false;
 #endif
 
@@ -35,14 +35,14 @@ namespace Network
 #endif
   }
 
-  ASocket::ASocket(uint16_t port, std::string const &host, SocketType type)
+  ASocket::ASocket(std::uint16_t port, std::string const &host, SocketType type)
       : ASocket(type)
   {
     m_port = port;
     m_host = host;
   }
 
-  ASocket::ASocket(uint16_t port, uint32_t maxClients, SocketType type)
+  ASocket::ASocket(std::uint16_t port, std::uint32_t maxClients, SocketType type)
       : ASocket(type)
   {
     assert(maxClients);
@@ -111,17 +111,17 @@ namespace Network
     return (m_socket);
   }
 
-  uint16_t ASocket::getPort() const
+  std::uint16_t ASocket::getPort() const
   {
     return (m_port);
   }
 
-  uint32_t ASocket::getMaxClients() const
+  std::uint32_t ASocket::getMaxClients() const
   {
     return (m_maxClients);
   }
 
-  uint32_t ASocket::getCurClients() const
+  std::uint32_t ASocket::getCurClients() const
   {
     return (m_curClients);
   }
@@ -161,7 +161,7 @@ namespace Network
 	// Loop over all the potential addresses
 	for (addrinfo_t *ptr = res; ptr; ptr = ptr->ai_next)
 	  {
-	    int ret = 0;
+            std::int32_t ret = 0;
 
 	    typeBackup = getType();
 	    m_type = ASocket::BLOCKING;
@@ -178,7 +178,7 @@ namespace Network
 	    ret = connect(m_socket, ptr->ai_addr, ptr->ai_addrlen);
 #elif defined(_WIN32)
 	    ret = connect(m_socket, ptr->ai_addr,
-	                  static_cast<int>(ptr->ai_addrlen));
+	                  static_cast<std::int32_t>(ptr->ai_addrlen));
 #endif
 	    if (ret != -1)
 	      {
@@ -200,7 +200,7 @@ namespace Network
     return (connected);
   }
 
-  void ASocket::initSocket(int domain, int type, int protocol)
+  void ASocket::initSocket(std::int32_t domain, std::int32_t type, std::int32_t protocol)
   {
     char const enable = 1;
 
@@ -235,7 +235,7 @@ namespace Network
     unsigned long lock = !(m_type == ASocket::BLOCKING);
     ret = ioctlsocket(m_socket, FIONBIO, &lock) == 0;
 #else
-    int flags;
+    std::int32_t flags;
 
 #if defined(O_NONBLOCK)
     flags = fcntl(m_socket, F_GETFL, 0);

@@ -9,7 +9,7 @@
 #pragma clang diagnostic ignored "-Wweak-vtables"
 #endif
 
-namespace Network
+namespace network
 {
   class ISocket
   {
@@ -17,8 +17,8 @@ namespace Network
     virtual ~ISocket()
     {
     }
-    virtual bool send(void const *data, size_t len) const = 0;
-    virtual bool rec(void **buffer, size_t rlen, ssize_t *buffLen) const = 0;
+    virtual bool send(void const *data, std::size_t len) const = 0;
+    virtual bool rec(void **buffer, std::size_t rlen, ssize_t *buffLen) const = 0;
     virtual bool openConnection() = 0;
     virtual bool closeConnection() = 0;
 

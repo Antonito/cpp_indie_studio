@@ -9,17 +9,17 @@
 typedef SSIZE_T ssize_t;
 #endif
 
-namespace Network
+namespace network
 {
   ///
   /// \struct NetworkGameEvent
   /// \brief Network Game Event
   ///
-  template <size_t len>
+  template <std::size_t len>
   struct NetworkGameEvent
   {
-    uint32_t buffLen = len;
-    uint8_t  data[len];
+    std::uint32_t buffLen = len;
+    std::uint8_t  data[len];
   };
 
   ///
@@ -43,15 +43,15 @@ namespace Network
       ssize_t x;
       ssize_t y;
     } pos;
-    uint8_t dir;
-    size_t  life;
+    std::uint8_t dir;
+    std::size_t  life;
   };
 
   ///
   /// \struct NetworkPacketData
   /// \brief Network packet data
   ///
-  template <size_t gameEventLen, typename EntityDataType>
+  template <std::size_t gameEventLen, typename EntityDataType>
   struct NetworkPacketData
   {
     NetworkPacketData() : action{}, game{} {};

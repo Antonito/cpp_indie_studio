@@ -9,7 +9,7 @@
 #pragma clang diagnostic ignored "-Wweak-vtables"
 #endif
 
-namespace Network
+namespace network
 {
   class IServer
   {

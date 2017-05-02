@@ -13,7 +13,7 @@
 #define closesocket(s) close(s)
 
 // Uniform type declarations
-typedef int                sock_t;
+typedef std::int32_t                sock_t;
 typedef struct sockaddr_in sockaddr_in_t;
 typedef struct sockaddr    sockaddr_t;
 typedef struct in_addr     _in_addr_t;

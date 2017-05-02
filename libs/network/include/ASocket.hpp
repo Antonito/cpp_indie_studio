@@ -11,7 +11,7 @@
 #endif
 
 // TODO: Add IPv4 / IPV6 selection, SSL / TLS
-namespace Network
+namespace network
 {
   class ASocket : public ISocket
   {
@@ -31,30 +31,30 @@ namespace Network
 
     bool       isStarted() const;
     sock_t     getSocket() const;
-    uint16_t   getPort() const;
-    uint32_t   getMaxClients() const;
-    uint32_t   getCurClients() const;
+    std::uint16_t   getPort() const;
+    std::uint32_t   getMaxClients() const;
+    std::uint32_t   getCurClients() const;
     SocketMode getMode() const;
     SocketType getType() const;
 
   protected:
-    ASocket(uint16_t port, std::string const &host,
+    ASocket(std::uint16_t port, std::string const &host,
             SocketType type = ASocket::BLOCKING);
-    ASocket(uint16_t port, uint32_t maxClients,
+    ASocket(std::uint16_t port, std::uint32_t maxClients,
             SocketType type = ASocket::BLOCKING);
     ASocket(ASocket const &other);
     ASocket &operator=(ASocket const &);
 
     virtual bool connectToHost();
-    void initSocket(int domain, int type, int protocol);
+    void initSocket(std::int32_t domain, std::int32_t type, std::int32_t protocol);
     bool setSocketType() const;
 
     sock_t        m_socket;
-    uint16_t      m_port;
+    std::uint16_t      m_port;
     std::string   m_host;
     bool          m_ip;
-    uint32_t      m_maxClients;
-    uint32_t      m_curClients;
+    std::uint32_t      m_maxClients;
+    std::uint32_t      m_curClients;
     sockaddr_in_t m_addr;
     SocketType    m_type;
 
@@ -63,7 +63,7 @@ namespace Network
 
 // Init network DLL
 #if defined(_WIN32)
-    static uint32_t m_nbSockets;
+    static std::uint32_t m_nbSockets;
     static bool     m_WSAInited;
     bool            initWSA() const;
     void            deinitWSA() const;
