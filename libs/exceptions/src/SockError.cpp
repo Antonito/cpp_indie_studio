@@ -1,6 +1,6 @@
 #include "SockError.hpp"
 
-namespace Network
+namespace network
 {
   SockError::SockError(std::string const &msg)
       : AException("SocketError: ", msg)
