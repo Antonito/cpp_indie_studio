@@ -21,6 +21,8 @@
 #include <array>
 #include <thread>
 #include <string>
+#include <condition_variable>
+#include <mutex>
 #include <sys/select.h>
 #include "LicenseServer.hpp"
 #include "Logger.hpp"

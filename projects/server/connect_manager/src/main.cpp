@@ -2,8 +2,15 @@
 
 int main(int ac, char **av)
 {
-  std::cout << "Starting server" << std::endl;
 
+  if (ac != 3)
+    {
+      std::cout << "Usage: " << *av << " licensePort gameServerPort"
+                << std::endl;
+      return (1);
+    }
+
+  // Starts logger
   nope::log::Logger::start("connect_manager.log");
 #if defined(DEBUG)
   nope::log::Logger::logLevel = nope::log::LogLevel::LOG_DEBUG;
@@ -11,20 +18,22 @@ int main(int ac, char **av)
 #else
   nope::log::Logger::logLevel = nope::log::LogLevel::LOG_INFO;
 #endif
-  if (ac != 2)
-    {
-      std::cout << "Usage: " << *av << " port" << std::endl;
-      return (1);
-    }
+  std::cout << "Starting server" << std::endl;
 
   nope::log::Log(Debug) << "Starting license manager";
-  // Connection to License Manager
+  // Connection to License Manager + accept game servers
   try
     {
       LicenseServer mainSrv(
-          static_cast<std::uint16_t>(std::strtol(*(av + 1), nullptr, 10)));
+          static_cast<std::uint16_t>(std::strtol(*(av + 1), nullptr, 10)),
+          static_cast<std::uint16_t>(std::strtol(*(av + 2), nullptr, 10)));
 
       mainSrv.run();
+      mainSrv.waitSignal();
+
+      // Accept Client's connection
+
+      // Stop servers
       mainSrv.stop();
     }
   catch (std::exception const &e)
@@ -32,10 +41,6 @@ int main(int ac, char **av)
       std::cerr << e.what() << std::endl;
       return (1);
     }
-
-  // Accept Game Server's connection
-
-  // Accept Client's connection
 
   std::cout << "Server stopped" << std::endl;
 #if defined(_WIN32) && !defined(__on__linux__)

@@ -1,8 +1,13 @@
 #include "connect_manager_stdafx.hpp"
 
-LicenseServer::LicenseServer(std::uint16_t const port)
-    : m_license(port, "localhost", false, network::ASocket::BLOCKING),
-      m_licenseList(), m_gameServerList(), m_thread()
+constexpr std::uint32_t LicenseServer::maxGameServer;
+
+LicenseServer::LicenseServer(std::uint16_t const licensePort,
+                             std::uint16_t const gameServerPort)
+    : m_license(licensePort, "localhost", false, network::ASocket::BLOCKING),
+      m_gameServer(gameServerPort, LicenseServer::maxGameServer,
+                   network::ASocket::BLOCKING),
+      m_licenseList(), m_gameServerList(), m_thread(), m_cond(), m_mut()
 {
 }
 
@@ -43,11 +48,23 @@ bool LicenseServer::removeClient(network::IClient &)
   return (true);
 }
 
+void LicenseServer::waitSignal()
+{
+  std::unique_lock<std::mutex> lock(m_mut);
+  m_cond.wait(lock);
+}
+
 void LicenseServer::_loop()
 {
   bool monitorLicenseServer = true;
 
   loadLicenses();
+
+  // Create gameServer's server
+
+  m_mut.lock();
+  m_cond.notify_one();
+  m_mut.unlock();
   while (1)
     {
       std::int32_t   rc = -1;
