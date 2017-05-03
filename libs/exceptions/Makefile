@@ -26,7 +26,8 @@ HEADER=		exceptions_stdafx.hpp
 # Project's files
 
 SRC_FILES=	AException.cpp	\
-		SockError.cpp
+		SockError.cpp \
+		PyInitializationError.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 
