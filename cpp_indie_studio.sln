@@ -17,7 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "memory", "libs\memory\Memor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "server", "server", "{A1F87238-23C8-4E87-A05F-16D70C269C3D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "connect_manager", "connect_manager\connect_manager.vcxproj", "{5F55893F-40B9-4CEF-BCCE-65A9ACC29431}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "connect_manager", "projects\server\connect_manager\connect_manager.vcxproj", "{5F55893F-40B9-4CEF-BCCE-65A9ACC29431}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
