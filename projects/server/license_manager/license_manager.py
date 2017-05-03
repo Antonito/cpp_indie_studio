@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 
 """
-This script generates manages licences.
-It allows someone to add licences, or list all the current licences.
+This script generates manages licenses.
+It allows someone to add licenses, or list all the current licenses.
 """
 import logging
 import random
 import socket
 import select
 
-LICENCE_FILE = "./.licence_keys"
+LICENSE_FILE = "./.license_keys"
 SERVER_PORT = 1123
 
 
-def generate_licence():
+def generate_license():
     KEY = '0123456789ABCDEF'
 
     key = ''
@@ -25,25 +25,25 @@ def generate_licence():
     return (key)
 
 
-def find_licence(key):
-    # Check if a licence key is in the licence file
+def find_license(key):
+    # Check if a license key is in the license file
     try:
-        rc = open(LICENCE_FILE, 'r').read().find(key)
+        rc = open(LICENSE_FILE, 'r').read().find(key)
     except Exception as e:
         return False
     return rc != -1
 
 
-def add_licence(clientsocket):
-    # Add a licence key to the licence file
-    key = generate_licence()
+def add_license(clientsocket):
+    # Add a license key to the license file
+    key = generate_license()
 
-    # Loops until the licence is new
-    while find_licence(key):
-        key = generate_licence()
+    # Loops until the license is new
+    while find_license(key):
+        key = generate_license()
 
     print(key)
-    with open(LICENCE_FILE, 'a') as f:
+    with open(LICENSE_FILE, 'a') as f:
         f.write(key + '\n')
     totalsent = 0
     msg = "License key file changed"
@@ -54,9 +54,9 @@ def add_licence(clientsocket):
         totalsent = totalsent + sent
 
 
-def list_licence():
+def list_license():
     try:
-        with open(LICENCE_FILE, 'r') as f:
+        with open(LICENSE_FILE, 'r') as f:
             print(f.read(), end='')
     except Exception as e:
         print (e)
@@ -66,8 +66,8 @@ def list_licence():
 logging.basicConfig(format='%(asctime)s %(message)s',
                     datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
 
-logging.info('Starting licence manager.')
-logging.info('Writing to file ' + LICENCE_FILE)
+logging.info('Starting license manager.')
+logging.info('Writing to file ' + LICENSE_FILE)
 
 # Create socket
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -81,7 +81,7 @@ logging.info('Local server listening on port ' + str(SERVER_PORT))
 (clientsocket, address) = serversocket.accept()
 logging.info('Client connected !')
 
-# Licence manager loop
+# License manager loop
 try:
     while True:
         # Process user input
@@ -112,12 +112,12 @@ try:
         elif msg == 'help':
             print('Available commands: exit / help / list / add')
         elif msg == 'list':
-            list_licence()
+            list_license()
         elif msg == 'add':
-            add_licence(clientsocket)
+            add_license(clientsocket)
         else:
             print('Invalid command')
 except Exception as e:
     print(e)
 
-logging.info('Stopping licence manager.')
+logging.info('Stopping license manager.')

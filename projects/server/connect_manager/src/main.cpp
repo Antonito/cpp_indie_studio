@@ -1,17 +1,36 @@
 #include "connect_manager_stdafx.hpp"
 
-int main()
+int main(int ac, char **av)
 {
-	std::cout << "Starting server" << std::endl;
+  std::cout << "Starting server" << std::endl;
 
-	// Connection to License Manager
-	// Accept Game Server's connection
+  if (ac != 2)
+    {
+      std::cout << "Usage: " << *av << " port" << std::endl;
+      return (1);
+    }
+  // Connection to License Manager
+  try
+    {
+      LicenseServer mainSrv(
+          static_cast<std::uint16_t>(std::strtol(*(av + 1), nullptr, 10)));
 
-	// Accept Client's connection
+      mainSrv.run();
+      mainSrv.stop();
+    }
+  catch (std::exception const &e)
+    {
+      std::cerr << e.what() << std::endl;
+      return (1);
+    }
 
-	std::cout << "Server stopped" << std::endl;
+  // Accept Game Server's connection
+
+  // Accept Client's connection
+
+  std::cout << "Server stopped" << std::endl;
 #if defined(_WIN32) && !defined(__on__linux__)
-	system("pause");
+  system("pause");
 #endif
   return (0);
 }

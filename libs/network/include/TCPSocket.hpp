@@ -13,7 +13,7 @@ namespace network
     TCPSocket(std::uint16_t port, std::uint32_t maxClients, SocketType type);
     virtual ~TCPSocket();
     virtual bool send(void const *data, std::size_t len) const;
-    virtual bool rec(void **buffer, std::size_t rlen, ssize_t *buffLen) const;
+    virtual bool rec(void *buffer, std::size_t rlen, ssize_t *buffLen) const;
     virtual bool openConnection();
 
   protected:
@@ -22,8 +22,9 @@ namespace network
   private:
     bool sendBlocking(void const *data, std::size_t len) const;
     bool sendNonBlocking(void const *data, std::size_t len) const;
-    bool recBlocking(void **buffer, std::size_t rlen, ssize_t *buffLen) const;
-    bool recNonBlocking(void **buffer, std::size_t rlen, ssize_t *buffLen) const;
+    bool recBlocking(void *buffer, std::size_t rlen, ssize_t *buffLen) const;
+    bool recNonBlocking(void *buffer, std::size_t rlen,
+                        ssize_t *buffLen) const;
   };
 }
 

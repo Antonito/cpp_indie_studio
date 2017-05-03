@@ -18,7 +18,8 @@ namespace network
     {
     }
     virtual bool send(void const *data, std::size_t len) const = 0;
-    virtual bool rec(void **buffer, std::size_t rlen, ssize_t *buffLen) const = 0;
+    virtual bool rec(void *buffer, std::size_t rlen,
+                     ssize_t *buffLen) const = 0;
     virtual bool openConnection() = 0;
     virtual bool closeConnection() = 0;
 
