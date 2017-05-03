@@ -12,6 +12,7 @@
 
 // Reference additional headers your program requires here
 
+#include <cassert>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -22,5 +23,6 @@
 #include <string>
 #include <sys/select.h>
 #include "LicenseServer.hpp"
+#include "Logger.hpp"
 
 #endif // !CONNECT_MANAGER_STDAFX_HPP_

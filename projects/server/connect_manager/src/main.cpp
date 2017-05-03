@@ -4,11 +4,20 @@ int main(int ac, char **av)
 {
   std::cout << "Starting server" << std::endl;
 
+  nope::log::Logger::start("connect_manager.log");
+#if defined(DEBUG)
+  nope::log::Logger::logLevel = nope::log::LogLevel::LOG_DEBUG;
+  nope::log::Log(Debug) << "Starting log";
+#else
+  nope::log::Logger::logLevel = nope::log::LogLevel::LOG_INFO;
+#endif
   if (ac != 2)
     {
       std::cout << "Usage: " << *av << " port" << std::endl;
       return (1);
     }
+
+  nope::log::Log(Debug) << "Starting license manager";
   // Connection to License Manager
   try
     {

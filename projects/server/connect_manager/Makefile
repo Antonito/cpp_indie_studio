@@ -7,7 +7,7 @@ NAME=			$(ROOT_DIR)/build/connect_manager
 
 LOCAL_COMP_FLAGS=	-O2
 
-LOCAL_LINK_FLAGS=	-L$(ROOT_DIR)/build/ -lindie_network -lindie_exceptions
+LOCAL_LINK_FLAGS=	-L$(ROOT_DIR)/build/ -lindie_network -lindie_logger -lindie_exceptions
 
 LOCAL_DEBUG_FLAGS=
 
@@ -20,7 +20,8 @@ SRC_DIR=	./src/
 INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)				\
-		$(ROOT_DIR)/libs/network/include/
+		$(ROOT_DIR)/libs/network/include/	\
+		$(ROOT_DIR)/libs/logger/include/
 
 HEADER=		connect_manager_stdafx.hpp
 

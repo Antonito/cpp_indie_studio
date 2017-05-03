@@ -2,6 +2,7 @@
 #include <cassert>
 #include "TCPSocket.hpp"
 #include "SockError.hpp"
+#include "network_stdafx.hpp"
 
 namespace network
 {
@@ -26,9 +27,11 @@ namespace network
   {
     bool ret;
 
+    nope::log::Log(Debug) << "Opening TCP connection";
     assert(!isStarted());
     if (getMode() == ASocket::SERVER)
       {
+	nope::log::Log(Debug) << "Hosting connection";
 	ret = true;
 	try
 	  {
@@ -37,8 +40,9 @@ namespace network
 	    m_addr.sin_family = AF_INET;
 	    hostConnection();
 	  }
-	catch (std::exception &)
+	catch (std::exception &e)
 	  {
+	    nope::log::Log(Error) << e.what();
 	    ret = false;
 	  }
       }
@@ -126,7 +130,6 @@ namespace network
 #endif
     if (*buffLen < 0)
       {
-	*buffLen = 0;
 	return (false);
       }
     return (true);

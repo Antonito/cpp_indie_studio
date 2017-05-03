@@ -8,6 +8,7 @@
 #include <iostream>
 #include "ASocket.hpp"
 #include "SockError.hpp"
+#include "network_stdafx.hpp"
 
 namespace network
 {
@@ -24,13 +25,16 @@ namespace network
 #if defined(__linux__) || (__APPLE__)
     // If we can, ignore SIGPIPE
     std::signal(SIGPIPE, SIG_IGN);
+    nope::log::Log(Debug) << "Ignoring SIGPIPE";
 #endif
 #if defined(_WIN32)
     // Do we need to load the network DLL ?
     if (!m_nbSockets && !initWSA())
       {
+	nope::log::Log(Error) << "Cannot load network DLL";
 	throw network::SockError("Cannot load network DLL");
       }
+    nope::log::Log(Debug) << "Adding socket " << m_nbSockets;
     ++m_nbSockets;
 #endif
   }
@@ -72,6 +76,7 @@ namespace network
     if (!m_nbSockets)
       {
 	// It is the last socket
+	nope::log::Log(Debug) << "Closing last socket";
 	deinitWSA();
       }
 #endif
@@ -80,6 +85,7 @@ namespace network
   // Close the socket
   bool ASocket::closeConnection()
   {
+    nope::log::Log(Debug) << "Closing socket #" << m_socket;
     if (m_socket > 0 && !closesocket(m_socket))
       {
 	m_socket = -1;
@@ -149,14 +155,17 @@ namespace network
     bool        connected = false;
     SocketType  typeBackup;
 
+    nope::log::Log(Debug) << "Connection to host";
     assert(m_socket == -1);
     if (m_ip)
       {
+	nope::log::Log(Debug) << "Provided address is an IP";
 	hints.ai_flags = AI_NUMERICHOST;
       }
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
+    nope::log::Log(Debug) << "Processing address resolution";
     if (getaddrinfo(m_host.c_str(), std::to_string(m_port).c_str(), &hints,
                     &res) == 0)
       {
@@ -192,6 +201,7 @@ namespace network
 			throw network::SockError("Cannot set socket type");
 		      }
 		  }
+		nope::log::Log(Debug) << "Found an address, connected !";
 		connected = true;
 		break;
 	      }
@@ -207,13 +217,16 @@ namespace network
   {
     char const enable = 1;
 
+    nope::log::Log(Debug) << "Creating socket";
     m_socket = ::socket(domain, type, protocol);
     if (m_socket == -1)
       {
+	nope::log::Log(Error) << "Cannot create socket";
 	throw network::SockError("Cannot create socket");
       }
     if (setSocketType() == false)
       {
+	nope::log::Log(Error) << "Cannot set socket type";
 	throw network::SockError("Cannot set socket type");
       }
     if (m_port != 0)
@@ -223,9 +236,13 @@ namespace network
 	               sizeof(enable)) < 0)
 	  {
 	    if (errno != EINVAL)
-	      throw network::SockError("Cannot set socket options");
+	      {
+		nope::log::Log(Error) << "Cannot set socket options";
+		throw network::SockError("Cannot set socket options");
+	      }
 	  }
       }
+    nope::log::Log(Debug) << "Socket created successfuly";
   }
 
   // Set the socket to blocking or non-blocking state

@@ -17,6 +17,7 @@ public:
 
 private:
   void               _loop();
+  bool               loadLicenses();
   network::TCPSocket m_license;
   // network::TCPSocket m_gameServer;
 
@@ -34,9 +35,9 @@ private:
   private:
   };
 
-  std::vector<License>    m_licenseList;
-  std::vector<GameServer> m_gameServerList;
-  std::thread             m_thread;
+  std::vector<std::string> m_licenseList; // TODO: Licenses ?
+  std::vector<GameServer>  m_gameServerList;
+  std::thread              m_thread;
 };
 
 #endif // !LICENSE_SERVER_HPP_
