@@ -24,7 +24,7 @@ namespace std
   };
 }
 
-namespace Network
+namespace network
 {
   class PacketFactory
   {
@@ -32,7 +32,7 @@ namespace Network
     PacketFactory(){};
     ~PacketFactory(){};
 
-    template <size_t gameEventLen, typename EntityDataType>
+    template <std::size_t gameEventLen, typename EntityDataType>
     std::unique_ptr<arcade::NetworkPacket> create(
         arcade::NetworkGames const game,
         std::function<void(NetworkPacketData<gameEventLen, EntityDataType> &)>
@@ -41,14 +41,14 @@ namespace Network
       std::unique_ptr<arcade::NetworkPacket> pck =
           std::make_unique<arcade::NetworkPacket>();
       arcade::NetworkPacketHeader *head = &pck->header;
-      uint16_t                     curChck = 0;
+      std::uint16_t                     curChck = 0;
 
       // Fill header
       std::memset(pck.get(), 0, sizeof(arcade::NetworkPacket));
       head->magicNumber =
           htonl(arcade::NetworkPacketHeader::packetMagicNumber);
       head->game = static_cast<arcade::NetworkGames>(
-          htons(static_cast<uint16_t>(game)));
+          htons(static_cast<std::uint16_t>(game)));
       pck->len =
           htonl(sizeof(NetworkPacketData<gameEventLen, EntityDataType>));
       head->checksum = head->magicNumber + head->game + pck->len;
@@ -57,7 +57,7 @@ namespace Network
       // Fill datas && calc checksum
       NetworkPacketData<gameEventLen, EntityDataType> *data =
           new NetworkPacketData<gameEventLen, EntityDataType>;
-      pck->data = reinterpret_cast<uint8_t *>(data);
+      pck->data = reinterpret_cast<std::uint8_t *>(data);
       std::memset(data, 0,
                   sizeof(NetworkPacketData<gameEventLen, EntityDataType>));
       callback(*data);
@@ -71,11 +71,11 @@ namespace Network
     }
 
   private:
-    void calcChecksum(uint32_t const len, uint8_t const *data,
-                      uint32_t &checksum) const
+    void calcChecksum(std::uint32_t const len, std::uint8_t const *data,
+                      std::uint32_t &checksum) const
     {
       // Basic checksum
-      for (uint32_t i = 0; i < len; ++i)
+      for (std::uint32_t i = 0; i < len; ++i)
 	{
 	  checksum += data[i];
 	}

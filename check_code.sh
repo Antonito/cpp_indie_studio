@@ -33,5 +33,6 @@ check_dir "libs/logger/"
 check_dir "libs/memory/"
 check_dir "libs/exceptions/"
 check_dir "libs/network/"
+check_dir "projects/server/connect_manager/"
 
 exit 0

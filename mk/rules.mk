@@ -1,14 +1,17 @@
 MAIN_OBJ_DIR=	$(ROOT_DIR)/obj/
 EMPTY=
 OBJ_DIR=	$(MAIN_OBJ_DIR)$(shell basename $(CURDIR))/
+ifeq ($(CXX),clang++)
+PRECOMPILED_OBJ=$(PRECOMPILED_HEADER:%.hpp=%.hpp.pch)
+else
 PRECOMPILED_OBJ=$(PRECOMPILED_HEADER:%.hpp=%.hpp.gch)
-OBJ=		$(PRECOMPILED_OBJ)		\
-		$(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
+endif
+OBJ=		$(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 OBJ_DIR_LIST=	$(DIR_LIST:$(SRC_DIR)%=$(OBJ_DIR)%)
 
 NAME_EXTENSION=	$(suffix $(NAME))
 
-$(NAME):	$(MAIN_OBJ_DIR) $(OBJ_DIR_LIST) $(OBJ)
+$(NAME):	$(PRECOMPILED_OBJ) $(MAIN_OBJ_DIR) $(OBJ_DIR_LIST) $(OBJ)
 ifeq ($(NAME_EXTENSION),.a)
 		@$(RANLIB) $(NAME) $(OBJ) && \
 		$(ECHO) "$(WHITE)[$(GREEN)OK$(WHITE)] Generated $(CYAN)"$(NAME)"\n$(CLEAR)" || \
@@ -21,7 +24,7 @@ endif
 
 $(OBJ_DIR)%.o:	$(SRC_DIR)%.cpp
 ifeq ($(CXX),clang++)
-		@$(CXX) $(CXXFLAGS) -c -o $@ $< $(addprefix -include-pch ,$(PRECOMPILED_OBJ)) && \
+		@$(CXX) $(CXXFLAGS) -c -o $@ $< $(addprefix -include ,$(PRECOMPILED_HEADER)) && \
 		$(ECHO) "$(WHITE)[$(GREEN)OK$(WHITE)] Compiled "$<"\n$(CLEAR)" || \
 		$(ECHO) "$(WHITE)[$(RED)KO$(WHITE)] Compiled "$<"\n$(CLEAR)"
 else
@@ -31,6 +34,11 @@ else
 endif
 
 %.hpp.gch:		%.hpp
+		@$(CXX) -x c++-header $(CXXFLAGS) -c -o $@ $(SRC_DIR)stdafx.cpp && \
+		$(ECHO) "$(WHITE)[$(GREEN)OK$(WHITE)] Precompiled "$<"\n$(CLEAR)" || \
+		$(ECHO) "$(WHITE)[$(RED)KO$(WHITE)] Precompiled "$<"\n$(CLEAR)"
+
+%.hpp.pch:		%.hpp
 		@$(CXX) -x c++-header $(CXXFLAGS) -c -o $@ $(SRC_DIR)stdafx.cpp && \
 		$(ECHO) "$(WHITE)[$(GREEN)OK$(WHITE)] Precompiled "$<"\n$(CLEAR)" || \
 		$(ECHO) "$(WHITE)[$(RED)KO$(WHITE)] Precompiled "$<"\n$(CLEAR)"
@@ -53,6 +61,7 @@ endif
 
 clean:
 		@$(RM) $(OBJ)
+		@$(RM) $(PRECOMPILED_OBJ)
 		@$(RM_DIR) $(OBJ_DIR)
 		@$(RM_EMPTY_DIR) $(MAIN_OBJ_DIR) &> /dev/null || $(ECHO) ""
 		@$(ECHO) "$(WHITE)[$(YELLOW)RM$(WHITE)] Removed OBJs files and directory\n$(CLEAR)"
