@@ -51,7 +51,7 @@ void pythonpp::PyModule::feedFunctions(std::vector<std::string> &functionNames)
 	}
       catch (pythonpp::PyFunctionInitializationError &err)
 	{
-    nope::log::Log(nope::log::Warning) << err << std::endl;
+	  nope::log::Log(nope::log::Warning) << err << std::endl;
 	}
     }
 }
