@@ -3,7 +3,6 @@
 //
 
 #include "PyInitializationError.hpp"
-#include "AException.hpp"
 
 pythonpp::PyInitializationError::PyInitializationError(const std::string &msg)
     : AException("PythonInitializationError: ", msg)

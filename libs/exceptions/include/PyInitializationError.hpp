@@ -18,7 +18,7 @@ namespace pythonpp
   class PyInitializationError : public indie::AException
   {
   public:
-    explicit PyInitializationError(const std::string &msg = "");
+    explicit PyInitializationError(std::string const &msg = "");
   };
 }
 
