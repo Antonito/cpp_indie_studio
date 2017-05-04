@@ -46,11 +46,58 @@ bool GameClientServer::removeClient(network::IClient &)
   return (true);
 }
 
+std::int32_t GameClientServer::checkActivity(fd_set &readfds, fd_set &writefds,
+                                             fd_set &exceptfds)
+{
+  std::int32_t   rc = -1;
+  struct timeval tv;
+  std::int32_t   maxFd;
+
+  // Check file descriptors
+  do
+    {
+      FD_ZERO(&readfds);
+      FD_ZERO(&writefds);
+      FD_ZERO(&exceptfds);
+      tv.tv_sec = 2;
+      tv.tv_usec = 0;
+
+      // Add Game Server's socket
+      maxFd = m_sock.getSocket();
+      FD_SET(maxFd, &readfds);
+
+      // Add every gameClient
+      // TODO
+
+      // Loop over gameServers
+      rc = select(maxFd + 1, &readfds, &writefds, &exceptfds, &tv);
+    }
+  while (rc == -1 && errno == EINTR);
+  return (rc);
+}
+
 void GameClientServer::_loop()
 {
-  // TODO: Code
   while (1)
     {
-      break;
+      fd_set readfds, writefds, exceptfds;
+
+      std::int32_t const rc = checkActivity(readfds, writefds, exceptfds);
+      if (rc < 0)
+	{
+	  // There was an error
+	  nope::log::Log(Error) << "select() failed";
+	  break;
+	}
+      else if (rc > 0)
+	{
+	  // Handle IO
+	  if (FD_ISSET(m_sock.getSocket(), &readfds))
+	    {
+	      addClient();
+	    }
+
+	  // Loop over all clients
+	}
     }
 }

@@ -42,8 +42,29 @@ void LicenseServer::stop()
 
 bool LicenseServer::addClient()
 {
-  // TODO: Cooode
-  return (true);
+  // Accept new client
+  std::int32_t  rc = 0;
+  sockaddr_in_t in = {};
+  sock_t const  gameSocket = m_gameServer.getSocket();
+
+  nope::log::Log(Debug) << "There's client to accept on socket #"
+                        << gameSocket;
+  do
+    {
+      socklen_t len = sizeof(in);
+      rc = ::accept(gameSocket, reinterpret_cast<sockaddr_t *>(&in), &len);
+    }
+  while (rc == -1 && errno == EINTR);
+
+  // Check if the socket is valid
+  if (rc > 0)
+    {
+      m_gameServerList.push_back(std::make_unique<GameServer>(rc, in));
+      nope::log::Log(Debug) << "Added client FD #"
+                            << m_gameServerList.back()->getSocket();
+      return (true);
+    }
+  return (false);
 }
 
 bool LicenseServer::removeClient(network::IClient &c)
@@ -145,7 +166,7 @@ void LicenseServer::_loop()
       throw network::SockError("Cannot create game server socket");
     }
 
-  // Resize vector to max client
+  // Resize vector to max client, preallocate memory
   m_gameServerList.reserve(maxGameServer);
 
   nope::log::Log(Debug) << "Starting to loop";
@@ -192,29 +213,7 @@ void LicenseServer::_loop()
 
 	  if (FD_ISSET(gameSocket, &readfds))
 	    {
-	      // Accept new client
-	      std::int32_t  _rc = 0;
-	      sockaddr_in_t in = {};
-
-	      nope::log::Log(Debug) << "There's client to accept on socket #"
-	                            << gameSocket;
-	      do
-		{
-		  socklen_t len = sizeof(in);
-		  _rc = ::accept(gameSocket,
-		                 reinterpret_cast<sockaddr_t *>(&in), &len);
-		}
-	      while (_rc == -1 && errno == EINTR);
-
-	      // Check if the socket is valid
-	      if (rc > 0)
-		{
-		  m_gameServerList.push_back(
-		      std::make_unique<GameServer>(_rc, in));
-		  nope::log::Log(Debug)
-		      << "Added client FD #"
-		      << m_gameServerList.back()->getSocket();
-		}
+	      addClient();
 	    }
 
 	  // Loop over gameServers and handle IO
@@ -238,6 +237,10 @@ void LicenseServer::_loop()
 		      removeClient(*game);
 		      deleted = true;
 		    }
+		  else if (action == network::IClient::ClientAction::SUCCESS)
+		    {
+		      // TODO: Treat incoming data
+		    }
 		}
 	      if (deleted == false && FD_ISSET(sock, &writefds))
 		{
@@ -245,7 +248,10 @@ void LicenseServer::_loop()
 		}
 	      if (deleted == false && FD_ISSET(sock, &exceptfds))
 		{
-		  // TODO: Except
+		  nope::log::Log(Debug)
+		      << "Something happened, disconnecting client" << sock;
+		  removeClient(*game);
+		  deleted = true;
 		}
 
 	      // Check if we deleted anything

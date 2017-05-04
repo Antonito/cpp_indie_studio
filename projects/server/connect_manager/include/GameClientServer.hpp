@@ -20,6 +20,8 @@ public:
 private:
   constexpr static std::uint32_t maxGameClients = 64;
   void                           _loop();
+  std::int32_t checkActivity(fd_set &readfds, fd_set &writefds,
+                             fd_set &exceptfds);
 
   network::TCPSocket m_sock;
   std::thread        m_thread;
