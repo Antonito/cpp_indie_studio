@@ -20,16 +20,16 @@ public:
   Car &operator=(Car &&) = delete;
 
   const std::vector<Wheel> &getWheels() const;
-  void                      setWheels(const std::vector<Wheel> &);
+  void                      setWheels(std::vector<Wheel> const &);
   double                    getSpeed() const;
-  void                      setSpeed(double);
+  void                      setSpeed(double const);
   std::int32_t              getHealth() const;
-  void                      setHealth(std::int32_t);
+  void                      setHealth(std::int32_t const);
   std::int32_t              getResistance() const;
-  void                      setResistance(std::int32_t);
+  void                      setResistance(std::int32_t const);
 
-  void takeBonus(Bonus);
-  void takeDamage(std::int32_t);
+  void takeBonus(Bonus const);
+  void takeDamage(std::int32_t const);
 
 private:
   std::vector<Wheel> m_wheels;

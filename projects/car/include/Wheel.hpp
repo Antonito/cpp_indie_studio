@@ -5,6 +5,7 @@
 #ifndef CPP_INDIE_STUDIO_WHEEL_HPP
 #define CPP_INDIE_STUDIO_WHEEL_HPP
 
+
 class Wheel : public IDrawable, public Object
 {
 public:
@@ -15,13 +16,13 @@ public:
   Wheel &operator=(Wheel &&) = delete;
 
   double getAdherence() const;
-  void setAdherence(double m_adherence);
+  void setAdherence(double const);
   double getDirection() const;
-  void setDirection(double m_direction);
+  void setDirection(double const);
   double getRayon() const;
-  void setRayon(double m_rayon);
-  const Style &getStyle() const;
-  void setM_style(const Style &m_style);
+  void setRayon(double const);
+  Style const &getStyle() const;
+  void setM_style(Style const &m_style);
 
 private:
   double m_adherence;
