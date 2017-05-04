@@ -1,3 +1,15 @@
 #!/bin/sh
 
-LICENSE_MANAGER=./projects/server/license_manager/license_manager.py
+#
+# This script starts the licenseManager and the connectManager
+#
+
+BUILD_FOLDER="./build/"
+LICENSE_MANAGER=license_manager.py
+CONNECT_MANAGER=./connect_manager
+
+cd "$BUILD_FOLDER";
+
+./"$LICENSE_MANAGER" &
+#./"$CONNECT_MANAGER" 1123 12345 12346
+fg

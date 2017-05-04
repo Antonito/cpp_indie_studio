@@ -282,7 +282,7 @@ bool LicenseServer::loadLicenses()
 
 // GameServer definition
 LicenseServer::GameServer::GameServer(sock_t socket, sockaddr_in_t const &in)
-    : m_sock(socket), m_in(in), m_write(false)
+    : m_sock(socket), m_in(in), m_write(false), __padding()
 {
   std::array<char, INET6_ADDRSTRLEN> clntName;
 
@@ -297,7 +297,7 @@ LicenseServer::GameServer::GameServer(sock_t socket, sockaddr_in_t const &in)
 
 LicenseServer::GameServer::GameServer(GameServer &&other)
     : m_sock(std::move(other.m_sock)), m_in(std::move(other.m_in)),
-      m_write(other.m_write)
+      m_write(other.m_write), __padding(other.__padding)
 {
 }
 

@@ -23,7 +23,8 @@ private:
   void         _loop();
   bool         loadLicenses();
   std::int32_t checkActivity(fd_set &readfds, fd_set &writefds,
-                             fd_set &exceptfds, bool monitorLicenseServer);
+                             fd_set &   exceptfds,
+                             bool const monitorLicenseServer);
 
   constexpr static std::uint32_t maxGameServer = 64;
 
@@ -48,12 +49,12 @@ private:
     sock_t getSocket() const;
     bool   canWrite() const;
 
+    void toggleWrite();
+
     virtual bool                           disconnect();
     virtual network::IClient::ClientAction write();
     virtual network::IClient::ClientAction read();
     virtual bool                           hasTimedOut() const;
-
-    void toggleWrite();
 
     bool operator==(GameServer const &other) const;
 
@@ -61,6 +62,9 @@ private:
     network::TCPSocket m_sock;
     sockaddr_in_t      m_in;
     bool               m_write;
+
+    // Explicit padding
+    std::array<std::uint8_t, 7> __padding;
   };
 
   std::vector<std::string> m_licenseList; // TODO: Licenses ?
