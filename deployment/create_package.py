@@ -20,6 +20,7 @@ from subprocess import Popen, PIPE
 
 version = "0.1-1"
 
+
 def osxPack():
 
     process = Popen(['platypus', '-P', 'IndieStudio.platypus', 'indiestudio.app'], stdout=PIPE, stderr=PIPE)
@@ -35,6 +36,38 @@ def osxPack():
 def windowsPack():
     print("To code of course")
 
+def susePack():
+    print("OpenSUSE")
+    print("To code of course")
+
+def archPack():
+    print("ArchLinux")
+    print("To code of course")
+
+def debianPack():
+    print("debian")
+    print("To code of course")
+
+def ubuntuPack():
+    print("debian")
+    print("To code of course")
+
+def fedoraPack():
+    print("fedora")
+    print("To code of course")
+
+def gentooPack():
+    print("fedora")
+    print("To code of course")
+
+def checkLinux():
+    distribMap = {"arch" : archPack, "Ubuntu" : ubuntuPack, "OpenSUSE" : susePack, "debian" : debianPack, "fedora" : fedoraPack, "gentoo" : gentooPack}
+    distribName = platform.linux_distribution()[0]
+    try:
+        distribMap[distribName]()
+    except:
+        print("Your Linux distribution is not officialy supported :'(")
+
 if (__name__ == "__main__"):
     print("Packager version:" + version)
     print("checking target for package creation...\n")
@@ -48,8 +81,8 @@ if (__name__ == "__main__"):
         print("Creating indiestudio_installer.exe")
         windowsPack()
     elif (osName == "Linux"):
-        print("Creating IDontFuckingKnowWhatIAmDoing")
-        checkLinux()
+        print("For Linux installation please check the installation script !")
+        #checkLinux()
     else:
         print("Error, cannot identify the target :/")
         sys.exit(1)
