@@ -1,6 +1,7 @@
 #ifndef LICENSE_SERVER_HPP_
 #define LICENSE_SERVER_HPP_
 
+#include <memory>
 #include "IServer.hpp"
 #include "TCPSocket.hpp"
 
@@ -35,17 +36,33 @@ private:
   private:
   };
 
-  class GameServer
+  class GameServer : public network::IClient
   {
   public:
+    explicit GameServer(sock_t socket, sockaddr_in_t const &in);
+
+    GameServer(GameServer &&);
+
+    sock_t getSocket() const;
+    bool   canWrite() const;
+
+    virtual bool                           disconnect();
+    virtual network::IClient::ClientAction write();
+    virtual network::IClient::ClientAction read();
+    virtual bool                           hasTimedOut() const;
+
+    bool operator==(GameServer const &other) const;
+
   private:
+    network::TCPSocket m_sock;
+    sockaddr_in_t      m_in;
   };
 
-  std::vector<std::string> m_licenseList; // TODO: Licenses ?
-  std::vector<GameServer>  m_gameServerList;
-  std::thread              m_thread;
-  std::condition_variable  m_cond;
-  std::mutex               m_mut;
+  std::vector<std::string>                 m_licenseList; // TODO: Licenses ?
+  std::vector<std::unique_ptr<GameServer>> m_gameServerList;
+  std::thread                              m_thread;
+  std::condition_variable                  m_cond;
+  std::mutex                               m_mut;
 };
 
 #endif // !LICENSE_SERVER_HPP_

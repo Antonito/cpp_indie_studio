@@ -8,9 +8,11 @@ namespace network
   class TCPSocket : public ASocket
   {
   public:
+    TCPSocket(sock_t const sock);
     TCPSocket(std::uint16_t port, std::string const &host, bool ip,
               SocketType type);
     TCPSocket(std::uint16_t port, std::uint32_t maxClients, SocketType type);
+    TCPSocket(TCPSocket &&);
     virtual ~TCPSocket();
     virtual bool send(void const *data, std::size_t len) const;
     virtual bool rec(void *buffer, std::size_t rlen, ssize_t *buffLen) const;

@@ -6,6 +6,10 @@
 
 namespace network
 {
+  TCPSocket::TCPSocket(sock_t const sock) : ASocket(sock)
+  {
+  }
+
   TCPSocket::TCPSocket(std::uint16_t port, std::string const &host, bool ip,
                        SocketType type)
       : ASocket(port, host, type)
@@ -16,6 +20,10 @@ namespace network
   TCPSocket::TCPSocket(std::uint16_t port, std::uint32_t maxClients,
                        SocketType type)
       : ASocket(port, maxClients, type)
+  {
+  }
+
+  TCPSocket::TCPSocket(TCPSocket &&other) : ASocket(std::move(other))
   {
   }
 

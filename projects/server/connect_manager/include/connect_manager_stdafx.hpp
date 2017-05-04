@@ -22,9 +22,11 @@
 #include <thread>
 #include <string>
 #include <condition_variable>
+#include <algorithm>
 #include <mutex>
 #include <sys/select.h>
 #include "LicenseServer.hpp"
 #include "Logger.hpp"
+#include "SockError.hpp"
 
 #endif // !CONNECT_MANAGER_STDAFX_HPP_

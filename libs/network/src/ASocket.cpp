@@ -18,6 +18,13 @@ namespace network
   bool          network::ASocket::m_WSAInited = false;
 #endif
 
+  ASocket::ASocket(sock_t const socket)
+      : m_socket(socket), m_port(0), m_host(""), m_ip(false), m_maxClients(0),
+        m_curClients(0), m_addr{}, m_type()
+  {
+    nope::log::Log(Debug) << "Loading socket #" << m_socket;
+  }
+
   ASocket::ASocket(SocketType type)
       : m_socket(-1), m_port(0), m_host(""), m_ip(false), m_maxClients(0),
         m_curClients(0), m_addr{}, m_type(type)
@@ -67,6 +74,15 @@ namespace network
     m_addr = other.m_addr;
   }
 
+  ASocket::ASocket(ASocket &&other)
+      : m_socket(other.m_socket), m_port(other.m_port), m_host(other.m_host),
+        m_ip(other.m_ip), m_maxClients(other.m_maxClients),
+        m_curClients(other.m_curClients), m_addr(other.m_addr),
+        m_type(other.m_type)
+  {
+    other.m_socket = -1;
+  }
+
   ASocket::~ASocket()
   {
     closeConnection();
@@ -107,6 +123,15 @@ namespace network
 	m_type = other.m_type;
       }
     return (*this);
+  }
+
+  bool ASocket::operator==(ASocket const &other) const
+  {
+    if (this != &other)
+      {
+	return (m_socket == other.m_socket);
+      }
+    return (true);
   }
 
   bool ASocket::isStarted() const
@@ -217,13 +242,14 @@ namespace network
   {
     char const enable = 1;
 
-    nope::log::Log(Debug) << "Creating socket";
+    nope::log::Log(Debug) << "Creating socket...";
     m_socket = ::socket(domain, type, protocol);
     if (m_socket == -1)
       {
 	nope::log::Log(Error) << "Cannot create socket";
 	throw network::SockError("Cannot create socket");
       }
+    nope::log::Log(Debug) << "Created socket #" << m_socket;
     if (setSocketType() == false)
       {
 	nope::log::Log(Error) << "Cannot set socket type";

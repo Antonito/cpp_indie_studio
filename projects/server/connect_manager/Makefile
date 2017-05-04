@@ -21,7 +21,8 @@ INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)				\
 		$(ROOT_DIR)/libs/network/include/	\
-		$(ROOT_DIR)/libs/logger/include/
+		$(ROOT_DIR)/libs/logger/include/	\
+		$(ROOT_DIR)/libs/exceptions/include/
 
 HEADER=		connect_manager_stdafx.hpp
 

@@ -28,13 +28,15 @@ int main(int ac, char **av)
           static_cast<std::uint16_t>(std::strtol(*(av + 1), nullptr, 10)),
           static_cast<std::uint16_t>(std::strtol(*(av + 2), nullptr, 10)));
 
-      mainSrv.run();
-      mainSrv.waitSignal();
+      if (mainSrv.run())
+	{
+	  mainSrv.waitSignal();
 
-      // Accept Client's connection
+	  // Accept Client's connection
 
-      // Stop servers
-      mainSrv.stop();
+	  // Stop servers
+	  mainSrv.stop();
+	}
     }
   catch (std::exception const &e)
     {
