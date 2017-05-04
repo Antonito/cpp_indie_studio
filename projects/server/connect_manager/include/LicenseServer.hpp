@@ -51,11 +51,14 @@ private:
     virtual network::IClient::ClientAction read();
     virtual bool                           hasTimedOut() const;
 
+    void toggleWrite();
+
     bool operator==(GameServer const &other) const;
 
   private:
     network::TCPSocket m_sock;
     sockaddr_in_t      m_in;
+    bool               m_write;
   };
 
   std::vector<std::string> m_licenseList; // TODO: Licenses ?

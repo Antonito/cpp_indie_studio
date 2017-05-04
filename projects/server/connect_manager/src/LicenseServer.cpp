@@ -163,6 +163,8 @@ void LicenseServer::_loop()
 		{
 		  if (readVal == 0)
 		    {
+		      nope::log::Log(Debug)
+		          << "License Server disconnected. Quitting";
 		      break;
 		    }
 		  arr[static_cast<std::size_t>(readVal)] = '\0';
@@ -172,6 +174,8 @@ void LicenseServer::_loop()
 	      else
 		{
 		  // Nothing more to read, byebye
+		  nope::log::Log(Debug)
+		      << "License Server disconnected. Quitting";
 		  break;
 		}
 	    }
@@ -268,7 +272,7 @@ bool LicenseServer::loadLicenses()
 
 // GameServer definition
 LicenseServer::GameServer::GameServer(sock_t socket, sockaddr_in_t const &in)
-    : m_sock(socket), m_in(in)
+    : m_sock(socket), m_in(in), m_write(false)
 {
   std::array<char, INET6_ADDRSTRLEN> clntName;
 
@@ -282,7 +286,8 @@ LicenseServer::GameServer::GameServer(sock_t socket, sockaddr_in_t const &in)
 }
 
 LicenseServer::GameServer::GameServer(GameServer &&other)
-    : m_sock(std::move(other.m_sock)), m_in(std::move(other.m_in))
+    : m_sock(std::move(other.m_sock)), m_in(std::move(other.m_in)),
+      m_write(other.m_write)
 {
 }
 
@@ -293,8 +298,7 @@ sock_t LicenseServer::GameServer::getSocket() const
 
 bool LicenseServer::GameServer::canWrite() const
 {
-  // TODO: Implement
-  return (false);
+  return (m_write);
 }
 
 bool LicenseServer::GameServer::disconnect()
@@ -317,6 +321,11 @@ network::IClient::ClientAction LicenseServer::GameServer::read()
 bool LicenseServer::GameServer::hasTimedOut() const
 {
   return (false);
+}
+
+void LicenseServer::GameServer::toggleWrite()
+{
+  m_write = !m_write;
 }
 
 bool LicenseServer::GameServer::

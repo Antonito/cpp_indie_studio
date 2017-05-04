@@ -45,7 +45,7 @@ namespace network
     bool operator==(ASocket const &other) const;
 
   protected:
-    ASocket(sock_t const socket);
+    explicit ASocket(sock_t const socket);
     ASocket(std::uint16_t port, std::string const &host,
             SocketType type = ASocket::BLOCKING);
     ASocket(std::uint16_t port, std::uint32_t maxClients,
