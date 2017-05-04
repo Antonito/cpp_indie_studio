@@ -42,6 +42,7 @@ void LicenseServer::stop()
 
 bool LicenseServer::addClient()
 {
+  // TODO: Cooode
   return (true);
 }
 

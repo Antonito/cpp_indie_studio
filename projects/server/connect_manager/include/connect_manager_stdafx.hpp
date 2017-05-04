@@ -26,6 +26,7 @@
 #include <mutex>
 #include <sys/select.h>
 #include "LicenseServer.hpp"
+#include "GameClientServer.hpp"
 #include "Logger.hpp"
 #include "SockError.hpp"
 

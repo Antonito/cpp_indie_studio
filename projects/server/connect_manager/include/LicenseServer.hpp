@@ -58,11 +58,12 @@ private:
     sockaddr_in_t      m_in;
   };
 
-  std::vector<std::string>                 m_licenseList; // TODO: Licenses ?
-  std::vector<std::unique_ptr<GameServer>> m_gameServerList;
-  std::thread                              m_thread;
-  std::condition_variable                  m_cond;
-  std::mutex                               m_mut;
+  std::vector<std::string> m_licenseList; // TODO: Licenses ?
+  std::vector<std::unique_ptr<GameServer>>
+                          m_gameServerList; // TODO: Use Memory lib
+  std::thread             m_thread;
+  std::condition_variable m_cond;
+  std::mutex              m_mut;
 };
 
 #endif // !LICENSE_SERVER_HPP_

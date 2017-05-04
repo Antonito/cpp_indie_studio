@@ -3,10 +3,10 @@
 int main(int ac, char **av)
 {
 
-  if (ac != 3)
+  if (ac != 4)
     {
-      std::cout << "Usage: " << *av << " licensePort gameServerPort"
-                << std::endl;
+      std::cout << "Usage: " << *av
+                << " licensePort gameServerPort gameClientPort" << std::endl;
       return (1);
     }
 
@@ -27,6 +27,8 @@ int main(int ac, char **av)
       LicenseServer mainSrv(
           static_cast<std::uint16_t>(std::strtol(*(av + 1), nullptr, 10)),
           static_cast<std::uint16_t>(std::strtol(*(av + 2), nullptr, 10)));
+      GameClientServer gameSrv(
+          static_cast<std::uint16_t>(std::strtol(*(av + 3), nullptr, 10)));
 
       if (mainSrv.run())
 	{
