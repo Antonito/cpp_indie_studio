@@ -1,20 +1,3 @@
-/*
------------------------------------------------------------------------------
-Filename:    BaseApplication.cpp
------------------------------------------------------------------------------
-
-This source file is part of the
-   ___                 __    __ _ _    _
-  /___\__ _ _ __ ___  / / /\ \ (_) | _(_)
- //  // _` | '__/ _ \ \ \/  \/ / | |/ / |
-/ \_// (_| | | |  __/  \  /\  /| |   <| |
-\___/ \__, |_|  \___|   \/  \/ |_|_|\_\_|
-      |___/
-Tutorial Framework (for Ogre 1.9)
-http://www.ogre3d.org/wiki/
------------------------------------------------------------------------------
-*/
-
 #include "pakpak_stdafx.hpp"
 #include "BaseApplication.hpp"
 
@@ -22,7 +5,6 @@ http://www.ogre3d.org/wiki/
 #include <macUtils.h>
 #endif
 
-//---------------------------------------------------------------------------
 BaseApplication::BaseApplication(void)
     : mRoot(0), mCamera(0), mSceneMgr(0), mWindow(0),
       mResourcesCfg(Ogre::StringUtil::BLANK),
@@ -37,7 +19,6 @@ BaseApplication::BaseApplication(void)
 #endif
 }
 
-//---------------------------------------------------------------------------
 BaseApplication::~BaseApplication(void)
 {
   if (mTrayMgr)
@@ -53,7 +34,6 @@ BaseApplication::~BaseApplication(void)
   delete mRoot;
 }
 
-//---------------------------------------------------------------------------
 bool BaseApplication::configure(void)
 {
   // Show the configuration dialog and initialise the system.
@@ -64,7 +44,7 @@ bool BaseApplication::configure(void)
       // If returned true, user clicked OK so initialise.
       // Here we choose to let the system create a default rendering window by
       // passing 'true'.
-      mWindow = mRoot->initialise(true, "TutorialApplication Render Window");
+      mWindow = mRoot->initialise(true, "Pak Pak");
 
       return true;
     }
@@ -73,7 +53,7 @@ bool BaseApplication::configure(void)
       return false;
     }
 }
-//---------------------------------------------------------------------------
+
 void BaseApplication::chooseSceneManager(void)
 {
   // Get the SceneManager, in this case a generic one
@@ -83,7 +63,7 @@ void BaseApplication::chooseSceneManager(void)
   mOverlaySystem = new Ogre::OverlaySystem();
   mSceneMgr->addRenderQueueListener(mOverlaySystem);
 }
-//---------------------------------------------------------------------------
+
 void BaseApplication::createCamera(void)
 {
   // Create the camera
@@ -98,7 +78,7 @@ void BaseApplication::createCamera(void)
   mCameraMan = new OgreBites::SdkCameraMan(
       mCamera); // Create a default camera controller
 }
-//---------------------------------------------------------------------------
+
 void BaseApplication::createFrameListener(void)
 {
   Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
@@ -156,11 +136,11 @@ void BaseApplication::createFrameListener(void)
 
   mRoot->addFrameListener(this);
 }
-//---------------------------------------------------------------------------
+
 void BaseApplication::destroyScene(void)
 {
 }
-//---------------------------------------------------------------------------
+
 void BaseApplication::createViewports(void)
 {
   // Create one viewport, entire window
@@ -171,7 +151,7 @@ void BaseApplication::createViewports(void)
   mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth()) /
                           Ogre::Real(vp->getActualHeight()));
 }
-//---------------------------------------------------------------------------
+
 void BaseApplication::setupResources(void)
 {
   // Load resource paths from config file
@@ -206,16 +186,16 @@ void BaseApplication::setupResources(void)
 	}
     }
 }
-//---------------------------------------------------------------------------
+
 void BaseApplication::createResourceListener(void)
 {
 }
-//---------------------------------------------------------------------------
+
 void BaseApplication::loadResources(void)
 {
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 }
-//---------------------------------------------------------------------------
+
 void BaseApplication::go(void)
 {
 #ifdef _DEBUG
@@ -244,7 +224,7 @@ void BaseApplication::go(void)
   // Clean up
   destroyScene();
 }
-//---------------------------------------------------------------------------
+
 bool BaseApplication::setup(void)
 {
   mRoot = new Ogre::Root(mPluginsCfg);
@@ -274,7 +254,7 @@ bool BaseApplication::setup(void)
 
   return true;
 };
-//---------------------------------------------------------------------------
+
 bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent &evt)
 {
   if (mWindow->isClosed())
@@ -322,7 +302,7 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent &evt)
 
   return true;
 }
-//---------------------------------------------------------------------------
+
 bool BaseApplication::keyPressed(const OIS::KeyEvent &arg)
 {
   if (mTrayMgr->isDialogVisible())
@@ -418,13 +398,13 @@ bool BaseApplication::keyPressed(const OIS::KeyEvent &arg)
   mCameraMan->injectKeyDown(arg);
   return true;
 }
-//---------------------------------------------------------------------------
+
 bool BaseApplication::keyReleased(const OIS::KeyEvent &arg)
 {
   mCameraMan->injectKeyUp(arg);
   return true;
 }
-//---------------------------------------------------------------------------
+
 bool BaseApplication::mouseMoved(const OIS::MouseEvent &arg)
 {
   if (mTrayMgr->injectMouseMove(arg))
@@ -432,7 +412,7 @@ bool BaseApplication::mouseMoved(const OIS::MouseEvent &arg)
   mCameraMan->injectMouseMove(arg);
   return true;
 }
-//---------------------------------------------------------------------------
+
 bool BaseApplication::mousePressed(const OIS::MouseEvent &arg,
                                    OIS::MouseButtonID     id)
 {
@@ -441,7 +421,7 @@ bool BaseApplication::mousePressed(const OIS::MouseEvent &arg,
   mCameraMan->injectMouseDown(arg, id);
   return true;
 }
-//---------------------------------------------------------------------------
+
 bool BaseApplication::mouseReleased(const OIS::MouseEvent &arg,
                                     OIS::MouseButtonID     id)
 {
@@ -450,7 +430,7 @@ bool BaseApplication::mouseReleased(const OIS::MouseEvent &arg,
   mCameraMan->injectMouseUp(arg, id);
   return true;
 }
-//---------------------------------------------------------------------------
+
 // Adjust mouse clipping area
 void BaseApplication::windowResized(Ogre::RenderWindow *rw)
 {
@@ -462,7 +442,7 @@ void BaseApplication::windowResized(Ogre::RenderWindow *rw)
   ms.width = width;
   ms.height = height;
 }
-//---------------------------------------------------------------------------
+
 // Unattach OIS before window shutdown (very important under Linux)
 void BaseApplication::windowClosed(Ogre::RenderWindow *rw)
 {
@@ -479,4 +459,3 @@ void BaseApplication::windowClosed(Ogre::RenderWindow *rw)
 	}
     }
 }
-//---------------------------------------------------------------------------

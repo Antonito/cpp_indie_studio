@@ -1,22 +1,5 @@
-/*
------------------------------------------------------------------------------
-Filename:    BaseApplication.h
------------------------------------------------------------------------------
-
-This source file is part of the
-   ___                 __    __ _ _    _
-  /___\__ _ _ __ ___  / / /\ \ (_) | _(_)
- //  // _` | '__/ _ \ \ \/  \/ / | |/ / |
-/ \_// (_| | | |  __/  \  /\  /| |   <| |
-\___/ \__, |_|  \___|   \/  \/ |_|_|\_\_|
-      |___/
-Tutorial Framework (for Ogre 1.9)
-http://www.ogre3d.org/wiki/
------------------------------------------------------------------------------
-*/
-
-#ifndef __BaseApplication_h_
-#define __BaseApplication_h_
+#ifndef BASEAPPLICATION_HPP_
+#define BASEAPPLICATION_HPP_
 
 #include <OgreCamera.h>
 #include <OgreEntity.h>
@@ -65,8 +48,6 @@ http://www.ogre3d.org/wiki/
 #endif
 #include "OgreStaticPluginLoader.h"
 #endif
-
-//---------------------------------------------------------------------------
 
 class BaseApplication : public Ogre::FrameListener,
                         public Ogre::WindowEventListener,
@@ -136,8 +117,4 @@ protected:
 #endif
 };
 
-//---------------------------------------------------------------------------
-
-#endif // #ifndef __BaseApplication_h_
-
-//---------------------------------------------------------------------------
+#endif // !BASEAPPLICATION_HPP_
