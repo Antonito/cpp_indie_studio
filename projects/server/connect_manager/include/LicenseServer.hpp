@@ -20,8 +20,10 @@ public:
   void waitSignal();
 
 private:
-  void _loop();
-  bool loadLicenses();
+  void         _loop();
+  bool         loadLicenses();
+  std::int32_t checkActivity(fd_set &readfds, fd_set &writefds,
+                             fd_set &exceptfds, bool monitorLicenseServer);
 
   constexpr static std::uint32_t maxGameServer = 64;
 

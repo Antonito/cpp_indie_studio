@@ -66,6 +66,65 @@ void LicenseServer::waitSignal()
   m_cond.wait(lock);
 }
 
+std::int32_t LicenseServer::checkActivity(fd_set &readfds, fd_set &writefds,
+                                          fd_set &   exceptfds,
+                                          bool const monitorLicenseServer)
+{
+  std::int32_t       rc = -1;
+  struct timeval     tv;
+  std::int32_t       maxFd;
+  std::int32_t const gameSocket = m_gameServer.getSocket();
+
+  // Check file descriptors
+  do
+    {
+      FD_ZERO(&readfds);
+      FD_ZERO(&writefds);
+      FD_ZERO(&exceptfds);
+      tv.tv_sec = 2;
+      tv.tv_usec = 0;
+
+      // Add license manager's socket if needed
+      maxFd = (monitorLicenseServer) ? m_license.getSocket() : 0;
+      assert(maxFd != -1);
+      if (monitorLicenseServer)
+	{
+	  FD_SET(maxFd, &readfds);
+	}
+      // Add Game Server's socket
+      maxFd = (gameSocket > maxFd) ? gameSocket : maxFd;
+      FD_SET(gameSocket, &readfds);
+
+      // Add every GameServer to the file descriptor list
+      for (std::unique_ptr<GameServer> const &game : m_gameServerList)
+	{
+	  std::int32_t sock = game->getSocket();
+
+	  if (sock > 0)
+	    {
+	      nope::log::Log(Debug) << "Adding to readfds: #" << sock;
+	      FD_SET(sock, &readfds);
+	      // Add it to the writefds set if you can
+	      if (game->canWrite())
+		{
+		  FD_SET(sock, &writefds);
+		}
+
+	      // Update max file descriptor
+	      if (sock > maxFd)
+		{
+		  maxFd = sock;
+		}
+	    }
+	}
+
+      // Loop over gameServers
+      rc = select(maxFd + 1, &readfds, &writefds, &exceptfds, &tv);
+    }
+  while (rc == -1 && errno == EINTR);
+  return (rc);
+}
+
 void LicenseServer::_loop()
 {
   bool monitorLicenseServer = true;
@@ -92,59 +151,10 @@ void LicenseServer::_loop()
   nope::log::Log(Debug) << "Starting to loop";
   while (1)
     {
-      std::int32_t   rc = -1;
-      fd_set         readfds, writefds, exceptfds;
-      struct timeval tv;
-      std::int32_t   maxFd;
+      fd_set readfds, writefds, exceptfds;
 
-      // Check file descriptors
-      do
-	{
-	  FD_ZERO(&readfds);
-	  FD_ZERO(&writefds);
-	  FD_ZERO(&exceptfds);
-	  tv.tv_sec = 2;
-	  tv.tv_usec = 0;
-
-	  // Add license manager's socket if needed
-	  maxFd = (monitorLicenseServer) ? m_license.getSocket() : 0;
-	  assert(maxFd != -1);
-	  if (monitorLicenseServer)
-	    {
-	      FD_SET(maxFd, &readfds);
-	    }
-	  // Add Game Server's socket
-	  maxFd = (gameSocket > maxFd) ? gameSocket : maxFd;
-	  FD_SET(gameSocket, &readfds);
-
-	  // Add every GameServer to the file descriptor list
-	  for (std::unique_ptr<GameServer> const &game : m_gameServerList)
-	    {
-	      std::int32_t sock = game->getSocket();
-
-	      if (sock > 0)
-		{
-		  nope::log::Log(Debug) << "Adding to readfds: #" << sock;
-		  FD_SET(sock, &readfds);
-		  // Add it to the writefds set if you can
-		  if (game->canWrite())
-		    {
-		      FD_SET(sock, &writefds);
-		    }
-
-		  // Update max file descriptor
-		  if (sock > maxFd)
-		    {
-		      maxFd = sock;
-		    }
-		}
-	    }
-
-	  // Loop over gameServers
-	  rc = select(maxFd + 1, &readfds, &writefds, &exceptfds, &tv);
-	}
-      while (rc == -1 && errno == EINTR);
-
+      std::int32_t const rc =
+          checkActivity(readfds, writefds, exceptfds, monitorLicenseServer);
       if (rc < 0)
 	{
 	  // There was an error
