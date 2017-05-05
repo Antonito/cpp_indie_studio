@@ -21,51 +21,24 @@
     <ClCompile Include="src\AException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AllocationError.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CapabilityError.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\InitializationError.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PacketError.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\RessourceError.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\SockError.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\WindowError.cpp">
+    <ClCompile Include="src\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\AException.hpp">
+    <ClInclude Include="include\AException.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\AllocationError.hpp">
+    <ClInclude Include="include\exceptions_stdafx.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\CapabilityError.hpp">
+    <ClInclude Include="include\exceptions_targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\InitializationError.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PacketError.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\RessourceError.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SockError.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\WindowError.hpp">
+    <ClInclude Include="include\SockError.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

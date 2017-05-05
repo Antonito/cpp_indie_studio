@@ -1,3 +1,4 @@
+#include "network_stdafx.hpp"
 #if defined(__linux__) || defined(__APPLE__)
 #include <fcntl.h>
 #include <netdb.h>
@@ -8,7 +9,6 @@
 #include <iostream>
 #include "ASocket.hpp"
 #include "SockError.hpp"
-#include "network_stdafx.hpp"
 
 namespace network
 {
