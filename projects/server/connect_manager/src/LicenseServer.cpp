@@ -87,6 +87,12 @@ void LicenseServer::waitSignal()
   m_cond.wait(lock);
 }
 
+std::vector<std::unique_ptr<GameServer>> const &
+    LicenseServer::getGameServers() const
+{
+  return (m_gameServerList);
+}
+
 std::int32_t LicenseServer::checkActivity(fd_set &readfds, fd_set &writefds,
                                           fd_set &   exceptfds,
                                           bool const monitorLicenseServer)
@@ -239,12 +245,12 @@ void LicenseServer::_loop()
 		    }
 		  else if (action == network::IClient::ClientAction::SUCCESS)
 		    {
-		      // TODO: Treat incoming data
+		      game->treatIncomingData();
 		    }
 		}
 	      if (deleted == false && FD_ISSET(sock, &writefds))
 		{
-		  // TODO: Write
+		  game->treatOutcomingData();
 		}
 	      if (deleted == false && FD_ISSET(sock, &exceptfds))
 		{
@@ -284,72 +290,4 @@ bool LicenseServer::loadLicenses()
       return (true);
     }
   return (false);
-}
-
-// GameServer definition
-LicenseServer::GameServer::GameServer(sock_t socket, sockaddr_in_t const &in)
-    : m_sock(socket), m_in(in), m_write(false), __padding()
-{
-  std::array<char, INET6_ADDRSTRLEN> clntName;
-
-  if (::getnameinfo(reinterpret_cast<sockaddr_t *>(&m_in), sizeof(m_in),
-                    clntName.data(), sizeof(clntName), nullptr, 0,
-                    NI_NUMERICHOST | NI_NUMERICSERV) == 0)
-    {
-      nope::log::Log(Info) << "Client joined " << std::string(clntName.data())
-                           << std::endl;
-    }
-}
-
-LicenseServer::GameServer::GameServer(GameServer &&other)
-    : m_sock(std::move(other.m_sock)), m_in(std::move(other.m_in)),
-      m_write(other.m_write), __padding(other.__padding)
-{
-}
-
-sock_t LicenseServer::GameServer::getSocket() const
-{
-  return (m_sock.getSocket());
-}
-
-bool LicenseServer::GameServer::canWrite() const
-{
-  return (m_write);
-}
-
-bool LicenseServer::GameServer::disconnect()
-{
-  nope::log::Log(Debug) << "Client disconnected #" << getSocket();
-  m_sock.closeConnection();
-  return (true);
-}
-
-network::IClient::ClientAction LicenseServer::GameServer::write()
-{
-  return (network::IClient::ClientAction::DISCONNECT);
-}
-
-network::IClient::ClientAction LicenseServer::GameServer::read()
-{
-  return (network::IClient::ClientAction::DISCONNECT);
-}
-
-bool LicenseServer::GameServer::hasTimedOut() const
-{
-  return (false);
-}
-
-void LicenseServer::GameServer::toggleWrite()
-{
-  m_write = !m_write;
-}
-
-bool LicenseServer::GameServer::
-    operator==(LicenseServer::GameServer const &other) const
-{
-  if (this != &other)
-    {
-      return (m_sock == other.m_sock);
-    }
-  return (true);
 }

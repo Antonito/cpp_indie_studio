@@ -4,6 +4,7 @@
 #include <memory>
 #include "IServer.hpp"
 #include "TCPSocket.hpp"
+#include "GameServer.hpp"
 
 class LicenseServer : public network::IServer
 {
@@ -18,6 +19,8 @@ public:
   virtual bool removeClient(network::IClient &);
 
   void waitSignal();
+
+  std::vector<std::unique_ptr<GameServer>> const &getGameServers() const;
 
 private:
   void         _loop();
@@ -37,34 +40,6 @@ private:
     explicit License(std::string const &nb);
 
   private:
-  };
-
-  class GameServer : public network::IClient
-  {
-  public:
-    explicit GameServer(sock_t socket, sockaddr_in_t const &in);
-
-    GameServer(GameServer &&);
-
-    sock_t getSocket() const;
-    bool   canWrite() const;
-
-    void toggleWrite();
-
-    virtual bool                           disconnect();
-    virtual network::IClient::ClientAction write();
-    virtual network::IClient::ClientAction read();
-    virtual bool                           hasTimedOut() const;
-
-    bool operator==(GameServer const &other) const;
-
-  private:
-    network::TCPSocket m_sock;
-    sockaddr_in_t      m_in;
-    bool               m_write;
-
-    // Explicit padding
-    std::array<std::uint8_t, 7> __padding;
   };
 
   std::vector<std::string> m_licenseList; // TODO: Licenses ?

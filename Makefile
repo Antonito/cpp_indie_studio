@@ -13,7 +13,8 @@ LIBS=			logger		\
 			crypto		\
 			memory		\
 			exceptions	\
-			network
+			network		\
+			multithread
 
 PROJECTS_PATH=		$(addprefix $(LIB_DIR), $(LIBS))		\
 			$(addprefix $(PROJECT_DIR), $(PROJECTS))
