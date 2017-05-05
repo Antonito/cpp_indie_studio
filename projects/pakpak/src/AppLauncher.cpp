@@ -15,18 +15,19 @@ bool AppLauncher::start()
 // TODO : Create .cfg
 // Create the Root
 #ifdef DEBUG
-  mRoot =
-      std::make_unique<Ogre::Root>("plugins_d.cfg", "ogre_d.cfg", "Ogre.log");
+  mRoot = std::make_unique<Ogre::Root>("conf/plugins_d.cfg", "conf/ogre_d.cfg",
+                                       "Ogre.log");
 #else
-  mRoot = std::make_unique<Ogre::Root>("plugins.cfg", "ogre.cfg", "Ogre.log");
+  mRoot = std::make_unique<Ogre::Root>("conf/plugins.cfg", "conf/ogre.cfg",
+                                       "Ogre.log");
 #endif
 
   // Load Ressource config file
   Ogre::ConfigFile configFile;
 #ifdef DEBUG
-  configFile.load("resources_d.cfg");
+  configFile.load("conf/resources_d.cfg");
 #else
-  configFile.load("resources.cfg");
+  configFile.load("conf/resources.cfg");
 #endif
 
   // Load all the Ressources
