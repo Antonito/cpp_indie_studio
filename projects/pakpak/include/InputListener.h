@@ -1,7 +1,7 @@
 #ifndef INPUTLISTENER_H_
 #define INPUTLISTENER_H_
 
-#include <Ogre.h>
+#include <OGRE/Ogre.h>
 #include <memory>
 #include <OIS/OIS.h>
 
@@ -13,8 +13,8 @@ public:
   virtual ~InputListener();
   virtual void windowResized(Ogre::RenderWindow *rw);
   virtual void windowClosed(Ogre::RenderWindow *rw);
-  bool         frameRenderingQueued(const Ogre::FrameEvent &evt);
-  void         startOIS();
+  bool frameRenderingQueued(const Ogre::FrameEvent &evt);
+  void startOIS();
 
 private:
   Ogre::RenderWindow *mWindow;

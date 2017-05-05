@@ -5,7 +5,7 @@ include $(MK_DIR)colors.mk $(MK_DIR)defs.mk
 ###### Add your projects here #####
 PROJECT_DIR=		./projects/
 
-PROJECTS=
+PROJECTS=		pakpak
 
 LIB_DIR=		./libs/
 

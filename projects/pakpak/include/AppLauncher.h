@@ -2,7 +2,7 @@
 #define APPLAUNCHER_H_
 
 #include <memory>
-#include <Ogre.h>
+#include <OGRE/Ogre.h>
 #include "InputListener.h"
 
 class AppLauncher
