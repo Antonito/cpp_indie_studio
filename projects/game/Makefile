@@ -26,7 +26,8 @@ HEADER=
 # Project's files
 
 SRC_FILES=	main.cpp			\
-		AppLauncher.cpp
+		AppLauncher.cpp			\
+		InputListener.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 

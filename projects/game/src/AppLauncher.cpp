@@ -14,8 +14,9 @@ bool AppLauncher::start()
 
 {
 
+  // TODO : Create .cfg
   // Create the Root
-  mRoot = new Ogre::Root("plugins.cfg", "ogre.cfg", "Ogre.log");
+  mRoot = make_unique<Ogre::Root>("plugins.cfg", "ogre.cfg", "Ogre.log");
 
   // Load Ressource config file
   Ogre::ConfigFile configFile;
@@ -47,30 +48,32 @@ bool AppLauncher::start()
 
   // Render System
   // TODO: Render System dynamiques
-  Ogre::RenderSystem *rs = mRoot->getRenderSystemByName(
-      "OpenGL Rendering Subsystem"); // Pour DirectX : "Direct3D9 Rendering
-                                     // Subsystem
+  Ogre::RenderSystem *rs =
+      mRoot->getRenderSystemByName("OpenGL Rendering Subsystem");
+  // Pour DirectX : "Direct3D9 Rendering Subsystem
   mRoot->setRenderSystem(rs);
   rs->setConfigOption("Full Screen", "No");
   rs->setConfigOption("Video Mode", "1280 x 800 @ 32-bit colour");
   rs->setConfigOption("VSync", "Yes");
 
   // Render Window
-  mWindow = mRoot->initialise(true, "Pak Pak Studio");
+  mWindow = std::unique<Ogre::RenderWindow>(
+      mRoot->initialise(true, "Pak Pak Studio"));
 
   // Initialize Ressources
   Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
   // Create the Scene Manager
-  mSceneMgr =
-      mRoot->createSceneManager("DefaultSceneManager", "Mon Scene Manager");
+  mSceneMgr = std::unique<Ogre::SceneManager>(
+      mRoot->createSceneManager("DefaultSceneManager", "Mon Scene Manager"));
 
   // Set A light
   mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
 
   // Create Camera
-  mCamera = mSceneMgr->createCamera("PlayerCam");
+  mCamera =
+      std::unique_ptr<Ogre::Camera>(mSceneMgr->createCamera("PlayerCam"));
   mCamera->setPosition(Ogre::Vector3(0, 0, 100));
   mCamera->lookAt(Ogre::Vector3(0, 0, 0));
   mCamera->setNearClipDistance(5);
@@ -89,6 +92,8 @@ bool AppLauncher::start()
       mSceneMgr->getRootSceneNode()->createChildSceneNode();
   node->attachObject(ent);
 
+  createFrameListener();
+
   // Render Loop
   while (true)
     {
@@ -100,4 +105,11 @@ bool AppLauncher::start()
     }
 
   return true;
+}
+
+void AppDemarrage::createFrameListener()
+{
+  // Create and add a Framelistener
+  mInputListener = std::unique<InputListener>(InputListener(mWindow, mCamera));
+  mRoot->addFrameListener(mInputListener);
 }
