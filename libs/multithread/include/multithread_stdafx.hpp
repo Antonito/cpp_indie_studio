@@ -15,5 +15,6 @@
 #include <mutex>
 #include <condition_variable>
 #include "Semaphore.hpp"
+#include "Queue.hpp"
 
 #endif // !MULTITHREAD_STDAFX_HPP_

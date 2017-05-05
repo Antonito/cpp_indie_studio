@@ -4,6 +4,12 @@
 #include <mutex>
 #include <condition_variable>
 
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 namespace multithread
 {
   class Semaphore
@@ -24,5 +30,9 @@ namespace multithread
     std::unique_ptr<std::condition_variable> m_cond;
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !SEMAPHORE_HPP_

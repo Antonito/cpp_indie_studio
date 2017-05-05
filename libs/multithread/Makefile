@@ -25,8 +25,7 @@ HEADER=		multithread_stdafx.hpp
 
 # Project's files
 
-SRC_FILES=	Queue.cpp	\
-		Semaphore.cpp
+SRC_FILES=	Semaphore.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 
