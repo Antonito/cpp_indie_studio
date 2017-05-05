@@ -1,8 +1,8 @@
+#include "network_stdafx.hpp"
 #include <cerrno>
 #include <cassert>
 #include "TCPSocket.hpp"
 #include "SockError.hpp"
-#include "network_stdafx.hpp"
 
 namespace network
 {

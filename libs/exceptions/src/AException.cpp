@@ -1,3 +1,4 @@
+#include "exceptions_stdafx.hpp"
 #include "AException.hpp"
 
 namespace indie

@@ -1,5 +1,5 @@
 // stdafx.cpp : source file that includes just the standard includes
-// logger.pch will be the pre-compiled header
+// network.pch will be the pre-compiled header
 // stdafx.obj will contain the pre-compiled type information
 
 #include "network_stdafx.hpp"

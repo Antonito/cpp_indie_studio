@@ -24,7 +24,9 @@
 #include <condition_variable>
 #include <algorithm>
 #include <mutex>
+#if defined(__linux__) || defined(__APPLE__)
 #include <sys/select.h>
+#endif
 #include "LicenseServer.hpp"
 #include "GameClientServer.hpp"
 #include "Logger.hpp"
