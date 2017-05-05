@@ -19,12 +19,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameClientServer.cpp" />
+    <ClCompile Include="src\LicenseServer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\connect_manager_stdafx.hpp" />
     <ClInclude Include="include\connect_manager_targetver.h" />
+    <ClInclude Include="include\GameClientServer.hpp" />
+    <ClInclude Include="include\LicenseServer.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\libs\exceptions\exceptions.vcxproj">
+      <Project>{ffdce64e-932c-4d89-b5b4-934708a5ac52}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\libs\logger\logger.vcxproj">
+      <Project>{241420dc-d873-413c-ab83-b483d362558c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\libs\network\network.vcxproj">
+      <Project>{79e40ad2-4e62-4892-838e-295e56bf43c8}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -107,8 +122,9 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>connect_manager_stdafx.hpp</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\exceptions\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -119,8 +135,9 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>connect_manager_stdafx.hpp</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\exceptions\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,6 +152,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>connect_manager_stdafx.hpp</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\exceptions\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,6 +169,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>connect_manager_stdafx.hpp</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\exceptions\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
