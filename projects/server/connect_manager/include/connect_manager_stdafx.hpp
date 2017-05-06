@@ -31,5 +31,6 @@
 #include "GameClientServer.hpp"
 #include "Logger.hpp"
 #include "SockError.hpp"
+#include "Queue.hpp"
 
 #endif // !CONNECT_MANAGER_STDAFX_HPP_

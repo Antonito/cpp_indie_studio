@@ -5,7 +5,7 @@ constexpr std::uint32_t GameClientServer::maxGameClients;
 GameClientServer::GameClientServer(std::uint16_t const port)
     : m_sock(port, GameClientServer::maxGameClients,
              network::ASocket::BLOCKING),
-      m_thread()
+      m_thread(), m_gameClient()
 {
 }
 
@@ -67,7 +67,21 @@ std::int32_t GameClientServer::checkActivity(fd_set &readfds, fd_set &writefds,
       FD_SET(maxFd, &readfds);
 
       // Add every gameClient
-      // TODO
+      for (std::unique_ptr<GameClient> const &game : m_gameClient)
+	{
+	  std::int32_t const sock = game->getSocket();
+
+	  FD_SET(sock, &readfds);
+	  FD_SET(sock, &exceptfds);
+	  if (game->canWrite())
+	    {
+	      FD_SET(sock, &writefds);
+	    }
+	  if (sock > maxFd)
+	    {
+	      maxFd = sock;
+	    }
+	}
 
       // Loop over gameServers
       rc = select(maxFd + 1, &readfds, &writefds, &exceptfds, &tv);
@@ -98,6 +112,31 @@ void GameClientServer::_loop()
 	    }
 
 	  // Loop over all clients
+	  for (std::vector<std::unique_ptr<GameClient>>::iterator iter =
+	           m_gameClient.begin();
+	       iter != m_gameClient.end();)
+	    {
+	      bool                         deleted = false;
+	      std::unique_ptr<GameClient> &client = *iter;
+	      std::int32_t                 sock = client->getSocket();
+
+	      if (FD_ISSET(sock, &readfds))
+		{
+		  // TODO: Check input
+		}
+	      if (!deleted && FD_ISSET(sock, &writefds))
+		{
+		  // TODO: Ouput
+		}
+	      if (!deleted && FD_ISSET(sock, &exceptfds))
+		{
+		  // TODO: Except
+		}
+	      if (!deleted)
+		{
+		  ++iter;
+		}
+	    }
 	}
     }
 }
