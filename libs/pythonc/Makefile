@@ -3,9 +3,9 @@ MK_DIR=		./mk/
 MK_COMMON_DIR=	./../../mk/
 
 # Definitions for Makefile
-NAME=		$(ROOT_DIR)/build/libindie_memory.a
+NAME=		$(ROOT_DIR)/build/libindie_pythonmodule.a
 
-LOCAL_COMP_FLAGS=	-O2 -fno-exceptions
+LOCAL_COMP_FLAGS=	-O2
 
 LOCAL_LINK_FLAGS=
 
@@ -17,15 +17,15 @@ include $(MK_COMMON_DIR)colors.mk $(MK_COMMON_DIR)defs.mk
 
 SRC_DIR=	./src/
 
-INCLUDE_DIR=	./include/
+INCLUDE_DIR=	./include/ $(ROOT_DIR)/libs/logger/include $(ROOT_DIR)/libs/exceptions/include $(ROOT_DIR)/libs/serializer/include
 
 DIR_LIST=	$(SRC_DIR)
 
-HEADER=		memory_stdafx.hpp
+HEADER=
 
 # Project's files
 
-SRC_FILES=	MemoryManager.cpp
+SRC_FILES=	PythonModule.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 

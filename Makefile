@@ -13,7 +13,8 @@ LIBS=			logger		\
 			crypto		\
 			memory		\
 			exceptions	\
-			network
+			network		\
+			pythonpp
 
 PROJECTS_PATH=		$(addprefix $(LIB_DIR), $(LIBS))		\
 			$(addprefix $(PROJECT_DIR), $(PROJECTS))
