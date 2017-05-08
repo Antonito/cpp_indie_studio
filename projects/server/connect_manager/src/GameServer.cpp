@@ -66,12 +66,14 @@ bool GameServer::operator==(GameServer const &other) const
   return (true);
 }
 
-void GameServer::treatIncomingData()
+network::IClient::ClientAction GameServer::treatIncomingData()
 {
   // TODO: State machine
   switch (m_state)
     {
     case State::CONNECTED:
+      break;
+    case State::SETTING:
       break;
     case State::AUTHENTICATED:
       nope::log::Log(Info) << "GameServer " << getSocket() << " authenticated."
@@ -80,12 +82,14 @@ void GameServer::treatIncomingData()
     }
 }
 
-void GameServer::treatOutcomingData()
+network::IClient::ClientAction GameServer::treatOutcomingData()
 {
   // TODO: State machine
   switch (m_state)
     {
     case State::CONNECTED:
+      break;
+    case State::SETTING:
       break;
     case State::AUTHENTICATED:
       break;
