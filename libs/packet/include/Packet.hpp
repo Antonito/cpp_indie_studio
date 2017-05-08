@@ -74,13 +74,15 @@ public:
 
     header->magic.__data._magic = 0x1D;
     header->magic.__data.vers = 0; // TODO: Change version here
-    header->magic.magic = htonl(header->magic.magic);
+    header->magic.magic =
+        static_cast<std::uint16_t>(htons(header->magic.magic));
 
-    header->size = htonl(m_size - sizeof(m_header));
+    header->size =
+        static_cast<std::uint16_t>(htons(m_size - sizeof(m_header)));
 
     // TODO: calculate checksum
     header->checkSum = 0;
-    header->checkSum = htonl(header->checkSum);
+    header->checkSum = static_cast<std::uint16_t>(htons(header->checkSum));
   }
 
   void getPacket(T &obj)
