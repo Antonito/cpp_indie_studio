@@ -12,11 +12,11 @@ struct PacketHeader
     struct
     {
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-      uint8_t vers;
-      uint8_t _magic;
+      std::uint8_t vers;
+      std::uint8_t _magic;
 #else
-      uint8_t _magic;
-      uint8_t vers;
+      std::uint8_t _magic;
+      std::uint8_t vers;
 #endif
     } __data;
   } magic;
