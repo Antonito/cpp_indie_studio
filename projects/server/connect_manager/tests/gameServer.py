@@ -6,6 +6,13 @@
 
 This script emulates the gameServer behavior.
 
+Packet:
+
+    uint16_t magicNumber (2)
+    uint16_t size (packet size)
+    uint16_t checksum (checksum of the packet)
+    char data[]
+
 Protocol:
 GS == gameServer (this script)
 CM == ConnectManager
@@ -33,6 +40,7 @@ import logging
 import threading
 import argparse
 import sys
+from collections import namedtuple
 
 __author__ = "Antoine Baché"
 
@@ -56,8 +64,17 @@ def connectProtocol(logger, sock):
         print("Will exit now")
         sys.exit()
 
+    MyStruct = namedtuple("Packet", "field1 field2 field3 field4")
 
-    sock.send(b"HELLO");
+    data = b"HELLO"
+    summ = 0
+    magick = 0x1D00
+    size = len(data)
+    for i in range(len(data)):
+        summ += data[i]
+    summ &= 0xFFFF
+    m = MyStruct(magick, size, summ, data)
+    sock.send(m);
 
     msg = sock.recv(4096); # "Hello, who are you ?"
 
