@@ -6,6 +6,7 @@
 #include <cstring>
 #include "IPacket.hpp"
 #include "ISerializable.hpp"
+#include "GenNetwork.hpp"
 
 template <typename T>
 class Packet : public IPacket
@@ -75,16 +76,16 @@ public:
 
     PacketHeader *header = reinterpret_cast<PacketHeader *>(m_data.get());
 
-    header->magic.__data._magic = 0x1D;
-    header->magic.__data.vers = 0; // TODO: Change version here
+    header->magic.__data._magic = PacketHeader::Magic;
+    header->magic.__data.vers = PacketHeader::Version;
     header->magic.magic =
         static_cast<std::uint16_t>(htons(header->magic.magic));
 
     header->size =
         static_cast<std::uint16_t>(htons(m_size - sizeof(m_header)));
 
-    // TODO: calculate checksum
-    header->checkSum = 0;
+    header->checkSum = calculateChecksum(m_size - sizeof(m_header),
+                                         m_data.get() + sizeof(m_header));
     header->checkSum = static_cast<std::uint16_t>(htons(header->checkSum));
   }
 
@@ -94,11 +95,24 @@ public:
     PacketHeader *header = reinterpret_cast<PacketHeader *>(m_data.get());
 
     m_header.magic.magic = ntohs(header->magic.magic);
+    if (m_header.getMagic() != PacketHeader::Magic)
+      {
+	throw std::runtime_error("Magic number is invalid");
+      }
+    else if (m_header.getVersion() != PacketHeader::Version)
+      {
+	throw std::runtime_error("Invalid packet version");
+      }
     m_header.size = ntohs(header->size);
     m_header.checkSum = ntohs(header->checkSum);
     obj.deserialize(m_size - sizeof(m_header),
                     m_data.get() + sizeof(m_header));
-    // TODO : Check checksum
+    std::uint16_t foundCheckSum = calculateChecksum(
+        m_size - sizeof(m_header), m_data.get() + sizeof(m_header));
+    if (m_header.checkSum != foundCheckSum)
+      {
+	throw std::runtime_error("Invalid packet : checksum is incorrect");
+      }
   }
 
   Packet &operator<<(T const &obj)
@@ -130,6 +144,18 @@ public:
   }
 
 private:
+  static std::uint16_t calculateChecksum(std::size_t const   size,
+                                         std::uint8_t const *data)
+  {
+    std::size_t sum = 0;
+
+    for (std::size_t i = 0; i < size; ++i)
+      {
+	sum += data[i];
+      }
+    return (sum & 0xFFFF);
+  }
+
   std::size_t                     m_size;
   std::unique_ptr<std::uint8_t[]> m_data;
   PacketHeader                    m_header;

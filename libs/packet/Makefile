@@ -19,13 +19,15 @@ SRC_DIR=	./src/
 
 INCLUDE_DIR=	./include/
 
-DIR_LIST=	$(SRC_DIR)
+DIR_LIST=	$(SRC_DIR)				\
+		$(ROOT_DIR)/libs/network/include/
 
 HEADER=		packet_stdafx.hpp
 
 # Project's files
 
-SRC_FILES=	GameServerToCM.cpp
+SRC_FILES=	GameServerToCM.cpp	\
+		PacketHeader.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 

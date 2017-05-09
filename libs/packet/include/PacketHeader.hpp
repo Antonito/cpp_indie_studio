@@ -36,6 +36,9 @@ struct PacketHeader
     assert((magic.magic & 0xFF00) == magic.__data._magic);
     return (magic.__data._magic);
   }
+
+  constexpr static std::uint8_t Magic = 0x1D;
+  constexpr static std::uint8_t Version = 0;
 };
 
 static_assert(sizeof(PacketHeader) == sizeof(std::uint16_t) * 3,
