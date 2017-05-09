@@ -39,10 +39,11 @@ public:
   bool operator==(GameServer const &other) const;
 
 private:
-  network::TCPSocket m_sock;
-  sockaddr_in_t      m_in;
-  bool               m_write;
-  State              m_state;
+  network::TCPSocket           m_sock;
+  sockaddr_in_t                m_in;
+  bool                         m_write;
+  State                        m_state;
+  Packet<GameServerToCMPacket> m_packet;
 };
 
 // Disable clang warning for implicit padding

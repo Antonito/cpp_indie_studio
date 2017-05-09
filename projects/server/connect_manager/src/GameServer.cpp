@@ -42,7 +42,7 @@ network::IClient::ClientAction GameServer::write()
   return (network::IClient::ClientAction::DISCONNECT);
 }
 
-network::IClient::ClientAction GameServer::read()
+network::IClient::ClientAction GameServer::read(IPacket packet)
 {
   return (network::IClient::ClientAction::DISCONNECT);
 }
@@ -72,6 +72,7 @@ void GameServer::treatIncomingData()
   switch (m_state)
     {
     case State::CONNECTED:
+      read(m_packet);
       break;
     case State::AUTHENTICATED:
       nope::log::Log(Info) << "GameServer " << getSocket() << " authenticated."
