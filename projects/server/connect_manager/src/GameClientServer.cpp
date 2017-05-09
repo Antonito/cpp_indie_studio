@@ -123,10 +123,18 @@ void GameClientServer::_loop()
 	      if (FD_ISSET(sock, &readfds))
 		{
 		  // TODO: Check input
+		  network::IClient::ClientAction ret;
+		  ret = client->treatIncomingData();
+		  if (ret == network::IClient::ClientAction::DISCONNECT)
+		    {
+		      removeClient(*client);
+		      deleted = true;
+		    }
 		}
 	      if (!deleted && FD_ISSET(sock, &writefds))
 		{
 		  // TODO: Ouput
+		  client->treatOutcomingData();
 		}
 	      if (!deleted && FD_ISSET(sock, &exceptfds))
 		{

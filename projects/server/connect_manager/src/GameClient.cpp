@@ -1,7 +1,7 @@
 #include "GameClient.hpp"
 
 GameClient::GameClient(sock_t const fd)
-    : m_sock(fd), m_write(false), __padding()
+    : m_sock(fd), m_write(false), m_state(State::CONNECTED)
 {
 }
 
@@ -46,4 +46,42 @@ bool GameClient::canWrite() const
 void GameClient::toggleWrite()
 {
   m_write = !m_write;
+}
+
+network::IClient::ClientAction GameClient::treatIncomingData()
+{
+  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+
+  switch (m_state)
+    {
+    case State::CONNECTED:
+      break;
+    case State::AUTHENTICATED:
+      break;
+    }
+  if (ret == network::IClient::ClientAction::SUCCESS)
+    {
+      toggleWrite();
+    }
+  return (ret);
+}
+
+network::IClient::ClientAction GameClient::treatOutcomingData()
+{
+  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+
+  switch (m_state)
+    {
+    case State::CONNECTED:
+      break;
+    case State::AUTHENTICATED:
+      nope::log::Log(Info) << "GameClient " << getSocket()
+                           << " authenticated."; // TODO: Put here or output ?
+      break;
+    }
+  if (ret == network::IClient::ClientAction::SUCCESS)
+    {
+      toggleWrite();
+    }
+  return (ret);
 }

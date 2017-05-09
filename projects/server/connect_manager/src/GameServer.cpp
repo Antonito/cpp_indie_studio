@@ -103,7 +103,7 @@ bool GameServer::operator==(GameServer const &other) const
 
 network::IClient::ClientAction GameServer::treatIncomingData()
 {
-  network::IClient::ClientAction ret = network::IClient::ClientAction::SUCCESS;
+  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
   GameServerToCMPacket           rep;
 
   switch (m_state)
@@ -142,8 +142,8 @@ network::IClient::ClientAction GameServer::treatIncomingData()
 	}
       break;
     case State::AUTHENTICATED:
-      nope::log::Log(Info) << "GameServer " << getSocket() << " authenticated."
-                           << std::endl; // TODO: Put here or output ?
+      nope::log::Log(Info) << "GameServer " << getSocket()
+                           << " authenticated."; // TODO: Put here or output ?
       break;
     }
   if (ret == network::IClient::ClientAction::SUCCESS)
@@ -155,7 +155,7 @@ network::IClient::ClientAction GameServer::treatIncomingData()
 
 network::IClient::ClientAction GameServer::treatOutcomingData()
 {
-  network::IClient::ClientAction ret = network::IClient::ClientAction::SUCCESS;
+  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
 
   GameServerToCMPacket rep;
   switch (m_state)

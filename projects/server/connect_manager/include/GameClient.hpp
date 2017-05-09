@@ -1,15 +1,25 @@
 #ifndef GAME_CLIENT_HPP_
 #define GAME_CLIENT_HPP_
 
-#include <array>
 #include <cstdint>
 #include "IClient.hpp"
 #include "TCPSocket.hpp"
 #include "IPacket.hpp"
 
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 class GameClient : public network::IClient
 {
 public:
+  enum State
+  {
+    CONNECTED = 0,
+    AUTHENTICATED
+  };
   explicit GameClient(sock_t const fd);
   virtual ~GameClient();
 
@@ -22,12 +32,18 @@ public:
   bool         canWrite() const;
   void         toggleWrite();
 
+  network::IClient::ClientAction treatIncomingData();
+  network::IClient::ClientAction treatOutcomingData();
+
 private:
   network::TCPSocket m_sock;
   bool               m_write;
-
-  // Explicit padding
-  std::array<std::uint8_t, 7> __padding;
+  State              m_state;
 };
+
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !GAME_CLIENT_HPP_
