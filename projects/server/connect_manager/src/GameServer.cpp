@@ -41,14 +41,43 @@ bool GameServer::disconnect()
   return (true);
 }
 
-network::IClient::ClientAction GameServer::write(IPacket const &)
+network::IClient::ClientAction GameServer::write(IPacket const &pck)
 {
-  return (network::IClient::ClientAction::DISCONNECT);
+  network::IClient::ClientAction ret = network::IClient::ClientAction::SUCCESS;
+  std::size_t const              sizeToWrite = pck.getSize();
+  uint8_t const *                data = pck.getData();
+
+  if (m_sock.send(data, sizeToWrite) == false)
+    {
+      ret = network::IClient::ClientAction::FAILURE;
+    }
+  return (ret);
 }
 
-network::IClient::ClientAction GameServer::read(IPacket &)
+network::IClient::ClientAction GameServer::read(IPacket &pck)
 {
-  return (network::IClient::ClientAction::DISCONNECT);
+  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+
+  // Allocate buffer
+  std::unique_ptr<uint8_t[]> buff =
+      std::make_unique<uint8_t[]>(packetSize::GameServerToCMPacketSize);
+  ssize_t buffLen = 0;
+
+  if (m_sock.rec(buff.get(), packetSize::GameServerToCMPacketSize, &buffLen))
+    {
+      assert(buffLen >= 0);
+      if (buffLen == 0)
+	{
+	  ret = network::IClient::ClientAction::DISCONNECT;
+	}
+      else
+	{
+	  ret = network::IClient::ClientAction::SUCCESS;
+	  pck.setData(static_cast<size_t>(buffLen), std::move(buff));
+	}
+    }
+
+  return (ret);
 }
 
 bool GameServer::hasTimedOut() const
