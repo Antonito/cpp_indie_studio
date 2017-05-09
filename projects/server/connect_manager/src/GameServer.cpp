@@ -1,7 +1,9 @@
 #include "connect_manager_stdafx.hpp"
 
-GameServer::GameServer(sock_t socket, sockaddr_in_t const &in)
-    : m_sock(socket), m_in(in), m_write(false), m_state(State::CONNECTED)
+GameServer::GameServer(sock_t socket, sockaddr_in_t const &in,
+                       std::vector<std::string> const &licences)
+    : m_sock(socket), m_in(in), m_licences(licences), m_write(false),
+      m_state(State::CONNECTED)
 {
   std::array<char, INET6_ADDRSTRLEN> clntName;
 
@@ -16,7 +18,8 @@ GameServer::GameServer(sock_t socket, sockaddr_in_t const &in)
 
 GameServer::GameServer(GameServer &&other)
     : m_sock(std::move(other.m_sock)), m_in(std::move(other.m_in)),
-      m_write(other.m_write), m_state(other.m_state)
+      m_licences(other.m_licences), m_write(other.m_write),
+      m_state(other.m_state)
 {
 }
 
