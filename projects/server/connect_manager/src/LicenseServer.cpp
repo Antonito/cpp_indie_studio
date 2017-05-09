@@ -59,7 +59,8 @@ bool LicenseServer::addClient()
   // Check if the socket is valid
   if (rc > 0)
     {
-      m_gameServerList.push_back(std::make_unique<GameServer>(rc, in));
+      m_gameServerList.push_back(
+          std::make_unique<GameServer>(rc, in, m_licenseList));
       nope::log::Log(Debug) << "Added client FD #"
                             << m_gameServerList.back()->getSocket();
       return (true);

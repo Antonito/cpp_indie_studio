@@ -1,6 +1,8 @@
 #ifndef GAMESERVER_HPP_
 #define GAMESERVER_HPP_
 
+#include <vector>
+#include <string>
 #include "IClient.hpp"
 #include "TCPSocket.hpp"
 
@@ -20,7 +22,8 @@ public:
     AUTHENTICATED
   };
 
-  explicit GameServer(sock_t socket, sockaddr_in_t const &in);
+  explicit GameServer(sock_t socket, sockaddr_in_t const &in,
+                      std::vector<std::string> const &licences);
 
   GameServer(GameServer &&);
 
@@ -40,10 +43,11 @@ public:
   bool operator==(GameServer const &other) const;
 
 private:
-  network::TCPSocket m_sock;
-  sockaddr_in_t      m_in;
-  bool               m_write;
-  State              m_state;
+  network::TCPSocket              m_sock;
+  sockaddr_in_t                   m_in;
+  std::vector<std::string> const &m_licences;
+  bool                            m_write;
+  State                           m_state;
 };
 
 // Disable clang warning for implicit padding
