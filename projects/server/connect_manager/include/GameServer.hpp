@@ -46,6 +46,7 @@ public:
 
 private:
   network::TCPSocket              m_sock;
+  std::uint16_t                   m_port;
   sockaddr_in_t                   m_in;
   std::vector<std::string> const &m_licences;
   bool                            m_write;

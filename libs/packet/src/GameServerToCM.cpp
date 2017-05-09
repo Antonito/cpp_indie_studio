@@ -2,6 +2,10 @@
 
 constexpr std::size_t GameServerToCMPacketSimple::buffSize;
 
+GameServerToCMPacket::GameServerToCMPacket() : pck(), __padding()
+{
+}
+
 std::unique_ptr<std::uint8_t[]>
     GameServerToCMPacket::serialize(std::size_t &sizeToFill) const
 {

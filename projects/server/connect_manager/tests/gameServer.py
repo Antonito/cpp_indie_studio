@@ -1,4 +1,4 @@
-#! /bin/env python3
+#!/usr/bin/env python3
 # coding: utf-8
 
 #TODO: RE-DO the whole protocol communication : eg "Hello connectManager" -> breuh
@@ -11,14 +11,14 @@ GS == gameServer (this script)
 CM == ConnectManager
 
 ## Unknwon
-GS ==> "Hello connectManager" ==> CM
+GS ==> "HELLO" ==> CM
 
-CM ==> "Hello, who are you ?" ==> GS
+CM ==> "WHO ?" ==> GS
 
 ## Connecting
-GS ==> "gameServer, licence:. port:.. max:...." ==> CM // . means char[] .. means uint16_t .... means uint32_t
+GS ==> "LICENCEPORT" ==> CM // . means char[] .. means uint16_t .... means uint32_t
 
-CM ==> "OK, welcome gentleman." ==> GS
+CM ==> "OK" ==> GS
 
 ## Valid
 
@@ -36,7 +36,7 @@ import sys
 
 __author__ = "Antoine Baché"
 
-gameServerPortL = (1324)
+gameServerPortL = (12346)
 gameServerMaxClientL = (4096)
 gameServerPort = gameServerPortL.to_bytes(2, byteorder='big')
 gameServerMaxClient = gameServerMaxClientL.to_bytes(4, byteorder='big')
@@ -57,11 +57,11 @@ def connectProtocol(logger, sock):
         sys.exit()
 
 
-    sock.send(b"Hello connectManager\x00");
+    sock.send(b"HELLO");
 
     msg = sock.recv(4096); # "Hello, who are you ?"
 
-    if (msg != b"Hello, who are you ?"):
+    if (msg != b"WHO ?"):
         sock.close()
         logger.debug("Wrong server answer. Received: \"%s\"" % (msg))
         return (1);

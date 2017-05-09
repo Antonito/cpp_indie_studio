@@ -22,7 +22,7 @@ struct GameServerToCMPacketSimple
 
 struct GameServerToCMPacketLicence
 {
-  GameServerToCMPacketSimple license;
+  GameServerToCMPacketSimple licence;
   std::uint16_t              port;
 };
 
@@ -39,6 +39,7 @@ struct GameServerToCMPacketRaw
 
 struct GameServerToCMPacket : public ISerializable
 {
+  GameServerToCMPacket();
   GameServerToCMPacketRaw pck;
 
   virtual std::unique_ptr<std::uint8_t[]>

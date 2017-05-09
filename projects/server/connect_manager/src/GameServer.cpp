@@ -2,8 +2,8 @@
 
 GameServer::GameServer(sock_t socket, sockaddr_in_t const &in,
                        std::vector<std::string> const &licences)
-    : m_sock(socket), m_in(in), m_licences(licences), m_write(false),
-      m_state(State::CONNECTED)
+    : m_sock(socket), m_port(0), m_in(in), m_licences(licences),
+      m_write(false), m_state(State::CONNECTED), m_packet()
 {
   std::array<char, INET6_ADDRSTRLEN> clntName;
 
@@ -17,9 +17,10 @@ GameServer::GameServer(sock_t socket, sockaddr_in_t const &in,
 }
 
 GameServer::GameServer(GameServer &&other)
-    : m_sock(std::move(other.m_sock)), m_in(std::move(other.m_in)),
-      m_licences(other.m_licences), m_write(other.m_write),
-      m_state(other.m_state)
+    : m_sock(std::move(other.m_sock)), m_port(other.m_port),
+      m_in(std::move(other.m_in)), m_licences(other.m_licences),
+      m_write(other.m_write), m_state(other.m_state),
+      m_packet(std::move(other.m_packet))
 {
 }
 
@@ -40,12 +41,12 @@ bool GameServer::disconnect()
   return (true);
 }
 
-network::IClient::ClientAction GameServer::write()
+network::IClient::ClientAction GameServer::write(IPacket const &)
 {
   return (network::IClient::ClientAction::DISCONNECT);
 }
 
-network::IClient::ClientAction GameServer::read(IPacket &packet)
+network::IClient::ClientAction GameServer::read(IPacket &)
 {
   return (network::IClient::ClientAction::DISCONNECT);
 }
@@ -71,27 +72,34 @@ bool GameServer::operator==(GameServer const &other) const
 
 network::IClient::ClientAction GameServer::treatIncomingData()
 {
-  // TODO: State machine
-  GameServerToCMPacket rep;
+  network::IClient::ClientAction ret = network::IClient::ClientAction::SUCCESS;
+  GameServerToCMPacket           rep;
+
   switch (m_state)
     {
     case State::CONNECTED:
-      read(m_packet);
-      m_packet >> rep;
-      if (std::memcpm(rep.pck.string, "HELLO", 5) != 0)
+      ret = read(m_packet);
+      if (ret == network::IClient::ClientAction::SUCCESS)
 	{
-	  return (network::IClient::ClientAction::DISCONNECT);
+	  m_packet >> rep;
+	  if (std::memcmp(&rep.pck.eventData.string, "HELLO", 5) != 0)
+	    {
+	      return (network::IClient::ClientAction::DISCONNECT);
+	    }
 	}
       break;
     case State::SETTING:
-      read(m_packet);
-      m_packet >> rep;
-      m_licences;
-      if (m_licences.find(m_licences.begin(), m_licences.end(),
-                          rep.pck.licence.licence.data.data) ==
-          m_licences.end())
+      ret = read(m_packet);
+      if (ret == network::IClient::ClientAction::SUCCESS)
 	{
-	  return (network::IClient::ClientAction::DISCONNECT);
+	  m_packet >> rep;
+	  if (std::find(m_licences.begin(), m_licences.end(),
+	                rep.pck.eventData.licence.licence.data.data()) ==
+	      m_licences.end())
+	    {
+	      return (network::IClient::ClientAction::DISCONNECT);
+	    }
+	  m_port = rep.pck.eventData.licence.port;
 	}
       break;
     case State::AUTHENTICATED:
@@ -99,25 +107,38 @@ network::IClient::ClientAction GameServer::treatIncomingData()
                            << std::endl; // TODO: Put here or output ?
       break;
     }
+  return (ret);
 }
 
 network::IClient::ClientAction GameServer::treatOutcomingData()
 {
-  // TODO: State machine
+  network::IClient::ClientAction ret = network::IClient::ClientAction::SUCCESS;
+
   GameServerToCMPacket rep;
   switch (m_state)
     {
     case State::CONNECTED:
-      GameServerToCMPacketSimple simple;
-      std::memcpy(simple.data.data, "WHO ?", 6);
-      rep.pck.string = simple;
-      m_packet << rep;
-      send(rep);
-      m_state = State::SETTING;
+      {
+	rep.pck.eventType = GameServerToCMEvent::STRINGIFIED_EVENT;
+	GameServerToCMPacketSimple &simple = rep.pck.eventData.string;
+	std::memcpy(simple.data.data(), "WHO ?", 6);
+	m_packet << rep;
+	ret = write(m_packet);
+	m_state = State::SETTING;
+      }
       break;
     case State::SETTING:
+      {
+	rep.pck.eventType = GameServerToCMEvent::STRINGIFIED_EVENT;
+	GameServerToCMPacketSimple &simple = rep.pck.eventData.string;
+	std::memcpy(simple.data.data(), "OK", 3);
+	m_packet << rep;
+	ret = write(m_packet);
+	m_state = State::AUTHENTICATED;
+      }
       break;
     case State::AUTHENTICATED:
       break;
     }
+  return (ret);
 }
