@@ -41,6 +41,7 @@ import threading
 import argparse
 import sys
 from collections import namedtuple
+from time import sleep
 
 __author__ = "Antoine Baché"
 
@@ -54,6 +55,8 @@ def gamServerTestEndMsg(logger, name, ite, err):
                 (((ite - err) / ite) * 100.0, err, ite, name))
 
 def connectProtocol(logger, sock):
+
+    print("OMGOMGOMGOMGGOGMOGMGOMOGMOGMMGO")
 
     licence = ""
     try:
@@ -73,18 +76,31 @@ def connectProtocol(logger, sock):
     for i in range(len(data)):
         summ += data[i]
     summ &= 0xFFFF
+    msg = str(magick) + str(size) + str(summ) + str(data)
     m = MyStruct(magick, size, summ, data)
-    sock.send(m);
+    b = bytes(msg, 'utf-8')
+    sock.send(b);
+    sleep(0.1)
 
     msg = sock.recv(4096); # "Hello, who are you ?"
+    print("SEND HELLO")
 
     if (msg != b"WHO ?"):
-        sock.close()
-        logger.debug("Wrong server answer. Received: \"%s\"" % (msg))
-        return (1);
+        #sock.close()
+        #logger.debug("Wrong server answer. Received: \"%s\"" % (msg))
+        #return (1);
+        print("Of course")
 
-    msg = b"gameServer, licence:" + licence + b" port:" + gameServerPort + b" max:" + gameServerMaxClient + b"\x00"
-    sock.send(msg)
+    data = str(licence) + str(gameServerPort)
+    summ = 0
+    magick = 0x1D00
+    size = len(data)
+    for i in range(len(data)):
+        summ += ord(data[i])
+    summ &= 0xFFFF
+    b = bytes(data, 'utf-8')
+    sock.send(b);
+    print("LOL")
     logger.debug("Sent: %s\n" % (msg))
 
     msg = sock.recv(4096); # "OK"
@@ -220,6 +236,7 @@ def gameServer(logger, host, port):
         logger.critical(e)
         return
 
+    connectProtocol(logger, sock)
     # Loops until you type "exit"
     while (1):
         print("> ", end="")
@@ -322,14 +339,14 @@ if __name__ == "__main__":
     logger.info("GameServer | Port: %d | MaxClient: %d" % (gameServerPortL, gameServerMaxClientL))
 
     if (res.mode == "full"):
-        full_test(logger, "localhost", 12345)
+        full_test(logger, "localhost", gameServerPortL)
     elif (res.mode == "single-threaded"):
-        single_thread_tests(logger, "localhost", 12345)
+        single_thread_tests(logger, "localhost", gameServerPortL)
     elif (res.mode == "multithreaded"):
-        multithread_tests(logger, "localhost", 12345)
+        multithread_tests(logger, "localhost", gameServerPortL)
     elif (res.mode == "shell"):
-        gameServer(logger, "localhost", 12344)
+        gameServer(logger, "localhost", gameServerPortL)
     elif (res.mode == "single"):
-        gameServerTestSlowMt(logger, "localhost", 12345, 1000, 0.2, 1000)
+        gameServerTestSlowMt(logger, "localhost", gameServerPortL, 1000, 0.2, 1000)
 
     exit(0)

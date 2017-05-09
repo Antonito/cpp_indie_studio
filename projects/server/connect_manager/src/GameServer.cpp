@@ -111,6 +111,7 @@ network::IClient::ClientAction GameServer::treatIncomingData()
       if (ret == network::IClient::ClientAction::SUCCESS)
 	{
 	  m_packet >> rep;
+          std::cout << "[DELETE] " << &rep.pck.eventData.string << std::endl;
 	  if (std::memcmp(&rep.pck.eventData.string, "HELLO", 5) != 0)
 	    {
 	      return (network::IClient::ClientAction::DISCONNECT);
@@ -122,6 +123,7 @@ network::IClient::ClientAction GameServer::treatIncomingData()
       if (ret == network::IClient::ClientAction::SUCCESS)
 	{
 	  m_packet >> rep;
+          std::cout << "[DELETE] " << rep.pck.eventData.licence.licence.data.data() << std::endl;
 	  if (std::find(m_licences.begin(), m_licences.end(),
 	                rep.pck.eventData.licence.licence.data.data()) ==
 	      m_licences.end())
