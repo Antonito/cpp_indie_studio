@@ -36,13 +36,43 @@ void GameClientServer::stop()
 
 bool GameClientServer::addClient()
 {
-  // TODO: Code
-  return (true);
+  // Accept new client
+  std::int32_t  rc = 0;
+  sockaddr_in_t in = {};
+  sock_t const  sock = m_sock.getSocket();
+
+  nope::log::Log(Debug) << "There's client to accept on socket #" << sock;
+  do
+    {
+      socklen_t len = sizeof(in);
+      rc = ::accept(sock, reinterpret_cast<sockaddr_t *>(&in), &len);
+    }
+  while (rc == -1 && errno == EINTR);
+
+  // Check if the socket is valid
+  if (rc > 0)
+    {
+      m_gameClient.push_back(
+          std::make_unique<GameClient>(rc)); // TODO: Use in ?
+      nope::log::Log(Debug) << "Added client FD #"
+                            << m_gameClient.back()->getSocket();
+      return (true);
+    }
+  return (false);
 }
 
-bool GameClientServer::removeClient(network::IClient &)
+bool GameClientServer::removeClient(network::IClient &c)
 {
-  // TODO: Code
+  GameClient &g = static_cast<GameClient &>(c);
+
+  nope::log::Log(Debug) << "Removing GameClient";
+  g.disconnect();
+  // Remove asked element
+  m_gameClient.erase(std::remove_if(m_gameClient.begin(), m_gameClient.end(),
+                                    [&](std::unique_ptr<GameClient> const &o) {
+                                      return (*o == g);
+                                    }),
+                     m_gameClient.end());
   return (true);
 }
 
@@ -122,8 +152,8 @@ void GameClientServer::_loop()
 
 	      if (FD_ISSET(sock, &readfds))
 		{
-		  // TODO: Check input
 		  network::IClient::ClientAction ret;
+
 		  ret = client->treatIncomingData();
 		  if (ret == network::IClient::ClientAction::DISCONNECT)
 		    {
@@ -133,12 +163,21 @@ void GameClientServer::_loop()
 		}
 	      if (!deleted && FD_ISSET(sock, &writefds))
 		{
-		  // TODO: Ouput
-		  client->treatOutcomingData();
+		  network::IClient::ClientAction ret;
+
+		  ret = client->treatOutcomingData();
+		  if (ret == network::IClient::ClientAction::DISCONNECT)
+		    {
+		      removeClient(*client);
+		      deleted = true;
+		    }
 		}
 	      if (!deleted && FD_ISSET(sock, &exceptfds))
 		{
-		  // TODO: Except
+		  nope::log::Log(Debug)
+		      << "Something happened, disconnecting client" << sock;
+		  removeClient(*client);
+		  deleted = true;
 		}
 	      if (!deleted)
 		{
