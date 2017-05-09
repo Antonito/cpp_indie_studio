@@ -40,6 +40,7 @@ import logging
 import threading
 import argparse
 import sys
+import ctypes
 from collections import namedtuple
 from time import sleep
 
@@ -53,6 +54,18 @@ gameServerMaxClient = gameServerMaxClientL.to_bytes(4, byteorder='big')
 def gamServerTestEndMsg(logger, name, ite, err):
     logger.info("[OK] Succes: %.2f%% Fail: %d Total: %d | Name: %s" % \
                 (((ite - err) / ite) * 100.0, err, ite, name))
+
+
+def createHeader(data):
+    
+    summ = 0
+    magick = 0x1D00
+    size = len(data)
+    for i in range(len(data)):
+        summ += int(bytes(str(data[i]), 'utf-8'))
+    summ &= 0xFFFF
+    header = magick.to_bytes(2, byteorder='big') + size.to_bytes(2, byteorder='big') + summ.to_bytes(2, byteorder='big')
+    return (header)
 
 def connectProtocol(logger, sock):
 
@@ -69,18 +82,12 @@ def connectProtocol(logger, sock):
 
     MyStruct = namedtuple("Packet", "field1 field2 field3 field4")
 
-    data = b"HELLO"
-    summ = 0
-    magick = 0x1D00
-    size = len(data)
-    for i in range(len(data)):
-        summ += data[i]
-    summ &= 0xFFFF
-    msg = str(magick) + str(size) + str(summ) + str(data)
-    m = MyStruct(magick, size, summ, data)
-    b = bytes(msg, 'utf-8')
-    sock.send(b);
-    sleep(0.1)
+    msg = b"HELLO"
+    eventType = 0
+    data = eventType.to_bytes(2, byteorder='big') + msg
+    header = createHeader(data)
+    pck = header + data
+    sock.send(pck);
 
     msg = sock.recv(4096); # "Hello, who are you ?"
     print("SEND HELLO")
@@ -91,23 +98,22 @@ def connectProtocol(logger, sock):
         #return (1);
         print("Of course")
 
-    data = str(licence) + str(gameServerPort)
-    summ = 0
-    magick = 0x1D00
-    size = len(data)
-    for i in range(len(data)):
-        summ += ord(data[i])
-    summ &= 0xFFFF
-    b = bytes(data, 'utf-8')
-    sock.send(b);
-    print("LOL")
-    logger.debug("Sent: %s\n" % (msg))
+    msg = bytes(licence, 'utf-8')
+    for i in range(256 - len(msg)):
+        msg += b"\x00"
+    msg += (8080).to_bytes(2, byteorder='big')
+    eventType = 0
+    data = eventType.to_bytes(2, byteorder='big') + msg
+    header = createHeader(data)
+    pck = header + data
+    sock.send(pck);
 
     msg = sock.recv(4096); # "OK"
     if (msg != b"OK, welcome gentleman."):
-        sock.close()
-        logger.debug("Wrong server answer. Received: \"%s\"" % (msg))
-        return (1);
+        #sock.close()
+        #logger.debug("Wrong server answer. Received: \"%s\"" % (msg))
+        #return (1);
+        print("Of course")
 
     logger.debug("GameServer is connected\n");
     return (0);
