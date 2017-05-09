@@ -49,6 +49,7 @@ network::IClient::ClientAction GameServer::write(IPacket const &pck)
 
   if (m_sock.send(data, sizeToWrite) == false)
     {
+      nope::log::Log(Debug) << "Failed to write data [GameServer]";
       ret = network::IClient::ClientAction::FAILURE;
     }
   return (ret);
@@ -68,6 +69,8 @@ network::IClient::ClientAction GameServer::read(IPacket &pck)
       assert(buffLen >= 0);
       if (buffLen == 0)
 	{
+	  nope::log::Log(Debug)
+	      << "Read failed, shall disconnect [GameServer]";
 	  ret = network::IClient::ClientAction::DISCONNECT;
 	}
       else
@@ -76,7 +79,6 @@ network::IClient::ClientAction GameServer::read(IPacket &pck)
 	  pck.setData(static_cast<size_t>(buffLen), std::move(buff));
 	}
     }
-
   return (ret);
 }
 
@@ -153,6 +155,7 @@ network::IClient::ClientAction GameServer::treatOutcomingData()
 	std::memcpy(simple.data.data(), "WHO ?", 6);
 	m_packet << rep;
 	ret = write(m_packet);
+	nope::log::Log(Debug) << "Switching to state SETTING [GameServer]";
 	m_state = State::SETTING;
       }
       break;
@@ -163,6 +166,8 @@ network::IClient::ClientAction GameServer::treatOutcomingData()
 	std::memcpy(simple.data.data(), "OK", 3);
 	m_packet << rep;
 	ret = write(m_packet);
+	nope::log::Log(Debug)
+	    << "Switching to state AUTHENTICATED [GameServer]";
 	m_state = State::AUTHENTICATED;
       }
       break;
