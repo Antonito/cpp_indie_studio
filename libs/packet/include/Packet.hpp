@@ -104,6 +104,9 @@ public:
     m_header.magic.magic = ntohs(header->magic.magic);
     if (m_header.getMagic() != PacketHeader::Magic)
       {
+	std::cout << "Got: " << std::hex << m_header.magic.magic << '\n';
+	std::cout << "Expected: " << std::hex
+	          << static_cast<int>(PacketHeader::Magic) << std::endl;
 	throw std::runtime_error("Magic number is invalid");
       }
     else if (m_header.getVersion() != PacketHeader::Version)
