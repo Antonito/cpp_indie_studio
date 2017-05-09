@@ -26,7 +26,7 @@ struct GameServerToCMPacketLicence
   std::uint16_t              port;
 };
 
-struct GameServerToCMPacket : public ISerializable
+struct GameServerToCMPacketRaw
 {
   GameServerToCMEvent eventType;
   union
@@ -35,11 +35,19 @@ struct GameServerToCMPacket : public ISerializable
     GameServerToCMPacketLicence licence;
     uint16_t                    nbClients;
   } eventData;
+};
+
+struct GameServerToCMPacket : public ISerializable
+{
+  GameServerToCMPacketRaw pck;
 
   virtual std::unique_ptr<std::uint8_t[]>
       serialize(std::size_t &sizeToFill) const;
 
   virtual void deserialize(std::size_t size, std::uint8_t *data);
+
+private:
+  std::array<std::uint8_t, 4> __padding;
 };
 
 #endif // !GAMESERVER_CM_PACKET_HPP_

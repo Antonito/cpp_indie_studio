@@ -15,23 +15,25 @@ class Packet : public IPacket
                 "Type is not an ISerializable");
 
 public:
-  Packet() : m_size(0), m_data()
+  Packet() : m_size(0), m_data(), m_header()
   {
   }
 
   Packet(Packet const &other)
-      : m_size(other.m_size), m_data(new std::uint8_t[m_size])
+      : m_size(other.m_size), m_data(new std::uint8_t[m_size]),
+        m_header(other.m_header)
   {
     std::memcpy(m_data.get(), other.m_data.get(), m_size);
   }
 
   Packet(Packet &&other)
-      : m_size(other.m_size), m_data(std::move(other.m_data))
+      : m_size(other.m_size), m_data(std::move(other.m_data)),
+        m_header(other.m_header)
   {
     other.m_size = 0;
   }
 
-  Packet(T const &obj)
+  explicit Packet(T const &obj) : m_size(0), m_data(), m_header()
   {
     this->fillData(obj);
   }
@@ -63,6 +65,7 @@ public:
   Packet &operator=(T const &obj)
   {
     this->fillData(obj);
+    return (*this);
   }
 
   void fillPacket(T const &obj)
@@ -87,8 +90,15 @@ public:
 
   void getPacket(T &obj)
   {
-    // TODO: Fill header here
-    obj.deserialize(m_size, m_data.get());
+    // Fill header
+    PacketHeader *header = reinterpret_cast<PacketHeader *>(m_data.get());
+
+    m_header.magic.magic = ntohs(header->magic.magic);
+    m_header.size = ntohs(header->size);
+    m_header.checkSum = ntohs(header->checkSum);
+    obj.deserialize(m_size - sizeof(m_header),
+                    m_data.get() + sizeof(m_header));
+    // TODO : Check checksum
   }
 
   Packet &operator<<(T const &obj)

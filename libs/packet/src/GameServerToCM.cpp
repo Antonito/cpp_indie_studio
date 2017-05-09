@@ -5,27 +5,52 @@ constexpr std::size_t GameServerToCMPacketSimple::buffSize;
 std::unique_ptr<std::uint8_t[]>
     GameServerToCMPacket::serialize(std::size_t &sizeToFill) const
 {
+  // Set up cursor
   std::size_t cursor = sizeToFill;
-  sizeToFill += sizeof(PacketHeader) + sizeof(GameServerToCMPacket);
+  sizeToFill += sizeof(GameServerToCMPacket);
 
-  std::unique_ptr<std::uint8_t[]> serial = std::make_unique<std::uint8_t[]>(sizeToFill]);
-  std::uint32_t toSend;
+  // Allocate buffer
+  std::unique_ptr<std::uint8_t[]> serial =
+      std::make_unique<std::uint8_t[]>(sizeToFill);
 
-  // Convert to Big Endian
-  magic = htons(magic);
+  // Fill buffer
+  std::memcpy(&serial[cursor], &pck, sizeof(GameServerToCMPacketRaw));
 
-  toSend = htonl(static_cast<uint32_t>(m_file.length()));
-  std::memcpy(&serial[cursor], &toSend, sizeof(uint32_t));
-  cursor += sizeof(uint32_t);
+  GameServerToCMPacketRaw *data =
+      reinterpret_cast<GameServerToCMPacketRaw *>(&serial[cursor]);
+  data->eventType = static_cast<GameServerToCMEvent>(htons(data->eventType));
 
-  std::memcpy(&serial[cursor], m_file.c_str(), m_file.length());
-  cursor += m_file.length();
+  if (pck.eventType == LICENCE_EVENT)
+    {
+      data->eventData.licence.port = htons(data->eventData.licence.port);
+    }
+  else if (pck.eventType == NB_CLIENTS)
+    {
+      data->eventData.nbClients = htons(data->eventData.nbClients);
+    }
 
-  toSend = htonl(static_cast<uint32_t>(m_info));
-  std::memcpy(&serial[cursor], &toSend, sizeof(uint32_t));
   return (serial);
 }
 
-void deserialize(std::size_t size, std::uint8_t *data)
+void GameServerToCMPacket::deserialize(std::size_t, std::uint8_t *data)
 {
+  std::memcpy(&pck, data, sizeof(pck));
+
+  pck.eventType = static_cast<GameServerToCMEvent>(ntohs(pck.eventType));
+  if (pck.eventType == STRINGIFIED_EVENT)
+    {
+      ; // TODO : Do nothing
+    }
+  else if (pck.eventType == LICENCE_EVENT)
+    {
+      pck.eventData.licence.port = ntohs(pck.eventData.licence.port);
+    }
+  else if (pck.eventType == NB_CLIENTS)
+    {
+      pck.eventData.nbClients = ntohs(pck.eventData.nbClients);
+    }
+  else
+    {
+      throw std::runtime_error("Invalid packet received");
+    }
 }
