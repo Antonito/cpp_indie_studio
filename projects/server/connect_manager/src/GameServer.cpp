@@ -114,7 +114,6 @@ network::IClient::ClientAction GameServer::treatIncomingData()
       if (ret == network::IClient::ClientAction::SUCCESS)
 	{
 	  m_packet >> rep;
-          std::cout << "[DELETE] " << &rep.pck.eventData.string << std::endl;
 	  if (std::memcmp(&rep.pck.eventData.string, "HELLO", 5) != 0)
 	    {
 	      nope::log::Log(Debug) << "Error in state CONNECTED, invalid "
@@ -130,7 +129,6 @@ network::IClient::ClientAction GameServer::treatIncomingData()
       if (ret == network::IClient::ClientAction::SUCCESS)
 	{
 	  m_packet >> rep;
-          std::cout << "[DELETE] " << rep.pck.eventData.licence.licence.data.data() << std::endl;
 	  if (std::find(m_licences.begin(), m_licences.end(),
 	                rep.pck.eventData.licence.licence.data.data()) ==
 	      m_licences.end())
@@ -149,9 +147,9 @@ network::IClient::ClientAction GameServer::treatIncomingData()
       break;
     }
   if (ret == network::IClient::ClientAction::SUCCESS)
-  {
-    toggleWrite();
-  }
+    {
+      toggleWrite();
+    }
   return (ret);
 }
 
@@ -189,8 +187,8 @@ network::IClient::ClientAction GameServer::treatOutcomingData()
       break;
     }
   if (ret == network::IClient::ClientAction::SUCCESS)
-  {
-    toggleWrite();
-  }
+    {
+      toggleWrite();
+    }
   return (ret);
 }
