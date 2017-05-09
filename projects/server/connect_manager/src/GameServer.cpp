@@ -110,17 +110,22 @@ network::IClient::ClientAction GameServer::treatIncomingData()
     {
     case State::CONNECTED:
       ret = read(m_packet);
+      nope::log::Log(Debug) << "Reading in state CONNECTED [GameServer]";
       if (ret == network::IClient::ClientAction::SUCCESS)
 	{
 	  m_packet >> rep;
 	  if (std::memcmp(&rep.pck.eventData.string, "HELLO", 5) != 0)
 	    {
+	      nope::log::Log(Debug) << "Error in state CONNECTED, invalid "
+	                               "payload, shall disconnect "
+	                               "[GameServer]";
 	      return (network::IClient::ClientAction::DISCONNECT);
 	    }
 	}
       break;
     case State::SETTING:
       ret = read(m_packet);
+      nope::log::Log(Debug) << "Reading in state SETTING [GameServer]";
       if (ret == network::IClient::ClientAction::SUCCESS)
 	{
 	  m_packet >> rep;
@@ -128,6 +133,9 @@ network::IClient::ClientAction GameServer::treatIncomingData()
 	                rep.pck.eventData.licence.licence.data.data()) ==
 	      m_licences.end())
 	    {
+	      nope::log::Log(Debug) << "Error in state SETTING, invalid "
+	                               "payload, shall disconnect "
+	                               "[GameServer]";
 	      return (network::IClient::ClientAction::DISCONNECT);
 	    }
 	  m_port = rep.pck.eventData.licence.port;
