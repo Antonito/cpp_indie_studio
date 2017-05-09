@@ -16,6 +16,7 @@ public:
   enum State
   {
     CONNECTED,
+    SETTING,
     AUTHENTICATED
   };
 
@@ -33,8 +34,8 @@ public:
   virtual network::IClient::ClientAction read();
   virtual bool                           hasTimedOut() const;
 
-  void treatIncomingData();
-  void treatOutcomingData();
+  network::IClient::ClientAction treatIncomingData();
+  network::IClient::ClientAction treatOutcomingData();
 
   bool operator==(GameServer const &other) const;
 

@@ -245,11 +245,13 @@ void LicenseServer::_loop()
 		    }
 		  else if (action == network::IClient::ClientAction::SUCCESS)
 		    {
+		      // TODO: Check return
 		      game->treatIncomingData();
 		    }
 		}
 	      if (deleted == false && FD_ISSET(sock, &writefds))
 		{
+		  // TODO: Check return
 		  game->treatOutcomingData();
 		}
 	      if (deleted == false && FD_ISSET(sock, &exceptfds))
