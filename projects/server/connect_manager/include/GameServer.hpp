@@ -5,6 +5,8 @@
 #include <string>
 #include "IClient.hpp"
 #include "TCPSocket.hpp"
+#include "Packet.hpp"
+#include "GameServerCMPacket.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
@@ -33,9 +35,9 @@ public:
   void toggleWrite();
 
   virtual bool                           disconnect();
-  virtual network::IClient::ClientAction write();
-  virtual network::IClient::ClientAction read();
-  virtual bool                           hasTimedOut() const;
+  virtual network::IClient::ClientAction write(IPacket const &packet);
+  virtual network::IClient::ClientAction read(IPacket &packet);
+  virtual bool hasTimedOut() const;
 
   network::IClient::ClientAction treatIncomingData();
   network::IClient::ClientAction treatOutcomingData();
@@ -43,12 +45,12 @@ public:
   bool operator==(GameServer const &other) const;
 
 private:
-  network::TCPSocket           m_sock;
-  sockaddr_in_t                m_in;
+  network::TCPSocket              m_sock;
+  sockaddr_in_t                   m_in;
   std::vector<std::string> const &m_licences;
-  bool                         m_write;
-  State                        m_state;
-  Packet<GameServerToCMPacket> m_packet;
+  bool                            m_write;
+  State                           m_state;
+  Packet<GameServerToCMPacket>    m_packet;
 };
 
 // Disable clang warning for implicit padding

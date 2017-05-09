@@ -5,6 +5,7 @@
 #include <cstdint>
 #include "IClient.hpp"
 #include "TCPSocket.hpp"
+#include "IPacket.hpp"
 
 class GameClient : public network::IClient
 {
@@ -13,9 +14,9 @@ public:
   virtual ~GameClient();
 
   virtual bool                           disconnect();
-  virtual network::IClient::ClientAction write();
-  virtual network::IClient::ClientAction read();
-  virtual bool                           hasTimedOut() const;
+  virtual network::IClient::ClientAction write(IPacket const &packet);
+  virtual network::IClient::ClientAction read(IPacket &packet);
+  virtual bool hasTimedOut() const;
 
   std::int32_t getSocket() const;
   bool         canWrite() const;

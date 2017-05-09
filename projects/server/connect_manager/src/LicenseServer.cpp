@@ -238,16 +238,11 @@ void LicenseServer::_loop()
 		  network::IClient::ClientAction action;
 
 		  nope::log::Log(Debug) << "Can write to socket #" << sock;
-		  action = game->read();
+		  action = game->treatIncomingData();
 		  if (action == network::IClient::ClientAction::DISCONNECT)
 		    {
 		      removeClient(*game);
 		      deleted = true;
-		    }
-		  else if (action == network::IClient::ClientAction::SUCCESS)
-		    {
-		      // TODO: Check return
-		      game->treatIncomingData();
 		    }
 		}
 	      if (deleted == false && FD_ISSET(sock, &writefds))

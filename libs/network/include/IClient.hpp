@@ -1,6 +1,8 @@
 #ifndef ICLIENT_HPP_
 #define ICLIENT_HPP_
 
+#include "IPacket.hpp"
+
 // Disable clang warning for weak vtables
 #if defined(__clang__)
 #pragma clang diagnostic push
@@ -23,8 +25,8 @@ namespace network
     {
     }
     virtual bool                  disconnect() = 0;
-    virtual IClient::ClientAction write() = 0;
-    virtual IClient::ClientAction read() = 0;
+    virtual IClient::ClientAction write(IPacket const &) = 0;
+    virtual IClient::ClientAction read(IPacket &) = 0;
     virtual bool                  hasTimedOut() const = 0;
   };
 }

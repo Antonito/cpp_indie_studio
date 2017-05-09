@@ -21,7 +21,8 @@ INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)				\
 		$(ROOT_DIR)/libs/exceptions/include/	\
-		$(ROOT_DIR)/libs/logger/include/
+		$(ROOT_DIR)/libs/logger/include/	\
+		$(ROOT_DIR)/libs/packet/include/
 
 HEADER=		network_stdafx.hpp
 

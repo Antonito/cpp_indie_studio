@@ -1,5 +1,5 @@
-#ifndef PACKET_HPP_
-#define PACKET_HPP_
+#ifndef LIB_PACKET_HPP_
+#define LIB_PACKET_HPP_
 
 #include <memory>
 #include <type_traits>
@@ -7,6 +7,13 @@
 #include "IPacket.hpp"
 #include "ISerializable.hpp"
 #include "GenNetwork.hpp"
+#include "PacketHeader.hpp"
+
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
 
 template <typename T>
 class Packet : public IPacket
@@ -161,4 +168,9 @@ private:
   PacketHeader                    m_header;
 };
 
-#endif // !PACKET_HPP_
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+
+#endif // !LIB_PACKET_HPP_

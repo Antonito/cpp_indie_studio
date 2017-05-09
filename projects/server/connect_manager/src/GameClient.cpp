@@ -15,13 +15,13 @@ bool GameClient::disconnect()
   return (false);
 }
 
-network::IClient::ClientAction GameClient::write()
+network::IClient::ClientAction GameClient::write(IPacket const &)
 {
   // TODO
   return (network::IClient::ClientAction::DISCONNECT);
 }
 
-network::IClient::ClientAction GameClient::read()
+network::IClient::ClientAction GameClient::read(IPacket &)
 {
   // TODO
   return (network::IClient::ClientAction::DISCONNECT);
