@@ -35,6 +35,8 @@ public:
   network::IClient::ClientAction treatIncomingData();
   network::IClient::ClientAction treatOutcomingData();
 
+  bool operator==(GameClient const &other) const;
+
 private:
   network::TCPSocket m_sock;
   bool               m_write;

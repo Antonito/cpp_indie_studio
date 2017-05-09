@@ -72,7 +72,7 @@ bool LicenseServer::removeClient(network::IClient &c)
 {
   GameServer &g = static_cast<GameServer &>(c);
 
-  nope::log::Log(Debug) << "Removing client";
+  nope::log::Log(Debug) << "Removing GameServer";
   g.disconnect();
   m_gameServerList.erase(
       std::remove_if(
@@ -247,8 +247,14 @@ void LicenseServer::_loop()
 		}
 	      if (deleted == false && FD_ISSET(sock, &writefds))
 		{
-		  // TODO: Check return
-		  game->treatOutcomingData();
+		  network::IClient::ClientAction action;
+
+		  action = game->treatOutcomingData();
+		  if (action == network::IClient::ClientAction::DISCONNECT)
+		    {
+		      removeClient(*game);
+		      deleted = true;
+		    }
 		}
 	      if (deleted == false && FD_ISSET(sock, &exceptfds))
 		{

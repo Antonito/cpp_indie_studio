@@ -33,6 +33,15 @@ bool GameClient::hasTimedOut() const
   return (false);
 }
 
+bool GameClient::operator==(GameClient const &other) const
+{
+  if (this != &other)
+    {
+      return (m_sock == other.m_sock);
+    }
+  return (true);
+}
+
 std::int32_t GameClient::getSocket() const
 {
   return (m_sock.getSocket());
