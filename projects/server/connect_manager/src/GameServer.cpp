@@ -78,7 +78,7 @@ network::IClient::ClientAction GameServer::treatIncomingData()
     case State::CONNECTED:
       read(m_packet);
       m_packet >> rep;
-      if (std::memcpm(rep.pck.string, "HELLO", 5) != 0)
+      if (std::memcmp(rep.pck.string, "HELLO", 5) != 0)
       {
         return (network::IClient::ClientAction::DISCONNECT);
       }
@@ -87,10 +87,11 @@ network::IClient::ClientAction GameServer::treatIncomingData()
       read(m_packet);
       m_packet >> rep;
       m_licences;
-      if (m_licences.find(m_licences.begin(), m_licences.end(), rep.pck.licence.licence.data.data) == m_licences.end())
+      if (std::find(m_licences.begin(), m_licences.end(), rep.pck.licence.licence.data.data) == m_licences.end())
       {
         return (network::IClient::ClientAction::DISCONNECT);
       }
+      m_port = rep.pck.port;
       break;
     case State::AUTHENTICATED:
       nope::log::Log(Info) << "GameServer " << getSocket() << " authenticated."
@@ -114,6 +115,13 @@ network::IClient::ClientAction GameServer::treatOutcomingData()
       m_state = State::SETTING;
       break;
     case State::SETTING:
+      //send
+      GameServerToCMPacketSimple simple;
+      std::memcpy(simple.data.data, "OK", 3);
+      rep.pck.string = simple;
+      m_packet << rep;
+      send(rep);
+      m_state = State::AUTHENTICATED;
       break;
     case State::AUTHENTICATED:
       break;

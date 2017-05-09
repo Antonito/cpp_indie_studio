@@ -24,6 +24,7 @@
 #include <condition_variable>
 #include <algorithm>
 #include <mutex>
+#include <algorithm>
 #if defined(__linux__) || defined(__APPLE__)
 #include <sys/select.h>
 #endif
