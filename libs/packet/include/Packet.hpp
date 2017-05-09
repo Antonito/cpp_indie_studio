@@ -104,9 +104,7 @@ public:
     m_header.magic.magic = ntohs(header->magic.magic);
     if (m_header.getMagic() != PacketHeader::Magic)
       {
-	std::cout << "Got: " << std::hex << m_header.magic.magic << '\n';
-	std::cout << "Expected: " << std::hex
-	          << static_cast<int>(PacketHeader::Magic) << std::endl;
+        std::cout << "Got: " << std::hex << m_header.magic.magic << std::endl;
 	throw std::runtime_error("Magic number is invalid");
       }
     else if (m_header.getVersion() != PacketHeader::Version)
@@ -121,6 +119,8 @@ public:
         m_size - sizeof(m_header), m_data.get() + sizeof(m_header));
     if (m_header.checkSum != foundCheckSum)
       {
+        std::cout << "GOT: " << std::hex << foundCheckSum << std::endl;
+        std::cout << "Expected: " << std::hex << m_header.checkSum << std::endl;
 	throw std::runtime_error("Invalid packet : checksum is incorrect");
       }
   }
@@ -162,6 +162,7 @@ private:
     for (std::size_t i = 0; i < size; ++i)
       {
 	sum += data[i];
+        std::cout << "SUM: " << sum << ", data[" << i << "]: " << data[i] << std::endl;
       }
     return (sum & 0xFFFF);
   }

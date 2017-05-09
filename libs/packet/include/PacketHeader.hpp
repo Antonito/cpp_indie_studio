@@ -2,7 +2,6 @@
 #define PACKET_HEADER_HPP
 
 #include <cstdint>
-#include <cassert>
 
 struct PacketHeader
 {
@@ -27,13 +26,11 @@ struct PacketHeader
   // Methods
   inline uint8_t getVersion() const
   {
-    assert((magic.magic & 0x00FF) == magic.__data.vers);
     return (magic.__data.vers);
   }
 
   inline uint8_t getMagic() const
   {
-    assert((magic.magic & 0xFF00) == magic.__data._magic);
     return (magic.__data._magic);
   }
 

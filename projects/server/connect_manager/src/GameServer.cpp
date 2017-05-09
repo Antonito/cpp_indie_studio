@@ -148,6 +148,10 @@ network::IClient::ClientAction GameServer::treatIncomingData()
                            << std::endl; // TODO: Put here or output ?
       break;
     }
+  if (ret == network::IClient::ClientAction::SUCCESS)
+  {
+    toggleWrite();
+  }
   return (ret);
 }
 
@@ -184,5 +188,9 @@ network::IClient::ClientAction GameServer::treatOutcomingData()
     case State::AUTHENTICATED:
       break;
     }
+  if (ret == network::IClient::ClientAction::SUCCESS)
+  {
+    toggleWrite();
+  }
   return (ret);
 }
