@@ -51,4 +51,10 @@ private:
   std::array<std::uint8_t, 4> __padding;
 };
 
+namespace packetSize
+{
+  constexpr std::size_t GameServerToCMPacketSize =
+      sizeof(PacketHeader) + sizeof(GameServerToCMPacket);
+}
+
 #endif // !GAMESERVER_CM_PACKET_HPP_
