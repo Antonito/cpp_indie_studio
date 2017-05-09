@@ -11,20 +11,50 @@ GameClient::~GameClient()
 
 bool GameClient::disconnect()
 {
-  // TODO
-  return (false);
+  nope::log::Log(Debug) << "GameClient disconnected #" << getSocket();
+  m_sock.closeConnection();
+  return (true);
 }
 
-network::IClient::ClientAction GameClient::write(IPacket const &)
+network::IClient::ClientAction GameClient::write(IPacket const &pck)
 {
-  // TODO
-  return (network::IClient::ClientAction::DISCONNECT);
+  network::IClient::ClientAction ret = network::IClient::ClientAction::SUCCESS;
+  std::size_t const              sizeToWrite = pck.getSize();
+  uint8_t const *                data = pck.getData();
+
+  if (m_sock.send(data, sizeToWrite) == false)
+    {
+      nope::log::Log(Debug) << "Failed to write data [GameClient]";
+      ret = network::IClient::ClientAction::FAILURE;
+    }
+  return (ret);
 }
 
-network::IClient::ClientAction GameClient::read(IPacket &)
+network::IClient::ClientAction GameClient::read(IPacket &pck)
 {
-  // TODO
-  return (network::IClient::ClientAction::DISCONNECT);
+  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+  std::size_t const buffSize = packetSize::GameClientToCMPacketSize;
+
+  // Allocate buffer
+  std::unique_ptr<uint8_t[]> buff = std::make_unique<uint8_t[]>(buffSize);
+  ssize_t                    buffLen = 0;
+
+  if (m_sock.rec(buff.get(), buffSize, &buffLen))
+    {
+      assert(buffLen >= 0);
+      if (buffLen == 0)
+	{
+	  nope::log::Log(Debug)
+	      << "Read failed, shall disconnect [GameClient]";
+	  ret = network::IClient::ClientAction::DISCONNECT;
+	}
+      else
+	{
+	  ret = network::IClient::ClientAction::SUCCESS;
+	  pck.setData(static_cast<size_t>(buffLen), std::move(buff));
+	}
+    }
+  return (ret);
 }
 
 bool GameClient::hasTimedOut() const
