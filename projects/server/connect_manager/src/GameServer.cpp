@@ -45,7 +45,7 @@ network::IClient::ClientAction GameServer::write()
   return (network::IClient::ClientAction::DISCONNECT);
 }
 
-network::IClient::ClientAction GameServer::read()
+network::IClient::ClientAction GameServer::read(IPacket packet)
 {
   return (network::IClient::ClientAction::DISCONNECT);
 }
@@ -72,11 +72,25 @@ bool GameServer::operator==(GameServer const &other) const
 network::IClient::ClientAction GameServer::treatIncomingData()
 {
   // TODO: State machine
+  GameServerToCMPacket rep;
   switch (m_state)
     {
     case State::CONNECTED:
+      read(m_packet);
+      m_packet >> rep;
+      if (std::memcpm(rep.pck.string, "HELLO", 5) != 0)
+      {
+        return (network::IClient::ClientAction::DISCONNECT);
+      }
       break;
     case State::SETTING:
+      read(m_packet);
+      m_packet >> rep;
+      m_licences;
+      if (m_licences.find(m_licences.begin(), m_licences.end(), rep.pck.licence.licence.data.data) == m_licences.end())
+      {
+        return (network::IClient::ClientAction::DISCONNECT);
+      }
       break;
     case State::AUTHENTICATED:
       nope::log::Log(Info) << "GameServer " << getSocket() << " authenticated."
@@ -88,9 +102,16 @@ network::IClient::ClientAction GameServer::treatIncomingData()
 network::IClient::ClientAction GameServer::treatOutcomingData()
 {
   // TODO: State machine
+  GameServerToCMPacket rep;
   switch (m_state)
     {
     case State::CONNECTED:
+      GameServerToCMPacketSimple simple;
+      std::memcpy(simple.data.data, "WHO ?", 6);
+      rep.pck.string = simple;
+      m_packet << rep;
+      send(rep);
+      m_state = State::SETTING;
       break;
     case State::SETTING:
       break;
