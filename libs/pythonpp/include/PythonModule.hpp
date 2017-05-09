@@ -37,7 +37,7 @@ namespace pythonpp
 
       pyArgs = PyTuple_New(n);
 
-      nope::serialization::apply<bool, Args...>(tuple, [this, &index, &pyArgs](auto &e)->bool
+      nope::serialization::apply(tuple, [this, &index, &pyArgs](auto &e)->bool
       {
         if (!PythonLiteralConverter::pushArgs<decltype(e)>(pyArgs, e, index))
           throw(pythonpp::PyFunctionArgError(this->m_name));
