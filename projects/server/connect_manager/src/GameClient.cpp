@@ -140,7 +140,7 @@ network::IClient::ClientAction GameClient::treatOutcomingData()
     case State::STATUS:
       {
 	// TODO modify the packet to set real info insteab of bebete string
-	m_gameServerListMut.lock();
+	std::unique_lock<std::mutex> lock(m_gameServerListMut);
 	for (std::uint32_t i = 0; i < m_gameServerList.size(); i++)
 	  {
 	    rep.pck.eventType = GameClientToCMEvent::SERVER_STATUS_EVENT;
@@ -155,7 +155,6 @@ network::IClient::ClientAction GameClient::treatOutcomingData()
 	    m_packet << rep;
 	    ret = write(m_packet);
 	  }
-	m_gameServerListMut.unlock();
 	m_state = State::CONNECTED;
 	nope::log::Log(Info)
 	    << "GameClient " << getSocket()
