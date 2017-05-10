@@ -5,6 +5,7 @@
 #include "IClient.hpp"
 #include "TCPSocket.hpp"
 #include "IPacket.hpp"
+#include "GameClientCMPacket.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
@@ -18,7 +19,7 @@ public:
   enum State
   {
     CONNECTED = 0,
-    AUTHENTICATED
+    STATUS,
   };
   explicit GameClient(sock_t const fd);
   virtual ~GameClient();
@@ -38,9 +39,10 @@ public:
   bool operator==(GameClient const &other) const;
 
 private:
-  network::TCPSocket m_sock;
-  bool               m_write;
-  State              m_state;
+  network::TCPSocket           m_sock;
+  bool                         m_write;
+  State                        m_state;
+  Packet<GameClientToCMPacket> m_packet;
 };
 
 // Disable clang warning for implicit padding

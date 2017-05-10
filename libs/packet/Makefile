@@ -27,6 +27,7 @@ HEADER=		packet_stdafx.hpp
 # Project's files
 
 SRC_FILES=	GameServerToCM.cpp	\
+		GameClientToCM.cpp	\
 		PacketHeader.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))

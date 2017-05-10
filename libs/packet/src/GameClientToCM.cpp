@@ -1,7 +1,5 @@
 #include "packet_stdafx.hpp"
 
-//HELLO
-
 GameClientToCMPacket::GameClientToCMPacket() : pck()
 {
 }
@@ -31,7 +29,8 @@ std::unique_ptr<std::uint8_t[]>
   else if (pck.eventType == SERVER_STATUS_EVENT)
     {
       data->eventData.status.port = htons(data->eventData.status.port);
-      data->eventData.status.nbClients = htons(data->eventData.status.nbClients);
+      data->eventData.status.nbClients =
+          htons(data->eventData.status.nbClients);
     }
 
   return (serial);
@@ -42,7 +41,7 @@ void GameClientToCMPacket::deserialize(std::size_t, std::uint8_t *data)
   std::memcpy(&pck, data, sizeof(pck));
 
   pck.eventType = static_cast<GameClientToCMEvent>(ntohs(pck.eventType));
-   if (pck.eventType == INT_EVENT)
+  if (pck.eventType == INT_EVENT)
     {
       pck.eventData.intEvent.event = ntohs(pck.eventData.intEvent.event);
     }

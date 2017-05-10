@@ -1,8 +1,6 @@
 #ifndef GAMECLIENT_CM_PACKET_HPP_
 #define GAMECLIENT_CM_PACKET_HPP_
 
-//HELLO
-
 #include <cstdint>
 #include <cstddef>
 #include <array>
@@ -52,6 +50,9 @@ struct GameClientToCMPacket : public ISerializable
       serialize(std::size_t &sizeToFill) const;
 
   virtual void deserialize(std::size_t size, std::uint8_t *data);
+
+private:
+  std::array<std::uint8_t, 4> __padding;
 };
 
 namespace packetSize

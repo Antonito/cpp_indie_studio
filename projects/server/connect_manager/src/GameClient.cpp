@@ -90,38 +90,38 @@ void GameClient::toggleWrite()
 network::IClient::ClientAction GameClient::treatIncomingData()
 {
   network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
-  GameClientToCMPacket rep;
+  GameClientToCMPacket           rep;
 
   switch (m_state)
     {
     case State::CONNECTED:
       {
-        ret = read(m_packet);
+	ret = read(m_packet);
 	nope::log::Log(Debug) << "Reading in state CONNECTED [GameClient]";
-        if (ret == network::IClient::ClientAction::SUCCESS)
-        {
-          m_packet >> rep;
-          if (rep.pck.eventData.intEvent.event == 0)
-          {
-            m_state = Sate::STATUS;
-          }
-          else
-          {
-            nope::log::Log(Debug) << "Error in state CONNECTED, invalid "
-              "payload, shall disconnect "
-              "[GameClient]";
-            return (network::IClient::ClientAction::DISCONNECT);
-          }
-        }
+	if (ret == network::IClient::ClientAction::SUCCESS)
+	  {
+	    m_packet >> rep;
+	    if (rep.pck.eventData.intEvent.event == 0)
+	      {
+		m_state = State::STATUS;
+	      }
+	    else
+	      {
+		nope::log::Log(Debug) << "Error in state CONNECTED, invalid "
+		                         "payload, shall disconnect "
+		                         "[GameClient]";
+		return (network::IClient::ClientAction::DISCONNECT);
+	      }
+	  }
       }
       break;
-    case State::AUTHENTICATED:
+    case State::STATUS:
       break;
     }
   if (ret == network::IClient::ClientAction::SUCCESS)
-  {
-    toggleWrite();
-  }
+    {
+      toggleWrite();
+    }
   return (ret);
 }
 
@@ -130,19 +130,20 @@ network::IClient::ClientAction GameClient::treatOutcomingData()
   network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
 
   switch (m_state)
-  {
+    {
     case State::CONNECTED:
       break;
     case State::STATUS:
-      //for server in servers: send server
-      m_state = Sate::CONNECTED;
-      nope::log::Log(Info) << "GameClient " << getSocket()
-        << " ServerList sent."; // TODO: Put here or output ?
+      // for server in servers: send server
+      m_state = State::CONNECTED;
+      nope::log::Log(Info)
+          << "GameClient " << getSocket()
+          << " ServerList sent."; // TODO: Put here or output ?
       break;
-  }
+    }
   if (ret == network::IClient::ClientAction::SUCCESS)
-  {
-    toggleWrite();
-  }
+    {
+      toggleWrite();
+    }
   return (ret);
 }
