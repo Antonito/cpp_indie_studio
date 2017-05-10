@@ -45,7 +45,7 @@ void GameClientToCMPacket::deserialize(std::size_t, std::uint8_t *data)
     {
       pck.eventData.intEvent.event = ntohs(pck.eventData.intEvent.event);
     }
-  else if (pck.eventType == NB_CLIENTS)
+  else if (pck.eventType == SERVER_STATUS_EVENT)
     {
       pck.eventData.status.port = ntohs(pck.eventData.status.port);
       pck.eventData.status.nbClients = ntohs(pck.eventData.status.nbClients);
