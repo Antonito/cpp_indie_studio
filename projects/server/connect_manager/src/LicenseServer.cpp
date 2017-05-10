@@ -62,8 +62,8 @@ bool LicenseServer::addClient()
     {
       m_gameServerList.push_back(
           std::make_unique<GameServer>(rc, in, m_licenseList));
-      nope::log::Log(Debug) << "Added client FD #"
-                            << m_gameServerList.back()->getSocket();
+      nope::log::Log(Debug)
+          << "Added client FD #" << m_gameServerList.back()->getSocket();
       return (true);
     }
   return (false);
@@ -311,7 +311,7 @@ std::mutex &LicenseServer::getGameServerListMut()
 void LicenseServer::updateGameServerList()
 {
   std::unique_lock<std::mutex> lock(m_gameServerListMut);
-  m_gameServerList.clear();
+  m_list.clear();
   for (std::unique_ptr<GameServer> const &game : m_gameServerList)
     {
       m_list.push_back(GameServerInfo(game->getIp(), game->getPort(),
