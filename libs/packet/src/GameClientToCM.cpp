@@ -20,13 +20,13 @@ std::unique_ptr<std::uint8_t[]>
 
   GameClientToCMPacketRaw *data =
       reinterpret_cast<GameClientToCMPacketRaw *>(&serial[cursor]);
-  data->eventType = static_cast<GameClientToCMEvent>(htons(data->eventType));
+  data->eventType = static_cast<GameClientToCMEvent>(htons(static_cast<std::uint16_t>(data->eventType)));
 
-  if (pck.eventType == INT_EVENT)
+  if (pck.eventType == GameClientToCMEvent::INT_EVENT)
     {
       data->eventData.intEvent.event = htons(data->eventData.intEvent.event);
     }
-  else if (pck.eventType == SERVER_STATUS_EVENT)
+  else if (pck.eventType == GameClientToCMEvent::SERVER_STATUS_EVENT)
     {
       data->eventData.status.port = htons(data->eventData.status.port);
       data->eventData.status.nbClients =
@@ -40,12 +40,12 @@ void GameClientToCMPacket::deserialize(std::size_t, std::uint8_t *data)
 {
   std::memcpy(&pck, data, sizeof(pck));
 
-  pck.eventType = static_cast<GameClientToCMEvent>(ntohs(pck.eventType));
-  if (pck.eventType == INT_EVENT)
+  pck.eventType = static_cast<GameClientToCMEvent>(ntohs(static_cast<std::uint16_t>(pck.eventType)));
+  if (pck.eventType == GameClientToCMEvent::INT_EVENT)
     {
       pck.eventData.intEvent.event = ntohs(pck.eventData.intEvent.event);
     }
-  else if (pck.eventType == SERVER_STATUS_EVENT)
+  else if (pck.eventType == GameClientToCMEvent::SERVER_STATUS_EVENT)
     {
       pck.eventData.status.port = ntohs(pck.eventData.status.port);
       pck.eventData.status.nbClients = ntohs(pck.eventData.status.nbClients);

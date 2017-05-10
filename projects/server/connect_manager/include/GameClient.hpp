@@ -21,7 +21,7 @@ public:
     CONNECTED = 0,
     STATUS,
   };
-  explicit GameClient(sock_t const fd);
+  explicit GameClient(sock_t const fd, std::vector<std::string> const &, std::mutex &);
   virtual ~GameClient();
 
   virtual bool                           disconnect();
@@ -39,10 +39,12 @@ public:
   bool operator==(GameClient const &other) const;
 
 private:
-  network::TCPSocket           m_sock;
-  bool                         m_write;
-  State                        m_state;
-  Packet<GameClientToCMPacket> m_packet;
+  network::TCPSocket              m_sock;
+  bool                            m_write;
+  State                           m_state;
+  Packet<GameClientToCMPacket>    m_packet;
+  std::vector<std::string> const &m_gameServerList;
+  std::mutex &                    m_gameServerListMut;
 };
 
 // Disable clang warning for implicit padding

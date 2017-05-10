@@ -7,7 +7,7 @@
 #include "ISerializable.hpp"
 #include "PacketHeader.hpp"
 
-enum GameClientToCMEvent : std::uint16_t
+enum class GameClientToCMEvent : std::uint16_t
 {
   INT_EVENT = 0,
   SERVER_STATUS_EVENT

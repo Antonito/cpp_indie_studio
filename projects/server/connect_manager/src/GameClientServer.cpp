@@ -54,7 +54,7 @@ bool GameClientServer::addClient()
   if (rc > 0)
     {
       m_gameClient.push_back(
-          std::make_unique<GameClient>(rc)); // TODO: Use in ?
+          std::make_unique<GameClient>(rc, m_gameServerList, m_gameServerListMut)); // TODO: Use in ?
       nope::log::Log(Debug) << "Added client FD #"
                             << m_gameClient.back()->getSocket();
       return (true);

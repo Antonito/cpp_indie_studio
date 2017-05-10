@@ -1,7 +1,10 @@
 #include "GameClient.hpp"
 
-GameClient::GameClient(sock_t const fd)
-    : m_sock(fd), m_write(false), m_state(State::CONNECTED)
+GameClient::GameClient(sock_t const                    fd,
+                       std::vector<std::string> const &gameServerList,
+                       std::mutex &                    gameServerListMut)
+    : m_sock(fd), m_write(false), m_state(State::CONNECTED),
+      m_gameServerList(gameServerList), m_gameServerListMut(gameServerListMut)
 {
 }
 
@@ -128,17 +131,35 @@ network::IClient::ClientAction GameClient::treatIncomingData()
 network::IClient::ClientAction GameClient::treatOutcomingData()
 {
   network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+  GameClientToCMPacket           rep;
 
   switch (m_state)
     {
     case State::CONNECTED:
       break;
     case State::STATUS:
-      // for server in servers: send server
-      m_state = State::CONNECTED;
-      nope::log::Log(Info)
-          << "GameClient " << getSocket()
-          << " ServerList sent."; // TODO: Put here or output ?
+      {
+	// TODO modify the packet to set real info insteab of bebete string
+	m_gameServerListMut.lock();
+	for (std::uint32_t i = 0; i < m_gameServerList.size(); i++)
+	  {
+	    rep.pck.eventType = GameClientToCMEvent::SERVER_STATUS_EVENT;
+	    /*rep.pck.eventData.status.port = htons(rep.pck.eventData.port);
+	      rep.pck.eventData.status.nbClients = htons(rep.pck.eventData.port);*/
+	    rep.pck.eventData.status.port = 0;
+	    rep.pck.eventData.status.nbClients = 0;
+	    GameClientToCMPacketIP &simple = rep.pck.eventData.status.ip;
+	    std::memcpy(simple.data.data(), m_gameServerList[i].c_str(),
+	                m_gameServerList.size());
+	    m_packet << rep;
+	    ret = write(m_packet);
+	  }
+	m_gameServerListMut.unlock();
+	m_state = State::CONNECTED;
+	nope::log::Log(Info)
+	    << "GameClient " << getSocket()
+	    << " ServerList sent."; // TODO: Put here or output ?
+      }
       break;
     }
   if (ret == network::IClient::ClientAction::SUCCESS)
