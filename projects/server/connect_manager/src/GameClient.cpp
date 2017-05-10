@@ -59,7 +59,7 @@ network::IClient::ClientAction GameClient::read(IPacket &pck)
 
 bool GameClient::hasTimedOut() const
 {
-  // TODO
+  // TODO : implemented timeout
   return (false);
 }
 
