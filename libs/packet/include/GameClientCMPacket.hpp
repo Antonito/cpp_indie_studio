@@ -1,6 +1,8 @@
 #ifndef GAMECLIENT_CM_PACKET_HPP_
 #define GAMECLIENT_CM_PACKET_HPP_
 
+//HELLO
+
 #include <cstdint>
 #include <cstddef>
 #include <array>
