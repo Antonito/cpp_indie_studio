@@ -22,13 +22,13 @@ std::unique_ptr<std::uint8_t[]>
 
   GameServerToCMPacketRaw *data =
       reinterpret_cast<GameServerToCMPacketRaw *>(&serial[cursor]);
-  data->eventType = static_cast<GameServerToCMEvent>(htons(data->eventType));
+  data->eventType = static_cast<GameServerToCMEvent>(htons(static_cast<std::uint16_t>(data->eventType)));
 
-  if (pck.eventType == LICENCE_EVENT)
+  if (pck.eventType == GameServerToCMEvent::LICENCE_EVENT)
     {
       data->eventData.licence.port = htons(data->eventData.licence.port);
     }
-  else if (pck.eventType == NB_CLIENTS)
+  else if (pck.eventType == GameServerToCMEvent::NB_CLIENTS)
     {
       data->eventData.nbClients = htons(data->eventData.nbClients);
     }
@@ -40,16 +40,16 @@ void GameServerToCMPacket::deserialize(std::size_t, std::uint8_t *data)
 {
   std::memcpy(&pck, data, sizeof(pck));
 
-  pck.eventType = static_cast<GameServerToCMEvent>(ntohs(pck.eventType));
-  if (pck.eventType == STRINGIFIED_EVENT)
+  pck.eventType = static_cast<GameServerToCMEvent>(ntohs(static_cast<std::uint16_t>(pck.eventType)));
+  if (pck.eventType == GameServerToCMEvent::STRINGIFIED_EVENT)
     {
       ; // TODO : Do nothing
     }
-  else if (pck.eventType == LICENCE_EVENT)
+  else if (pck.eventType == GameServerToCMEvent::LICENCE_EVENT)
     {
       pck.eventData.licence.port = ntohs(pck.eventData.licence.port);
     }
-  else if (pck.eventType == NB_CLIENTS)
+  else if (pck.eventType == GameServerToCMEvent::NB_CLIENTS)
     {
       pck.eventData.nbClients = ntohs(pck.eventData.nbClients);
     }

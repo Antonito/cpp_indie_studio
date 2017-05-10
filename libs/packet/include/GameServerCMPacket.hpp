@@ -7,7 +7,7 @@
 #include "ISerializable.hpp"
 #include "PacketHeader.hpp"
 
-enum GameServerToCMEvent : std::uint16_t
+enum class GameServerToCMEvent : std::uint16_t
 {
   STRINGIFIED_EVENT = 0,
   LICENCE_EVENT,
