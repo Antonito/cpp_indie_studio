@@ -8,7 +8,7 @@ LicenseServer::LicenseServer(std::uint16_t const licensePort,
       m_gameServer(gameServerPort, LicenseServer::maxGameServer,
                    network::ASocket::BLOCKING),
       m_licenseList(), m_gameServerList(), m_thread(), m_cond(), m_mut(),
-      m_list()
+      m_list(), m_gameServerListMut()
 {
 }
 
@@ -297,7 +297,12 @@ bool LicenseServer::loadLicenses()
   return (false);
 }
 
-std::vector<std::string> const &LicenseServer::getLicences() const
+std::vector<std::string> const &LicenseServer::getGameServerList() const
 {
   return (m_list);
+}
+
+std::mutex &LicenseServer::getGameServerListMut()
+{
+  return (m_gameServerListMut);
 }
