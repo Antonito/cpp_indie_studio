@@ -8,7 +8,7 @@ LicenseServer::LicenseServer(std::uint16_t const licensePort,
       m_gameServer(gameServerPort, LicenseServer::maxGameServer,
                    network::ASocket::BLOCKING),
       m_licenseList(), m_gameServerList(), m_thread(), m_cond(), m_mut(),
-      m_list()
+      m_list(), m_gameServerListMut()
 {
 }
 
@@ -182,6 +182,7 @@ void LicenseServer::_loop()
     {
       fd_set readfds, writefds, exceptfds;
 
+      updateGameServerList();
       std::int32_t const rc =
           checkActivity(readfds, writefds, exceptfds, monitorLicenseServer);
       if (rc < 0)
@@ -297,7 +298,23 @@ bool LicenseServer::loadLicenses()
   return (false);
 }
 
-std::vector<std::string> const &LicenseServer::getLicences() const
+std::vector<std::string> const &LicenseServer::getGameServerList() const
 {
   return (m_list);
+}
+
+std::mutex &LicenseServer::getGameServerListMut()
+{
+  return (m_gameServerListMut);
+}
+
+void LicenseServer::updateGameServerList()
+{
+  std::unique_lock<std::mutex> lock(m_gameServerListMut);
+  m_gameServerList.clear();
+  for (std::unique_ptr<GameServer> const &game : m_gameServerList)
+    {
+      static_cast<void>(game); // TODO: Use real data
+      m_list.push_back("I am a gameServer");
+    }
 }

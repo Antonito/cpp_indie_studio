@@ -13,7 +13,8 @@ class GameClientServer : public network::IServer
 {
 public:
   explicit GameClientServer(std::uint16_t const             port,
-                            std::vector<std::string> const &com);
+                            std::vector<std::string> const &com,
+                            std::mutex &                    gameServerList);
 
   virtual ~GameClientServer();
 
@@ -32,7 +33,7 @@ private:
   std::thread                              m_thread;
   std::vector<std::unique_ptr<GameClient>> m_gameClient;
   std::vector<std::string> const &         m_gameServerList;
-  std::mutex m_gameServerListMut; // Lock it when accessing m_gameServerList
+  std::mutex &m_gameServerListMut; // Lock it when accessing m_gameServerList
 };
 
 #endif // !GAME_CLIENT_SERVER_HPP_

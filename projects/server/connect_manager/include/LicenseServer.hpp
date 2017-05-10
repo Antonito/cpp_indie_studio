@@ -23,7 +23,10 @@ public:
 
   std::vector<std::unique_ptr<GameServer>> const &getGameServers() const;
 
-  std::vector<std::string> const &getLicences() const;
+  std::vector<std::string> const &getGameServerList() const;
+  std::mutex &                    getGameServerListMut();
+
+  void updateGameServerList();
 
 private:
   void         _loop();
@@ -52,6 +55,7 @@ private:
   std::condition_variable  m_cond;
   std::mutex               m_mut;
   std::vector<std::string> m_list;
+  std::mutex               m_gameServerListMut;
 };
 
 #endif // !LICENSE_SERVER_HPP_

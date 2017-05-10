@@ -29,7 +29,7 @@ int main(int ac, char **av)
           static_cast<std::uint16_t>(std::strtol(*(av + 2), nullptr, 10)));
       GameClientServer gameSrv(
           static_cast<std::uint16_t>(std::strtol(*(av + 3), nullptr, 10)),
-          mainSrv.getLicences());
+          mainSrv.getGameServerList(), mainSrv.getGameServerListMut());
 
       if (mainSrv.run())
 	{
