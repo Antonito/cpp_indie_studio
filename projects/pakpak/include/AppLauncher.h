@@ -4,26 +4,30 @@
 #include <memory>
 #include <OGRE/Ogre.h>
 #include "InputListener.h"
+#include "Display.hpp"
 
-class AppLauncher
-
+namespace core
 {
+  class AppLauncher
+  {
+  public:
+    AppLauncher();
 
-public:
-  AppLauncher();
+    ~AppLauncher();
 
-  ~AppLauncher();
+    bool start();
 
-  bool start();
+    void createFrameListener();
 
-  void createFrameListener();
+  private:
+    std::unique_ptr<Ogre::Root>         mRoot;
+    std::unique_ptr<Ogre::RenderWindow> mWindow;
+    Ogre::SceneManager *                mSceneMgr;
+    std::unique_ptr<Ogre::Camera>       mCamera;
+    std::unique_ptr<InputListener>      mInputListener;
 
-private:
-  std::unique_ptr<Ogre::Root>         mRoot;
-  std::unique_ptr<Ogre::RenderWindow> mWindow;
-  Ogre::SceneManager *                mSceneMgr;
-  std::unique_ptr<Ogre::Camera>       mCamera;
-  std::unique_ptr<InputListener>      mInputListener;
-};
+    std::vector<Display> m_displays;
+  };
+}
 
 #endif // !APPLAUNCHER_H_

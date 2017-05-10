@@ -5,23 +5,26 @@
 #include <memory>
 #include <OIS/OIS.h>
 
-class InputListener : public Ogre::FrameListener,
-                      public Ogre::WindowEventListener
+namespace core
 {
-public:
-  InputListener(Ogre::RenderWindow *wnd, Ogre::Camera *camera);
-  virtual ~InputListener();
-  virtual void windowResized(Ogre::RenderWindow *rw);
-  virtual void windowClosed(Ogre::RenderWindow *rw);
-  bool frameRenderingQueued(const Ogre::FrameEvent &evt);
-  void startOIS();
+  class InputListener : public Ogre::FrameListener,
+                        public Ogre::WindowEventListener
+  {
+  public:
+    InputListener(Ogre::RenderWindow *wnd, Ogre::Camera *camera);
+    virtual ~InputListener();
+    virtual void windowResized(Ogre::RenderWindow *rw);
+    virtual void windowClosed(Ogre::RenderWindow *rw);
+    bool         frameRenderingQueued(const Ogre::FrameEvent &evt);
+    void         startOIS();
 
-private:
-  Ogre::RenderWindow *mWindow;
-  Ogre::Camera *      mCamera;
-  OIS::InputManager * mInputManager;
-  OIS::Mouse *        mMouse;
-  OIS::Keyboard *     mKeyboard;
-};
+  private:
+    Ogre::RenderWindow *mWindow;
+    Ogre::Camera *      mCamera;
+    OIS::InputManager * mInputManager;
+    OIS::Mouse *        mMouse;
+    OIS::Keyboard *     mKeyboard;
+  };
+}
 
 #endif // !INPUTLISTENER_H_
