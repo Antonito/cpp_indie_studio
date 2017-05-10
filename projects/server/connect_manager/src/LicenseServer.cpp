@@ -311,7 +311,7 @@ std::mutex &LicenseServer::getGameServerListMut()
 void LicenseServer::updateGameServerList()
 {
   std::unique_lock<std::mutex> lock(m_gameServerListMut);
-  m_gameServerList.clear();
+  m_list.clear();
   for (std::unique_ptr<GameServer> const &game : m_gameServerList)
     {
       m_list.push_back(GameServerInfo(game->getIp(), game->getPort(),
