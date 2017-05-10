@@ -30,6 +30,7 @@
 #endif
 #include "LicenseServer.hpp"
 #include "GameClientServer.hpp"
+#include "GameClient.hpp"
 #include "Logger.hpp"
 #include "SockError.hpp"
 #include "Queue.hpp"

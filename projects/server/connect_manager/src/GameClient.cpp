@@ -1,9 +1,9 @@
-#include "GameClient.hpp"
+#include "connect_manager_stdafx.hpp"
 
 GameClient::GameClient(sock_t const                       fd,
                        std::vector<GameServerInfo> const &gameServerList,
                        std::mutex &                       gameServerListMut)
-    : m_sock(fd), m_write(false), m_state(State::CONNECTED),
+    : m_sock(fd), m_write(false), m_state(State::CONNECTED), m_packet(),
       m_gameServerList(gameServerList), m_gameServerListMut(gameServerListMut)
 {
 }

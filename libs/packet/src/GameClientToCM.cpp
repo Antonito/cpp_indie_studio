@@ -1,6 +1,6 @@
 #include "packet_stdafx.hpp"
 
-GameClientToCMPacket::GameClientToCMPacket() : pck()
+GameClientToCMPacket::GameClientToCMPacket() : pck(), __padding()
 {
 }
 
@@ -20,7 +20,8 @@ std::unique_ptr<std::uint8_t[]>
 
   GameClientToCMPacketRaw *data =
       reinterpret_cast<GameClientToCMPacketRaw *>(&serial[cursor]);
-  data->eventType = static_cast<GameClientToCMEvent>(htons(static_cast<std::uint16_t>(data->eventType)));
+  data->eventType = static_cast<GameClientToCMEvent>(
+      htons(static_cast<std::uint16_t>(data->eventType)));
 
   if (pck.eventType == GameClientToCMEvent::INT_EVENT)
     {
@@ -40,7 +41,8 @@ void GameClientToCMPacket::deserialize(std::size_t, std::uint8_t *data)
 {
   std::memcpy(&pck, data, sizeof(pck));
 
-  pck.eventType = static_cast<GameClientToCMEvent>(ntohs(static_cast<std::uint16_t>(pck.eventType)));
+  pck.eventType = static_cast<GameClientToCMEvent>(
+      ntohs(static_cast<std::uint16_t>(pck.eventType)));
   if (pck.eventType == GameClientToCMEvent::INT_EVENT)
     {
       pck.eventData.intEvent.event = ntohs(pck.eventData.intEvent.event);

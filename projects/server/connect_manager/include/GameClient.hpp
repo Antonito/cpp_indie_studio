@@ -1,10 +1,12 @@
 #ifndef GAME_CLIENT_HPP_
 #define GAME_CLIENT_HPP_
 
+#include <vector>
 #include <cstdint>
+#include <mutex>
 #include "IClient.hpp"
 #include "TCPSocket.hpp"
-#include "IPacket.hpp"
+#include "Packet.hpp"
 #include "GameClientCMPacket.hpp"
 #include "GameServerInfo.hpp"
 
