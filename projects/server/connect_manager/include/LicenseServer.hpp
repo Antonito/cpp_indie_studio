@@ -26,6 +26,8 @@ public:
   std::vector<std::string> const &getGameServerList() const;
   std::mutex &                    getGameServerListMut();
 
+  void updateGameServerList();
+
 private:
   void         _loop();
   bool         loadLicenses();

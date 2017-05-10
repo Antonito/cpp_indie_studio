@@ -182,6 +182,7 @@ void LicenseServer::_loop()
     {
       fd_set readfds, writefds, exceptfds;
 
+      updateGameServerList();
       std::int32_t const rc =
           checkActivity(readfds, writefds, exceptfds, monitorLicenseServer);
       if (rc < 0)
@@ -305,4 +306,15 @@ std::vector<std::string> const &LicenseServer::getGameServerList() const
 std::mutex &LicenseServer::getGameServerListMut()
 {
   return (m_gameServerListMut);
+}
+
+void LicenseServer::updateGameServerList()
+{
+  std::unique_lock<std::mutex> lock(m_gameServerListMut);
+  m_gameServerList.clear();
+  for (std::unique_ptr<GameServer> const &game : m_gameServerList)
+    {
+      static_cast<void>(game); // TODO: Use real data
+      m_list.push_back("I am a gameServer");
+    }
 }
