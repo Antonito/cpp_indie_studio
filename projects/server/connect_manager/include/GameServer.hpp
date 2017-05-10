@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <array>
 #include "IClient.hpp"
 #include "TCPSocket.hpp"
 #include "Packet.hpp"
@@ -44,6 +45,11 @@ public:
 
   bool operator==(GameServer const &other) const;
 
+  std::array<char, INET6_ADDRSTRLEN> const &getIp() const;
+  std::uint16_t getPort() const;
+  std::uint16_t getCurrentClients() const;
+  std::uint16_t getMaxClients() const;
+
 private:
   network::TCPSocket              m_sock;
   std::uint16_t                   m_port;
@@ -52,6 +58,9 @@ private:
   bool                            m_write;
   State                           m_state;
   Packet<GameServerToCMPacket>    m_packet;
+  std::uint16_t                   m_curClients;
+  std::uint16_t                   m_maxClients;
+  std::array<char, INET6_ADDRSTRLEN> m_ip;
 };
 
 // Disable clang warning for implicit padding

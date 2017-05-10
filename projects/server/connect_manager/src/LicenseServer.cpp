@@ -298,7 +298,7 @@ bool LicenseServer::loadLicenses()
   return (false);
 }
 
-std::vector<std::string> const &LicenseServer::getGameServerList() const
+std::vector<GameServerInfo> const &LicenseServer::getGameServerList() const
 {
   return (m_list);
 }
@@ -314,7 +314,8 @@ void LicenseServer::updateGameServerList()
   m_gameServerList.clear();
   for (std::unique_ptr<GameServer> const &game : m_gameServerList)
     {
-      static_cast<void>(game); // TODO: Use real data
-      m_list.push_back("I am a gameServer");
+      m_list.push_back(GameServerInfo(game->getIp(), game->getPort(),
+                                      game->getCurrentClients(),
+                                      game->getMaxClients()));
     }
 }

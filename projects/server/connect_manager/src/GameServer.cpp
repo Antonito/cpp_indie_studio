@@ -3,15 +3,14 @@
 GameServer::GameServer(sock_t socket, sockaddr_in_t const &in,
                        std::vector<std::string> const &licences)
     : m_sock(socket), m_port(0), m_in(in), m_licences(licences),
-      m_write(false), m_state(State::CONNECTED), m_packet()
+      m_write(false), m_state(State::CONNECTED), m_packet(), m_curClients(0),
+      m_maxClients(0), m_ip()
 {
-  std::array<char, INET6_ADDRSTRLEN> clntName;
-
   if (::getnameinfo(reinterpret_cast<sockaddr_t *>(&m_in), sizeof(m_in),
-                    clntName.data(), sizeof(clntName), nullptr, 0,
+                    m_ip.data(), sizeof(m_ip), nullptr, 0,
                     NI_NUMERICHOST | NI_NUMERICSERV) == 0)
     {
-      nope::log::Log(Info) << "Client joined " << std::string(clntName.data())
+      nope::log::Log(Info) << "Client joined " << std::string(m_ip.data())
                            << std::endl;
     }
 }
@@ -20,7 +19,8 @@ GameServer::GameServer(GameServer &&other)
     : m_sock(std::move(other.m_sock)), m_port(other.m_port),
       m_in(std::move(other.m_in)), m_licences(other.m_licences),
       m_write(other.m_write), m_state(other.m_state),
-      m_packet(std::move(other.m_packet))
+      m_packet(std::move(other.m_packet)), m_curClients(other.m_curClients),
+      m_maxClients(other.m_maxClients), m_ip(other.m_ip)
 {
 }
 
@@ -196,4 +196,24 @@ network::IClient::ClientAction GameServer::treatOutcomingData()
       toggleWrite();
     }
   return (ret);
+}
+
+std::array<char, INET6_ADDRSTRLEN> const &GameServer::getIp() const
+{
+  return (m_ip);
+}
+
+std::uint16_t GameServer::getPort() const
+{
+  return (m_port);
+}
+
+std::uint16_t GameServer::getCurrentClients() const
+{
+  return (m_curClients);
+}
+
+std::uint16_t GameServer::getMaxClients() const
+{
+  return (m_maxClients);
 }

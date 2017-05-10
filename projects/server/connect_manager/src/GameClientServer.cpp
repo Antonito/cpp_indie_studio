@@ -2,8 +2,8 @@
 
 constexpr std::uint32_t GameClientServer::maxGameClients;
 
-GameClientServer::GameClientServer(std::uint16_t const             port,
-                                   std::vector<std::string> const &com,
+GameClientServer::GameClientServer(std::uint16_t const                port,
+                                   std::vector<GameServerInfo> const &com,
                                    std::mutex &gameServerList)
     : m_sock(port, GameClientServer::maxGameClients,
              network::ASocket::BLOCKING),
@@ -55,8 +55,8 @@ bool GameClientServer::addClient()
   // Check if the socket is valid
   if (rc > 0)
     {
-      m_gameClient.push_back(
-          std::make_unique<GameClient>(rc, m_gameServerList, m_gameServerListMut)); // TODO: Use in ?
+      m_gameClient.push_back(std::make_unique<GameClient>(
+          rc, m_gameServerList, m_gameServerListMut)); // TODO: Use in ?
       nope::log::Log(Debug) << "Added client FD #"
                             << m_gameClient.back()->getSocket();
       return (true);

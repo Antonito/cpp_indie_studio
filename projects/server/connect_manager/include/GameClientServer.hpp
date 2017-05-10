@@ -8,13 +8,14 @@
 #include "IServer.hpp"
 #include "TCPSocket.hpp"
 #include "GameClient.hpp"
+#include "GameServerInfo.hpp"
 
 class GameClientServer : public network::IServer
 {
 public:
-  explicit GameClientServer(std::uint16_t const             port,
-                            std::vector<std::string> const &com,
-                            std::mutex &                    gameServerList);
+  explicit GameClientServer(std::uint16_t const                port,
+                            std::vector<GameServerInfo> const &com,
+                            std::mutex &                       gameServerList);
 
   virtual ~GameClientServer();
 
@@ -32,7 +33,7 @@ private:
   network::TCPSocket                       m_sock;
   std::thread                              m_thread;
   std::vector<std::unique_ptr<GameClient>> m_gameClient;
-  std::vector<std::string> const &         m_gameServerList;
+  std::vector<GameServerInfo> const &      m_gameServerList;
   std::mutex &m_gameServerListMut; // Lock it when accessing m_gameServerList
 };
 

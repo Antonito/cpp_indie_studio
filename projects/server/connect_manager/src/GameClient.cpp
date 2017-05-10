@@ -1,8 +1,8 @@
 #include "GameClient.hpp"
 
-GameClient::GameClient(sock_t const                    fd,
-                       std::vector<std::string> const &gameServerList,
-                       std::mutex &                    gameServerListMut)
+GameClient::GameClient(sock_t const                       fd,
+                       std::vector<GameServerInfo> const &gameServerList,
+                       std::mutex &                       gameServerListMut)
     : m_sock(fd), m_write(false), m_state(State::CONNECTED),
       m_gameServerList(gameServerList), m_gameServerListMut(gameServerListMut)
 {
@@ -145,7 +145,8 @@ network::IClient::ClientAction GameClient::treatOutcomingData()
 	  {
 	    rep.pck.eventType = GameClientToCMEvent::SERVER_STATUS_EVENT;
 	    /*rep.pck.eventData.status.port = htons(rep.pck.eventData.port);
-	      rep.pck.eventData.status.nbClients = htons(rep.pck.eventData.port);*/
+	      rep.pck.eventData.status.nbClients =
+	      htons(rep.pck.eventData.port);*/
 	    rep.pck.eventData.status.port = 0;
 	    rep.pck.eventData.status.nbClients = 0;
 	    GameClientToCMPacketIP &simple = rep.pck.eventData.status.ip;
