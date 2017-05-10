@@ -46,7 +46,7 @@ from time import sleep
 
 __author__ = "Antoine Baché"
 
-gameServerPortL = (12346)
+gameServerPortL = (12345)
 gameServerMaxClientL = (4096)
 gameServerPort = gameServerPortL.to_bytes(2, byteorder='big')
 gameServerMaxClient = gameServerMaxClientL.to_bytes(4, byteorder='big')
@@ -82,22 +82,25 @@ def connectProtocol(logger, sock):
 
     MyStruct = namedtuple("Packet", "field1 field2 field3 field4")
 
-    msg = b"HELLO"
+    #msg = b"HELLO"
     eventType = 0
-    data = eventType.to_bytes(2, byteorder='big') + msg
+    data = eventType.to_bytes(2, byteorder='big')
     header = createHeader(data)
     pck = header + data
     sock.send(pck);
 
     msg = sock.recv(4096); # "Hello, who are you ?"
     print("SEND HELLO")
-    sleep(1)
 
     if (msg != b"WHO ?"):
         #sock.close()
         #logger.debug("Wrong server answer. Received: \"%s\"" % (msg))
         #return (1);
-        print(msg.decode())
+        for i in range(len(msg)):
+            try:
+                print(str(msg[i]).decode)
+            except:
+                continue
         print("Of course")
 
     msg = bytes(licence, 'utf-8')

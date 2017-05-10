@@ -28,7 +28,8 @@ struct GameClientToCMPacketStatus
 {
   GameClientToCMPacketIP ip;
   std::uint16_t          port;
-  std::uint16_t          nbClients;
+  std::uint16_t          currentClients;
+  std::uint16_t          maxClients;
 };
 
 struct GameClientToCMPacketRaw
@@ -52,7 +53,7 @@ struct GameClientToCMPacket : public ISerializable
   virtual void deserialize(std::size_t size, std::uint8_t *data);
 
 private:
-  std::array<std::uint8_t, 4> __padding;
+  std::array<std::uint8_t, 2> __padding;
 };
 
 namespace packetSize

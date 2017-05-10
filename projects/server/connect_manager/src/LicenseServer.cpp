@@ -62,8 +62,8 @@ bool LicenseServer::addClient()
     {
       m_gameServerList.push_back(
           std::make_unique<GameServer>(rc, in, m_licenseList));
-      nope::log::Log(Debug) << "Added client FD #"
-                            << m_gameServerList.back()->getSocket();
+      nope::log::Log(Debug)
+          << "Added client FD #" << m_gameServerList.back()->getSocket();
       return (true);
     }
   return (false);

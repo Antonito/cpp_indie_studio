@@ -30,8 +30,10 @@ std::unique_ptr<std::uint8_t[]>
   else if (pck.eventType == GameClientToCMEvent::SERVER_STATUS_EVENT)
     {
       data->eventData.status.port = htons(data->eventData.status.port);
-      data->eventData.status.nbClients =
-          htons(data->eventData.status.nbClients);
+      data->eventData.status.currentClients =
+          htons(data->eventData.status.currentClients);
+      data->eventData.status.maxClients =
+          htons(data->eventData.status.maxClients);
     }
 
   return (serial);
@@ -50,7 +52,9 @@ void GameClientToCMPacket::deserialize(std::size_t, std::uint8_t *data)
   else if (pck.eventType == GameClientToCMEvent::SERVER_STATUS_EVENT)
     {
       pck.eventData.status.port = ntohs(pck.eventData.status.port);
-      pck.eventData.status.nbClients = ntohs(pck.eventData.status.nbClients);
+      pck.eventData.status.currentClients =
+          htons(pck.eventData.status.currentClients);
+      pck.eventData.status.maxClients = htons(pck.eventData.status.maxClients);
     }
   else
     {
