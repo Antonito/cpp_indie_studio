@@ -6,6 +6,7 @@
 #include "TCPSocket.hpp"
 #include "GameServer.hpp"
 #include "Queue.hpp"
+#include "GameServerInfo.hpp"
 
 class LicenseServer : public network::IServer
 {
@@ -23,8 +24,8 @@ public:
 
   std::vector<std::unique_ptr<GameServer>> const &getGameServers() const;
 
-  std::vector<std::string> const &getGameServerList() const;
-  std::mutex &                    getGameServerListMut();
+  std::vector<GameServerInfo> const &getGameServerList() const;
+  std::mutex &                       getGameServerListMut();
 
   void updateGameServerList();
 
@@ -50,12 +51,12 @@ private:
 
   std::vector<std::string> m_licenseList; // TODO: Licenses ?
   std::vector<std::unique_ptr<GameServer>>
-                           m_gameServerList; // TODO: Use Memory lib
-  std::thread              m_thread;
-  std::condition_variable  m_cond;
-  std::mutex               m_mut;
-  std::vector<std::string> m_list;
-  std::mutex               m_gameServerListMut;
+                              m_gameServerList; // TODO: Use Memory lib
+  std::thread                 m_thread;
+  std::condition_variable     m_cond;
+  std::mutex                  m_mut;
+  std::vector<GameServerInfo> m_list;
+  std::mutex                  m_gameServerListMut;
 };
 
 #endif // !LICENSE_SERVER_HPP_

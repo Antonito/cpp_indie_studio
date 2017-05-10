@@ -34,10 +34,10 @@ int main(int ac, char **av)
       if (mainSrv.run())
 	{
 	  mainSrv.waitSignal();
-          if (gameSrv.run())
-          {
-            std::cout << "All servers started !" << std::endl;
-          }
+	  if (gameSrv.run())
+	    {
+	      std::cout << "All servers started !" << std::endl;
+	    }
 
 	  // Accept Client's connection
 

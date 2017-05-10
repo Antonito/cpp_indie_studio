@@ -1,8 +1,8 @@
 #include "GameClient.hpp"
 
-GameClient::GameClient(sock_t const                    fd,
-                       std::vector<std::string> const &gameServerList,
-                       std::mutex &                    gameServerListMut)
+GameClient::GameClient(sock_t const                       fd,
+                       std::vector<GameServerInfo> const &gameServerList,
+                       std::mutex &                       gameServerListMut)
     : m_sock(fd), m_write(false), m_state(State::CONNECTED),
       m_gameServerList(gameServerList), m_gameServerListMut(gameServerListMut)
 {
