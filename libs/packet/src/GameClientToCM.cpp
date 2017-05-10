@@ -1,5 +1,7 @@
 #include "packet_stdafx.hpp"
 
+//HELLO
+
 GameClientToCMPacket::GameClientToCMPacket() : pck()
 {
 }
