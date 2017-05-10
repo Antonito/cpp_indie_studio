@@ -46,7 +46,7 @@ from time import sleep
 
 __author__ = "Antoine Baché"
 
-gameServerPortL = (12345)
+gameServerPortL = (12346)
 gameServerMaxClientL = (4096)
 gameServerPort = gameServerPortL.to_bytes(2, byteorder='big')
 gameServerMaxClient = gameServerMaxClientL.to_bytes(4, byteorder='big')
@@ -82,9 +82,9 @@ def connectProtocol(logger, sock):
 
     MyStruct = namedtuple("Packet", "field1 field2 field3 field4")
 
-    #msg = b"HELLO"
-    eventType = 1
-    data = eventType.to_bytes(2, byteorder='big')
+    msg = b"HELLO"
+    eventType = 0
+    data = eventType.to_bytes(2, byteorder='big') + msg
     header = createHeader(data)
     pck = header + data
     sock.send(pck);
