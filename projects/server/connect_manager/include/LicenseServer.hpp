@@ -11,8 +11,7 @@ class LicenseServer : public network::IServer
 {
 public:
   explicit LicenseServer(std::uint16_t const port,
-                         std::uint16_t const gameServerPort,
-                         multithread::Queue<std::vector<std::string>> &com);
+                         std::uint16_t const gameServerPort);
   virtual ~LicenseServer();
 
   virtual bool run();
@@ -23,6 +22,8 @@ public:
   void waitSignal();
 
   std::vector<std::unique_ptr<GameServer>> const &getGameServers() const;
+
+  std::vector<std::string> const &getLicences() const;
 
 private:
   void         _loop();
@@ -46,11 +47,11 @@ private:
 
   std::vector<std::string> m_licenseList; // TODO: Licenses ?
   std::vector<std::unique_ptr<GameServer>>
-                                                m_gameServerList; // TODO: Use Memory lib
-  std::thread                                   m_thread;
-  std::condition_variable                       m_cond;
-  std::mutex                                    m_mut;
-  multithread::Queue<std::vector<std::string>> &m_com;
+                           m_gameServerList; // TODO: Use Memory lib
+  std::thread              m_thread;
+  std::condition_variable  m_cond;
+  std::mutex               m_mut;
+  std::vector<std::string> m_list;
 };
 
 #endif // !LICENSE_SERVER_HPP_

@@ -3,13 +3,12 @@
 constexpr std::uint32_t LicenseServer::maxGameServer;
 
 LicenseServer::LicenseServer(std::uint16_t const licensePort,
-                             std::uint16_t const gameServerPort,
-                             multithread::Queue<std::vector<std::string>> &com)
+                             std::uint16_t const gameServerPort)
     : m_license(licensePort, "localhost", false, network::ASocket::BLOCKING),
       m_gameServer(gameServerPort, LicenseServer::maxGameServer,
                    network::ASocket::BLOCKING),
       m_licenseList(), m_gameServerList(), m_thread(), m_cond(), m_mut(),
-      m_com(com)
+      m_list()
 {
 }
 
@@ -296,4 +295,9 @@ bool LicenseServer::loadLicenses()
       return (true);
     }
   return (false);
+}
+
+std::vector<std::string> const &LicenseServer::getLicences() const
+{
+  return (m_list);
 }

@@ -24,14 +24,12 @@ int main(int ac, char **av)
   // Connection to License Manager + accept game servers
   try
     {
-      multithread::Queue<std::vector<std::string>> licencesQueue;
-      LicenseServer                                mainSrv(
+      LicenseServer mainSrv(
           static_cast<std::uint16_t>(std::strtol(*(av + 1), nullptr, 10)),
-          static_cast<std::uint16_t>(std::strtol(*(av + 2), nullptr, 10)),
-          licencesQueue);
+          static_cast<std::uint16_t>(std::strtol(*(av + 2), nullptr, 10)));
       GameClientServer gameSrv(
           static_cast<std::uint16_t>(std::strtol(*(av + 3), nullptr, 10)),
-          licencesQueue);
+          mainSrv.getLicences());
 
       if (mainSrv.run())
 	{
