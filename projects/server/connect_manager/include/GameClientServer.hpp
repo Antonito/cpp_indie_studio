@@ -7,11 +7,13 @@
 #include "IServer.hpp"
 #include "TCPSocket.hpp"
 #include "GameClient.hpp"
+#include "Queue.hpp"
 
 class GameClientServer : public network::IServer
 {
 public:
-  explicit GameClientServer(std::uint16_t const port);
+  explicit GameClientServer(std::uint16_t const                           port,
+                            multithread::Queue<std::vector<std::string>> &com);
 
   virtual ~GameClientServer();
 
@@ -26,9 +28,10 @@ private:
   std::int32_t checkActivity(fd_set &readfds, fd_set &writefds,
                              fd_set &exceptfds);
 
-  network::TCPSocket                       m_sock;
-  std::thread                              m_thread;
-  std::vector<std::unique_ptr<GameClient>> m_gameClient;
+  network::TCPSocket                            m_sock;
+  std::thread                                   m_thread;
+  std::vector<std::unique_ptr<GameClient>>      m_gameClient;
+  multithread::Queue<std::vector<std::string>> &m_com;
 };
 
 #endif // !GAME_CLIENT_SERVER_HPP_

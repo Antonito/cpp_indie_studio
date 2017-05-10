@@ -5,12 +5,14 @@
 #include "IServer.hpp"
 #include "TCPSocket.hpp"
 #include "GameServer.hpp"
+#include "Queue.hpp"
 
 class LicenseServer : public network::IServer
 {
 public:
   explicit LicenseServer(std::uint16_t const port,
-                         std::uint16_t const gameServerPort);
+                         std::uint16_t const gameServerPort,
+                         multithread::Queue<std::vector<std::string>> &com);
   virtual ~LicenseServer();
 
   virtual bool run();
@@ -44,10 +46,11 @@ private:
 
   std::vector<std::string> m_licenseList; // TODO: Licenses ?
   std::vector<std::unique_ptr<GameServer>>
-                          m_gameServerList; // TODO: Use Memory lib
-  std::thread             m_thread;
-  std::condition_variable m_cond;
-  std::mutex              m_mut;
+                                                m_gameServerList; // TODO: Use Memory lib
+  std::thread                                   m_thread;
+  std::condition_variable                       m_cond;
+  std::mutex                                    m_mut;
+  multithread::Queue<std::vector<std::string>> &m_com;
 };
 
 #endif // !LICENSE_SERVER_HPP_

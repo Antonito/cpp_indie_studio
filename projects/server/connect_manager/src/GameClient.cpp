@@ -20,7 +20,7 @@ network::IClient::ClientAction GameClient::write(IPacket const &pck)
 {
   network::IClient::ClientAction ret = network::IClient::ClientAction::SUCCESS;
   std::size_t const              sizeToWrite = pck.getSize();
-  uint8_t const *                data = pck.getData();
+  std::uint8_t const *           data = pck.getData();
 
   if (m_sock.send(data, sizeToWrite) == false)
     {
@@ -36,7 +36,7 @@ network::IClient::ClientAction GameClient::read(IPacket &pck)
   std::size_t const buffSize = packetSize::GameClientToCMPacketSize;
 
   // Allocate buffer
-  std::unique_ptr<uint8_t[]> buff = std::make_unique<uint8_t[]>(buffSize);
+  std::unique_ptr<uint8_t[]> buff = std::make_unique<std::uint8_t[]>(buffSize);
   ssize_t                    buffLen = 0;
 
   if (m_sock.rec(buff.get(), buffSize, &buffLen))
@@ -51,7 +51,7 @@ network::IClient::ClientAction GameClient::read(IPacket &pck)
       else
 	{
 	  ret = network::IClient::ClientAction::SUCCESS;
-	  pck.setData(static_cast<size_t>(buffLen), std::move(buff));
+	  pck.setData(static_cast<std::size_t>(buffLen), std::move(buff));
 	}
     }
   return (ret);

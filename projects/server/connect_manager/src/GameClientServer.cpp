@@ -2,10 +2,12 @@
 
 constexpr std::uint32_t GameClientServer::maxGameClients;
 
-GameClientServer::GameClientServer(std::uint16_t const port)
+GameClientServer::GameClientServer(
+    std::uint16_t const                           port,
+    multithread::Queue<std::vector<std::string>> &com)
     : m_sock(port, GameClientServer::maxGameClients,
              network::ASocket::BLOCKING),
-      m_thread(), m_gameClient()
+      m_thread(), m_gameClient(), m_com(com)
 {
 }
 
