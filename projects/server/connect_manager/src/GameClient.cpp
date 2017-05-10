@@ -144,13 +144,13 @@ network::IClient::ClientAction GameClient::treatOutcomingData()
 	for (std::uint32_t i = 0; i < m_gameServerList.size(); i++)
 	  {
 	    rep.pck.eventType = GameClientToCMEvent::SERVER_STATUS_EVENT;
-	    /*rep.pck.eventData.status.port = htons(rep.pck.eventData.port);
-	      rep.pck.eventData.status.nbClients =
-	      htons(rep.pck.eventData.port);*/
-	    rep.pck.eventData.status.port = 0;
-	    rep.pck.eventData.status.nbClients = 0;
+	    rep.pck.eventData.status.port = htons(m_gameServerList[i].port);
+	    rep.pck.eventData.status.currentClients =
+	        htons(m_gameServerList[i].currentClients);
+	    rep.pck.eventData.status.maxClients =
+	        htons(m_gameServerList[i].maxClients);
 	    GameClientToCMPacketIP &simple = rep.pck.eventData.status.ip;
-	    std::memcpy(simple.data.data(), m_gameServerList[i].c_str(),
+	    std::memcpy(simple.data.data(), m_gameServerList[i].addr.data(),
 	                m_gameServerList.size());
 	    m_packet << rep;
 	    ret = write(m_packet);
