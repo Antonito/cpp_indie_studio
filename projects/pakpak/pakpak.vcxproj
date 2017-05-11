@@ -191,8 +191,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\AContext.cpp" />
     <ClCompile Include="src\AppLauncher.cpp" />
-    <ClCompile Include="src\Display.cpp" />
+    <ClCompile Include="src\ContextGame.cpp" />
+    <ClCompile Include="src\ContextMenu.cpp" />
+    <ClCompile Include="src\ContextSplash.cpp" />
     <ClCompile Include="src\InputListener.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp">
@@ -203,18 +206,17 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\AppLauncher.h" />
+    <ClInclude Include="include\AContext.hpp" />
+    <ClInclude Include="include\AppLauncher.hpp" />
     <ClInclude Include="include\ContextGame.hpp" />
-    <ClInclude Include="include\ContextInGameMenu.hpp" />
-    <ClInclude Include="include\ContextMainMenu.hpp" />
+    <ClInclude Include="include\ContextMenu.hpp" />
     <ClInclude Include="include\ContextSplash.hpp" />
-    <ClInclude Include="include\Display.hpp" />
     <ClInclude Include="include\Entity.hpp" />
     <ClInclude Include="include\FastList.hpp" />
     <ClInclude Include="include\FastStack.hpp" />
     <ClInclude Include="include\GameState.hpp" />
     <ClInclude Include="include\IContext.hpp" />
-    <ClInclude Include="include\InputListener.h" />
+    <ClInclude Include="include\InputListener.hpp" />
     <ClInclude Include="include\pakpak_stdafx.hpp" />
     <ClInclude Include="include\targetver.h" />
   </ItemGroup>

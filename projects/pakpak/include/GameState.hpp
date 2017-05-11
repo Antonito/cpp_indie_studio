@@ -1,15 +1,17 @@
 #ifndef GAMESTATE_HPP_
 #define GAMESTATE_HPP_
 
+#include <cstdint>
+
 namespace core
 {
-  enum class GameState
+  enum class GameState : std::int8_t
   {
     None = -1,
     Splash,
-    MainMenu,
-    Game,
-    InGameMenu,
+    Menu,
+    InGame,
+    Quit,
     NbGameState
   };
 }

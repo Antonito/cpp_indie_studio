@@ -19,8 +19,8 @@ namespace core
     void         startOIS();
 
   private:
-    Ogre::RenderWindow *mWindow;
-    Ogre::Camera *      mCamera;
+    Ogre::RenderWindow *m_window;
+    Ogre::Camera *      m_camera;
     OIS::InputManager * mInputManager;
     OIS::Mouse *        mMouse;
     OIS::Keyboard *     mKeyboard;

@@ -1,4 +1,4 @@
-#include "AppLauncher.h"
+#include "AppLauncher.hpp"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 
 {
 
-  AppLauncher app;
+  core::AppLauncher app;
 
   try
     {

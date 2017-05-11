@@ -1,14 +1,16 @@
 #ifndef CONTEXTGAME_HPP_
 #define CONTEXTGAME_HPP_
 
-#include "IContext.hpp"
+#include "AContext.hpp"
 
-namespace core
+class Ogre::RenderWindow;
+
+namespace game
 {
-  class ContextGame final : public IContext
+  class ContextGame final : public core::AContext
   {
   public:
-    ContextGame();
+    ContextGame(Ogre::RenderWindow *win, core::InputListener *input);
     ContextGame(ContextGame const &);
     ContextGame(ContextGame &&);
     virtual ~ContextGame();
@@ -16,8 +18,11 @@ namespace core
     ContextGame &operator=(ContextGame const &);
     ContextGame &operator=(ContextGame &&);
 
-    virtual void update(std::vector<Event> &events);
-    virtual void display(Renderer &renderer);
+    virtual void enable();
+    virtual void disable();
+
+    virtual core::GameState update();
+    virtual void            display();
 
   private:
   };
