@@ -11,6 +11,16 @@ int main(int ac, char **av)
       return (EXIT_FAILURE);
     }
 
+  // Starts logger
+  nope::log::Logger::start("connect_manager.log");
+#if defined(DEBUG)
+  nope::log::Logger::logLevel = nope::log::LogLevel::LOG_DEBUG;
+  nope::log::Log(Debug) << "Starting log";
+#else
+  nope::log::Logger::logLevel = nope::log::LogLevel::LOG_INFO;
+#endif
+
+  // Get arguments
   std::uint16_t const connectManagerPort =
       static_cast<std::uint16_t>(std::strtol(*(av + 2), nullptr, 10));
   std::uint16_t const gameServerPort =

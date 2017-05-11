@@ -10,8 +10,7 @@ GameServer::GameServer(sock_t socket, sockaddr_in_t const &in,
                     m_ip.data(), sizeof(m_ip), nullptr, 0,
                     NI_NUMERICHOST | NI_NUMERICSERV) == 0)
     {
-      nope::log::Log(Info) << "Client joined " << std::string(m_ip.data())
-                           << std::endl;
+      nope::log::Log(Info) << "Client joined " << std::string(m_ip.data());
     }
 }
 
@@ -189,6 +188,12 @@ network::IClient::ClientAction GameServer::treatOutcomingData()
       }
       break;
     case State::AUTHENTICATED:
+      // TODO: To remove
+      rep.pck.eventType = GameServerToCMEvent::STRINGIFIED_EVENT;
+      GameServerToCMPacketSimple &simple = rep.pck.eventData.string;
+      std::memcpy(simple.data.data(), "OK", 3);
+      m_packet << rep;
+      ret = write(m_packet);
       break;
     }
   if (ret == network::IClient::ClientAction::SUCCESS)

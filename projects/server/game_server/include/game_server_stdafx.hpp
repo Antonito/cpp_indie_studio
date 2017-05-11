@@ -18,8 +18,11 @@
 #include <fstream>
 #include <memory>
 #include <vector>
+#include <cstring>
 #include "Logger.hpp"
 #include "GameServer.hpp"
 #include "TCPSocket.hpp"
+#include "Packet.hpp"
+#include "GameServerCMPacket.hpp"
 
 #endif // !GAME_SERVER_STDAFX_HPP_

@@ -18,7 +18,7 @@ int main(int ac, char **av)
 #else
   nope::log::Logger::logLevel = nope::log::LogLevel::LOG_INFO;
 #endif
-  std::cout << "Starting server" << std::endl;
+  nope::log::Log(Info) << "Starting server";
 
   nope::log::Log(Debug) << "Starting license manager";
   // Connection to License Manager + accept game servers
@@ -36,7 +36,7 @@ int main(int ac, char **av)
 	  mainSrv.waitSignal();
 	  if (gameSrv.run())
 	    {
-	      std::cout << "All servers started !" << std::endl;
+	      nope::log::Log(Info) << "All servers started";
 	    }
 
 	  // Accept Client's connection

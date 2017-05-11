@@ -62,8 +62,8 @@ bool LicenseServer::addClient()
     {
       m_gameServerList.push_back(
           std::make_unique<GameServer>(rc, in, m_licenseList));
-      nope::log::Log(Debug)
-          << "Added client FD #" << m_gameServerList.back()->getSocket();
+      nope::log::Log(Debug) << "Added client FD #"
+                            << m_gameServerList.back()->getSocket();
       return (true);
     }
   return (false);
@@ -241,7 +241,7 @@ void LicenseServer::_loop()
 
 		  nope::log::Log(Debug) << "Can write to socket #" << sock;
 		  action = game->treatIncomingData();
-		  if (action == network::IClient::ClientAction::DISCONNECT)
+		  if (action != network::IClient::ClientAction::SUCCESS)
 		    {
 		      removeClient(*game);
 		      deleted = true;
@@ -252,7 +252,7 @@ void LicenseServer::_loop()
 		  network::IClient::ClientAction action;
 
 		  action = game->treatOutcomingData();
-		  if (action == network::IClient::ClientAction::DISCONNECT)
+		  if (action != network::IClient::ClientAction::SUCCESS)
 		    {
 		      removeClient(*game);
 		      deleted = true;
