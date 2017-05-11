@@ -21,7 +21,7 @@ INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)
 
-HEADER=		
+HEADER=		pakpak_stdafx.hpp
 
 # Project's files
 
