@@ -1,3 +1,4 @@
+#include <OIS/OIS.h>
 #include "InputListener.hpp"
 
 namespace core

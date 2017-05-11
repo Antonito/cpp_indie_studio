@@ -1,20 +1,18 @@
 #ifndef ACONTEXT_HPP_
 #define ACONTEXT_HPP_
 
-#if defined(_WIN32) && !defined(__on__linux__)
-#include <OgreRenderWindow.h>
-#endif
-
-#if defined(__linux__)
-#include <OGRE/OgreRenderWindow.h>
-#endif
-
 #include "IContext.hpp"
+
+// Forward declaration for faster compilation
+namespace Ogre
+{
+  class RenderWindow;
+}
 
 namespace core
 {
+  // Forward declaration for faster compilation
   class InputListener;
-  //  class Ogre::RenderWindow;
 
   class AContext : public IContext
   {

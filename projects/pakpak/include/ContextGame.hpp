@@ -1,17 +1,13 @@
 #ifndef CONTEXTGAME_HPP_
 #define CONTEXTGAME_HPP_
 
-#if defined(_WIN32) && !defined(__on__linux__)
-#include <OgreRenderWindow.h>
-#endif
-
-#if defined(__linux__)
-#include <OGRE/OgreRenderWindow.h>
-#endif
-
 #include "AContext.hpp"
 
-//  class Ogre::RenderWindow;
+// Forward declaration for faster compilation
+namespace Ogre
+{
+  class RenderWindow;
+}
 
 namespace game
 {

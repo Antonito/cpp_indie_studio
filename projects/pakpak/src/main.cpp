@@ -1,3 +1,4 @@
+#include <OGRE/OgreException.h>
 #include "AppLauncher.hpp"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

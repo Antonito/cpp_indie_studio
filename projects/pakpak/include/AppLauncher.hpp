@@ -1,37 +1,25 @@
 #ifndef APPLAUNCHER_HPP_
 #define APPLAUNCHER_HPP_
 
+#include <array>
 #include <memory>
-
-#if defined(_WIN32) && !defined(__on__linux__)
-#include <OgreRenderWindow.h>
-#include <OgreRoot.h>
-#include <OgreSceneManager.h>
-#include <OgreEntity.h>
-#include <OgreSceneNode.h>
-#include <OgreLight.h>
-#include <OgreCamera.h>
-#include <OgreViewport.h>
-#endif
-
-#if defined(__on__linux__) && !defined(_WIN32)
-#include <OGRE/OgreRenderWindow.h>
-#include <OGRE/OgreRoot.h>
-#include <OGRE/OgreSceneManager.h>
-#include <OGRE/OgreEntity.h>
-#include <OGRE/OgreSceneNode.h>
-#include <OGRE/OgreLight.h>
-#include <OGRE/OgreCamera.h>
-#include <OGRE/OgreViewport.h>
-#endif
-
-#include <OGRE/Ogre.h>
-#include "GameState.hpp"
-#include "InputListener.hpp"
 #include "IContext.hpp"
+#include "GameState.hpp"
+
+// Forward declaration for faster compilation
+namespace Ogre
+{
+  class Root;
+  class RenderWindow;
+  class SceneManager;
+  class Camera;
+}
 
 namespace core
 {
+  // Forward declaration for faster compilation
+  class InputListener;
+
   class AppLauncher
   {
   public:

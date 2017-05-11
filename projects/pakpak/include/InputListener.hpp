@@ -3,7 +3,14 @@
 
 #include <OGRE/Ogre.h>
 #include <memory>
-#include <OIS/OIS.h>
+
+// Forward declaration for faster compilation
+namespace OIS
+{
+  class InputManager;
+  class Mouse;
+  class Keyboard;
+}
 
 namespace core
 {

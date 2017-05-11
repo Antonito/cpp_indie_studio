@@ -4,13 +4,17 @@
 #include <chrono>
 #include "AContext.hpp"
 
-class Ogre::RenderWindow;
-class Ogre::SceneManager;
-class Ogre::Entity;
-class Ogre::SceneNode;
-class Ogre::Light;
-class Ogre::Camera;
-class Ogre::Viewport;
+// Forward declaration for faster compilation
+namespace Ogre
+{
+  class RenderWindow;
+  class SceneManager;
+  class Entity;
+  class SceneNode;
+  class Light;
+  class Camera;
+  class Viewport;
+}
 
 namespace splash
 {

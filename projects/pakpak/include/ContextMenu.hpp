@@ -1,17 +1,14 @@
 #ifndef CONTEXTMENU_HPP_
 #define CONTEXTMENU_HPP_
 
-#if defined(_WIN32) && !defined(__on__linux__)
-#include <OgreRenderWindow.h>
-#endif
-
-#if defined(__linux__)
-#include <OGRE/OgreRenderWindow.h>
-#endif
-
 #include "AContext.hpp"
 
-// class Ogre::RenderWindow;
+// Forward declaration for faster compilation
+namespace Ogre
+{
+  class RenderWindow;
+}
+
 namespace menu
 {
   class ContextMenu final : public core::AContext
