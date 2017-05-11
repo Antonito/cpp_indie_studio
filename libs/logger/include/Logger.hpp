@@ -33,7 +33,7 @@ namespace nope
       void addSink(LogSink const &s);
 
 #ifdef DEBUG
-      inline LogMessage operator()(std::string &&file, std::size_t line);
+      LogMessage operator()(std::string &&file, std::size_t line);
 #endif
 
       template <typename T>
@@ -47,8 +47,7 @@ namespace nope
 
       void flush(LogMessage const &) const;
 
-      static void start();
-      static void stop();
+      static void start(std::string const &filename);
 
       static LogLevel logLevel;
       static const std::chrono::time_point<std::chrono::high_resolution_clock,
@@ -92,29 +91,29 @@ namespace nope
     };
 
 #if defined(NOPE_NO_LOG)
-    extern EmptyLogger *Trace;
-    extern EmptyLogger *Debug;
-    extern EmptyLogger *Info;
-    extern EmptyLogger *Warning;
-    extern EmptyLogger *Error;
+    extern EmptyLogger Trace;
+    extern EmptyLogger Debug;
+    extern EmptyLogger Info;
+    extern EmptyLogger Warning;
+    extern EmptyLogger Error;
 #else
-    extern Logger *Trace;
+    extern Logger Trace;
 #ifdef DEBUG
-    extern Logger *Debug;
+    extern Logger Debug;
 #else
-    extern EmptyLogger *Debug;
+    extern EmptyLogger Debug;
 #endif
-    extern Logger *Info;
-    extern Logger *Warning;
-    extern Logger *Error;
+    extern Logger Info;
+    extern Logger Warning;
+    extern Logger Error;
 #endif
   }
 }
 
 #ifdef DEBUG
-#define Log(logger) (*logger)(__FILE__, __LINE__)
+#define Log(logger) logger(__FILE__, __LINE__)
 #else
-#define Log(logger) (*logger)
+#define Log(logger) logger
 #endif
 
 #endif // !LOGGER_HPP_

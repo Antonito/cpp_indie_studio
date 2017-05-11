@@ -330,3 +330,7 @@ __pycache__/
 *.xsd.cs
 *.iobj
 *.ipdb
+
+#Vim
+*.swp
+.ycm_extra_conf.py

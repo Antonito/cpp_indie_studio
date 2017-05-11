@@ -26,7 +26,16 @@ function check_dir {
     cd - &> /dev/null;
 }
 
+# Add your directories here
+
 check_dir "libs/crypto/"
 check_dir "libs/logger/"
 check_dir "libs/memory/"
+check_dir "libs/exceptions/"
+check_dir "libs/network/"
+check_dir "libs/multithread/"
+check_dir "libs/packet/"
+check_dir "projects/server/connect_manager/"
+check_dir "projects/server/game_server/"
+
 exit 0
