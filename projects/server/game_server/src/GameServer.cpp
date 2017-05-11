@@ -6,7 +6,10 @@ GameServer::GameServer(std::string const & connectManagerIp,
     : m_connectManagerPort(cmPort), m_gameServerPort(gsPort),
       m_maxClients(maxClients), m_licence(),
       m_connectManagerSock(m_connectManagerPort, connectManagerIp, true,
-                           network::ASocket::SocketType::BLOCKING)
+                           network::ASocket::SocketType::BLOCKING),
+      m_gameSock(
+          m_gameServerPort, static_cast<std::uint32_t>(m_maxClients),
+          network::ASocket::SocketType::BLOCKING) // TODO: Non-blocking ?
 {
   std::ifstream licenceFile(".licence");
 
@@ -23,68 +26,75 @@ GameServer::~GameServer()
 {
 }
 
+bool GameServer::authenticateToConnectManager()
+{
+  Packet<GameServerToCMPacket> pck;
+  GameServerToCMPacket         data;
+
+  nope::log::Log(Debug) << "Connected to ConnectManager";
+
+  // Send "HELLO"
+  data.pck.eventType = GameServerToCMEvent::STRINGIFIED_EVENT;
+  std::memcpy(data.pck.eventData.string.data.data(), "HELLO", sizeof("HELLO"));
+
+  pck << data;
+  if (write(pck) != network::IClient::ClientAction::SUCCESS)
+    {
+      return (false);
+    }
+
+  // Read "WHO ?"
+  if (read(pck) != network::IClient::ClientAction::SUCCESS)
+    {
+      return (false);
+    }
+  pck >> data;
+  if (data.pck.eventType != GameServerToCMEvent::STRINGIFIED_EVENT ||
+      std::memcmp(data.pck.eventData.string.data.data(), "WHO ?",
+                  sizeof("WHO ?")))
+    {
+      nope::log::Log(Error) << "Invalid packet received";
+      return (false);
+    }
+
+  // Send licence + port
+  nope::log::Log(Debug) << "Sending licence ...";
+  data.pck.eventType = GameServerToCMEvent::LICENCE_EVENT;
+  std::memcpy(data.pck.eventData.licence.licence.data.data(),
+              m_licence.c_str(), m_licence.length() + 1);
+  data.pck.eventData.licence.port = m_gameServerPort;
+  pck << data;
+  if (write(pck) != network::IClient::ClientAction::SUCCESS)
+    {
+      return (false);
+    }
+
+  // Read "OK"
+  if (read(pck) != network::IClient::ClientAction::SUCCESS)
+    {
+      return (false);
+    }
+  pck >> data;
+  if (data.pck.eventType != GameServerToCMEvent::STRINGIFIED_EVENT ||
+      std::memcmp(data.pck.eventData.string.data.data(), "OK", sizeof("OK")))
+    {
+      nope::log::Log(Error) << "Invalid packet received";
+      return (false);
+    }
+  nope::log::Log(Info) << "Authenticated on connectManager";
+  return (true);
+}
+
 bool GameServer::run()
 {
   nope::log::Log(Debug) << "Running Game Server";
-  if (m_connectManagerSock.openConnection())
+  if (m_connectManagerSock.openConnection() && authenticateToConnectManager())
     {
-      Packet<GameServerToCMPacket> pck;
-      GameServerToCMPacket         data;
-
-      nope::log::Log(Debug) << "Connected to ConnectManager";
-
-      // Send "HELLO"
-      data.pck.eventType = GameServerToCMEvent::STRINGIFIED_EVENT;
-      std::memcpy(data.pck.eventData.string.data.data(), "HELLO",
-                  sizeof("HELLO"));
-
-      pck << data;
-      if (write(pck) != network::IClient::ClientAction::SUCCESS)
+      // Authenticated to connectManager, shall start gameClient server
+      if (m_gameSock.openConnection())
 	{
-	  return (false);
+	  nope::log::Log(Info) << "Server started";
 	}
-
-      // Read "WHO ?"
-      if (read(pck) != network::IClient::ClientAction::SUCCESS)
-	{
-	  return (false);
-	}
-      pck >> data;
-      if (data.pck.eventType != GameServerToCMEvent::STRINGIFIED_EVENT ||
-          std::memcmp(data.pck.eventData.string.data.data(), "WHO ?",
-                      sizeof("WHO ?")))
-	{
-	  nope::log::Log(Error) << "Invalid packet received";
-	  return (false);
-	}
-
-      // Send licence + port
-      nope::log::Log(Debug) << "Sending licence ...";
-      data.pck.eventType = GameServerToCMEvent::LICENCE_EVENT;
-      std::memcpy(data.pck.eventData.licence.licence.data.data(),
-                  m_licence.c_str(), m_licence.length() + 1);
-      data.pck.eventData.licence.port = m_gameServerPort;
-      pck << data;
-      if (write(pck) != network::IClient::ClientAction::SUCCESS)
-	{
-	  return (false);
-	}
-
-      // Read "OK"
-      if (read(pck) != network::IClient::ClientAction::SUCCESS)
-	{
-	  return (false);
-	}
-      pck >> data;
-      if (data.pck.eventType != GameServerToCMEvent::STRINGIFIED_EVENT ||
-          std::memcmp(data.pck.eventData.string.data.data(), "OK",
-                      sizeof("OK")))
-	{
-	  nope::log::Log(Error) << "Invalid packet received";
-	  return (false);
-	}
-      nope::log::Log(Info) << "Authenticated on connectManager";
-      return (true);
     }
   return (false);
 }

@@ -28,12 +28,15 @@ public:
   virtual bool                           hasTimedOut() const;
 
 private:
+  bool authenticateToConnectManager();
+
   std::uint16_t      m_connectManagerPort;
   std::uint16_t      m_gameServerPort;
   std::int32_t const m_maxClients;
   std::string        m_licence;
 
   network::TCPSocket m_connectManagerSock;
+  network::TCPSocket m_gameSock;
 };
 
 #endif // !GAMESERVER_HPP_
