@@ -1,6 +1,4 @@
-#include <OGRE/OgreRenderWindow.h>
-#include "AContext.hpp"
-#include "InputListener.hpp"
+#include "pakpak_stdafx.hpp"
 
 namespace core
 {

@@ -1,13 +1,5 @@
 #include <OGRE/OgreRenderWindow.h>
-#include <OGRE/OgreRoot.h>
-#include <OGRE/OgreSceneManager.h>
-#include <OGRE/OgreEntity.h>
-#include <OGRE/OgreSceneNode.h>
-#include <OGRE/OgreLight.h>
-#include <OGRE/OgreCamera.h>
-#include <OGRE/OgreViewport.h>
-#include "ContextSplash.hpp"
-#include "GameState.hpp"
+#include "pakpak_stdafx.hpp"
 
 namespace splash
 {

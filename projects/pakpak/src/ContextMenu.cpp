@@ -1,7 +1,4 @@
-#include <OGRE/OgreRenderWindow.h>
-#include "ContextMenu.hpp"
-#include "InputListener.hpp"
-#include "GameState.hpp"
+#include "pakpak_stdafx.hpp"
 
 namespace menu
 {

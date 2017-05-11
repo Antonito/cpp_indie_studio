@@ -1,7 +1,4 @@
-#include <OGRE/OgreRenderWindow.h>
-#include "InputListener.hpp"
-#include "GameState.hpp"
-#include "ContextGame.hpp"
+#include "pakpak_stdafx.hpp"
 
 namespace game
 {
