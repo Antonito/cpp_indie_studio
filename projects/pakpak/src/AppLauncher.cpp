@@ -22,12 +22,13 @@ namespace core
 
 // TODO : Create .cfg
 // Create the Root
+
 #ifdef DEBUG
     m_root =
         new Ogre::Root("conf/plugins_d.cfg", "conf/ogre_d.cfg", "Ogre.log");
 #else
     m_root = new Ogre::Root("conf/plugins.cfg", "conf/ogre.cfg", "Ogre.log");
-#endif
+#endif // !DEBUG
 
     // Load Ressource config file
     Ogre::ConfigFile configFile;
@@ -35,7 +36,7 @@ namespace core
     configFile.load("conf/resources_d.cfg");
 #else
     configFile.load("conf/resources.cfg");
-#endif
+#endif // !DEBUG
 
     // Load all the Ressources
     Ogre::ConfigFile::SectionIterator seci = configFile.getSectionIterator();
