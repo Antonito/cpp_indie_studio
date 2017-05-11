@@ -11,8 +11,15 @@ namespace core
                         public Ogre::WindowEventListener
   {
   public:
+    InputListener() = delete;
     InputListener(Ogre::RenderWindow *wnd, Ogre::Camera *camera);
+    InputListener(InputListener const &that);
+    InputListener(InputListener &&that);
     virtual ~InputListener();
+
+    InputListener &operator=(InputListener const &that);
+    InputListener &operator=(InputListener &&that);
+
     virtual void windowResized(Ogre::RenderWindow *rw);
     virtual void windowClosed(Ogre::RenderWindow *rw);
     bool         frameRenderingQueued(const Ogre::FrameEvent &evt);
@@ -21,9 +28,9 @@ namespace core
   private:
     Ogre::RenderWindow *m_window;
     Ogre::Camera *      m_camera;
-    OIS::InputManager * mInputManager;
-    OIS::Mouse *        mMouse;
-    OIS::Keyboard *     mKeyboard;
+    OIS::InputManager * m_inputManager;
+    OIS::Mouse *        m_mouse;
+    OIS::Keyboard *     m_keyboard;
   };
 }
 

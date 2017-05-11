@@ -18,12 +18,12 @@ namespace menu
   {
   public:
     ContextMenu(Ogre::RenderWindow *win, core::InputListener *input);
-    ContextMenu(ContextMenu const &);
-    ContextMenu(ContextMenu &&);
+    ContextMenu(ContextMenu const &) = delete;
+    ContextMenu(ContextMenu &&) = delete;
     virtual ~ContextMenu();
 
-    ContextMenu &operator=(ContextMenu const &);
-    ContextMenu &operator=(ContextMenu &&);
+    ContextMenu &operator=(ContextMenu const &) = delete;
+    ContextMenu &operator=(ContextMenu &&) = delete;
 
     virtual void enable();
     virtual void disable();

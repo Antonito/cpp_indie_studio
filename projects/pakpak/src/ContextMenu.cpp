@@ -9,33 +9,8 @@ namespace menu
   {
   }
 
-  ContextMenu::ContextMenu(ContextMenu const &that) : core::AContext(that)
-  {
-  }
-
-  ContextMenu::ContextMenu(ContextMenu &&that)
-      : core::AContext(std::move(that))
-  {
-  }
-
   ContextMenu::~ContextMenu()
   {
-  }
-
-  ContextMenu &ContextMenu::operator=(ContextMenu const &that)
-  {
-    if (this == &that)
-      return (*this);
-    core::AContext::operator=(that);
-    return (*this);
-  }
-
-  ContextMenu &ContextMenu::operator=(ContextMenu &&that)
-  {
-    if (this == &that)
-      return (*this);
-    core::AContext::operator=(std::move(that));
-    return (*this);
   }
 
   void ContextMenu::enable()

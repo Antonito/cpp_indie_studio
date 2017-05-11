@@ -40,12 +40,12 @@ namespace splash
   public:
     explicit ContextSplash(Ogre::RenderWindow * win,
                            core::InputListener *input);
-    ContextSplash(ContextSplash const &);
-    ContextSplash(ContextSplash &&);
+    ContextSplash(ContextSplash const &) = delete;
+    ContextSplash(ContextSplash &&) = delete;
     virtual ~ContextSplash();
 
-    ContextSplash &operator=(ContextSplash const &);
-    ContextSplash &operator=(ContextSplash &&);
+    ContextSplash &operator=(ContextSplash const &) = delete;
+    ContextSplash &operator=(ContextSplash &&) = delete;
 
     virtual void enable();
     virtual void disable();

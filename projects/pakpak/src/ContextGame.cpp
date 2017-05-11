@@ -9,33 +9,8 @@ namespace game
   {
   }
 
-  ContextGame::ContextGame(ContextGame const &that) : core::AContext(that)
-  {
-  }
-
-  ContextGame::ContextGame(ContextGame &&that)
-      : core::AContext(std::move(that))
-  {
-  }
-
   ContextGame::~ContextGame()
   {
-  }
-
-  ContextGame &ContextGame::operator=(ContextGame const &that)
-  {
-    if (this == &that)
-      return (*this);
-    core::AContext::operator=(that);
-    return (*this);
-  }
-
-  ContextGame &ContextGame::operator=(ContextGame &&that)
-  {
-    if (this == &that)
-      return (*this);
-    core::AContext::operator=(std::move(that));
-    return (*this);
   }
 
   void ContextGame::enable()

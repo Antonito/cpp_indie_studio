@@ -3,9 +3,25 @@
 namespace core
 {
   InputListener::InputListener(Ogre::RenderWindow *wnd, Ogre::Camera *camera)
-      : m_window(wnd), m_camera(camera)
+      : m_window(wnd), m_camera(camera), m_inputManager(nullptr),
+        m_mouse(nullptr), m_keyboard(nullptr)
   {
     startOIS();
+  }
+
+  InputListener::InputListener(InputListener const &that)
+      : m_window(that.m_window), m_camera(that.m_camera),
+        m_inputManager(that.m_inputManager), m_mouse(that.m_mouse),
+        m_keyboard(that.m_keyboard)
+  {
+  }
+
+  InputListener::InputListener(InputListener &&that)
+      : m_window(std::move(that.m_window)), m_camera(std::move(that.m_camera)),
+        m_inputManager(std::move(that.m_inputManager)),
+        m_mouse(std::move(that.m_mouse)),
+        m_keyboard(std::move(that.m_keyboard))
+  {
   }
 
   InputListener::~InputListener()
@@ -14,15 +30,39 @@ namespace core
     windowClosed(m_window);
   }
 
+  InputListener &InputListener::operator=(InputListener const &that)
+  {
+    if (this == &that)
+      return (*this);
+    m_window = that.m_window;
+    m_camera = that.m_camera;
+    m_inputManager = that.m_inputManager;
+    m_mouse = that.m_mouse;
+    m_keyboard = that.m_keyboard;
+    return (*this);
+  }
+
+  InputListener &InputListener::operator=(InputListener &&that)
+  {
+    if (this == &that)
+      return (*this);
+    m_window = std::move(that.m_window);
+    m_camera = std::move(that.m_camera);
+    m_inputManager = std::move(that.m_inputManager);
+    m_mouse = std::move(that.m_mouse);
+    m_keyboard = std::move(that.m_keyboard);
+    return (*this);
+  }
+
   bool InputListener::frameRenderingQueued(const Ogre::FrameEvent &evt)
   {
     if (m_window->isClosed())
       return false;
 
-    mKeyboard->capture();
-    mMouse->capture();
+    m_keyboard->capture();
+    m_mouse->capture();
 
-    if (mKeyboard->isKeyDown(OIS::KC_ESCAPE))
+    if (m_keyboard->isKeyDown(OIS::KC_ESCAPE))
       return false;
 
     return true;
@@ -44,13 +84,13 @@ namespace core
     pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
 
     // Create Input System
-    mInputManager = OIS::InputManager::createInputSystem(pl);
+    m_inputManager = OIS::InputManager::createInputSystem(pl);
 
-    mMouse = static_cast<OIS::Mouse *>(
-        mInputManager->createInputObject(OIS::OISMouse, false));
+    m_mouse = static_cast<OIS::Mouse *>(
+        m_inputManager->createInputObject(OIS::OISMouse, false));
 
-    mKeyboard = static_cast<OIS::Keyboard *>(
-        mInputManager->createInputObject(OIS::OISKeyboard, false));
+    m_keyboard = static_cast<OIS::Keyboard *>(
+        m_inputManager->createInputObject(OIS::OISKeyboard, false));
 
     // Set the auto Resize
     windowResized(m_window);
@@ -64,7 +104,7 @@ namespace core
     int          left, top;
 
     wnd->getMetrics(width, height, depth, left, top);
-    const OIS::MouseState &ms = mMouse->getMouseState();
+    const OIS::MouseState &ms = m_mouse->getMouseState();
     ms.width = width;
     ms.height = height;
   }
@@ -74,13 +114,13 @@ namespace core
     // Delete all Object when the window close
     if (wnd == m_window)
       {
-	if (mInputManager)
+	if (m_inputManager)
 	  {
-	    mInputManager->destroyInputObject(mMouse);
-	    mInputManager->destroyInputObject(mKeyboard);
+	    m_inputManager->destroyInputObject(m_mouse);
+	    m_inputManager->destroyInputObject(m_keyboard);
 
-	    OIS::InputManager::destroyInputSystem(mInputManager);
-	    mInputManager = 0;
+	    OIS::InputManager::destroyInputSystem(m_inputManager);
+	    m_inputManager = 0;
 	  }
       }
   }

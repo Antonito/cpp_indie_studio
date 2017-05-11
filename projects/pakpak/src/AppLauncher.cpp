@@ -8,7 +8,8 @@ namespace core
 {
   AppLauncher::AppLauncher()
       : m_root(nullptr), m_window(nullptr), m_sceneMgr(nullptr),
-        m_camera(nullptr)
+        m_camera(nullptr), m_inputListener(nullptr), m_contexts(),
+        m_currentContext(nullptr), m_gameState(GameState::None)
   {
   }
 
@@ -22,11 +23,10 @@ namespace core
 // TODO : Create .cfg
 // Create the Root
 #ifdef DEBUG
-    m_root = std::make_unique<Ogre::Root>("conf/plugins_d.cfg",
-                                          "conf/ogre_d.cfg", "Ogre.log");
+    m_root =
+        new Ogre::Root("conf/plugins_d.cfg", "conf/ogre_d.cfg", "Ogre.log");
 #else
-    m_root = std::make_unique<Ogre::Root>("conf/plugins.cfg", "conf/ogre.cfg",
-                                          "Ogre.log");
+    m_root = new Ogre::Root("conf/plugins.cfg", "conf/ogre.cfg", "Ogre.log");
 #endif
 
     // Load Ressource config file
@@ -113,16 +113,15 @@ namespace core
 
     // Splash context
     m_contexts[static_cast<std::size_t>(GameState::Splash)] =
-        std::make_unique<splash::ContextSplash>(m_window,
-                                                m_inputListener.get());
+        std::make_unique<splash::ContextSplash>(m_window, m_inputListener);
 
     // Menu context
     m_contexts[static_cast<std::size_t>(GameState::Menu)] =
-        std::make_unique<menu::ContextMenu>(m_window, m_inputListener.get());
+        std::make_unique<menu::ContextMenu>(m_window, m_inputListener);
 
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
-        std::make_unique<game::ContextGame>(m_window, m_inputListener.get());
+        std::make_unique<game::ContextGame>(m_window, m_inputListener);
 
     m_currentContext =
         m_contexts[static_cast<std::size_t>(GameState::Splash)].get();
@@ -170,8 +169,7 @@ namespace core
   void AppLauncher::createFrameListener()
   {
     // Create and add a Framelistener
-    m_inputListener =
-        std::make_unique<InputListener>(m_window, m_camera.get());
-    m_root->addFrameListener(m_inputListener.get());
+    m_inputListener = new InputListener(m_window, m_camera);
+    m_root->addFrameListener(m_inputListener);
   }
 }

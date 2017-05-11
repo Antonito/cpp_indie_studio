@@ -30,36 +30,8 @@ namespace splash
     m_camera->setNearClipDistance(3);
   }
 
-  ContextSplash::ContextSplash(ContextSplash const &that)
-      : core::AContext(that), m_sceneMgr(that.m_sceneMgr)
-  {
-  }
-
-  ContextSplash::ContextSplash(ContextSplash &&that)
-      : core::AContext(std::move(that)), m_sceneMgr(std::move(that.m_sceneMgr))
-  {
-  }
-
   ContextSplash::~ContextSplash()
   {
-  }
-
-  ContextSplash &ContextSplash::operator=(ContextSplash const &that)
-  {
-    if (this == &that)
-      return (*this);
-    core::AContext::operator=(that);
-    m_sceneMgr = that.m_sceneMgr;
-    return (*this);
-  }
-
-  ContextSplash &ContextSplash::operator=(ContextSplash &&that)
-  {
-    if (this == &that)
-      return (*this);
-    core::AContext::operator=(std::move(that));
-    m_sceneMgr = std::move(that.m_sceneMgr);
-    return (*this);
   }
 
   void ContextSplash::enable()

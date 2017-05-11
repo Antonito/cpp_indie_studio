@@ -19,12 +19,12 @@ namespace game
   {
   public:
     ContextGame(Ogre::RenderWindow *win, core::InputListener *input);
-    ContextGame(ContextGame const &);
-    ContextGame(ContextGame &&);
+    ContextGame(ContextGame const &) = delete;
+    ContextGame(ContextGame &&) = delete;
     virtual ~ContextGame();
 
-    ContextGame &operator=(ContextGame const &);
-    ContextGame &operator=(ContextGame &&);
+    ContextGame &operator=(ContextGame const &) = delete;
+    ContextGame &operator=(ContextGame &&) = delete;
 
     virtual void enable();
     virtual void disable();
