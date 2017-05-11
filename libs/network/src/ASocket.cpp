@@ -50,8 +50,9 @@ namespace network
                    SocketType type)
       : ASocket(type)
   {
-    m_port = port;
+    // cppcheck-suppress useInitializationList
     m_host = host;
+    m_port = port;
   }
 
   ASocket::ASocket(std::uint16_t port, std::uint32_t maxClients,
@@ -65,9 +66,10 @@ namespace network
 
   ASocket::ASocket(ASocket const &other) : ASocket(other.m_type)
   {
+    // cppcheck-suppress useInitializationList
+    m_host = other.m_host;
     m_socket = other.m_socket;
     m_port = other.m_port;
-    m_host = other.m_host;
     m_ip = other.m_ip;
     m_maxClients = other.m_maxClients;
     m_curClients = other.m_curClients;
