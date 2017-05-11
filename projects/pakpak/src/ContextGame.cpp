@@ -1,4 +1,3 @@
-#include <OgreRenderWindow.h>
 #include "InputListener.hpp"
 #include "GameState.hpp"
 #include "ContextGame.hpp"

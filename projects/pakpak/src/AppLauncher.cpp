@@ -72,8 +72,7 @@ namespace core
     rs->setConfigOption("VSync", "Yes");
 
     // Render Window
-    m_window = std::unique_ptr<Ogre::RenderWindow>(
-        m_root->initialise(true, "Pak Pak Studio"));
+    m_window = m_root->initialise(true, "Pak Pak Studio");
 
     // Initialize Ressources
     Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
@@ -114,18 +113,16 @@ namespace core
 
     // Splash context
     m_contexts[static_cast<std::size_t>(GameState::Splash)] =
-        std::make_unique<splash::ContextSplash>(m_window.get(),
+        std::make_unique<splash::ContextSplash>(m_window,
                                                 m_inputListener.get());
 
     // Menu context
     m_contexts[static_cast<std::size_t>(GameState::Menu)] =
-        std::make_unique<menu::ContextMenu>(m_window.get(),
-                                            m_inputListener.get());
+        std::make_unique<menu::ContextMenu>(m_window, m_inputListener.get());
 
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
-        std::make_unique<game::ContextGame>(m_window.get(),
-                                            m_inputListener.get());
+        std::make_unique<game::ContextGame>(m_window, m_inputListener.get());
 
     m_currentContext =
         m_contexts[static_cast<std::size_t>(GameState::Splash)].get();
@@ -174,7 +171,7 @@ namespace core
   {
     // Create and add a Framelistener
     m_inputListener =
-        std::make_unique<InputListener>(m_window.get(), m_camera.get());
+        std::make_unique<InputListener>(m_window, m_camera.get());
     m_root->addFrameListener(m_inputListener.get());
   }
 }

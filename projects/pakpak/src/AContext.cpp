@@ -1,4 +1,3 @@
-#include <OgreRenderWindow.h>
 #include "AContext.hpp"
 #include "InputListener.hpp"
 

@@ -27,7 +27,11 @@ HEADER=
 
 SRC_FILES=	main.cpp			\
 		AppLauncher.cpp			\
-		InputListener.cpp
+		InputListener.cpp		\
+		AContext.cpp			\
+		ContextGame.cpp			\
+		ContextMenu.cpp			\
+		ContextSplash.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 

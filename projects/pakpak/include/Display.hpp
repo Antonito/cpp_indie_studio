@@ -3,6 +3,15 @@
 
 #include <array>
 #include <memory>
+
+#if defined(_WIN32) && !defined(__on__linux__)
+#include <OgreViewport.h>
+#endif
+
+#if defined(__linux__)
+#include <OGRE/OgreViewport.h>
+#endif
+
 #include "FastStack.hpp"
 #include "IContext.hpp"
 #include "GameState.hpp"
@@ -13,7 +22,7 @@ namespace core
   {
   public:
     Display();
-    Display(ViewPort *vp);
+    Display(Ogre::ViewPort *vp);
     Display(Display const &) = delete;
     Display(Display &&);
     ~Display();
@@ -21,7 +30,7 @@ namespace core
     Display &operator=(Display const &) = delete;
     Display &operator=(Display &&);
 
-    void      setViewPort(ViewPort *vp);
+    void setViewPort(Ogre::ViewPort *vp);
     ViewPort *getViewPort() const;
 
   private:

@@ -1,11 +1,3 @@
-#include <OgreRenderWindow.h>
-#include <OgreRoot.h>
-#include <OgreSceneManager.h>
-#include <OgreEntity.h>
-#include <OgreSceneNode.h>
-#include <OgreLight.h>
-#include <OgreCamera.h>
-#include <OgreViewport.h>
 #include "ContextSplash.hpp"
 #include "GameState.hpp"
 
