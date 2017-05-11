@@ -6,7 +6,7 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
 
 #else
 
-int main(int argc, char *argv[])
+int main(int , char **)
 
 #endif
 
