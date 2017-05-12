@@ -1,4 +1,5 @@
 #include "pakpak_stdafx.hpp"
+#include "AppLauncher.hpp"
 
 namespace core
 {
