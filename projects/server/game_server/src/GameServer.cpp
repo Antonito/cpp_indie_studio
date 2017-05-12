@@ -4,12 +4,14 @@ GameServer::GameServer(std::string const & connectManagerIp,
                        std::uint16_t const cmPort, std::uint16_t const gsPort,
                        std::int32_t const maxClients)
     : m_connectManagerPort(cmPort), m_gameServerPort(gsPort),
-      m_maxClients(maxClients), m_licence(),
+      m_maxClients(maxClients), m_curClients(0), m_licence(),
       m_connectManagerSock(m_connectManagerPort, connectManagerIp, true,
                            network::ASocket::SocketType::BLOCKING),
       m_gameSock(
           m_gameServerPort, static_cast<std::uint32_t>(m_maxClients),
-          network::ASocket::SocketType::BLOCKING) // TODO: Non-blocking ?
+          network::ASocket::SocketType::BLOCKING), // TODO: Non-blocking ?
+      m_connectSrv(),
+      m_clientList(), m_tokenList()
 {
   std::ifstream licenceFile(".licence");
 
@@ -20,6 +22,10 @@ GameServer::GameServer(std::string const & connectManagerIp,
   std::getline(licenceFile, m_licence);
   nope::log::Log(Debug) << "Loaded licence " << m_licence;
   licenceFile.close();
+
+  // Various pre-allocations
+  m_clientList.reserve(static_cast<std::size_t>(m_maxClients));
+  m_tokenList.reserve(static_cast<std::size_t>(m_maxClients));
 }
 
 GameServer::~GameServer()
@@ -94,6 +100,7 @@ bool GameServer::run()
       if (m_gameSock.openConnection())
 	{
 	  nope::log::Log(Info) << "Server started";
+	  m_connectSrv = std::thread(&GameServer::acceptLoop, this);
 	}
     }
   return (false);
@@ -164,4 +171,9 @@ bool GameServer::hasTimedOut() const
 {
   // TODO: Implement
   return (false);
+}
+
+void GameServer::acceptLoop()
+{
+  // TODO: Implement
 }

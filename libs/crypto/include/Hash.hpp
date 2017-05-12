@@ -104,6 +104,73 @@ namespace crypto
 
     std::array<std::uint8_t, _blockSize[A]> m_hash;
   };
+
+  // Template definition
+  extern template Hash<AHash::Algorithm::MD2>::Hash();
+  extern template Hash<AHash::Algorithm::MD2>::~Hash();
+  extern template bool
+      Hash<AHash::Algorithm::MD2>::compute(std::uint8_t const *data,
+                                           std::size_t const   len);
+
+  extern template Hash<AHash::Algorithm::MD4>::Hash();
+  extern template Hash<AHash::Algorithm::MD4>::~Hash();
+  extern template bool
+      Hash<AHash::Algorithm::MD4>::compute(std::uint8_t const *data,
+                                           std::size_t const   len);
+
+  extern template Hash<AHash::Algorithm::MD5>::Hash();
+  extern template Hash<AHash::Algorithm::MD5>::~Hash();
+  extern template bool
+      Hash<AHash::Algorithm::MD5>::compute(std::uint8_t const *data,
+                                           std::size_t const   len);
+
+  extern template Hash<AHash::Algorithm::MD6_128>::Hash();
+  extern template Hash<AHash::Algorithm::MD6_128>::~Hash();
+  extern template bool
+      Hash<AHash::Algorithm::MD6_128>::compute(std::uint8_t const *data,
+                                               std::size_t const   len);
+
+  extern template Hash<AHash::Algorithm::MD6_256>::Hash();
+  extern template Hash<AHash::Algorithm::MD6_256>::~Hash();
+  extern template bool
+      Hash<AHash::Algorithm::MD6_256>::compute(std::uint8_t const *data,
+                                               std::size_t const   len);
+
+  extern template Hash<AHash::Algorithm::MD6_512>::Hash();
+  extern template Hash<AHash::Algorithm::MD6_512>::~Hash();
+  extern template bool
+      Hash<AHash::Algorithm::MD6_512>::compute(std::uint8_t const *data,
+                                               std::size_t const   len);
+
+  extern template Hash<AHash::Algorithm::SHA1>::Hash();
+  extern template Hash<AHash::Algorithm::SHA1>::~Hash();
+  extern template bool
+      Hash<AHash::Algorithm::SHA1>::compute(std::uint8_t const *data,
+                                            std::size_t const   len);
+
+  extern template Hash<AHash::Algorithm::SHA224>::Hash();
+  extern template Hash<AHash::Algorithm::SHA224>::~Hash();
+  extern template bool
+      Hash<AHash::Algorithm::SHA224>::compute(std::uint8_t const *data,
+                                              std::size_t const   len);
+
+  extern template Hash<AHash::Algorithm::SHA256>::Hash();
+  extern template Hash<AHash::Algorithm::SHA256>::~Hash();
+  extern template bool
+      Hash<AHash::Algorithm::SHA256>::compute(std::uint8_t const *data,
+                                              std::size_t const   len);
+
+  extern template Hash<AHash::Algorithm::SHA384>::Hash();
+  extern template Hash<AHash::Algorithm::SHA384>::~Hash();
+  extern template bool
+      Hash<AHash::Algorithm::SHA384>::compute(std::uint8_t const *data,
+                                              std::size_t const   len);
+
+  extern template Hash<AHash::Algorithm::SHA512>::Hash();
+  extern template Hash<AHash::Algorithm::SHA512>::~Hash();
+  extern template bool
+      Hash<AHash::Algorithm::SHA512>::compute(std::uint8_t const *data,
+                                              std::size_t const   len);
 }
 
 #if defined(__clang__)
