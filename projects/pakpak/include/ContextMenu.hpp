@@ -7,6 +7,7 @@
 namespace Ogre
 {
   class RenderWindow;
+  class Viewport;
 }
 
 namespace menu
@@ -29,6 +30,8 @@ namespace menu
     virtual void            display();
 
   private:
+    Ogre::Viewport *m_viewport;
+    Ogre::Camera *  m_camera;
   };
 }
 
