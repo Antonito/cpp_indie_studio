@@ -54,7 +54,7 @@ namespace core
     return (*this);
   }
 
-  bool InputListener::frameRenderingQueued(const Ogre::FrameEvent &evt)
+  bool InputListener::frameRenderingQueued(const Ogre::FrameEvent &)
   {
     if (m_window->isClosed())
       return false;
