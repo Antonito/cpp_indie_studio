@@ -171,7 +171,7 @@ namespace ini
     // Loop on each lines
     while (std::getline(fs, line))
       {
-	std::int32_t i = 0;
+	std::size_t i = 0;
 
 	// Go to the next "non space" character
 	while (i < line.size() && std::isspace(line[i]) == true)
@@ -189,7 +189,7 @@ namespace ini
 	  {
 	    ++i;
 
-	    std::int32_t start = i;
+	    std::size_t start = i;
 
 	    while (i < line.size() && line[i] != ']')
 	      {
@@ -201,7 +201,7 @@ namespace ini
 	// Field
 	else
 	  {
-	    std::int32_t start = i;
+	    std::size_t start = i;
 
 	    while (line[i] != '=')
 	      {
