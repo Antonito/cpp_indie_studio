@@ -59,7 +59,7 @@ namespace splash
 
     if (t.count() < max)
       {
-	m_camera->setPosition(0, 0, 100 + max - t.count());
+	m_camera->setPosition(0, 0, Ogre::Real(100 + max - t.count()));
 	return (core::GameState::Splash);
       }
     else

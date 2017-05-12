@@ -5,13 +5,19 @@ include $(MK_DIR)colors.mk $(MK_DIR)defs.mk
 ###### Add your projects here #####
 PROJECT_DIR=		./projects/
 
-PROJECTS=		pakpak
+PROJECTS=		pakpak			\
+			server/connect_manager	\
+			server/game_server
 
 LIB_DIR=		./libs/
 
 LIBS=			logger		\
 			crypto		\
-			memory
+			memory		\
+			exceptions	\
+			network		\
+			multithread	\
+			packet
 
 PROJECTS_PATH=		$(addprefix $(LIB_DIR), $(LIBS))		\
 			$(addprefix $(PROJECT_DIR), $(PROJECTS))

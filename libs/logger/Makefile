@@ -5,7 +5,7 @@ MK_COMMON_DIR=	./../../mk/
 # Definitions for Makefile
 NAME=		$(ROOT_DIR)/build/libindie_logger.a
 
-LOCAL_COMP_FLAGS=
+LOCAL_COMP_FLAGS= -Wno-global-constructors -Wno-exit-time-destructors
 
 LOCAL_LINK_FLAGS=
 
