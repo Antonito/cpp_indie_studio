@@ -100,13 +100,13 @@ namespace core
   void InputListener::windowResized(Ogre::RenderWindow *wnd)
   {
     // Get the resized window metrics
-    unsigned int width, height, depth;
-    int          left, top;
+    std::uint32_t width, height, depth;
+    std::int32_t          left, top;
 
     wnd->getMetrics(width, height, depth, left, top);
     const OIS::MouseState &ms = m_mouse->getMouseState();
-    ms.width = width;
-    ms.height = height;
+    ms.width = static_cast<std::int32_t>(width);
+    ms.height = static_cast<std::int32_t>(height);
   }
 
   void InputListener::windowClosed(Ogre::RenderWindow *wnd)

@@ -1,4 +1,5 @@
 #include "ini_stdafx.hpp"
+#include <iostream>
 
 namespace ini
 {
@@ -122,7 +123,7 @@ namespace ini
 
   void Ini::saveAs(std::string const &filename)
   {
-    std::ofstream os(filename.c_str());
+    std::ofstream os(filename.c_str(), std::fstream::out);
 
     if (os.is_open() == false)
       {
@@ -174,11 +175,10 @@ namespace ini
 	std::size_t i = 0;
 
 	// Go to the next "non space" character
-	while (i < line.size() && std::isspace(line[i]) == true)
+	while (i < line.size() && std::isspace(line[i]))
 	  {
 	    ++i;
 	  }
-
 	// Check if it's a comment
 	if (i == line.size() || line[i] == '#' || line[i] == ';')
 	  {
@@ -203,6 +203,7 @@ namespace ini
 	  {
 	    std::size_t start = i;
 
+
 	    while (line[i] != '=')
 	      {
 		if (i == line.size())
@@ -222,7 +223,7 @@ namespace ini
 		m_sections.emplace_back("");
 	      }
 
-	    m_sections.back()[line.substr(start, i - start - 1)] =
+	    m_sections.back()[line.substr(start, i - start)] =
 	        line.substr(i + 1);
 	  }
       }

@@ -1,5 +1,4 @@
 #include "ini_stdafx.hpp"
-#include "..\include\Section.hpp"
 
 namespace ini
 {
@@ -33,7 +32,7 @@ namespace ini
 	    return (f.value);
 	  }
       }
-    return ("");
+    throw std::invalid_argument("No such field named '" + name + '"');
   }
 
   std::string &Section::operator[](std::string const &name)
