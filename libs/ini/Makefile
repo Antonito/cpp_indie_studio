@@ -3,17 +3,11 @@ MK_DIR=		./mk/
 MK_COMMON_DIR=	./../../mk/
 
 # Definitions for Makefile
-NAME=		$(ROOT_DIR)/pakpak
+NAME=		$(ROOT_DIR)/build/libindie_ini.a
 
 LOCAL_COMP_FLAGS=
-ifeq ($(CXX), clang++)
-LOCAL_COMP_FLAGS+=	-Wno-global-constructors		\
-			-Wno-exit-time-destructors		\
-			-Wno-weak-vtables			\
-			-Wno-padded
-endif
 
-LOCAL_LINK_FLAGS= -l OIS -l OgreMain -l boost_system
+LOCAL_LINK_FLAGS=
 
 LOCAL_DEBUG_FLAGS=
 
@@ -27,17 +21,12 @@ INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)
 
-HEADER=		pakpak_stdafx.hpp
+HEADER=		ini_stdafx.hpp
 
 # Project's files
 
-SRC_FILES=	main.cpp			\
-		AppLauncher.cpp			\
-		InputListener.cpp		\
-		AContext.cpp			\
-		ContextGame.cpp			\
-		ContextMenu.cpp			\
-		ContextSplash.cpp
+SRC_FILES=	Ini.cpp			\
+		Section.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 

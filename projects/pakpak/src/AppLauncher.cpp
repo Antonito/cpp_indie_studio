@@ -141,7 +141,7 @@ namespace core
 	if (state == GameState::Quit)
 	  {
 	    m_currentContext->disable();
-	    return (false);
+	    break;
 	  }
 
 	// Display

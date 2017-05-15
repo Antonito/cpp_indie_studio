@@ -3,7 +3,7 @@
 namespace menu
 {
   ContextMenu::ContextMenu(Ogre::RenderWindow *win, core::InputListener *input)
-      : core::AContext(win, input)
+      : core::AContext(win, input), m_viewport(nullptr), m_camera(nullptr)
   {
   }
 

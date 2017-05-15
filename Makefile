@@ -17,7 +17,8 @@ LIBS=			logger		\
 			exceptions	\
 			network		\
 			multithread	\
-			packet
+			packet		\
+			ini
 
 PROJECTS_PATH=		$(addprefix $(LIB_DIR), $(LIBS))		\
 			$(addprefix $(PROJECT_DIR), $(PROJECTS))
