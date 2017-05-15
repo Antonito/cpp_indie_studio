@@ -5,6 +5,7 @@
 # Dependencies:
 # - cppcheck
 
-cppcheck -I./include/ --enable=all --force --language=c++ --std=c++11 -q --suppress=missingIncludeSystem \
+cppcheck -I./include/ -I../exceptions/include/ -I../logger/include/ \
+	 --enable=all --force --language=c++ --std=c++11 -q --suppress=missingIncludeSystem \
 	 --error-exitcode=1 .
 exit $?

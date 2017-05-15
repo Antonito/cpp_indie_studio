@@ -1,3 +1,4 @@
+#include "network_stdafx.hpp"
 #if defined(__linux__) || defined(__APPLE__)
 #include <fcntl.h>
 #include <netdb.h>
@@ -17,6 +18,13 @@ namespace network
   bool          network::ASocket::m_WSAInited = false;
 #endif
 
+  ASocket::ASocket(sock_t const socket)
+      : m_socket(socket), m_port(0), m_host(""), m_ip(false), m_maxClients(0),
+        m_curClients(0), m_addr{}, m_type()
+  {
+    nope::log::Log(Debug) << "Loading socket #" << m_socket;
+  }
+
   ASocket::ASocket(SocketType type)
       : m_socket(-1), m_port(0), m_host(""), m_ip(false), m_maxClients(0),
         m_curClients(0), m_addr{}, m_type(type)
@@ -24,13 +32,16 @@ namespace network
 #if defined(__linux__) || (__APPLE__)
     // If we can, ignore SIGPIPE
     std::signal(SIGPIPE, SIG_IGN);
+    nope::log::Log(Debug) << "Ignoring SIGPIPE";
 #endif
 #if defined(_WIN32)
     // Do we need to load the network DLL ?
     if (!m_nbSockets && !initWSA())
       {
+	nope::log::Log(Error) << "Cannot load network DLL";
 	throw network::SockError("Cannot load network DLL");
       }
+    nope::log::Log(Debug) << "Adding socket " << m_nbSockets;
     ++m_nbSockets;
 #endif
   }
@@ -63,6 +74,15 @@ namespace network
     m_addr = other.m_addr;
   }
 
+  ASocket::ASocket(ASocket &&other)
+      : m_socket(other.m_socket), m_port(other.m_port), m_host(other.m_host),
+        m_ip(other.m_ip), m_maxClients(other.m_maxClients),
+        m_curClients(other.m_curClients), m_addr(other.m_addr),
+        m_type(other.m_type)
+  {
+    other.m_socket = -1;
+  }
+
   ASocket::~ASocket()
   {
     closeConnection();
@@ -72,6 +92,7 @@ namespace network
     if (!m_nbSockets)
       {
 	// It is the last socket
+	nope::log::Log(Debug) << "Closing last socket";
 	deinitWSA();
       }
 #endif
@@ -80,6 +101,7 @@ namespace network
   // Close the socket
   bool ASocket::closeConnection()
   {
+    nope::log::Log(Debug) << "Closing socket #" << m_socket;
     if (m_socket > 0 && !closesocket(m_socket))
       {
 	m_socket = -1;
@@ -101,6 +123,15 @@ namespace network
 	m_type = other.m_type;
       }
     return (*this);
+  }
+
+  bool ASocket::operator==(ASocket const &other) const
+  {
+    if (this != &other)
+      {
+	return (m_socket == other.m_socket);
+      }
+    return (true);
   }
 
   bool ASocket::isStarted() const
@@ -149,14 +180,17 @@ namespace network
     bool        connected = false;
     SocketType  typeBackup;
 
+    nope::log::Log(Debug) << "Connection to host";
     assert(m_socket == -1);
     if (m_ip)
       {
+	nope::log::Log(Debug) << "Provided address is an IP";
 	hints.ai_flags = AI_NUMERICHOST;
       }
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
+    nope::log::Log(Debug) << "Processing address resolution";
     if (getaddrinfo(m_host.c_str(), std::to_string(m_port).c_str(), &hints,
                     &res) == 0)
       {
@@ -192,6 +226,7 @@ namespace network
 			throw network::SockError("Cannot set socket type");
 		      }
 		  }
+		nope::log::Log(Debug) << "Found an address, connected !";
 		connected = true;
 		break;
 	      }
@@ -207,13 +242,17 @@ namespace network
   {
     char const enable = 1;
 
+    nope::log::Log(Debug) << "Creating socket...";
     m_socket = ::socket(domain, type, protocol);
     if (m_socket == -1)
       {
+	nope::log::Log(Error) << "Cannot create socket";
 	throw network::SockError("Cannot create socket");
       }
+    nope::log::Log(Debug) << "Created socket #" << m_socket;
     if (setSocketType() == false)
       {
+	nope::log::Log(Error) << "Cannot set socket type";
 	throw network::SockError("Cannot set socket type");
       }
     if (m_port != 0)
@@ -223,9 +262,13 @@ namespace network
 	               sizeof(enable)) < 0)
 	  {
 	    if (errno != EINVAL)
-	      throw network::SockError("Cannot set socket options");
+	      {
+		nope::log::Log(Error) << "Cannot set socket options";
+		throw network::SockError("Cannot set socket options");
+	      }
 	  }
       }
+    nope::log::Log(Debug) << "Socket created successfuly";
   }
 
   // Set the socket to blocking or non-blocking state

@@ -3,19 +3,18 @@
 // are changed infrequently
 //
 
-#ifndef NETWORK_STDAFX_HPP_
-#define NETWORK_STDAFX_HPP_
+#ifndef MULTITHREAD_STDAFX_HPP_
+#define MULTITHREAD_STDAFX_HPP_
 
-#include "network_targetver.h"
+#include "multithread_targetver.h"
 
 #define WIN32_LEAN_AND_MEAN // Exclude rarely-used stuff from Windows headers
 
 // Reference additional headers your program requires here
 
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <memory>
-#include "Logger.hpp"
+#include <mutex>
+#include <condition_variable>
+#include "Semaphore.hpp"
+#include "Queue.hpp"
 
-#endif // !NETWORK_STDAFX_HPP_
+#endif // !MULTITHREAD_STDAFX_HPP_

@@ -1,3 +1,4 @@
+#include "network_stdafx.hpp"
 #include <cerrno>
 #include <cassert>
 #include "TCPSocket.hpp"
@@ -5,6 +6,10 @@
 
 namespace network
 {
+  TCPSocket::TCPSocket(sock_t const sock) : ASocket(sock)
+  {
+  }
+
   TCPSocket::TCPSocket(std::uint16_t port, std::string const &host, bool ip,
                        SocketType type)
       : ASocket(port, host, type)
@@ -18,6 +23,10 @@ namespace network
   {
   }
 
+  TCPSocket::TCPSocket(TCPSocket &&other) : ASocket(std::move(other))
+  {
+  }
+
   TCPSocket::~TCPSocket()
   {
   }
@@ -26,9 +35,11 @@ namespace network
   {
     bool ret;
 
+    nope::log::Log(Debug) << "Opening TCP connection";
     assert(!isStarted());
     if (getMode() == ASocket::SERVER)
       {
+	nope::log::Log(Debug) << "Hosting connection";
 	ret = true;
 	try
 	  {
@@ -37,8 +48,9 @@ namespace network
 	    m_addr.sin_family = AF_INET;
 	    hostConnection();
 	  }
-	catch (std::exception &)
+	catch (std::exception &e)
 	  {
+	    nope::log::Log(Error) << e.what();
 	    ret = false;
 	  }
       }
@@ -114,34 +126,31 @@ namespace network
     return (sendNonBlocking(data, len));
   }
 
-  bool TCPSocket::recBlocking(void **buffer, std::size_t rlen,
+  bool TCPSocket::recBlocking(void *buffer, std::size_t rlen,
                               ssize_t *buffLen) const
   {
     assert(getType() == ASocket::BLOCKING);
-    *buffer = new std::uint8_t[rlen];
 #if defined(__linux__) || defined(__APPLE__)
-    *buffLen = ::recv(m_socket, static_cast<char *>(*buffer), rlen, 0);
+    *buffLen = ::recv(m_socket, static_cast<char *>(buffer), rlen, 0);
 #elif defined(_WIN32)
-    *buffLen = ::recv(m_socket, static_cast<char *>(*buffer),
+    *buffLen = ::recv(m_socket, static_cast<char *>(buffer),
                       static_cast<std::int32_t>(rlen), 0);
 #endif
     if (*buffLen < 0)
       {
-	*buffLen = 0;
 	return (false);
       }
     return (true);
   }
 
-  bool TCPSocket::recNonBlocking(void **buffer, std::size_t rlen,
+  bool TCPSocket::recNonBlocking(void *buffer, std::size_t rlen,
                                  ssize_t *buffLen) const
   {
     std::uint8_t *buf;
     bool          success = true;
 
     assert(getType() == ASocket::NONBLOCKING);
-    *buffer = new std::uint8_t[rlen];
-    buf = static_cast<std::uint8_t *>(*buffer);
+    buf = static_cast<std::uint8_t *>(buffer);
     *buffLen = 0;
     for (;;)
       {
@@ -181,7 +190,7 @@ namespace network
     return (success);
   }
 
-  bool TCPSocket::rec(void **buffer, std::size_t rlen, ssize_t *buffLen) const
+  bool TCPSocket::rec(void *buffer, std::size_t rlen, ssize_t *buffLen) const
   {
     assert(isStarted());
     if (getType() == ASocket::BLOCKING)

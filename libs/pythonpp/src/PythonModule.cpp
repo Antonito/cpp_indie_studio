@@ -2,6 +2,8 @@
 // Created by brout_m on 03/05/17.
 //
 
+#include <cstdlib>
+#include <climits>
 #include <PyFunctionInitializationError.hpp>
 #include "PythonModule.hpp"
 #include "PyInitializationError.hpp"
@@ -16,8 +18,15 @@ pythonpp::PythonModule::~PythonModule()
 pythonpp::PythonModule::PythonModule(std::string const &moduleName)
     : m_module(nullptr), m_functions()
 {
+  char buff[PATH_MAX];
+  char *fullpath = realpath("./", buff);
   PyObject *name;
 
+  (void)moduleName;
+  Py_SetProgramName(const_cast<char *>(moduleName.c_str()));
+  if (fullpath != NULL)
+    std::cout << fullpath << std::endl;
+  PySys_SetPath(fullpath);
   Py_Initialize();
   if (!Py_IsInitialized())
     throw(pythonpp::PyInitializationError(

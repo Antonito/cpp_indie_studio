@@ -3,9 +3,9 @@ MK_DIR=		./mk/
 MK_COMMON_DIR=	./../../mk/
 
 # Definitions for Makefile
-NAME=		$(ROOT_DIR)/build/libindie_logger.a
+NAME=		$(ROOT_DIR)/build/libindie_multithread.a
 
-LOCAL_COMP_FLAGS= -Wno-global-constructors -Wno-exit-time-destructors
+LOCAL_COMP_FLAGS=	-O2
 
 LOCAL_LINK_FLAGS=
 
@@ -21,13 +21,11 @@ INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)
 
-HEADER=		logger_stdafx.hpp
+HEADER=		multithread_stdafx.hpp
 
 # Project's files
 
-SRC_FILES=	LogMessage.cpp			\
-		LogSink.cpp			\
-		Logger.cpp
+SRC_FILES=	Semaphore.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 

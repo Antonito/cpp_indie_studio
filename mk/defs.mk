@@ -56,7 +56,7 @@ CXXFLAGS+=	-std=$(CPP_VER) -W -Wall -Wextra -Weffc++  -Wcomment 		\
 		$(addprefix -I, $(INC_DIR))					\
 		$(LOCAL_COMP_FLAGS)
 
-LDFLAGS+=	-lstdc++							\
+LDFLAGS+=	-lstdc++ -lpthread						\
 		$(LOCAL_LINK_FLAGS)
 
 ifeq ($(CXX),clang++)

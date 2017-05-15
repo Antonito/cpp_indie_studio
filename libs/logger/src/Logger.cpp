@@ -5,10 +5,32 @@ namespace nope
   namespace log
   {
     // Do not touch
-    std::chrono::time_point<std::chrono::high_resolution_clock,
-                            std::chrono::milliseconds> const Logger::startTime;
-
     LogLevel Logger::logLevel = LogLevel::LOG_INFO;
+
+    std::chrono::time_point<std::chrono::high_resolution_clock,
+                            std::chrono::milliseconds> const
+        Logger::startTime =
+            std::chrono::time_point_cast<std::chrono::milliseconds>(
+                std::chrono::high_resolution_clock::now());
+// Creation
+
+#if defined(NOPE_NO_LOG)
+    EmptyLogger Trace = (LogLevel::LOG_TRACE);
+    EmptyLogger Debug = (LogLevel::LOG_DEBUG);
+    EmptyLogger Info = (LogLevel::LOG_INFO);
+    EmptyLogger Warning = (LogLevel::LOG_WARNING);
+    EmptyLogger Error = (LogLevel::LOG_ERROR);
+#else
+    Logger Trace(LogLevel::LOG_TRACE);
+#ifdef DEBUG
+    Logger Debug(LogLevel::LOG_DEBUG);
+#else
+    EmptyLogger Debug(LogLevel::LOG_DEBUG);
+#endif
+    Logger Info(LogLevel::LOG_INFO);
+    Logger Warning(LogLevel::LOG_WARNING);
+    Logger Error(LogLevel::LOG_ERROR);
+#endif
 
     Logger::Logger(LogLevel level)
         : m_sinks(), m_level(level)
@@ -54,55 +76,20 @@ namespace nope
 #endif
     }
 
-    void Logger::start()
+    void Logger::start(std::string const &filename)
     {
-      *const_cast<std::chrono::time_point<std::chrono::high_resolution_clock,
-                                          std::chrono::milliseconds> *>(
-          &startTime) =
-          std::chrono::time_point_cast<std::chrono::milliseconds>(
-              std::chrono::high_resolution_clock::now());
-
       LogSink console = LogSink::makeOstream(std::cout);
-      LogSink file = LogSink::makeFile("nope.log");
+      LogSink file = LogSink::makeFile(filename);
 
-// Creation
+      Trace.addSink(console);
+      Debug.addSink(console);
+      Info.addSink(console);
+      Warning.addSink(console);
+      Error.addSink(console);
 
-#if defined(NOPE_NO_LOG)
-      Trace = new EmptyLogger(LogLevel::LOG_TRACE);
-      Debug = new EmptyLogger(LogLevel::LOG_DEBUG);
-      Info = new EmptyLogger(LogLevel::LOG_INFO);
-      Warning = new EmptyLogger(LogLevel::LOG_WARNING);
-      Error = new EmptyLogger(LogLevel::LOG_ERROR);
-#else
-      Trace = new Logger(LogLevel::LOG_TRACE);
-#ifdef DEBUG
-      Debug = new Logger(LogLevel::LOG_DEBUG);
-#else
-      Debug = new EmptyLogger(LogLevel::LOG_DEBUG);
-#endif
-      Info = new Logger(LogLevel::LOG_INFO);
-      Warning = new Logger(LogLevel::LOG_WARNING);
-      Error = new Logger(LogLevel::LOG_ERROR);
-#endif
-
-      Trace->addSink(console);
-      Debug->addSink(console);
-      Info->addSink(console);
-      Warning->addSink(console);
-      Error->addSink(console);
-
-      Debug->addSink(file);
-      Warning->addSink(file);
-      Error->addSink(file);
-    }
-
-    void Logger::stop()
-    {
-      delete Trace;
-      delete Debug;
-      delete Info;
-      delete Warning;
-      delete Error;
+      Debug.addSink(file);
+      Warning.addSink(file);
+      Error.addSink(file);
     }
 
     std::ostream &operator<<(std::ostream &os, LogLevel level)

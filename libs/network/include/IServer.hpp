@@ -14,7 +14,9 @@ namespace network
   class IServer
   {
   public:
-    virtual ~IServer(){};
+    virtual ~IServer()
+    {
+    }
     virtual bool run() = 0;
     virtual void stop() = 0;
     virtual bool addClient() = 0;
