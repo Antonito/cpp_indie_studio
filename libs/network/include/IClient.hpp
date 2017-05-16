@@ -24,10 +24,10 @@ namespace network
     virtual ~IClient()
     {
     }
-    virtual bool                  disconnect() = 0;
-    virtual IClient::ClientAction write(IPacket const &) = 0;
-    virtual IClient::ClientAction read(IPacket &) = 0;
-    virtual bool                  hasTimedOut() const = 0;
+    virtual bool                           disconnect() = 0;
+    virtual network::IClient::ClientAction write(IPacket const &) = 0;
+    virtual network::IClient::ClientAction read(IPacket &) = 0;
+    virtual bool                           hasTimedOut() const = 0;
   };
 }
 
