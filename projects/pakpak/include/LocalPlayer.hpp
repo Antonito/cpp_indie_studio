@@ -12,6 +12,7 @@
 #include "FastStack.hpp"
 #include "IEventHandler.hpp"
 #include "ILayerStack.hpp"
+#include "ACar.hpp"
 
 namespace game
 {
@@ -52,6 +53,8 @@ namespace game
 
     Ogre::Camera *  m_cam;
     Ogre::Viewport *m_viewport;
+
+    ACar *m_car;
   };
 }
 

@@ -35,11 +35,13 @@ SRC_FILES=	main.cpp			\
 		AppLauncher.cpp			\
 		InputListener.cpp		\
 		AContext.cpp			\
+		ACar.cpp			\
 		ALayer.cpp			\
 		ContextGame.cpp			\
 		ContextMenu.cpp			\
 		ContextSplash.cpp		\
 		Chat.cpp			\
+		EmptyCar.cpp			\
 		GameData.cpp			\
 		GameGUI.cpp			\
 		InGame.cpp			\

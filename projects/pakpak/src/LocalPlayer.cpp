@@ -4,7 +4,7 @@ namespace game
 {
   LocalPlayer::LocalPlayer(Ogre::RenderWindow *win, GameData &g, PlayerData &p)
       : m_data(p), m_cameraMode(CameraMode::Top), m_layers(),
-        m_currentLayers(), m_cam(nullptr), m_viewport(nullptr)
+        m_currentLayers(), m_cam(nullptr), m_viewport(nullptr), m_car(nullptr)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
         std::make_unique<Loading>(g, *this);
@@ -45,7 +45,7 @@ namespace game
       : m_data(that.m_data), m_cameraMode(std::move(that.m_cameraMode)),
         m_layers(std::move(that.m_layers)),
         m_currentLayers(std::move(that.m_currentLayers)), m_cam(that.m_cam),
-        m_viewport(that.m_viewport)
+        m_viewport(that.m_viewport), m_car(that.m_car)
   {
     that.m_cam = nullptr;
     that.m_viewport = nullptr;

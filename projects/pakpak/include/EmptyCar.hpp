@@ -6,19 +6,20 @@
 
 namespace game
 {
-  // TODO: REMOVE THAT CLASS
-  class EmptyCar : public ACar
+  class EmptyCar final : public ACar
   {
   public:
-    EmptyCar(){};
-    virtual ~EmptyCar()
-    {
-    }
+    EmptyCar();
+    EmptyCar(Ogre::Vector3 pos, Ogre::Vector3 dir, Ogre::Vector3 mov,
+             float speed);
+    EmptyCar(EmptyCar const &) = delete;
+    EmptyCar(EmptyCar &&) = delete;
+    virtual ~EmptyCar();
 
-    virtual Ogre::Vector3 const &position() const
-    {
-      return (m_pos);
-    }
+    virtual Ogre::Vector3 const &position() const;
+    virtual Ogre::Vector3 const &direction() const;
+    virtual Ogre::Vector3 const &movement() const;
+    virtual float const &        speed() const;
   };
 }
 
