@@ -10,6 +10,7 @@ namespace game
   class InGame : public ILayer
   {
   public:
+    InGame() = delete;
     InGame(GameData &data);
     InGame(InGame const &) = delete;
     InGame(InGame &&) = delete;

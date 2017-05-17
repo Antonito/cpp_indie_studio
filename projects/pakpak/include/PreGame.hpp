@@ -2,14 +2,14 @@
 #define PREGAME_HPP_
 
 #include "ILayer.hpp"
+#include "GameData.hpp"
 
 namespace game
 {
-  class GameData;
-
-  class PreGame : public ILayer
+  class PreGame final : public ILayer
   {
   public:
+    PreGame() = delete;
     PreGame(GameData &data);
     PreGame(PreGame const &) = delete;
     PreGame(PreGame &&) = delete;

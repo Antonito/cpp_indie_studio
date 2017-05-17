@@ -10,6 +10,7 @@ namespace game
   class Spectator : public ILayer
   {
   public:
+    Spectator() = delete;
     Spectator(GameData &data);
     Spectator(Spectator const &) = delete;
     Spectator(Spectator &&) = delete;

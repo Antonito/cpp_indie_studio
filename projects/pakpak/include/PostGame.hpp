@@ -10,6 +10,7 @@ namespace game
   class PostGame : public ILayer
   {
   public:
+    PostGame() = delete;
     PostGame(GameData &data);
     PostGame(PostGame const &) = delete;
     PostGame(PostGame &&) = delete;

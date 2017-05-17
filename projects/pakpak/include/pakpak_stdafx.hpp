@@ -55,8 +55,12 @@
 #include "ContextSplash.hpp"
 #include "GameData.hpp"
 #include "GameState.hpp"
+#include "InGame.hpp"
 #include "InputListener.hpp"
 #include "LocalPlayer.hpp"
+#include "Loading.hpp"
 #include "PlayerData.hpp"
+#include "PostGame.hpp"
+#include "PreGame.hpp"
 
 #endif // !PAKPAK_STDAFX_HPP_

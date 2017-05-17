@@ -2,14 +2,14 @@
 #define LOADING_HPP_
 
 #include "ILayer.hpp"
+#include "GameData.hpp"
 
 namespace game
 {
-  class GameData;
-
-  class Loading : public ILayer
+  class Loading final : public ILayer
   {
   public:
+    Loading() = delete;
     Loading(GameData &data);
     Loading(Loading const &) = delete;
     Loading(Loading &&) = delete;
