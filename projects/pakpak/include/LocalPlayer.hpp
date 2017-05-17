@@ -2,17 +2,20 @@
 #define LOCALPLAYER_HPP_
 
 #include <cstdint>
+#include <array>
+#include "GameData.hpp"
+#include "PlayerData.hpp"
+#include "CameraMode.hpp"
+#include "GameLayer.hpp"
+#include "FastStack.hpp"
 
 namespace game
 {
-  class PlayerData;
-  enum class CameraMode : std::int8_t;
-
   class LocalPlayer
   {
   public:
     LocalPlayer() = delete;
-    LocalPlayer(PlayerData &);
+    LocalPlayer(GameData &, PlayerData &);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&) = delete;
 
@@ -22,6 +25,10 @@ namespace game
   private:
     PlayerData &m_data;
     CameraMode  m_cameraMode;
+
+    std::array<std::unique_ptr<ILayer>, GameLayer::NbLayer> m_layers;
+
+    core::FastStack<ILayer *> m_currentLayers;
   };
 }
 

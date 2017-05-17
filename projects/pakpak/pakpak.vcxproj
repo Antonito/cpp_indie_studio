@@ -240,6 +240,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\PlayerData.cpp" />
     <ClCompile Include="src\PostGame.cpp" />
     <ClCompile Include="src\PreGame.cpp" />
@@ -269,11 +270,13 @@
     <ClInclude Include="include\FastStack.hpp" />
     <ClInclude Include="include\GameData.hpp" />
     <ClInclude Include="include\GameGUI.hpp" />
+    <ClInclude Include="include\GameLayer.hpp" />
     <ClInclude Include="include\GameState.hpp" />
     <ClInclude Include="include\ILayer.hpp" />
     <ClInclude Include="include\InGame.hpp" />
     <ClInclude Include="include\Loading.hpp" />
     <ClInclude Include="include\LocalPlayer.hpp" />
+    <ClInclude Include="include\Menu.hpp" />
     <ClInclude Include="include\PlayerData.hpp" />
     <ClInclude Include="include\PostGame.hpp" />
     <ClInclude Include="include\PreGame.hpp" />

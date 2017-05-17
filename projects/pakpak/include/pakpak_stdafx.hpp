@@ -61,10 +61,12 @@
 #include "InputListener.hpp"
 #include "LocalPlayer.hpp"
 #include "Loading.hpp"
+#include "Menu.hpp"
 #include "PlayerData.hpp"
 #include "PostGame.hpp"
 #include "PreGame.hpp"
 #include "Score.hpp"
 #include "SpecGUI.hpp"
+#include "Spectator.hpp"
 
 #endif // !PAKPAK_STDAFX_HPP_
