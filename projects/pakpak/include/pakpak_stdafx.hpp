@@ -50,10 +50,12 @@
 #include "AContext.hpp"
 #include "AppLauncher.hpp"
 #include "CameraMode.hpp"
+#include "Chat.hpp"
 #include "ContextGame.hpp"
 #include "ContextMenu.hpp"
 #include "ContextSplash.hpp"
 #include "GameData.hpp"
+#include "GameGUI.hpp"
 #include "GameState.hpp"
 #include "InGame.hpp"
 #include "InputListener.hpp"
@@ -62,5 +64,7 @@
 #include "PlayerData.hpp"
 #include "PostGame.hpp"
 #include "PreGame.hpp"
+#include "Score.hpp"
+#include "SpecGUI.hpp"
 
 #endif // !PAKPAK_STDAFX_HPP_

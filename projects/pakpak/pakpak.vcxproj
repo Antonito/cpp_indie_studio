@@ -204,6 +204,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Chat.cpp" />
     <ClCompile Include="src\ContextGame.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -223,6 +224,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\GameData.cpp" />
+    <ClCompile Include="src\GameGUI.cpp" />
     <ClCompile Include="src\InGame.cpp" />
     <ClCompile Include="src\InputListener.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -241,6 +243,8 @@
     <ClCompile Include="src\PlayerData.cpp" />
     <ClCompile Include="src\PostGame.cpp" />
     <ClCompile Include="src\PreGame.cpp" />
+    <ClCompile Include="src\Score.cpp" />
+    <ClCompile Include="src\SpecGUI.cpp" />
     <ClCompile Include="src\Spectator.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -257,12 +261,14 @@
     <ClInclude Include="include\AContext.hpp" />
     <ClInclude Include="include\AppLauncher.hpp" />
     <ClInclude Include="include\CameraMode.hpp" />
+    <ClInclude Include="include\Chat.hpp" />
     <ClInclude Include="include\ContextGame.hpp" />
     <ClInclude Include="include\ContextMenu.hpp" />
     <ClInclude Include="include\ContextSplash.hpp" />
     <ClInclude Include="include\FastList.hpp" />
     <ClInclude Include="include\FastStack.hpp" />
     <ClInclude Include="include\GameData.hpp" />
+    <ClInclude Include="include\GameGUI.hpp" />
     <ClInclude Include="include\GameState.hpp" />
     <ClInclude Include="include\ILayer.hpp" />
     <ClInclude Include="include\InGame.hpp" />
@@ -274,6 +280,8 @@
     <ClInclude Include="include\IContext.hpp" />
     <ClInclude Include="include\InputListener.hpp" />
     <ClInclude Include="include\pakpak_stdafx.hpp" />
+    <ClInclude Include="include\Score.hpp" />
+    <ClInclude Include="include\SpecGUI.hpp" />
     <ClInclude Include="include\Spectator.hpp" />
     <ClInclude Include="include\targetver.h" />
   </ItemGroup>

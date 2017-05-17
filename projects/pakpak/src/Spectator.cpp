@@ -1,5 +1,4 @@
 #include "pakpak_stdafx.hpp"
-#include "..\include\Spectator.hpp"
 
 namespace game
 {
