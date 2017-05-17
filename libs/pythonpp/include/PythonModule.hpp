@@ -28,11 +28,11 @@ namespace pythonpp
     template <typename Ret, typename... Args>
     Ret exec(Args... args)
     {
-      const std::int32_t  n {sizeof...(args)};
+      const std::int32_t  n{sizeof...(args)};
       std::tuple<Args...> tuple(args...);
-      PyObject *          retValue {nullptr};
-      PyObject *          pyArgs {nullptr};
-      std::int32_t        index {0};
+      PyObject *          retValue{nullptr};
+      PyObject *          pyArgs{nullptr};
+      std::int32_t        index{0};
       Ret                 convertedRet;
 
       pyArgs = PyTuple_New(n);
@@ -41,15 +41,18 @@ namespace pythonpp
       {
         if (!PythonLiteralConverter::pushArgs<decltype(e)>(pyArgs, e, index))
           throw(pythonpp::PyFunctionArgError(this->m_name));
+        ++index;
         return (true);
       });
 
+      std::cout << "executing function " << std::endl;
       retValue = PyObject_CallObject(m_function, pyArgs);
       Py_DECREF(pyArgs);
       if (!retValue)
       {
         throw(pythonpp::PyFunctionReturnError(m_name));
       }
+      std::cout << "exec done, converting return value " << std::endl;
       convertedRet =
           std::move(PythonLiteralConverter::backConverter<Ret>(retValue));
       Py_DECREF(retValue);
@@ -57,7 +60,7 @@ namespace pythonpp
     }
 
   private:
-    PyObject *  m_function;
+    PyObject    *m_function;
     std::string m_name;
 
     PythonFunction(PythonFunction const &) = delete;
@@ -77,6 +80,7 @@ namespace pythonpp
     {
       try
       {
+        std::cout << "starting function : " << index << std::endl;
         out = m_functions[index]->exec<Ret, Args...>(args...);
       }
       catch (indie::AException &err)

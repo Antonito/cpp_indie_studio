@@ -12,36 +12,37 @@
 
 pythonpp::PythonModule::~PythonModule()
 {
-  Py_DECREF(m_module);
+  Py_Finalize();
 }
 
 pythonpp::PythonModule::PythonModule(std::string const &moduleName)
     : m_module(nullptr), m_functions()
 {
   char buff[PATH_MAX];
-  char *fullpath = realpath("./", buff);
   PyObject *name;
 
-  (void)moduleName;
-  Py_SetProgramName(const_cast<char *>(moduleName.c_str()));
-  if (fullpath != NULL)
-    std::cout << fullpath << std::endl;
-  PySys_SetPath(fullpath);
+  printf("started init\n");
   Py_Initialize();
+  PySys_SetPath(realpath(".", buff));
+  printf("%s\n", buff);
   if (!Py_IsInitialized())
     throw(pythonpp::PyInitializationError(
         "Error while Initializating module " + moduleName));
 
+  printf("setting module name\n");
   name = PyString_FromString(moduleName.c_str());
+  perror("");
   if (!name)
     throw(pythonpp::PyInitializationError("Module '" + moduleName +
                                           "' doesn't exist."));
-  Py_DecRef(name);
-
+  printf("import module\n");
   m_module = PyImport_Import(name);
+  perror("");
   if (!m_module)
     throw(pythonpp::PyInitializationError("Failed to load '" + moduleName +
                                           "'"));
+  Py_DecRef(name);
+  printf("end init\n");
 }
 
 PyObject *pythonpp::PythonModule::ptr()
@@ -54,6 +55,7 @@ void pythonpp::PythonModule::feedFunctions(
 {
   std::vector<std::string> stolenNames = std::move(functionNames);
 
+  printf("starting function feed\n");
   for (std::string const &name : stolenNames)
     {
       try
@@ -65,6 +67,7 @@ void pythonpp::PythonModule::feedFunctions(
         Log(nope::log::Warning) << err.what() << std::endl;
       }
     }
+  printf("finished function feed\n");
 }
 
 pythonpp::PythonFunction::~PythonFunction()
@@ -83,4 +86,5 @@ pythonpp::PythonFunction::PythonFunction(
   if (!PyCallable_Check(m_function))
     throw(pythonpp::PyFunctionInitializationError("Object '" + functionName +
                                                   "' is not callable"));
+  std::cout << "function : " << functionName << " pushed" << std::endl;
 }
