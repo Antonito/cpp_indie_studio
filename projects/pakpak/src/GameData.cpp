@@ -2,7 +2,10 @@
 
 namespace game
 {
-  GameData::GameData() : m_players()
+  GameData::GameData()
+      : m_sceneMgr(Ogre::Root::getSingleton().createSceneManager(
+            "DefaultSceneManager", "Game scene manager")),
+        m_players()
   {
   }
 

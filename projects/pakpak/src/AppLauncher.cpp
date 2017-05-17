@@ -4,9 +4,8 @@
 namespace core
 {
   AppLauncher::AppLauncher()
-      : m_root(nullptr), m_window(nullptr), m_sceneMgr(nullptr),
-        m_camera(nullptr), m_inputListener(nullptr), m_contexts(),
-        m_currentContext(nullptr), m_gameState(GameState::None)
+      : m_root(nullptr), m_window(nullptr), m_inputListener(nullptr),
+        m_contexts(), m_currentContext(nullptr), m_gameState(GameState::None)
   {
   }
 

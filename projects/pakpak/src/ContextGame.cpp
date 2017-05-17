@@ -22,6 +22,7 @@ namespace game
 
     for (std::int32_t i = 0; i < nbPlayer; ++i)
       {
+	m_game[i].setCar(std::make_unique<EmptyCar>());
 	m_players.emplace_back(m_win, m_game, m_game[i]);
       }
   }

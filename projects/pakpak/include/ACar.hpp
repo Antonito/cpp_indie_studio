@@ -8,7 +8,8 @@ namespace game
   class ACar
   {
   public:
-    ACar() = delete;
+    // TODO: implement in .cpp file
+    ACar(){};
     ACar(ACar const &) = delete;
     ACar(ACar &&) = delete;
     ~ACar()

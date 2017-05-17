@@ -38,9 +38,9 @@ namespace core
   private:
     Ogre::Root *        m_root;
     Ogre::RenderWindow *m_window;
-    Ogre::SceneManager *m_sceneMgr;
-    Ogre::Camera *      m_camera;
-    InputListener *     m_inputListener;
+    // Ogre::SceneManager *m_sceneMgr;
+    // Ogre::Camera *      m_camera;
+    InputListener *m_inputListener;
 
     static constexpr std::size_t nbContext =
         static_cast<std::size_t>(GameState::NbGameState);

@@ -63,7 +63,7 @@ namespace splash
 	return (core::GameState::Splash);
       }
     else
-      return (core::GameState::Menu);
+      return (core::GameState::InGame);
   }
 
   void ContextSplash::display()

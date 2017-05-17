@@ -56,6 +56,7 @@
 #include "ContextGame.hpp"
 #include "ContextMenu.hpp"
 #include "ContextSplash.hpp"
+#include "EmptyCar.hpp"
 #include "GameData.hpp"
 #include "GameGUI.hpp"
 #include "GameState.hpp"

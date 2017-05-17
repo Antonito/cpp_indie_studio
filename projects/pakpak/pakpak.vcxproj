@@ -268,6 +268,7 @@
     <ClInclude Include="include\ContextGame.hpp" />
     <ClInclude Include="include\ContextMenu.hpp" />
     <ClInclude Include="include\ContextSplash.hpp" />
+    <ClInclude Include="include\EmptyCar.hpp" />
     <ClInclude Include="include\FastList.hpp" />
     <ClInclude Include="include\FastStack.hpp" />
     <ClInclude Include="include\GameData.hpp" />
