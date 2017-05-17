@@ -26,13 +26,12 @@ public:
   std::int32_t        getRank() const;
   void                setRank(std::int32_t);
   std::vector<Bonus> &getBonus() const;
-  void                addBonus(Bonus);
-  void                setPosition(Position const);
-  Position &          getPosition() const;
+  void                addBonus(Bonus &);
   Sprite &            getSprite() const;
   void setSprite(const Sprite &m_sprite);
 
-  bool useBonus(std::int32_t);
+  bool useBonus(Bonus &);
+  void updatePosition();
 
 private:
   Car                m_car;
@@ -40,7 +39,6 @@ private:
   std::int32_t       m_lap;
   std::int32_t       m_rank;
   std::vector<Bonus> m_bonus;
-  Position           m_position;
   Sprite             m_sprite;
 };
 
