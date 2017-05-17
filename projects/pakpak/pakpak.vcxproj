@@ -272,8 +272,10 @@
     <ClInclude Include="include\GameGUI.hpp" />
     <ClInclude Include="include\GameLayer.hpp" />
     <ClInclude Include="include\GameState.hpp" />
+    <ClInclude Include="include\IEventHandler.hpp" />
     <ClInclude Include="include\ILayer.hpp" />
     <ClInclude Include="include\InGame.hpp" />
+    <ClInclude Include="include\ILayerStack.hpp" />
     <ClInclude Include="include\Loading.hpp" />
     <ClInclude Include="include\LocalPlayer.hpp" />
     <ClInclude Include="include\Menu.hpp" />

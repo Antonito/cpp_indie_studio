@@ -5,22 +5,19 @@
 
 namespace game
 {
-  struct GameLayer
+  enum class GameLayer
   {
-    enum
-    {
-      Loading,
-      PreGame,
-      InGame,
-      GameGUI,
-      Spectator,
-      SpecGUI,
-      PostGame,
-      Score,
-      Chat,
-      Menu,
-      NbLayer
-    };
+    Loading,
+    PreGame,
+    InGame,
+    GameGUI,
+    Spectator,
+    SpecGUI,
+    PostGame,
+    Score,
+    Chat,
+    Menu,
+    NbLayer
   };
 }
 

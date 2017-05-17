@@ -167,5 +167,11 @@
     <ClInclude Include="include\Menu.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\IEventHandler.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ILayerStack.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
