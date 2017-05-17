@@ -40,14 +40,23 @@
 #endif // !_WIN32
 
 //
+// Utils
+//
+#include <cassert>
+
+//
 // Project headers
 //
 #include "AContext.hpp"
 #include "AppLauncher.hpp"
+#include "CameraMode.hpp"
 #include "ContextGame.hpp"
 #include "ContextMenu.hpp"
 #include "ContextSplash.hpp"
+#include "GameData.hpp"
 #include "GameState.hpp"
 #include "InputListener.hpp"
+#include "LocalPlayer.hpp"
+#include "PlayerData.hpp"
 
 #endif // !PAKPAK_STDAFX_HPP_

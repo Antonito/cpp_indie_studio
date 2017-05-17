@@ -29,6 +29,8 @@ namespace game
     virtual void            display();
 
   private:
+    GameData                 m_game;
+    std::vector<LocalPlayer> m_players;
   };
 }
 

@@ -7,7 +7,7 @@
 namespace core
 {
   // Forward declaration for faster compilation
-  enum class InGameState : std::int8_t;
+  enum class GameState : std::int8_t;
 
   class IContext
   {
