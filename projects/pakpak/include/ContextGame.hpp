@@ -1,15 +1,12 @@
 #ifndef CONTEXTGAME_HPP_
 #define CONTEXTGAME_HPP_
 
+#include <vector>
+#include <Ogre/OgreRenderWindow.h>
 #include <OIS/OISMouse.h>
 #include <OIS/OISKeyboard.h>
 #include "AContext.hpp"
-
-// Forward declaration for faster compilation
-namespace Ogre
-{
-  class RenderWindow;
-}
+#include "LocalPlayer.hpp"
 
 namespace game
 {

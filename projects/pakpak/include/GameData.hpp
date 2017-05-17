@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <OGRE/OgreSceneManager.h>
 #include "PlayerData.hpp"
 
 namespace game
@@ -26,8 +27,10 @@ namespace game
 
     void update();
 
+    Ogre::Camera *createCamera(std::string const &name);
+
   private:
-    // m_sceneMgr;
+    Ogre::SceneManager *    m_sceneMgr;
     std::vector<PlayerData> m_players;
   };
 }

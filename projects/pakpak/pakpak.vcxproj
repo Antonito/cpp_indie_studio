@@ -191,7 +191,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="include\PostGame.cpp" />
     <ClCompile Include="src\AContext.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -260,6 +259,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\ACar.hpp" />
     <ClInclude Include="include\AContext.hpp" />
     <ClInclude Include="include\ALayer.hpp" />
     <ClInclude Include="include\AppLauncher.hpp" />

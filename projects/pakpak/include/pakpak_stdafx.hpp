@@ -47,6 +47,7 @@
 //
 // Project headers
 //
+#include "ACar.hpp"
 #include "AContext.hpp"
 #include "ALayer.hpp"
 #include "AppLauncher.hpp"

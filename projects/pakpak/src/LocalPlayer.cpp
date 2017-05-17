@@ -2,7 +2,7 @@
 
 namespace game
 {
-  LocalPlayer::LocalPlayer(GameData &g, PlayerData &p)
+  LocalPlayer::LocalPlayer(Ogre::RenderWindow *win, GameData &g, PlayerData &p)
       : m_data(p), m_cameraMode(CameraMode::Top), m_layers(), m_currentLayers()
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
@@ -28,6 +28,27 @@ namespace game
 
     m_currentLayers.push(
         m_layers[static_cast<std::size_t>(GameLayer::Loading)].get());
+
+    m_cam = g.createCamera("PlayerCam");
+    m_cam->setPosition(m_data.car().position());
+    m_cam->lookAt(Ogre::Vector3(0, 0, 0));
+    m_cam->setNearClipDistance(3);
+
+    m_viewport = win->addViewport(m_cam);
+    m_viewport->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
+    m_cam->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
+                          Ogre::Real(m_viewport->getActualHeight()));
+  }
+
+  LocalPlayer::LocalPlayer(LocalPlayer &&that)
+      : m_data(std::move(that.m_data)),
+        m_cameraMode(std::move(that.m_cameraMode)),
+        m_layers(std::move(that.m_layers)),
+        m_currentLayers(std::move(that.m_currentLayers)), m_cam(that.m_cam),
+        m_viewport(that.m_viewport)
+  {
+    that.m_cam = nullptr;
+    that.m_viewport = nullptr;
   }
 
   bool LocalPlayer::keyPressed(OIS::KeyEvent const &ke)

@@ -34,4 +34,9 @@ namespace game
   {
     // TODO: implements lol
   }
+
+  Ogre::Camera *GameData::createCamera(std::string const &name)
+  {
+    return (m_sceneMgr->createCamera(name));
+  }
 }

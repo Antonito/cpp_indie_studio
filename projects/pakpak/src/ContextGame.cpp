@@ -13,11 +13,22 @@ namespace game
 
   void ContextGame::enable()
   {
-    // m_win->addViewport()
+    m_input->setMouseEventCallback(this);
+    m_input->setKeyboardEventCallback(this);
+
+    std::int32_t nbPlayer = 1;
+
+    m_game.setPlayerNb(nbPlayer);
+
+    for (std::int32_t i = 0; i < nbPlayer; ++i)
+      {
+	m_players.emplace_back(m_win, m_game, m_game[i]);
+      }
   }
 
   void ContextGame::disable()
   {
+    m_players.clear();
   }
 
   core::GameState ContextGame::update()
@@ -31,6 +42,11 @@ namespace game
 
   bool ContextGame::keyPressed(OIS::KeyEvent const &ke)
   {
+    if (ke.key == OIS::KC_ESCAPE)
+      {
+	m_input->shutdown();
+      }
+
     for (LocalPlayer &p : m_players)
       {
 	p.keyPressed(ke);

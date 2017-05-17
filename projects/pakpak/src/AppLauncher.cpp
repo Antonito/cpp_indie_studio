@@ -167,7 +167,7 @@ namespace core
   void AppLauncher::createFrameListener()
   {
     // Create and add a Framelistener
-    m_inputListener = new InputListener(m_window, m_camera);
+    m_inputListener = new InputListener(m_window);
     m_root->addFrameListener(m_inputListener);
   }
 }

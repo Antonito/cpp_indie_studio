@@ -2,25 +2,26 @@
 
 namespace core
 {
-  InputListener::InputListener(Ogre::RenderWindow *wnd, Ogre::Camera *camera)
-      : m_window(wnd), m_camera(camera), m_inputManager(nullptr),
-        m_mouse(nullptr), m_keyboard(nullptr)
+  InputListener::InputListener(Ogre::RenderWindow *wnd)
+      : m_window(wnd), m_inputManager(nullptr), m_mouse(nullptr),
+        m_keyboard(nullptr), m_shutdown(false)
   {
     startOIS();
   }
 
   InputListener::InputListener(InputListener const &that)
-      : m_window(that.m_window), m_camera(that.m_camera),
-        m_inputManager(that.m_inputManager), m_mouse(that.m_mouse),
-        m_keyboard(that.m_keyboard)
+      : m_window(that.m_window), m_inputManager(that.m_inputManager),
+        m_mouse(that.m_mouse), m_keyboard(that.m_keyboard),
+        m_shutdown(that.m_shutdown)
   {
   }
 
   InputListener::InputListener(InputListener &&that)
-      : m_window(std::move(that.m_window)), m_camera(std::move(that.m_camera)),
+      : m_window(std::move(that.m_window)),
         m_inputManager(std::move(that.m_inputManager)),
         m_mouse(std::move(that.m_mouse)),
-        m_keyboard(std::move(that.m_keyboard))
+        m_keyboard(std::move(that.m_keyboard)),
+        m_shutdown(std::move(that.m_shutdown))
   {
   }
 
@@ -35,10 +36,10 @@ namespace core
     if (this == &that)
       return (*this);
     m_window = that.m_window;
-    m_camera = that.m_camera;
     m_inputManager = that.m_inputManager;
     m_mouse = that.m_mouse;
     m_keyboard = that.m_keyboard;
+    m_shutdown = that.m_shutdown;
     return (*this);
   }
 
@@ -47,10 +48,10 @@ namespace core
     if (this == &that)
       return (*this);
     m_window = std::move(that.m_window);
-    m_camera = std::move(that.m_camera);
     m_inputManager = std::move(that.m_inputManager);
     m_mouse = std::move(that.m_mouse);
     m_keyboard = std::move(that.m_keyboard);
+    m_shutdown = std::move(that.m_shutdown);
     return (*this);
   }
 
@@ -62,7 +63,7 @@ namespace core
     m_keyboard->capture();
     m_mouse->capture();
 
-    if (m_keyboard->isKeyDown(OIS::KC_ESCAPE))
+    if (m_shutdown)
       return false;
 
     return true;
@@ -97,11 +98,26 @@ namespace core
     Ogre::WindowEventUtilities::addWindowEventListener(m_window, this);
   }
 
+  void InputListener::setMouseEventCallback(OIS::MouseListener *listener)
+  {
+    m_mouse->setEventCallback(listener);
+  }
+
+  void InputListener::setKeyboardEventCallback(OIS::KeyListener *listener)
+  {
+    m_keyboard->setEventCallback(listener);
+  }
+
+  void InputListener::shutdown()
+  {
+    m_shutdown = true;
+  }
+
   void InputListener::windowResized(Ogre::RenderWindow *wnd)
   {
     // Get the resized window metrics
     std::uint32_t width, height, depth;
-    std::int32_t          left, top;
+    std::int32_t  left, top;
 
     wnd->getMetrics(width, height, depth, left, top);
     const OIS::MouseState &ms = m_mouse->getMouseState();

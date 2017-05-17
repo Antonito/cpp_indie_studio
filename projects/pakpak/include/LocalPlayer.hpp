@@ -3,6 +3,8 @@
 
 #include <cstdint>
 #include <array>
+#include <OGRE/OgreCamera.h>
+#include <OGRE/OgreViewport.h>
 #include "GameData.hpp"
 #include "PlayerData.hpp"
 #include "CameraMode.hpp"
@@ -17,9 +19,9 @@ namespace game
   {
   public:
     LocalPlayer() = delete;
-    LocalPlayer(GameData &, PlayerData &);
+    LocalPlayer(Ogre::RenderWindow *win, GameData &, PlayerData &);
     LocalPlayer(LocalPlayer const &) = delete;
-    LocalPlayer(LocalPlayer &&) = delete;
+    LocalPlayer(LocalPlayer &&);
 
     LocalPlayer &operator=(LocalPlayer const &) = delete;
     LocalPlayer &operator=(LocalPlayer &&) = delete;
@@ -46,6 +48,9 @@ namespace game
     std::array<std::unique_ptr<ILayer>, nbLayer> m_layers;
 
     core::FastStack<ILayer *> m_currentLayers;
+
+    Ogre::Camera *  m_cam;
+    Ogre::Viewport *m_viewport;
   };
 }
 

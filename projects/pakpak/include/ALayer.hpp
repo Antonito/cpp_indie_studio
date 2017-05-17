@@ -20,7 +20,7 @@ namespace game
     ALayer &operator=(ALayer &&) = delete;
 
   protected:
-    GameData     m_gameData;
+    GameData &   m_gameData;
     ILayerStack &m_layerStack;
   };
 }

@@ -6,6 +6,10 @@ namespace game
   {
   }
 
+  PlayerData::PlayerData(PlayerData &&that) : m_car(std::move(that.m_car))
+  {
+  }
+
   PlayerData::~PlayerData()
   {
   }

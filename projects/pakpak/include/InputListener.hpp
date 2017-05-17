@@ -1,16 +1,11 @@
 #ifndef INPUTLISTENER_H_
 #define INPUTLISTENER_H_
 
-#include <OGRE/Ogre.h>
 #include <memory>
-
-// Forward declaration for faster compilation
-namespace OIS
-{
-  class InputManager;
-  class Mouse;
-  class Keyboard;
-}
+#include <OGRE/Ogre.h>
+#include <OIS/OISInputManager.h>
+#include <OIS/OISMouse.h>
+#include <OIS/OISKeyboard.h>
 
 namespace core
 {
@@ -19,7 +14,7 @@ namespace core
   {
   public:
     InputListener() = delete;
-    InputListener(Ogre::RenderWindow *wnd, Ogre::Camera *camera);
+    InputListener(Ogre::RenderWindow *wnd);
     InputListener(InputListener const &that);
     InputListener(InputListener &&that);
     virtual ~InputListener();
@@ -32,12 +27,17 @@ namespace core
     bool         frameRenderingQueued(const Ogre::FrameEvent &evt);
     void         startOIS();
 
+    void setMouseEventCallback(OIS::MouseListener *listener);
+    void setKeyboardEventCallback(OIS::KeyListener *listener);
+
+    void shutdown();
+
   private:
     Ogre::RenderWindow *m_window;
-    Ogre::Camera *      m_camera;
     OIS::InputManager * m_inputManager;
     OIS::Mouse *        m_mouse;
     OIS::Keyboard *     m_keyboard;
+    bool                m_shutdown;
   };
 }
 
