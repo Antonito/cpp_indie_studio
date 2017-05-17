@@ -1,6 +1,7 @@
 #ifndef LOADING_HPP_
 #define LOADING_HPP_
 
+#include <chrono>
 #include "ALayer.hpp"
 
 namespace game
@@ -33,6 +34,10 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
+    using clock_t = std::chrono::high_resolution_clock;
+    using time_point_t = std::chrono::time_point<clock_t>;
+
+    time_point_t m_start;
   };
 }
 

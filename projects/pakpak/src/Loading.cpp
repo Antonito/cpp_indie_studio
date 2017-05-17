@@ -12,6 +12,7 @@ namespace game
 
   void Loading::enable()
   {
+    m_start = clock_t::now();
   }
 
   void Loading::disable()
@@ -20,6 +21,17 @@ namespace game
 
   void Loading::update()
   {
+    using milliseconds = std::chrono::milliseconds;
+
+    std::size_t ms =
+        std::chrono::duration_cast<milliseconds>(clock_t::now() - m_start)
+            .count();
+
+    if (ms > 1000)
+      {
+	m_layerStack.popLayer();
+	m_layerStack.push(GameLayer::PreGame);
+      }
   }
 
   void Loading::display()

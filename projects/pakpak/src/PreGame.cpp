@@ -12,6 +12,8 @@ namespace game
 
   void PreGame::enable()
   {
+    m_layerStack.popLayer();
+    m_layerStack.push(GameLayer::InGame);
   }
 
   void PreGame::disable()
