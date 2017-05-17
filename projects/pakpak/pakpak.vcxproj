@@ -198,6 +198,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\ALayer.cpp" />
     <ClCompile Include="src\AppLauncher.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -260,6 +261,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AContext.hpp" />
+    <ClInclude Include="include\ALayer.hpp" />
     <ClInclude Include="include\AppLauncher.hpp" />
     <ClInclude Include="include\CameraMode.hpp" />
     <ClInclude Include="include\Chat.hpp" />

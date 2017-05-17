@@ -2,7 +2,8 @@
 
 namespace game
 {
-  GameGUI::GameGUI(GameData &data) : m_data(data)
+  GameGUI::GameGUI(GameData &data, LocalPlayer &player)
+      : ALayer(data, player), m_player(player)
   {
   }
 

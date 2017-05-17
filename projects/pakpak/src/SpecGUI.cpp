@@ -2,7 +2,7 @@
 
 namespace game
 {
-  SpecGUI::SpecGUI(SpecData &data) : m_data(data)
+  SpecGUI::SpecGUI(GameData &data, ILayerStack &layer) : ALayer(data, layer)
   {
   }
 

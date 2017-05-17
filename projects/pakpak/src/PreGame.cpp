@@ -2,7 +2,7 @@
 
 namespace game
 {
-  PreGame::PreGame(GameData &data) : m_data(data)
+  PreGame::PreGame(GameData &data, ILayerStack &layer) : ALayer(data, layer)
   {
   }
 

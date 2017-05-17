@@ -2,7 +2,7 @@
 
 namespace game
 {
-  Chat::Chat(SpecData &data) : m_data(data)
+  Chat::Chat(GameData &data, ILayerStack &layer) : ALayer(data, layer)
   {
   }
 

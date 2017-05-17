@@ -48,6 +48,7 @@
 // Project headers
 //
 #include "AContext.hpp"
+#include "ALayer.hpp"
 #include "AppLauncher.hpp"
 #include "CameraMode.hpp"
 #include "Chat.hpp"

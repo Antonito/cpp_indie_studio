@@ -1,17 +1,16 @@
 #ifndef INGAME_HPP_
 #define INGAME_HPP_
 
-#include "ILayer.hpp"
+#include "ALayer.hpp"
+#include "LocalPlayer.hpp"
 
 namespace game
 {
-  class GameData;
-
-  class InGame : public ILayer
+  class InGame final : public ALayer
   {
   public:
     InGame() = delete;
-    InGame(GameData &data);
+    InGame(GameData &data, LocalPlayer &layer);
     InGame(InGame const &) = delete;
     InGame(InGame &&) = delete;
     virtual ~InGame();
@@ -35,7 +34,7 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
-    GameData &m_data;
+    LocalPlayer &m_player;
   };
 }
 

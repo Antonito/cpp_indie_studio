@@ -2,7 +2,8 @@
 
 namespace game
 {
-  Spectator::Spectator(GameData &data) : m_data(data)
+  Spectator::Spectator(GameData &data, ILayerStack &layer)
+      : ALayer(data, layer)
   {
   }
 

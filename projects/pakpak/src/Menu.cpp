@@ -2,7 +2,7 @@
 
 namespace game
 {
-  Menu::Menu(GameData &data) : m_data(data)
+  Menu::Menu(GameData &data, ILayerStack &layer) : ALayer(data, layer)
   {
   }
 

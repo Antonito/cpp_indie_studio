@@ -1,17 +1,15 @@
 #ifndef SPECTATOR_HPP_
 #define SPECTATOR_HPP_
 
-#include "ILayer.hpp"
+#include "ALayer.hpp"
 
 namespace game
 {
-  class GameData;
-
-  class Spectator : public ILayer
+  class Spectator final : public ALayer
   {
   public:
     Spectator() = delete;
-    Spectator(GameData &data);
+    Spectator(GameData &data, ILayerStack &layer);
     Spectator(Spectator const &) = delete;
     Spectator(Spectator &&) = delete;
     virtual ~Spectator();
@@ -35,7 +33,6 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
-    GameData &m_data;
   };
 }
 

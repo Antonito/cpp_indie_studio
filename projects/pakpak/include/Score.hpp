@@ -1,17 +1,15 @@
 #ifndef SCORE_HPP_
 #define SCORE_HPP_
 
-#include "ILayer.hpp"
+#include "ALayer.hpp"
 
 namespace game
 {
-  class GameData;
-
-  class Score : public ILayer
+  class Score final : public ALayer
   {
   public:
     Score() = delete;
-    Score(GameData &data);
+    Score(GameData &data, ILayerStack &layer);
     Score(Score const &) = delete;
     Score(Score &&) = delete;
     virtual ~Score();
@@ -35,7 +33,6 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
-    GameData &m_data;
   };
 }
 

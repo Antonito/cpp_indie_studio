@@ -1,17 +1,15 @@
 #ifndef CHAT_HPP_
 #define CHAT_HPP_
 
-#include "ILayer.hpp"
+#include "ALayer.hpp"
 
 namespace game
 {
-  class GameData;
-
-  class Chat : public ILayer
+  class Chat final : public ALayer
   {
   public:
     Chat() = delete;
-    Chat(GameData &data);
+    Chat(GameData &data, ILayerStack &layer);
     Chat(Chat const &) = delete;
     Chat(Chat &&) = delete;
     virtual ~Chat();
@@ -35,7 +33,6 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
-    GameData &m_data;
   };
 }
 

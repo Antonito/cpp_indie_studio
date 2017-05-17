@@ -1,8 +1,6 @@
 #ifndef GAMELAYER_HPP_
 #define GAMELAYER_HPP_
 
-#include <cstddef>
-
 namespace game
 {
   enum class GameLayer

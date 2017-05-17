@@ -1,17 +1,15 @@
 #ifndef POSTGAME_HPP_
 #define POSTGAME_HPP_
 
-#include "ILayer.hpp"
+#include "ALayer.hpp"
 
 namespace game
 {
-  class GameData;
-
-  class PostGame : public ILayer
+  class PostGame final : public ALayer
   {
   public:
     PostGame() = delete;
-    PostGame(GameData &data);
+    PostGame(GameData &data, ILayerStack &layer);
     PostGame(PostGame const &) = delete;
     PostGame(PostGame &&) = delete;
     virtual ~PostGame();
@@ -35,7 +33,6 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
-    GameData &m_data;
   };
 }
 

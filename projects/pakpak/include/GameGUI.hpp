@@ -1,17 +1,16 @@
 #ifndef GAMEGUI_HPP_
 #define GAMEGUI_HPP_
 
-#include "ILayer.hpp"
+#include "ALayer.hpp"
+#include "LocalPlayer.hpp"
 
 namespace game
 {
-  class GameData;
-
-  class GameGUI : public ILayer
+  class GameGUI final : public ALayer
   {
   public:
     GameGUI() = delete;
-    GameGUI(GameData &data);
+    GameGUI(GameData &data, LocalPlayer &layer);
     GameGUI(GameGUI const &) = delete;
     GameGUI(GameGUI &&) = delete;
     virtual ~GameGUI();
@@ -35,7 +34,7 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
-    GameData &m_data;
+    LocalPlayer &m_player;
   };
 }
 

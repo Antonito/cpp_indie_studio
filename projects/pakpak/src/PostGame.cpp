@@ -2,7 +2,7 @@
 
 namespace game
 {
-  PostGame::PostGame(GameData &data) : m_data(data)
+  PostGame::PostGame(GameData &data, ILayerStack &layer) : ALayer(data, layer)
   {
   }
 

@@ -1,16 +1,15 @@
 #ifndef PREGAME_HPP_
 #define PREGAME_HPP_
 
-#include "ILayer.hpp"
-#include "GameData.hpp"
+#include "ALayer.hpp"
 
 namespace game
 {
-  class PreGame final : public ILayer
+  class PreGame final : public ALayer
   {
   public:
     PreGame() = delete;
-    PreGame(GameData &data);
+    PreGame(GameData &data, ILayerStack &layer);
     PreGame(PreGame const &) = delete;
     PreGame(PreGame &&) = delete;
     virtual ~PreGame();
@@ -34,7 +33,6 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
-    GameData &m_data;
   };
 }
 

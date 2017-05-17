@@ -2,7 +2,7 @@
 
 namespace game
 {
-  Score::Score(SpecData &data) : m_data(data)
+  Score::Score(GameData &data, ILayerStack &layer) : ALayer(data, layer)
   {
   }
 

@@ -1,17 +1,15 @@
 #ifndef SPECGUI_HPP_
 #define SPECGUI_HPP_
 
-#include "ILayer.hpp"
+#include "ALayer.hpp"
 
 namespace game
 {
-  class SpecData;
-
-  class SpecGUI : public ILayer
+  class SpecGUI final : public ALayer
   {
   public:
     SpecGUI() = delete;
-    SpecGUI(SpecData &data);
+    SpecGUI(GameData &data, ILayerStack &layer);
     SpecGUI(SpecGUI const &) = delete;
     SpecGUI(SpecGUI &&) = delete;
     virtual ~SpecGUI();
@@ -35,7 +33,6 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
-    SpecData &m_data;
   };
 }
 

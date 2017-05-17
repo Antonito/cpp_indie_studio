@@ -1,17 +1,15 @@
 #ifndef MENU_HPP_
 #define MENU_HPP_
 
-#include "ILayer.hpp"
+#include "ALayer.hpp"
 
 namespace game
 {
-  class GameData;
-
-  class Menu : public ILayer
+  class Menu final : public ALayer
   {
   public:
     Menu() = delete;
-    Menu(GameData &data);
+    Menu(GameData &data, ILayerStack &layer);
     Menu(Menu const &) = delete;
     Menu(Menu &&) = delete;
     virtual ~Menu();
@@ -35,7 +33,6 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
-    GameData &m_data;
   };
 }
 

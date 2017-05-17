@@ -1,16 +1,15 @@
 #ifndef LOADING_HPP_
 #define LOADING_HPP_
 
-#include "ILayer.hpp"
-#include "GameData.hpp"
+#include "ALayer.hpp"
 
 namespace game
 {
-  class Loading final : public ILayer
+  class Loading final : public ALayer
   {
   public:
     Loading() = delete;
-    Loading(GameData &data);
+    Loading(GameData &data, ILayerStack &layerStack);
     Loading(Loading const &) = delete;
     Loading(Loading &&) = delete;
     virtual ~Loading();
@@ -34,7 +33,6 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
-    GameData &m_data;
   };
 }
 

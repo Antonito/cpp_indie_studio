@@ -28,4 +28,51 @@ namespace game
   void ContextGame::display()
   {
   }
+
+  bool ContextGame::keyPressed(OIS::KeyEvent const &ke)
+  {
+    for (LocalPlayer &p : m_players)
+      {
+	p.keyPressed(ke);
+      }
+    return (true);
+  }
+
+  bool ContextGame::keyReleased(OIS::KeyEvent const &ke)
+  {
+    for (LocalPlayer &p : m_players)
+      {
+	p.keyReleased(ke);
+      }
+    return (true);
+  }
+
+  bool ContextGame::mouseMoved(OIS::MouseEvent const &me)
+  {
+    for (LocalPlayer &p : m_players)
+      {
+	p.mouseMoved(me);
+      }
+    return (true);
+  }
+
+  bool ContextGame::mousePressed(OIS::MouseEvent const &me,
+                                 OIS::MouseButtonID     id)
+  {
+    for (LocalPlayer &p : m_players)
+      {
+	p.mousePressed(me, id);
+      }
+    return (true);
+  }
+
+  bool ContextGame::mouseReleased(OIS::MouseEvent const &me,
+                                  OIS::MouseButtonID     id)
+  {
+    for (LocalPlayer &p : m_players)
+      {
+	p.mouseReleased(me, id);
+      }
+    return (true);
+  }
 }

@@ -2,7 +2,8 @@
 
 namespace game
 {
-  InGame::InGame(GameData &data) : m_data(data)
+  InGame::InGame(GameData &data, LocalPlayer &player)
+      : ALayer(data, player), m_player(player)
   {
   }
 
