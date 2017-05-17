@@ -8,6 +8,10 @@ namespace game
   class ILayerStack
   {
   public:
+    virtual ~ILayerStack()
+    {
+    }
+
     virtual void push(GameLayer layer) = 0;
     virtual void popLayer() = 0;
   };

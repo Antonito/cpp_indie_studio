@@ -9,6 +9,9 @@ namespace game
   class IEventHandler
   {
   public:
+    virtual ~IEventHandler()
+    {
+    }
     virtual bool keyPressed(OIS::KeyEvent const &ke) = 0;
     virtual bool keyReleased(OIS::KeyEvent const &ke) = 0;
 

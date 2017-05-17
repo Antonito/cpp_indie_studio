@@ -3,7 +3,8 @@
 namespace game
 {
   LocalPlayer::LocalPlayer(Ogre::RenderWindow *win, GameData &g, PlayerData &p)
-      : m_data(p), m_cameraMode(CameraMode::Top), m_layers(), m_currentLayers()
+      : m_data(p), m_cameraMode(CameraMode::Top), m_layers(),
+        m_currentLayers(), m_cam(nullptr), m_viewport(nullptr)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
         std::make_unique<Loading>(g, *this);
@@ -29,7 +30,7 @@ namespace game
     m_currentLayers.push(
         m_layers[static_cast<std::size_t>(GameLayer::Loading)].get());
 
-    m_cam = g.createCamera("PlayerCam");
+    m_cam = g.createCamera("PlayerCam"); // todo: name
     m_cam->setPosition(m_data.car().position());
     m_cam->lookAt(Ogre::Vector3(0, 0, 0));
     m_cam->setNearClipDistance(3);
@@ -41,8 +42,7 @@ namespace game
   }
 
   LocalPlayer::LocalPlayer(LocalPlayer &&that)
-      : m_data(std::move(that.m_data)),
-        m_cameraMode(std::move(that.m_cameraMode)),
+      : m_data(that.m_data), m_cameraMode(std::move(that.m_cameraMode)),
         m_layers(std::move(that.m_layers)),
         m_currentLayers(std::move(that.m_currentLayers)), m_cam(that.m_cam),
         m_viewport(that.m_viewport)
@@ -51,9 +51,13 @@ namespace game
     that.m_viewport = nullptr;
   }
 
+  LocalPlayer::~LocalPlayer()
+  {
+  }
+
   bool LocalPlayer::keyPressed(OIS::KeyEvent const &ke)
   {
-    for (std::int32_t i = m_currentLayers.size() - 1; i > 0; --i)
+    for (std::size_t i = m_currentLayers.size() - 1; i > 0; --i)
       {
 	if (m_currentLayers[i]->keyPressed(ke))
 	  {
@@ -65,7 +69,7 @@ namespace game
 
   bool LocalPlayer::keyReleased(OIS::KeyEvent const &ke)
   {
-    for (std::int32_t i = m_currentLayers.size() - 1; i > 0; --i)
+    for (std::size_t i = m_currentLayers.size() - 1; i > 0; --i)
       {
 	if (m_currentLayers[i]->keyReleased(ke))
 	  {
@@ -77,7 +81,7 @@ namespace game
 
   bool LocalPlayer::mouseMoved(OIS::MouseEvent const &me)
   {
-    for (std::int32_t i = m_currentLayers.size() - 1; i > 0; --i)
+    for (std::size_t i = m_currentLayers.size() - 1; i > 0; --i)
       {
 	if (m_currentLayers[i]->mouseMoved(me))
 	  {
@@ -90,7 +94,7 @@ namespace game
   bool LocalPlayer::mousePressed(OIS::MouseEvent const &me,
                                  OIS::MouseButtonID     id)
   {
-    for (std::int32_t i = m_currentLayers.size() - 1; i > 0; --i)
+    for (std::size_t i = m_currentLayers.size() - 1; i > 0; --i)
       {
 	if (m_currentLayers[i]->mousePressed(me, id))
 	  {
@@ -103,7 +107,7 @@ namespace game
   bool LocalPlayer::mouseReleased(OIS::MouseEvent const &me,
                                   OIS::MouseButtonID     id)
   {
-    for (std::int32_t i = m_currentLayers.size() - 1; i > 0; --i)
+    for (std::size_t i = m_currentLayers.size() - 1; i > 0; --i)
       {
 	if (m_currentLayers[i]->mouseReleased(me, id))
 	  {

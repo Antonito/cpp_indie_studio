@@ -11,10 +11,13 @@ namespace game
   {
   public:
     EmptyCar(){};
+    virtual ~EmptyCar()
+    {
+    }
 
     virtual Ogre::Vector3 const &position() const
     {
-      return (Ogre::Vector3(0, 0, 0));
+      return (m_pos);
     }
   };
 }

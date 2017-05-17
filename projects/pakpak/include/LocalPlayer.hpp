@@ -22,6 +22,7 @@ namespace game
     LocalPlayer(Ogre::RenderWindow *win, GameData &, PlayerData &);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&);
+    virtual ~LocalPlayer();
 
     LocalPlayer &operator=(LocalPlayer const &) = delete;
     LocalPlayer &operator=(LocalPlayer &&) = delete;

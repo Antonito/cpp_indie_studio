@@ -2,7 +2,7 @@
 #define CONTEXTGAME_HPP_
 
 #include <vector>
-#include <Ogre/OgreRenderWindow.h>
+#include <OGRE/OgreRenderWindow.h>
 #include <OIS/OISMouse.h>
 #include <OIS/OISKeyboard.h>
 #include "AContext.hpp"

@@ -35,9 +35,23 @@ SRC_FILES=	main.cpp			\
 		AppLauncher.cpp			\
 		InputListener.cpp		\
 		AContext.cpp			\
+		ALayer.cpp			\
 		ContextGame.cpp			\
 		ContextMenu.cpp			\
-		ContextSplash.cpp
+		ContextSplash.cpp		\
+		Chat.cpp			\
+		GameData.cpp			\
+		GameGUI.cpp			\
+		InGame.cpp			\
+		Loading.cpp			\
+		LocalPlayer.cpp			\
+		Menu.cpp			\
+		PlayerData.cpp			\
+		PostGame.cpp			\
+		PreGame.cpp			\
+		Score.cpp			\
+		SpecGUI.cpp			\
+		Spectator.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 

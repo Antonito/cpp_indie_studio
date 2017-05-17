@@ -9,10 +9,10 @@ namespace game
   {
   public:
     // TODO: implement in .cpp file
-    ACar(){};
+    ACar() : m_pos(0, 0, 0){};
     ACar(ACar const &) = delete;
     ACar(ACar &&) = delete;
-    ~ACar()
+    virtual ~ACar()
     {
     }
 
@@ -21,7 +21,9 @@ namespace game
 
     virtual Ogre::Vector3 const &position() const = 0;
 
-  private:
+    // Direction , Movement, Speed
+  protected:
+    Ogre::Vector3 m_pos;
   };
 }
 

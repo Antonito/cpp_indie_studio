@@ -3,7 +3,7 @@
 namespace game
 {
   ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input)
-      : core::AContext(win, input)
+      : core::AContext(win, input), m_game(), m_players()
   {
   }
 
