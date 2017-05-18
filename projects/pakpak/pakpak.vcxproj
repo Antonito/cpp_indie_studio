@@ -72,25 +72,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
@@ -197,14 +197,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\ALayer.cpp" />
     <ClCompile Include="src\AppLauncher.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Chat.cpp" />
     <ClCompile Include="src\ContextGame.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -223,30 +221,34 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\GameData.cpp" />
-    <ClCompile Include="src\GameGUI.cpp" />
-    <ClCompile Include="src\InGame.cpp" />
+    <ClCompile Include="src\game\car\ACar.cpp" />
+    <ClCompile Include="src\game\car\EmptyCar.cpp" />
+    <ClCompile Include="src\game\GameData.cpp" />
+    <ClCompile Include="src\game\layer\ALayer.cpp" />
+    <ClCompile Include="src\game\layer\Chat.cpp" />
+    <ClCompile Include="src\game\layer\GameGUI.cpp" />
+    <ClCompile Include="src\game\layer\InGame.cpp" />
+    <ClCompile Include="src\game\layer\Loading.cpp" />
+    <ClCompile Include="src\game\layer\Menu.cpp" />
+    <ClCompile Include="src\game\layer\PostGame.cpp" />
+    <ClCompile Include="src\game\layer\PreGame.cpp" />
+    <ClCompile Include="src\game\layer\Score.cpp" />
+    <ClCompile Include="src\game\layer\SpecGUI.cpp" />
+    <ClCompile Include="src\game\layer\Spectator.cpp" />
+    <ClCompile Include="src\game\LocalPlayer.cpp" />
+    <ClCompile Include="src\game\PlayerData.cpp" />
     <ClCompile Include="src\InputListener.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Loading.cpp" />
-    <ClCompile Include="src\LocalPlayer.cpp" />
     <ClCompile Include="src\main.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Menu.cpp" />
-    <ClCompile Include="src\PlayerData.cpp" />
-    <ClCompile Include="src\PostGame.cpp" />
-    <ClCompile Include="src\PreGame.cpp" />
-    <ClCompile Include="src\Score.cpp" />
-    <ClCompile Include="src\SpecGUI.cpp" />
-    <ClCompile Include="src\Spectator.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -259,38 +261,38 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ACar.hpp" />
     <ClInclude Include="include\AContext.hpp" />
-    <ClInclude Include="include\ALayer.hpp" />
     <ClInclude Include="include\AppLauncher.hpp" />
-    <ClInclude Include="include\CameraMode.hpp" />
-    <ClInclude Include="include\Chat.hpp" />
     <ClInclude Include="include\ContextGame.hpp" />
     <ClInclude Include="include\ContextMenu.hpp" />
     <ClInclude Include="include\ContextSplash.hpp" />
-    <ClInclude Include="include\EmptyCar.hpp" />
     <ClInclude Include="include\FastList.hpp" />
     <ClInclude Include="include\FastStack.hpp" />
-    <ClInclude Include="include\GameData.hpp" />
-    <ClInclude Include="include\GameGUI.hpp" />
-    <ClInclude Include="include\GameLayer.hpp" />
     <ClInclude Include="include\GameState.hpp" />
+    <ClInclude Include="include\game\CameraMode.hpp" />
+    <ClInclude Include="include\game\car\ACar.hpp" />
+    <ClInclude Include="include\game\car\EmptyCar.hpp" />
+    <ClInclude Include="include\game\GameData.hpp" />
+    <ClInclude Include="include\game\layer\ALayer.hpp" />
+    <ClInclude Include="include\game\layer\Chat.hpp" />
+    <ClInclude Include="include\game\layer\GameGUI.hpp" />
+    <ClInclude Include="include\game\layer\GameLayer.hpp" />
+    <ClInclude Include="include\game\layer\ILayer.hpp" />
+    <ClInclude Include="include\game\layer\ILayerStack.hpp" />
+    <ClInclude Include="include\game\layer\InGame.hpp" />
+    <ClInclude Include="include\game\layer\Loading.hpp" />
+    <ClInclude Include="include\game\layer\Menu.hpp" />
+    <ClInclude Include="include\game\layer\PostGame.hpp" />
+    <ClInclude Include="include\game\layer\PreGame.hpp" />
+    <ClInclude Include="include\game\layer\Score.hpp" />
+    <ClInclude Include="include\game\layer\SpecGUI.hpp" />
+    <ClInclude Include="include\game\layer\Spectator.hpp" />
+    <ClInclude Include="include\game\LocalPlayer.hpp" />
+    <ClInclude Include="include\game\PlayerData.hpp" />
     <ClInclude Include="include\IEventHandler.hpp" />
-    <ClInclude Include="include\ILayer.hpp" />
-    <ClInclude Include="include\InGame.hpp" />
-    <ClInclude Include="include\ILayerStack.hpp" />
-    <ClInclude Include="include\Loading.hpp" />
-    <ClInclude Include="include\LocalPlayer.hpp" />
-    <ClInclude Include="include\Menu.hpp" />
-    <ClInclude Include="include\PlayerData.hpp" />
-    <ClInclude Include="include\PostGame.hpp" />
-    <ClInclude Include="include\PreGame.hpp" />
     <ClInclude Include="include\IContext.hpp" />
     <ClInclude Include="include\InputListener.hpp" />
     <ClInclude Include="include\pakpak_stdafx.hpp" />
-    <ClInclude Include="include\Score.hpp" />
-    <ClInclude Include="include\SpecGUI.hpp" />
-    <ClInclude Include="include\Spectator.hpp" />
     <ClInclude Include="include\targetver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
