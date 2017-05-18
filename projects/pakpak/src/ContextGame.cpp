@@ -34,6 +34,7 @@ namespace game
 
   core::GameState ContextGame::update()
   {
+    m_input->capture();
     return (core::GameState::InGame);
   }
 

@@ -24,12 +24,13 @@ namespace core
 
     virtual void windowResized(Ogre::RenderWindow *rw);
     virtual void windowClosed(Ogre::RenderWindow *rw);
-    bool         frameRenderingQueued(const Ogre::FrameEvent &evt);
-    void         startOIS();
+    bool frameRenderingQueued(const Ogre::FrameEvent &evt);
+    void startOIS();
 
     void setMouseEventCallback(OIS::MouseListener *listener);
     void setKeyboardEventCallback(OIS::KeyListener *listener);
 
+    void capture();
     void shutdown();
 
   private:

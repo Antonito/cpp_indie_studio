@@ -19,7 +19,7 @@ namespace game
     GameData &operator=(GameData const &) = delete;
     GameData &operator=(GameData &&) = delete;
 
-    PlayerData &      operator[](std::size_t);
+    PlayerData &operator[](std::size_t);
     PlayerData const &operator[](std::size_t) const;
 
     void        setPlayerNb(std::int32_t);
@@ -28,6 +28,8 @@ namespace game
     void update();
 
     Ogre::Camera *createCamera(std::string const &name);
+    Ogre::Entity *createEntity(std::string const &name);
+    Ogre::SceneNode *createSceneNode();
 
   private:
     Ogre::SceneManager *    m_sceneMgr;

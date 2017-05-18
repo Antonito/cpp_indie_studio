@@ -54,7 +54,7 @@ namespace game
     Ogre::Camera *  m_cam;
     Ogre::Viewport *m_viewport;
 
-    ACar *m_car;
+    std::unique_ptr<ACar> m_car;
   };
 }
 

@@ -30,8 +30,11 @@ namespace game
     m_currentLayers.push(
         m_layers[static_cast<std::size_t>(GameLayer::Loading)].get());
 
+    m_car = std::make_unique<EmptyCar>();
+    m_car->create(g);
+
     m_cam = g.createCamera("PlayerCam"); // todo: name
-    m_cam->setPosition(m_data.car().position());
+    m_cam->setPosition(m_car->position() - m_car->direction());
     m_cam->lookAt(Ogre::Vector3(0, 0, 0));
     m_cam->setNearClipDistance(3);
 
@@ -45,7 +48,7 @@ namespace game
       : m_data(that.m_data), m_cameraMode(std::move(that.m_cameraMode)),
         m_layers(std::move(that.m_layers)),
         m_currentLayers(std::move(that.m_currentLayers)), m_cam(that.m_cam),
-        m_viewport(that.m_viewport), m_car(that.m_car)
+        m_viewport(that.m_viewport), m_car(std::move(that.m_car))
   {
     that.m_cam = nullptr;
     that.m_viewport = nullptr;
@@ -57,14 +60,23 @@ namespace game
 
   bool LocalPlayer::keyPressed(OIS::KeyEvent const &ke)
   {
+
     for (std::size_t i = m_currentLayers.size() - 1; i > 0; --i)
       {
 	if (m_currentLayers[i]->keyPressed(ke))
 	  {
 	    return (true);
 	  }
+	switch (ke.key)
+	  {
+	  case OIS::KC_W:
+	    m_car->position(m_car->position() + Ogre::Vector3(0, 0, -1));
+	    break;
+	  default:
+	    return false;
+	  }
       }
-    return (false);
+    return (true);
   }
 
   bool LocalPlayer::keyReleased(OIS::KeyEvent const &ke)

@@ -88,10 +88,10 @@ namespace core
     m_inputManager = OIS::InputManager::createInputSystem(pl);
 
     m_mouse = static_cast<OIS::Mouse *>(
-        m_inputManager->createInputObject(OIS::OISMouse, false));
+        m_inputManager->createInputObject(OIS::OISMouse, true));
 
     m_keyboard = static_cast<OIS::Keyboard *>(
-        m_inputManager->createInputObject(OIS::OISKeyboard, false));
+        m_inputManager->createInputObject(OIS::OISKeyboard, true));
 
     // Set the auto Resize
     windowResized(m_window);
@@ -106,6 +106,12 @@ namespace core
   void InputListener::setKeyboardEventCallback(OIS::KeyListener *listener)
   {
     m_keyboard->setEventCallback(listener);
+  }
+
+  void InputListener::capture()
+  {
+    m_keyboard->capture();
+    m_mouse->capture();
   }
 
   void InputListener::shutdown()
