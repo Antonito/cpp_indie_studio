@@ -16,9 +16,10 @@ LIBS=			logger		\
 			memory		\
 			exceptions	\
 			network		\
-			multithread	\
 			packet		\
-			ini
+			ini		\
+			pythonpp	\
+			multithread
 
 PROJECTS_PATH=		$(addprefix $(LIB_DIR), $(LIBS))		\
 			$(addprefix $(PROJECT_DIR), $(PROJECTS))
