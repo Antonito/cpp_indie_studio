@@ -187,6 +187,7 @@ bool GameServer::hasTimedOut() const
   return (false);
 }
 
+// Connection Manager TCP communication
 void GameServer::connectManagerCom()
 {
   std::int32_t const sock = m_connectManagerSock.getSocket();
@@ -245,6 +246,7 @@ void GameServer::connectManagerCom()
   nope::log::Log(Info) << "Connection with license server closed.";
 }
 
+// GameServer -> GameClient TCP Connection
 void GameServer::gameServerTCP()
 {
   std::int32_t const sock = m_gameSock.getSocket();
@@ -291,6 +293,7 @@ void GameServer::gameServerTCP()
     }
 }
 
+// GameServer->GameClient UDP Connection
 void GameServer::gameServerUDP()
 {
 }
