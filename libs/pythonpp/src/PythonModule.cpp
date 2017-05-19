@@ -24,25 +24,18 @@ pythonpp::PythonModule::PythonModule(std::string const &moduleName)
   printf("started init\n");
   Py_Initialize();
   PySys_SetPath(realpath(".", buff));
-  printf("%s\n", buff);
   if (!Py_IsInitialized())
     throw(pythonpp::PyInitializationError(
         "Error while Initializating module " + moduleName));
-
-  printf("setting module name\n");
   name = PyString_FromString(moduleName.c_str());
-  perror("");
   if (!name)
     throw(pythonpp::PyInitializationError("Module '" + moduleName +
                                           "' doesn't exist."));
-  printf("import module\n");
   m_module = PyImport_Import(name);
-  perror("");
   if (!m_module)
     throw(pythonpp::PyInitializationError("Failed to load '" + moduleName +
                                           "'"));
   Py_DecRef(name);
-  printf("end init\n");
 }
 
 PyObject *pythonpp::PythonModule::ptr()

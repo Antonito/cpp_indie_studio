@@ -45,14 +45,12 @@ namespace pythonpp
         return (true);
       });
 
-      std::cout << "executing function " << std::endl;
       retValue = PyObject_CallObject(m_function, pyArgs);
       Py_DECREF(pyArgs);
       if (!retValue)
       {
         throw(pythonpp::PyFunctionReturnError(m_name));
       }
-      std::cout << "exec done, converting return value " << std::endl;
       convertedRet =
           std::move(PythonLiteralConverter::backConverter<Ret>(retValue));
       Py_DECREF(retValue);

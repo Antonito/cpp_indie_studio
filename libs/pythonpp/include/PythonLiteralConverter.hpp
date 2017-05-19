@@ -54,6 +54,37 @@ namespace pythonpp
     std::string store(PyString_AsString(value));
     return (store);
   }
+
+  template <>
+  inline bool PythonLiteralConverter::pushArgs<bool>(PyObject *args, bool arg,
+                                              int pos)
+  {
+    PyObject *l_arg;
+
+    l_arg = PyBool_FromLong(arg);
+    if (!l_arg)
+      return (false);
+    PyTuple_SetItem(args, pos, l_arg);
+    return (true);
+  }
+
+  template <>
+  inline bool PythonLiteralConverter::pushArgs<int>(PyObject *args, int arg, int pos)
+  {
+    PyObject *l_arg;
+
+    l_arg = PyInt_FromLong(arg);
+    if (!l_arg)
+      return (false);
+    PyTuple_SetItem(args, pos, l_arg);
+    return (true);
+  }
+
+  template <>
+  inline int PythonLiteralConverter::backConverter(PyObject *value)
+  {
+    return (static_cast<int>(PyInt_AsLong(value)));
+  }
 }
 
 #endif // CPP_PLAZZA_PYTHONLITERALCONVERTER_HPP
