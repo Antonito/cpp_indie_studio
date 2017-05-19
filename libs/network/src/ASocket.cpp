@@ -175,7 +175,8 @@ namespace network
     return (m_type);
   }
 
-  bool ASocket::connectToHost()
+  bool ASocket::connectToHost(std::int32_t const socktype,
+                              std::int32_t const proto)
   {
     addrinfo_t  hints = {};
     addrinfo_t *res = nullptr;
@@ -190,8 +191,8 @@ namespace network
 	hints.ai_flags = AI_NUMERICHOST;
       }
     hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_protocol = IPPROTO_TCP;
+    hints.ai_socktype = socktype;
+    hints.ai_protocol = proto;
     nope::log::Log(Debug) << "Processing address resolution";
     if (getaddrinfo(m_host.c_str(), std::to_string(m_port).c_str(), &hints,
                     &res) == 0)
@@ -271,6 +272,34 @@ namespace network
 	  }
       }
     nope::log::Log(Debug) << "Socket created successfuly";
+  }
+
+  void ASocket::hostConnection()
+  {
+    assert(m_socket != -1);
+    m_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    if (bind(m_socket, reinterpret_cast<sockaddr_t *>(&m_addr),
+             sizeof(m_addr)) == -1)
+      {
+	throw network::SockError("Cannot bind to socket");
+      }
+    if (m_port == 0)
+      {
+	sockaddr_in_t newAddr = {};
+	socklen_t     len = sizeof(sockaddr_in_t);
+
+	// Get the port selected by the kernel
+	if (getsockname(m_socket, reinterpret_cast<sockaddr_t *>(&newAddr),
+	                &len) == -1)
+	  {
+	    throw network::SockError("Cannot get port selected by the kernel");
+	  }
+	m_port = ntohs(newAddr.sin_port);
+      }
+    if (listen(m_socket, static_cast<std::int32_t>(m_maxClients)) == -1)
+      {
+	throw network::SockError("Cannot listen on socket");
+      }
   }
 
   // Set the socket to blocking or non-blocking state

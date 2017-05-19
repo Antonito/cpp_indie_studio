@@ -51,10 +51,12 @@ namespace network
     ASocket(std::uint16_t port, std::uint32_t maxClients,
             SocketType type = ASocket::BLOCKING);
 
-    virtual bool connectToHost();
+    virtual bool connectToHost(std::int32_t const socktype,
+                               std::int32_t const proto);
     void initSocket(std::int32_t domain, std::int32_t type,
                     std::int32_t protocol);
-    bool setSocketType() const;
+    bool         setSocketType() const;
+    virtual void hostConnection();
 
     sock_t        m_socket;
     std::uint16_t m_port;

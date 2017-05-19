@@ -56,7 +56,7 @@ namespace network
       }
     else
       {
-	ret = connectToHost();
+	ret = connectToHost(SOCK_STREAM, IPPROTO_TCP);
       }
     if (ret == false)
       {
@@ -198,33 +198,5 @@ namespace network
 	return (recBlocking(buffer, rlen, buffLen));
       }
     return (recNonBlocking(buffer, rlen, buffLen));
-  }
-
-  void TCPSocket::hostConnection()
-  {
-    assert(m_socket != -1);
-    m_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    if (bind(m_socket, reinterpret_cast<sockaddr_t *>(&m_addr),
-             sizeof(m_addr)) == -1)
-      {
-	throw network::SockError("Cannot bind to socket");
-      }
-    if (m_port == 0)
-      {
-	sockaddr_in_t newAddr = {};
-	socklen_t     len = sizeof(sockaddr_in_t);
-
-	// Get the port selected by the kernel
-	if (getsockname(m_socket, reinterpret_cast<sockaddr_t *>(&newAddr),
-	                &len) == -1)
-	  {
-	    throw network::SockError("Cannot get port selected by the kernel");
-	  }
-	m_port = ntohs(newAddr.sin_port);
-      }
-    if (listen(m_socket, static_cast<std::int32_t>(m_maxClients)) == -1)
-      {
-	throw network::SockError("Cannot listen on socket");
-      }
   }
 }
