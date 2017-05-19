@@ -36,6 +36,7 @@ check_dir "libs/network/"
 check_dir "libs/multithread/"
 check_dir "libs/packet/"
 check_dir "libs/ini/"
+check_dir "libs/pythonpp/"
 check_dir "projects/server/connect_manager/"
 check_dir "projects/server/game_server/"
 
