@@ -3,7 +3,7 @@ MK_DIR=				./mk/
 MK_COMMON_DIR=			./../../mk/
 
 # Definitions for Makefile
-NAME=			$(ROOT_DIR)/build/libindie_pythonmodule
+NAME=			$(ROOT_DIR)/build/libindie_pythonmodule.a
 
 LOCAL_COMP_FLAGS=	-O2 -g3 -Wno-unused-variable
 
@@ -29,8 +29,7 @@ HEADER=
 # Project's files
 
 SRC_FILES=	PythonModule.cpp 			\
-		PythonLiteralConverter.cpp 		\
-		main-test.cpp
+		PythonLiteralConverter.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 
