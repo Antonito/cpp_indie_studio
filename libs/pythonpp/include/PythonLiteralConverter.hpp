@@ -19,7 +19,6 @@ namespace pythonpp
     {
       PyObject *l_arg;
 
-      std::cout << "pushing arg : " << arg << " at pos " << pos << std::endl;
       l_arg = PyLong_FromLong(arg);
       if (!l_arg)
 	      return (false);
@@ -49,19 +48,25 @@ namespace pythonpp
   }
 
   template <>
-  inline std::string PythonLiteralConverter::backConverter(PyObject *value)
-  {
-    std::string store(PyString_AsString(value));
-    return (store);
-  }
-
-  template <>
   inline bool PythonLiteralConverter::pushArgs<bool>(PyObject *args, bool arg,
                                               int pos)
   {
     PyObject *l_arg;
 
     l_arg = PyBool_FromLong(arg);
+    if (!l_arg)
+      return (false);
+    PyTuple_SetItem(args, pos, l_arg);
+    return (true);
+  }
+
+  template <>
+  inline bool PythonLiteralConverter::pushArgs<double>(PyObject *args, double arg,
+                                                     int pos)
+  {
+    PyObject *l_arg;
+
+    l_arg = PyFloat_FromDouble(arg);
     if (!l_arg)
       return (false);
     PyTuple_SetItem(args, pos, l_arg);
@@ -84,6 +89,19 @@ namespace pythonpp
   inline int PythonLiteralConverter::backConverter(PyObject *value)
   {
     return (static_cast<int>(PyInt_AsLong(value)));
+  }
+
+  template <>
+  inline std::string PythonLiteralConverter::backConverter(PyObject *value)
+  {
+    std::string store(PyString_AsString(value));
+    return (store);
+  }
+
+  template <>
+  inline double PythonLiteralConverter::backConverter(PyObject *value)
+  {
+    return (PyFloat_AsDouble(value));
   }
 }
 
