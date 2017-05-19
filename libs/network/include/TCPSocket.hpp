@@ -18,9 +18,6 @@ namespace network
     virtual bool rec(void *buffer, std::size_t rlen, ssize_t *buffLen) const;
     virtual bool openConnection();
 
-  protected:
-    virtual void hostConnection();
-
   private:
     bool sendBlocking(void const *data, std::size_t len) const;
     bool sendNonBlocking(void const *data, std::size_t len) const;

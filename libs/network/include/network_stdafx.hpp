@@ -16,6 +16,8 @@
 #include <iomanip>
 #include <fstream>
 #include <memory>
+#include <cassert>
 #include "Logger.hpp"
+#include "UDPSocket.hpp"
 
 #endif // !NETWORK_STDAFX_HPP_
