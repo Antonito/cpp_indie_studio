@@ -5,7 +5,7 @@ namespace game
   GameData::GameData()
       : m_sceneMgr(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Game scene manager")),
-        m_players()
+        m_players(), m_map(m_sceneMgr)
   {
     // todo: move in Map
     m_sceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));

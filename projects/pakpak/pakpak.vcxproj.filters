@@ -31,6 +31,12 @@
     <Filter Include="Source Files\game\car">
       <UniqueIdentifier>{df02045e-e463-403e-a8b1-97d42eb154be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game\map">
+      <UniqueIdentifier>{a589726b-bc2a-481f-a635-583ad24f5c60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\map">
+      <UniqueIdentifier>{7bc6dffe-5d7b-4c02-82fc-23131be54ed4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">
@@ -104,6 +110,12 @@
     </ClCompile>
     <ClCompile Include="src\game\car\EmptyCar.cpp">
       <Filter>Source Files\game\car</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\map\Map.cpp">
+      <Filter>Source Files\game\map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\map\PathPoint.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +217,12 @@
     </ClInclude>
     <ClInclude Include="include\game\car\EmptyCar.hpp">
       <Filter>Header Files\game\car</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\map\Map.hpp">
+      <Filter>Header Files\game\map</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\map\PathPoint.hpp">
+      <Filter>Header Files\game\map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

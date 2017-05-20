@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <array>
+#include <memory>
 #include <OGRE/OgreCamera.h>
 #include <OGRE/OgreViewport.h>
 #include "GameData.hpp"
@@ -13,6 +14,7 @@
 #include "IEventHandler.hpp"
 #include "ILayerStack.hpp"
 #include "ACar.hpp"
+#include "ILayer.hpp"
 
 namespace game
 {

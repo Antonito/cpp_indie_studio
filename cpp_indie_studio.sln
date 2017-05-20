@@ -30,6 +30,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ini", "libs\ini\ini.vcxproj", "{DD5C24E8-81C8-413A-8F04-26DB6E2B6406}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		libs\serializer\serializer.vcxitems*{9c3ae512-84fc-44e6-8be3-115e401d0e3c}*SharedItemsImports = 9
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86

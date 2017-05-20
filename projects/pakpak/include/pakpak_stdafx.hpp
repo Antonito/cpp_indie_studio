@@ -47,29 +47,40 @@
 //
 // Project headers
 //
-#include "ACar.hpp"
-#include "AContext.hpp"
-#include "ALayer.hpp"
 #include "AppLauncher.hpp"
-#include "CameraMode.hpp"
-#include "Chat.hpp"
+#include "binary.hpp"
 #include "ContextGame.hpp"
 #include "ContextMenu.hpp"
 #include "ContextSplash.hpp"
-#include "EmptyCar.hpp"
-#include "GameData.hpp"
-#include "GameGUI.hpp"
 #include "GameState.hpp"
-#include "InGame.hpp"
 #include "InputListener.hpp"
+
+// Game
+#include "AContext.hpp"
+#include "CameraMode.hpp"
+#include "GameData.hpp"
 #include "LocalPlayer.hpp"
+#include "PlayerData.hpp"
+
+// Game.Car
+#include "ACar.hpp"
+#include "EmptyCar.hpp"
+
+// Game.Layer
+#include "ALayer.hpp"
+#include "Chat.hpp"
+#include "GameGUI.hpp"
+#include "InGame.hpp"
 #include "Loading.hpp"
 #include "Menu.hpp"
-#include "PlayerData.hpp"
 #include "PostGame.hpp"
 #include "PreGame.hpp"
 #include "Score.hpp"
 #include "SpecGUI.hpp"
 #include "Spectator.hpp"
+
+// Game.Map
+#include "Map.hpp"
+#include "PathPoint.hpp"
 
 #endif // !PAKPAK_STDAFX_HPP_
