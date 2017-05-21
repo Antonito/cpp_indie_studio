@@ -75,6 +75,7 @@ namespace game
     Ogre::SceneManager *   m_sceneMgr;
     std::vector<PathPoint> m_points;
     Ogre::Entity *         m_map;
+    Ogre::SceneNode *      m_node;
     // std::vector<MapElement> m_elements;
     // std::vector<MapBonus> m_bonus;
   };

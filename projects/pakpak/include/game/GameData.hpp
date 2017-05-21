@@ -32,6 +32,8 @@ namespace game
     Ogre::Entity *   createEntity(std::string const &name);
     Ogre::SceneNode *createSceneNode();
 
+    Ogre::SceneManager *sceneMgr();
+
   private:
     Ogre::SceneManager *    m_sceneMgr;
     std::vector<PlayerData> m_players;

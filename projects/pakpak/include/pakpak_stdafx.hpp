@@ -83,4 +83,9 @@
 #include "Map.hpp"
 #include "PathPoint.hpp"
 
+//
+// Logger
+//
+#include "Logger.hpp"
+
 #endif // !PAKPAK_STDAFX_HPP_

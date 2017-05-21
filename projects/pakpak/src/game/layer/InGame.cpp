@@ -27,13 +27,47 @@ namespace game
   {
   }
 
-  bool InGame::keyPressed(OIS::KeyEvent const &)
+  bool InGame::keyPressed(OIS::KeyEvent const &ke)
   {
-    return (false);
+    switch (ke.key)
+      {
+      case OIS::KC_W:
+	m_player.car().move(1);
+	break;
+      case OIS::KC_S:
+	m_player.car().move(-1);
+	break;
+      case OIS::KC_A:
+	m_player.car().turn(1);
+	break;
+      case OIS::KC_D:
+	m_player.car().turn(-1);
+	break;
+      default:
+	return false;
+      }
+    return (true);
   }
 
-  bool InGame::keyReleased(OIS::KeyEvent const &)
+  bool InGame::keyReleased(OIS::KeyEvent const &ke)
   {
+    switch (ke.key)
+      {
+      case OIS::KC_W:
+	m_player.car().move(0);
+	break;
+      case OIS::KC_S:
+	m_player.car().move(0);
+	break;
+      case OIS::KC_A:
+	m_player.car().turn(0);
+	break;
+      case OIS::KC_D:
+	m_player.car().turn(0);
+	break;
+      default:
+	return false;
+      }
     return (false);
   }
 

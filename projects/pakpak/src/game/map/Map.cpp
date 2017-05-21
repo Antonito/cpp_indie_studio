@@ -19,8 +19,9 @@ namespace game
 
   void Map::loadFromFile(std::string filename)
   {
-    std::ifstream     fs(filename.c_str());
-    std::stringstream ss;
+    static std::int32_t id = 0;
+    std::stringstream   ss;
+    std::ifstream       fs(filename.c_str());
 
     if (fs.is_open() == false)
       {
@@ -77,15 +78,28 @@ namespace game
     std::fread(memstream->getPtr(), fileStat.st_size, 1, meshFile);
     std::fclose(meshFile);
 
+    ss.str("");
+    ss << "MapMesh" << id;
+
     Ogre::MeshPtr meshptr = Ogre::MeshManager::getSingleton().createManual(
-        "MapMesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+        ss.str(), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
     Ogre::MeshSerializer meshSerializer;
     Ogre::DataStreamPtr  stream(memstream);
 
     meshSerializer.importMesh(stream, meshptr.getPointer());
 
-    m_map = m_sceneMgr->createEntity("MapMesh_Ent", "MapMesh");
+    m_map = m_sceneMgr->createEntity(ss.str() + "_ent", ss.str());
+
+    ss.str("");
+    ss << "MapNode" << id;
+    m_node = m_sceneMgr->getRootSceneNode()->createChildSceneNode(ss.str());
+    m_node->attachObject(m_map);
+
+    m_node->setScale(1000, 100, 1000);
+    m_node->setPosition(0, 100, 0);
+
+    ++id;
   }
 
   void Map::unload()

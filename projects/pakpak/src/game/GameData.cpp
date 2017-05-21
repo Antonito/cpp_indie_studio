@@ -5,7 +5,7 @@ namespace game
   GameData::GameData()
       : m_sceneMgr(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Game scene manager")),
-        m_players(), m_map(m_sceneMgr)
+        m_players(), m_map(m_sceneMgr, "map/map.dat")
   {
     // todo: move in Map
     m_sceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
@@ -38,7 +38,10 @@ namespace game
 
   void GameData::update()
   {
-    // TODO: implements lol
+    for (PlayerData &p : m_players)
+      {
+	p.car().update(1 / 60.0);
+      }
   }
 
   Ogre::Camera *GameData::createCamera(std::string const &name)
@@ -53,5 +56,10 @@ namespace game
   Ogre::SceneNode *GameData::createSceneNode()
   {
     return (m_sceneMgr->getRootSceneNode()->createChildSceneNode());
+  }
+
+  Ogre::SceneManager *GameData::sceneMgr()
+  {
+    return (m_sceneMgr);
   }
 }

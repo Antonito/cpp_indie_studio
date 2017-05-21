@@ -42,6 +42,9 @@ namespace game
     virtual void push(GameLayer layer);
     virtual void popLayer();
 
+    ACar &      car();
+    ACar const &car() const;
+
   private:
     PlayerData &m_data;
     CameraMode  m_cameraMode;
@@ -56,7 +59,7 @@ namespace game
     Ogre::Camera *  m_cam;
     Ogre::Viewport *m_viewport;
 
-    std::unique_ptr<ACar> m_car;
+    ACar &m_car;
   };
 }
 
