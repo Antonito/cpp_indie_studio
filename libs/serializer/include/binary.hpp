@@ -95,7 +95,7 @@ namespace nope
 	static void to_binary(buf_t &v, T i)
 	{
 	  // Get the value to send in big endian
-	  T toSend = host_to_net(i);
+	  T toSend = host_to_net<T>(i);
 	  // Buffer
 	  std::array<std::uint8_t, sizeof(T)> buf;
 
@@ -143,7 +143,7 @@ namespace nope
 	  // Get it from the buffer
 	  std::memcpy(&t, &buf[cursor], sizeof(T));
 	  // Convert it from big endian
-	  e = net_to_host(t);
+	  e = net_to_host<T>(t);
 	  // Increment cursor position
 	  cursor += sizeof(T);
 	}
