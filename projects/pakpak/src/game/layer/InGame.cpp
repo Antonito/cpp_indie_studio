@@ -32,16 +32,16 @@ namespace game
     switch (ke.key)
       {
       case OIS::KC_W:
-	m_player.car().move(1);
-	break;
-      case OIS::KC_S:
 	m_player.car().move(-1);
 	break;
+      case OIS::KC_S:
+	m_player.car().move(1);
+	break;
       case OIS::KC_A:
-	m_player.car().turn(1);
+	m_player.car().turn(2);
 	break;
       case OIS::KC_D:
-	m_player.car().turn(-1);
+	m_player.car().turn(-2);
 	break;
       default:
 	return false;

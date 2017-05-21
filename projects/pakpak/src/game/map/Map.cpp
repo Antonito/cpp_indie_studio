@@ -3,12 +3,12 @@
 namespace game
 {
   Map::Map(Ogre::SceneManager *sceneMgr)
-      : m_sceneMgr(sceneMgr), m_points(), m_map(nullptr)
+      : m_sceneMgr(sceneMgr), m_points(), m_map(nullptr), m_node(nullptr)
   {
   }
 
   Map::Map(Ogre::SceneManager *sceneMgr, std::string const &filename)
-      : m_sceneMgr(sceneMgr), m_points(), m_map(nullptr)
+      : m_sceneMgr(sceneMgr), m_points(), m_map(nullptr), m_node(nullptr)
   {
     this->loadFromFile(filename);
   }
@@ -105,5 +105,21 @@ namespace game
   void Map::unload()
   {
     m_points.clear();
+  }
+
+  Map::MapData::MapData() : points(), elements()
+  {
+  }
+
+  Map::MapData::Point::Point() : x(0.0), y(0.0), z(0.0)
+  {
+  }
+
+  Map::MapData::Quaternion::Quaternion() : x(0.0), y(0.0), z(0.0), w(0.0)
+  {
+  }
+
+  Map::MapData::Element::Element() : pos(), rot(), type(0)
+  {
   }
 }

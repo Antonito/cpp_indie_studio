@@ -46,7 +46,7 @@ namespace game
       : m_data(that.m_data), m_cameraMode(std::move(that.m_cameraMode)),
         m_layers(std::move(that.m_layers)),
         m_currentLayers(std::move(that.m_currentLayers)), m_cam(that.m_cam),
-        m_viewport(that.m_viewport), m_car(std::move(that.m_car))
+        m_viewport(that.m_viewport), m_car(that.m_car)
   {
     that.m_cam = nullptr;
     that.m_viewport = nullptr;

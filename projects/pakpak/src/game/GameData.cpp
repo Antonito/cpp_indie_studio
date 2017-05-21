@@ -8,8 +8,11 @@ namespace game
         m_players(), m_map(m_sceneMgr, "map/map.dat")
   {
     // todo: move in Map
+    m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
     m_sceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
-    m_sceneMgr->createLight("MainLight")->setPosition(20, 80, 50);
+    Ogre::Light *l = m_sceneMgr->createLight("MainLight");
+    l->setPosition(20, 80, 50);
+    l->setCastShadows(true);
   }
 
   GameData::~GameData()

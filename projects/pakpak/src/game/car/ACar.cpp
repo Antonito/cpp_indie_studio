@@ -60,18 +60,19 @@ namespace game
 	m_speed = m_speed < 0.0 ? -1 : 1;
       }
 
-    Ogre::Quaternion rot(Ogre::Radian(m_tryTurning * elapsedTime),
-                         Ogre::Vector3::UNIT_Y);
+    Ogre::Quaternion rot(
+        Ogre::Radian(Ogre::Real(m_tryTurning * -m_speed * elapsedTime)),
+        Ogre::Vector3::UNIT_Y);
 
     m_dir = rot * m_dir;
-    m_pos += 500 * m_speed * elapsedTime * m_dir;
+    m_pos += Ogre::Real(500 * m_speed * elapsedTime) * m_dir;
 
     m_node->setPosition(m_pos);
     m_carNode->setDirection(rot * Ogre::Vector3(0, 0, -1));
 
-    Ogre::Vector3 pos = m_dir * -500;
+    Ogre::Vector3 pos = m_dir * 500;
 
-    pos.y = m_pos.y + 100;
+    pos.y = m_pos.y + 250;
 
     m_camera->setPosition(pos);
     // m_camera->setPosition(Ogre::Vector3(0, 300, 500));
@@ -96,6 +97,7 @@ namespace game
     ss << "MainCarNode" << id;
 
     m_entity = sceneMgr->createEntity(mesh);
+    m_entity->setCastShadows(true);
     m_node = sceneMgr->getRootSceneNode()->createChildSceneNode(ss.str());
 
     m_node->setPosition(Ogre::Vector3(0, 0, 0));

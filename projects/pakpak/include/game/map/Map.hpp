@@ -28,14 +28,10 @@ namespace game
   private:
     struct MapData
     {
-      MapData()
-      {
-      }
+      MapData();
       struct Point
       {
-	Point()
-	{
-	}
+	Point();
 	// clang-format off
 	NOPE_SERIAL_MEMBER(
 	    float, x,
@@ -46,6 +42,7 @@ namespace game
 
       struct Quaternion
       {
+	Quaternion();
 	// clang-format off
 	NOPE_SERIAL_MEMBER(
 	    float, x,
@@ -57,6 +54,7 @@ namespace game
 
       struct Element
       {
+	Element();
 	// clang-format off
 	  NOPE_SERIAL_MEMBER(
 	      Point,        pos,
