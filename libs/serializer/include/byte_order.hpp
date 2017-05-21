@@ -101,9 +101,11 @@ namespace nope
       template <>
       struct net_to_host_impl<float, 32>
       {
-	static float net_to_host(std::int32_t t)
+	static float net_to_host(std::uint32_t t)
 	{
-	  return (static_cast<float>(ntohl(t)) / 0xFFFF);
+	  std::uint32_t i = ntohl(t);
+	  return (static_cast<float>(*reinterpret_cast<std::int32_t *>(i)) /
+	          0xFFFF);
 	}
       };
 
@@ -121,16 +123,18 @@ namespace nope
       template <>
       struct net_to_host_impl<double, 64>
       {
-	static double net_to_host(std::int64_t t)
+	static double net_to_host(std::uint64_t t)
 	{
-	  return (static_cast<double>(ntohll(t)) / 0xFFFFFFFF);
+	  std::uint64_t i = ntohll(t);
+	  return (static_cast<double>(*reinterpret_cast<std::int64_t *>(i)) /
+	          0xFFFFFFFF);
 	}
       };
     }
 
     // Call the right macro based on the type size
-    template <typename T>
-    T net_to_host(T val)
+    template <typename T, typename _T = decltype(host_to_net<T>(T()))>
+    T net_to_host(_T val)
     {
       return (detail::net_to_host_impl<T>::net_to_host(val));
     }
@@ -178,9 +182,11 @@ namespace nope
       template <>
       struct host_to_net_impl<float, 32>
       {
-	static std::int32_t host_to_net(float t)
+	static std::uint32_t host_to_net(float t)
 	{
-	  return (htonl(static_cast<std::int32_t>(t * 0xFFFF)));
+	  std::int32_t i = static_cast<std::int32_t>(t * 0xFFFF);
+
+	  return (htonl(*reinterpret_cast<std::uint32_t *>(&i)));
 	}
       };
 
@@ -198,16 +204,18 @@ namespace nope
       template <>
       struct host_to_net_impl<double, 64>
       {
-	static std::int64_t host_to_net(double t)
+	static std::uint64_t host_to_net(double t)
 	{
-	  return (htonll(static_cast<std::uint64_t>(t * 0xFFFFFFFF)));
+	  std::int64_t i = static_cast<std::int64_t>(t * 0xFFFFFFFF);
+
+	  return (htonll(*reinterpret_cast<std::uint64_t *>(&i)));
 	}
       };
     }
 
     // Call the right macro based on the type size
     template <typename T>
-    T host_to_net(T val)
+    auto host_to_net(T val)
     {
       return (detail::host_to_net_impl<T>::host_to_net(val));
     }

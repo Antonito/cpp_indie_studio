@@ -95,12 +95,15 @@ namespace nope
 	static void to_binary(buf_t &v, T i)
 	{
 	  // Get the value to send in big endian
-	  T toSend = host_to_net<T>(i);
+	  auto toSend = host_to_net<T>(i);
+
+	  using toSend_t = decltype(toSend);
+
 	  // Buffer
-	  std::array<std::uint8_t, sizeof(T)> buf;
+	  std::array<std::uint8_t, sizeof(toSend_t)> buf;
 
 	  // Copy the value into the buffer
-	  std::memcpy(buf.data(), &toSend, sizeof(T));
+	  std::memcpy(buf.data(), &toSend, sizeof(toSend_t));
 	  // Insert it
 	  v.insert(v.end(), buf.begin(), buf.end());
 	}
@@ -138,14 +141,15 @@ namespace nope
 	                       std::size_t &cursor)
 	{
 	  // Type to read
-	  T t;
+	  using toRead_t = decltype(host_to_net<T>(e));
+	  toRead_t t;
 
 	  // Get it from the buffer
-	  std::memcpy(&t, &buf[cursor], sizeof(T));
+	  std::memcpy(&t, &buf[cursor], sizeof(toRead_t));
 	  // Convert it from big endian
 	  e = net_to_host<T>(t);
 	  // Increment cursor position
-	  cursor += sizeof(T);
+	  cursor += sizeof(toRead_t);
 	}
       };
 
@@ -165,7 +169,7 @@ namespace nope
 	  // Copy length from buffer
 	  std::memcpy(&_l, &buf[cursor], sizeof(std::size_t));
 	  // Convert it from big endian
-	  len = net_to_host(_l);
+	  len = net_to_host<std::size_t>(_l);
 	  // Increment cursor position
 	  cursor += sizeof(std::size_t);
 
@@ -222,7 +226,7 @@ namespace nope
 	  uint32_t len;
 
 	  std::memcpy(&tmp, &v[cursor], sizeof(tmp));
-	  len = net_to_host(tmp);
+	  len = net_to_host<std::uint32_t>(tmp);
 	  cursor += sizeof(tmp);
 
 	  s.resize(len);
