@@ -68,7 +68,7 @@ namespace game
       default:
 	return false;
       }
-    return (false);
+    return (true);
   }
 
   bool InGame::mouseMoved(OIS::MouseEvent const &)

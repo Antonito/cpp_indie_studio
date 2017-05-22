@@ -16,11 +16,11 @@ namespace game
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
 
-    std::int32_t nbPlayer = 1;
+    std::size_t nbPlayer = 1;
 
     m_game.setPlayerNb(nbPlayer);
 
-    for (std::int32_t i = 0; i < nbPlayer; ++i)
+    for (std::size_t i = 0; i < nbPlayer; ++i)
       {
 	m_game[i].setCar(std::make_unique<EmptyCar>(m_game.sceneMgr(),
 	                                            Ogre::Vector3(0, 0, 0),

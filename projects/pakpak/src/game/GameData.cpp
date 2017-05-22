@@ -29,7 +29,7 @@ namespace game
     return (m_players[i]);
   }
 
-  void GameData::setPlayerNb(std::int32_t n)
+  void GameData::setPlayerNb(std::size_t n)
   {
     m_players.resize(n);
   }

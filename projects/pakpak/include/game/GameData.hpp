@@ -23,7 +23,7 @@ namespace game
     PlayerData &      operator[](std::size_t);
     PlayerData const &operator[](std::size_t) const;
 
-    void        setPlayerNb(std::int32_t);
+    void        setPlayerNb(std::size_t);
     std::size_t getPlayerNb() const;
 
     void update();

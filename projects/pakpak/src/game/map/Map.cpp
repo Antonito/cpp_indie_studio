@@ -42,7 +42,7 @@ namespace game
 
     m_points.clear();
     m_points.reserve(p.size());
-    for (std::int32_t i = 0; i < static_cast<std::int32_t>(p.size()); i += 2)
+    for (std::size_t i = 0; i < p.size(); i += 2)
       {
 	m_points.emplace_back(
 	    Ogre::Vector3(p[i].x, p[i].y, p[i].z),
@@ -51,7 +51,7 @@ namespace game
 
     std::int32_t pathLen = static_cast<std::int32_t>(filename.length());
 
-    while (pathLen >= 0 && filename[pathLen] != '/')
+    while (pathLen >= 0 && filename[static_cast<std::size_t>(pathLen)] != '/')
       {
 	--pathLen;
       }
@@ -72,10 +72,12 @@ namespace game
 
     stat(filename.c_str(), &fileStat);
 
-    Ogre::MemoryDataStream *memstream =
-        new Ogre::MemoryDataStream(filename, fileStat.st_size, true);
+    std::size_t size = static_cast<std::size_t>(fileStat.st_size);
 
-    std::fread(memstream->getPtr(), fileStat.st_size, 1, meshFile);
+    Ogre::MemoryDataStream *memstream =
+        new Ogre::MemoryDataStream(filename, size, true);
+
+    std::fread(memstream->getPtr(), size, 1, meshFile);
     std::fclose(meshFile);
 
     ss.str("");

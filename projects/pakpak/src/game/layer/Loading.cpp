@@ -24,7 +24,7 @@ namespace game
   {
     using milliseconds = std::chrono::milliseconds;
 
-    std::size_t ms =
+    std::int64_t ms =
         std::chrono::duration_cast<milliseconds>(clock_t::now() - m_start)
             .count();
 

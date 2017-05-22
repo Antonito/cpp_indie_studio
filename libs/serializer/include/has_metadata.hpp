@@ -22,9 +22,9 @@ namespace nope
     class has_metadata
     {
       template <typename U>
-      constexpr static std::true_type deduce(decltype(U::m_metadata)*);
+      static std::true_type deduce(decltype(U::m_metadata)*);
       template <typename>
-      constexpr static std::false_type deduce(...);
+      static std::false_type deduce(...);
     public:
       constexpr static bool result = decltype(deduce<typename std::remove_reference<T>::type>(nullptr))::value;
     };
