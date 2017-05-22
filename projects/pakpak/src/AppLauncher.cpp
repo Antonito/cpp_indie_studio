@@ -20,18 +20,19 @@ namespace core
 // Create the Root
 
 #ifdef DEBUG
-    m_root =
-        new Ogre::Root("conf/plugins_d.cfg", "conf/ogre_d.cfg", "Ogre.log");
+    m_root = new Ogre::Root("../indie_resource/conf/plugins_d.cfg",
+                            "../indie_resource/conf/ogre_d.cfg", "Ogre.log");
 #else
-    m_root = new Ogre::Root("conf/plugins.cfg", "conf/ogre.cfg", "Ogre.log");
+    m_root = new Ogre::Root("../indie_resource/conf/plugins.cfg",
+                            "../indie_resource/conf/ogre.cfg", "Ogre.log");
 #endif // !DEBUG
 
     // Load Ressource config file
     Ogre::ConfigFile configFile;
 #ifdef DEBUG
-    configFile.load("conf/resources_d.cfg");
+    configFile.load("../indie_resource/conf/resources_d.cfg");
 #else
-    configFile.load("conf/resources.cfg");
+    configFile.load("../indie_resource/conf/resources.cfg");
 #endif // !DEBUG
 
     // Load all the Ressources
