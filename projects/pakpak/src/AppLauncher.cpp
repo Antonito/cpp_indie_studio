@@ -20,11 +20,25 @@ namespace core
 // Create the Root
 
 #ifdef DEBUG
-    m_root = new Ogre::Root("../indie_resource/conf/plugins_d.cfg",
-                            "../indie_resource/conf/ogre_d.cfg", "Ogre.log");
+#ifdef _WIN32
+    m_root = new Ogre::Root("../indie_resource/conf/windows/plugins_d.cfg",
+                            "../indie_resource/conf/windows/ogre_d.cfg",
+                            "Ogre.log");
 #else
-    m_root = new Ogre::Root("../indie_resource/conf/plugins.cfg",
-                            "../indie_resource/conf/ogre.cfg", "Ogre.log");
+    m_root =
+        new Ogre::Root("../indie_resource/conf/linux/plugins_d.cfg",
+                       "../indie_resource/conf/linux/ogre_d.cfg", "Ogre.log");
+#endif
+#else
+#ifdef _WIN32
+    m_root =
+        new Ogre::Root("../indie_resource/conf/windows/plugins.cfg",
+                       "../indie_resource/conf/windows/ogre.cfg", "Ogre.log");
+#else
+    m_root =
+        new Ogre::Root("../indie_resource/conf/linux/plugins.cfg",
+                       "../indie_resource/conf/linux/ogre.cfg", "Ogre.log");
+#endif
 #endif // !DEBUG
 
     // Load Ressource config file
