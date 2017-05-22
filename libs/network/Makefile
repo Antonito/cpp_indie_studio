@@ -29,7 +29,8 @@ HEADER=		network_stdafx.hpp
 # Project's files
 
 SRC_FILES=	ASocket.cpp		\
-		TCPSocket.cpp
+		TCPSocket.cpp		\
+		UDPSocket.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 
