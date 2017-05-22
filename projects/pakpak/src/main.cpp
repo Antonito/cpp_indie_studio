@@ -6,12 +6,12 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT)
 
 #else
 
-int main(int , char **)
+int main(int, char **)
 
 #endif
 
 {
-
+  nope::log::Logger::start("nope.log");
   core::AppLauncher app;
 
   try

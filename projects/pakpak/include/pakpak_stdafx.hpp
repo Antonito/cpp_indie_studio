@@ -40,14 +40,52 @@
 #endif // !_WIN32
 
 //
+// Utils
+//
+#include <cassert>
+
+//
 // Project headers
 //
-#include "AContext.hpp"
 #include "AppLauncher.hpp"
+#include "binary.hpp"
 #include "ContextGame.hpp"
 #include "ContextMenu.hpp"
 #include "ContextSplash.hpp"
 #include "GameState.hpp"
 #include "InputListener.hpp"
+
+// Game
+#include "AContext.hpp"
+#include "CameraMode.hpp"
+#include "GameData.hpp"
+#include "LocalPlayer.hpp"
+#include "PlayerData.hpp"
+
+// Game.Car
+#include "ACar.hpp"
+#include "EmptyCar.hpp"
+
+// Game.Layer
+#include "ALayer.hpp"
+#include "Chat.hpp"
+#include "GameGUI.hpp"
+#include "InGame.hpp"
+#include "Loading.hpp"
+#include "Menu.hpp"
+#include "PostGame.hpp"
+#include "PreGame.hpp"
+#include "Score.hpp"
+#include "SpecGUI.hpp"
+#include "Spectator.hpp"
+
+// Game.Map
+#include "Map.hpp"
+#include "PathPoint.hpp"
+
+//
+// Logger
+//
+#include "Logger.hpp"
 
 #endif // !PAKPAK_STDAFX_HPP_

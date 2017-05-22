@@ -22,7 +22,7 @@ namespace menu
 
   core::GameState ContextMenu::update()
   {
-    return (core::GameState::Menu);
+    return (core::GameState::InGame);
   }
 
   void ContextMenu::display()

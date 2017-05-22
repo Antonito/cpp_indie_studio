@@ -14,6 +14,18 @@ namespace core
     Quit,
     NbGameState
   };
+
+  enum class InGameState : std::int8_t
+  {
+    None = -1,
+    Menu,
+    Chat,
+    Game,
+    Start,
+    End,
+    Spectator,
+    NbGameState
+  };
 }
 
 #endif // !GAMESTATE_HPP_

@@ -13,6 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\game">
+      <UniqueIdentifier>{a0b35e9b-6d1f-4ca1-93ea-795128bffa14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\layer">
+      <UniqueIdentifier>{08e29539-4762-42a3-90ea-9a90ab0a9cc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\car">
+      <UniqueIdentifier>{0c66f57e-4502-406f-abd0-31a481722668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game">
+      <UniqueIdentifier>{fbdee79a-a701-4dec-b8ed-8135ac58d43e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\layer">
+      <UniqueIdentifier>{cec8186a-36d4-4cf0-929f-81dc21cf1c3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\car">
+      <UniqueIdentifier>{df02045e-e463-403e-a8b1-97d42eb154be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\map">
+      <UniqueIdentifier>{a589726b-bc2a-481f-a635-583ad24f5c60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\map">
+      <UniqueIdentifier>{7bc6dffe-5d7b-4c02-82fc-23131be54ed4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">
@@ -39,15 +63,66 @@
     <ClCompile Include="src\ContextGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\GameData.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\LocalPlayer.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\PlayerData.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\ALayer.cpp">
+      <Filter>Source Files\game\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\Chat.cpp">
+      <Filter>Source Files\game\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\GameGUI.cpp">
+      <Filter>Source Files\game\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\InGame.cpp">
+      <Filter>Source Files\game\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\Loading.cpp">
+      <Filter>Source Files\game\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\Menu.cpp">
+      <Filter>Source Files\game\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\PostGame.cpp">
+      <Filter>Source Files\game\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\PreGame.cpp">
+      <Filter>Source Files\game\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\Score.cpp">
+      <Filter>Source Files\game\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\SpecGUI.cpp">
+      <Filter>Source Files\game\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\Spectator.cpp">
+      <Filter>Source Files\game\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\car\ACar.cpp">
+      <Filter>Source Files\game\car</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\car\EmptyCar.cpp">
+      <Filter>Source Files\game\car</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\map\Map.cpp">
+      <Filter>Source Files\game\map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\map\PathPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\pakpak_stdafx.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Entity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ContextSplash.hpp">
@@ -79,6 +154,75 @@
     </ClInclude>
     <ClInclude Include="include\InputListener.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IEventHandler.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\CameraMode.hpp">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\GameData.hpp">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\LocalPlayer.hpp">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\PlayerData.hpp">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\ALayer.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\Chat.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\GameGUI.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\GameLayer.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\ILayer.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\ILayerStack.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\InGame.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\Loading.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\Menu.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\PostGame.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\PreGame.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\Score.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\SpecGUI.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\Spectator.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\car\ACar.hpp">
+      <Filter>Header Files\game\car</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\car\EmptyCar.hpp">
+      <Filter>Header Files\game\car</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\map\Map.hpp">
+      <Filter>Header Files\game\map</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\map\PathPoint.hpp">
+      <Filter>Header Files\game\map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

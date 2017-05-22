@@ -1,19 +1,12 @@
 #ifndef ACONTEXT_HPP_
 #define ACONTEXT_HPP_
 
+#include <OGRE/OgreRenderWindow.h>
 #include "IContext.hpp"
-
-// Forward declaration for faster compilation
-namespace Ogre
-{
-  class RenderWindow;
-}
+#include "InputListener.hpp"
 
 namespace core
 {
-  // Forward declaration for faster compilation
-  class InputListener;
-
   class AContext : public IContext
   {
   public:

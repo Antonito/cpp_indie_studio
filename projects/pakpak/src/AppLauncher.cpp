@@ -1,11 +1,11 @@
 #include "pakpak_stdafx.hpp"
+#include "AppLauncher.hpp"
 
 namespace core
 {
   AppLauncher::AppLauncher()
-      : m_root(nullptr), m_window(nullptr), m_sceneMgr(nullptr),
-        m_camera(nullptr), m_inputListener(nullptr), m_contexts(),
-        m_currentContext(nullptr), m_gameState(GameState::None)
+      : m_root(nullptr), m_window(nullptr), m_inputListener(nullptr),
+        m_contexts(), m_currentContext(nullptr), m_gameState(GameState::None)
   {
   }
 
@@ -166,7 +166,7 @@ namespace core
   void AppLauncher::createFrameListener()
   {
     // Create and add a Framelistener
-    m_inputListener = new InputListener(m_window, m_camera);
+    m_inputListener = new InputListener(m_window);
     m_root->addFrameListener(m_inputListener);
   }
 }
