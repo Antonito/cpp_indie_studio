@@ -26,6 +26,8 @@ namespace game
     virtual void enable();
     virtual void disable();
 
+    void updateViewPort();
+
     virtual core::GameState update();
     virtual void            display();
 

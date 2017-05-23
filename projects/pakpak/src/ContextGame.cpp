@@ -16,16 +16,47 @@ namespace game
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
 
-    std::size_t nbPlayer = 1;
+    std::size_t nbPlayer = 6;
 
     m_game.setPlayerNb(nbPlayer);
+
+    std::size_t nbLocalPlayer = 3;
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
 	m_game[i].setCar(std::make_unique<EmptyCar>(m_game.sceneMgr(),
 	                                            Ogre::Vector3(0, 0, 0),
 	                                            Ogre::Vector3(0, 0, -1)));
-	m_players.emplace_back(m_win, m_game, m_game[i]);
+      }
+
+    for (std::size_t i = 0; i < nbLocalPlayer; ++i)
+      {
+	m_players.emplace_back(m_win, m_game, &m_game[i], i);
+      }
+
+    updateViewPort();
+  }
+
+  void ContextGame::updateViewPort()
+  {
+
+    int size = static_cast<int>(m_players.size());
+
+    for (std::size_t i = 0; i < static_cast<std::size_t>(size); ++i)
+      {
+	m_players[i].setViewPort(
+	    static_cast<Ogre::Real>(
+	        static_cast<double>((i % 2) * ((size - 1) / 2)) * 0.5),
+	    static_cast<Ogre::Real>(
+	        static_cast<double>(
+	            (((size - 1) / 2) * i / 2 + (1 - (size - 1) / 2) * i)) *
+	        0.5),
+	    static_cast<Ogre::Real>(
+	        1 -
+	        0.5 * static_cast<double>((((size - 1) / 2) * (1 - (i / 2)) +
+	                                   (i / 2) * (size / 4)))),
+	    static_cast<Ogre::Real>(
+	        1 - 0.5 * static_cast<double>((size + 1) / 3)));
       }
   }
 
@@ -52,10 +83,15 @@ namespace game
 	m_input->shutdown();
       }
 
+    std::size_t i = 0;
     for (LocalPlayer &p : m_players)
       {
+	std::cout << "		Pressed for player " << i << std::endl;
+
 	p.keyPressed(ke);
+	++i;
       }
+    std::cout << std::endl;
     return (true);
   }
 
