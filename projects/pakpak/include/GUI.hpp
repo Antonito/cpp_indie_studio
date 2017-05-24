@@ -2,13 +2,13 @@
 // Created by duhieu_b on 23/05/17.
 //
 
-#ifndef CPP_INDIE_STUDIO_GUI_HPP
-#define CPP_INDIE_STUDIO_GUI_HPP
+#ifndef CPP_INDIE_STUDIO_GUI_HPP_
+#define CPP_INDIE_STUDIO_GUI_HPP_
 
 #include <OGRE/Ogre.h>
 #include <iostream>
 #include <glm/glm.hpp>
-//#include <CEGUI/Cegui.h>
+#include <CEGUI/Cegui.h>
 
 namespace core
 {
