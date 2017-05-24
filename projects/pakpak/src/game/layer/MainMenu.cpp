@@ -36,19 +36,19 @@ void core::MainMenu::initGUI()
   m_gui.setFont("");
   m_gui.loadSheme("");
 
-  CEGUI::PushButton *quitButton = static_cast<CEGUI::PushButton *>(
+  CEGUI::Window *quitButton = static_cast<CEGUI::PushButton *>(
       m_gui.createButton("", glm::vec4(0.3f, 0.3f, 0.1f, 0.05f),
                          glm::vec4(0.0), "ExitButton"));
   quitButton->setText("QUIT");
-  quitButton->suscribeEvent(
+  quitButton->subscribeEvent(
       CEGUI::PushButton::EventClicked,
       CEGUI::Event::Subscriber(&MainMenu::onExitClick, this));
 
-  CEGUI::PlayButton *playButton = static_cast<CEGUI::PushButton *>(
+  CEGUI::Window *playButton = static_cast<CEGUI::PushButton *>(
       m_gui.createButton("", glm::vec4(0.7f, 0.7f, 0.1f, 0.05f),
                          glm::vec4(0.0), "ExitButton"));
   quitButton->setText("PLAY");
-  quitButton->suscribeEvent(
+  quitButton->subscribeEvent(
       CEGUI::PushButton::EventClicked,
       CEGUI::Event::Subscriber(&MainMenu::onPlayClick, this));
 }

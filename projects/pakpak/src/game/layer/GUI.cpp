@@ -23,9 +23,9 @@ void core::GUI::init(std::string const &p_path)
     CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
     CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
     CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
-    m_context = CEGUI::System::getSingleton().getDefaultGUIContext();
-    m_root = CEGUI::WindowManage::getSingleton().createWindow("DefaultWindow", "root");
-    m_context->setRootWindow();
+    m_context = &CEGUI::System::getSingleton().getDefaultGUIContext();
+    m_root = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "root");
+    m_context->setRootWindow(m_root);
 }
 
 void core::GUI::destroy()
@@ -37,7 +37,7 @@ void core::GUI::destroy()
 void core::GUI::setFont(std::string const &p_font)
 {
     CEGUI::FontManager::getSingleton().createFromFile(p_font + ".font");
-    m_context.setDefaultFront(p_font);
+    m_context->setDefaultFont(p_font);
 }
 
 CEGUI::Window *core::GUI::createButton(CEGUI::Window *p_win,
@@ -68,7 +68,7 @@ void core::GUI::setPos(CEGUI::Window *p_win, glm::vec4 const &p_dim1, glm::vec4 
     p_win->setPosition(CEGUI::UVector2(CEGUI::UDim(p_dim1.x, p_dim2.x),
                                         CEGUI::UDim(p_dim1.y, p_dim2.y)));
     p_win->setSize(CEGUI::USize(CEGUI::UDim(p_dim1.z, p_dim2.z),
-                                CEGUI::UDIM(p_dim1.w, p_dim2.w)));
+                                CEGUI::UDim(p_dim1.w, p_dim2.w)));
 }
 
 CEGUI::OgreRenderer *core::GUI::getRender() const
@@ -89,7 +89,7 @@ void core::GUI::draw()
 {
     m_renderer->beginRendering();
     m_context->draw();
-    m_renderer->endRedering();
+    m_renderer->endRendering();
 }
 
 core::GUI::GUI() : m_renderer(nullptr), m_root(nullptr), m_context(nullptr)

@@ -9,6 +9,7 @@
 #include <OGRE/Ogre.h>
 #include <glm/glm.hpp>
 #include <CEGUI/CEGUI.h>
+#include <CEGUI/RendererModules/Ogre/Renderer.h>
 
 namespace core
 {
@@ -47,4 +48,4 @@ namespace core
   };
 }
 
-#endif
+#endif //CPP_INDIE_STUDIO_GUI_HPP_
