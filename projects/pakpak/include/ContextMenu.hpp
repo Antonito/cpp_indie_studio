@@ -2,6 +2,9 @@
 #define CONTEXTMENU_HPP_
 
 #include "AContext.hpp"
+#include "GUI.hpp"
+#include "IMenuLayer.hpp"
+#include "FastStack.hpp"
 
 // Forward declaration for faster compilation
 namespace Ogre
@@ -30,8 +33,9 @@ namespace menu
     virtual void            display();
 
   private:
-    Ogre::Viewport *m_viewport;
-    Ogre::Camera *  m_camera;
+    Ogre::Viewport *              m_viewport;
+    Ogre::Camera *                m_camera;
+    core::FastStack<core::IMenuLayer *> m_currentGUI;
   };
 }
 
