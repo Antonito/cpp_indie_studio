@@ -37,6 +37,8 @@ namespace core
         void setPos(CEGUI::Window *, CEGUI::UDim const &,
                             CEGUI::UDim const &);
 
+        void loadSheme(std::string const &);
+
         CEGUI::OgreRenderer *getRender() const;
 
         CEGUI::GUIContext *getContext() const;

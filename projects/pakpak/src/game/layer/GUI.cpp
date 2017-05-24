@@ -72,6 +72,8 @@ void core::GUI::setPos(CEGUI::Window *p_win, glm::vec4 const &p_dim1, glm::vec4 
 
 }
 
+
+
 CEGUI::OgreRenderer *core::GUI::getRender() const
 {
     return m_renderer;
@@ -96,4 +98,9 @@ void core::GUI::draw()
 
 core::GUI::GUI() : m_renderer(nullptr), m_root(nullptr), m_context(nullptr)
 {
+}
+
+void core::GUI::loadSheme(std::string const &p_shem)
+{
+    CEGUI::SchemeManager::getSingleton().createFromFile(p_shem);
 }

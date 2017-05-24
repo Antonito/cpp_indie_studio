@@ -28,6 +28,8 @@ namespace core
         void build();
 
     private:
+        void initGUI();
+
         GUI m_gui;
         //Camera m_camera;
         //Window m_window;
