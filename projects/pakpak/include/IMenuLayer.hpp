@@ -7,7 +7,6 @@
 
 #include <CEGUI/CEGUI.h>
 #include <iostream>
-#include <glm>
 #include "GameState.hpp"
 
 namespace core

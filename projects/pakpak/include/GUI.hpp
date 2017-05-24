@@ -2,11 +2,11 @@
 // Created by duhieu_b on 23/05/17.
 //
 
-#ifndef CPP_INDIE_STUDIO_GUI_HPP_
-#define CPP_INDIE_STUDIO_GUI_HPP_
+#ifndef CPP_INDIE_STUDIO_MGUI_HPP_
+#define CPP_INDIE_STUDIO_MGUI_HPP_
 
-#include <OGRE/Ogre.h>
 #include <iostream>
+#include <OGRE/Ogre.h>
 #include <glm/glm.hpp>
 #include <CEGUI/CEGUI.h>
 
@@ -46,3 +46,5 @@ namespace core
     CEGUI::GUIContext *  m_context;
   };
 }
+
+#endif
