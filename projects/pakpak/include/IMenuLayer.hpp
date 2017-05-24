@@ -5,7 +5,7 @@
 #ifndef CPP_INDIE_STUDIO_IMENULAYER_HPP_
 #define CPP_INDIE_STUDIO_IMENULAYER_HPP_
 
-#include <CEGUI/cegui.h>
+#include <CEGUI/CEGUI.h>
 #include <iostream>
 #include <glm>
 #include "GameState.hpp"

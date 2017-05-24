@@ -8,7 +8,7 @@
 #include <OGRE/Ogre.h>
 #include <iostream>
 #include <glm/glm.hpp>
-#include <CEGUI/Cegui.h>
+#include <CEGUI/CEGUI.h>
 
 namespace core
 {
