@@ -33,9 +33,9 @@ namespace menu
     virtual void            display();
 
   private:
-    Ogre::Viewport *              m_viewport;
-    Ogre::Camera *                m_camera;
-    core::FastStack<core::IMenuLayer *> m_currentGUI;
+    Ogre::Viewport *                    m_viewport;
+    Ogre::Camera *                      m_camera;
+    core::FastStack<core::IMenuLayer *> m_gui;
   };
 }
 

@@ -7,45 +7,42 @@
 
 #include <OGRE/Ogre.h>
 #include <iostream>
+#include <glm/glm.hpp>
 //#include <CEGUI/Cegui.h>
 
 namespace core
 {
-    class GUI
-    {
-    public:
-        ~GUI();
-        GUI();
-        void init(std::string const &);
+  class GUI
+  {
+  public:
+    ~GUI();
+    GUI();
+    void init(std::string const &);
 
-        void destroy();
+    void destroy();
 
-        void draw();
+    void draw();
 
-        void setFont(std::string const &);
+    void setFont(std::string const &);
 
-        CEGUI::Window *createButton(CEGUI::Window *, std::string const &,
-                                            CEGUI::UDim const &,
-                                            CEGUI::UDim const &,
-                                            std::string const &);
+    CEGUI::Window *createButton(CEGUI::Window *, std::string const &,
+                                glm::vec4 const &, glm::vec4 const &,
+                                std::string const &);
 
-        CEGUI::Window *createButton(std::string const &,
-                                            CEGUI::UDim const &,
-                                            CEGUI::UDim const &,
-                                            std::string const &);
+    CEGUI::Window *createButton(std::string const &, glm::vec4 const &,
+                                glm::vec4 const &, std::string const &);
 
-        void setPos(CEGUI::Window *, CEGUI::UDim const &,
-                            CEGUI::UDim const &);
+    void setPos(CEGUI::Window *, glm::vec4 const &, glm::vec4 const &);
 
-        void loadSheme(std::string const &);
+    void loadSheme(std::string const &);
 
-        CEGUI::OgreRenderer *getRender() const;
+    CEGUI::OgreRenderer *getRender() const;
 
-        CEGUI::GUIContext *getContext() const;
+    CEGUI::GUIContext *getContext() const;
 
-    private:
-        CEGUI::OgreRenderer *m_renderer;
-        CEGUI::Window *m_root;
-        CEGUI::GUIContext *m_context;
-    };
+  private:
+    CEGUI::OgreRenderer *m_renderer;
+    CEGUI::Window *      m_root;
+    CEGUI::GUIContext *  m_context;
+  };
 }

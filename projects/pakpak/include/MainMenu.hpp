@@ -10,31 +10,30 @@
 
 namespace core
 {
-    class MainMenu : public IMenuLayer
-    {
-    public:
-        GameState changeScreen() const;
+  class MainMenu : public IMenuLayer
+  {
+  public:
+    void draw();
 
-        void draw();
+    void entry();
 
-        void entry();
+    void exit();
 
-        void exit();
+    void destroy();
 
-        void destroy();
+    GameState update() const;
 
-        void update();
+    void build();
 
-        void build();
-
-    private:
-        void initGUI();
-
-        GUI m_gui;
-        //Camera m_camera;
-        //Window m_window;
-    };
+  private:
+    void      initGUI();
+    bool      onExitClick(CEGUI::EventArgs const &);
+    bool      onPlayClick(CEGUI::EventArgs const &);
+    GUI       m_gui;
+    GameState m_curState;
+    // Camera m_camera;
+    // Window m_window;
+  };
 }
 
-
-#endif //CPP_INDIE_STUDIO_MAINMENU_HPP_
+#endif // CPP_INDIE_STUDIO_MAINMENU_HPP_

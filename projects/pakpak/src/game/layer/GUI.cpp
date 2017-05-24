@@ -69,10 +69,7 @@ void core::GUI::setPos(CEGUI::Window *p_win, glm::vec4 const &p_dim1, glm::vec4 
                                         CEGUI::UDim(p_dim1.y, p_dim2.y)));
     p_win->setSize(CEGUI::USize(CEGUI::UDim(p_dim1.z, p_dim2.z),
                                 CEGUI::UDIM(p_dim1.w, p_dim2.w)));
-
 }
-
-
 
 CEGUI::OgreRenderer *core::GUI::getRender() const
 {
@@ -86,7 +83,6 @@ CEGUI::GUIContext *core::GUI::getContext() const
 
 core::GUI::~GUI()
 {
-    destroy();
 }
 
 void core::GUI::draw()
