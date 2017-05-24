@@ -9,6 +9,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <CEGUI/CEGUI.h>
+#include <CEGUI/RendererModules/Ogre/Renderer.h>
 
 namespace core
 {
@@ -46,3 +47,5 @@ namespace core
     CEGUI::GUIContext *  m_context;
   };
 }
+
+#endif //CPP_INDIE_STUDIO_GUI_HPP_
