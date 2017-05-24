@@ -7,10 +7,6 @@ namespace game
       : m_data(p), m_cameraMode(CameraMode::Top), m_layers(),
         m_currentLayers(), m_cam(nullptr), m_viewport(nullptr)
   {
-    if (p == nullptr)
-      {
-	std::cout << " DAAAAAAAAAFUUUUUUUUUUUQQQQQQQQQ" << std::endl;
-      }
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
         std::make_unique<Loading>(g, *this);
     m_layers[static_cast<std::size_t>(GameLayer::PreGame)] =
@@ -67,6 +63,8 @@ namespace game
     std::cout << "left : " << left << ", top : " << top
               << ", width : " << width << ", height : " << height << std::endl;
     m_viewport->setDimensions(left, top, width, height);
+    m_cam->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
+                          Ogre::Real(m_viewport->getActualHeight()));
   }
 
   bool LocalPlayer::keyPressed(OIS::KeyEvent const &ke)
@@ -145,8 +143,6 @@ namespace game
 
   ACar &LocalPlayer::car()
   {
-    std::cout << this << std::endl;
-    std::cout << m_data << std::endl;
     return (m_data->car());
   }
 

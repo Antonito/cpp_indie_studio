@@ -31,7 +31,8 @@ namespace game
 
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
-	m_players.emplace_back(m_win, m_game, &m_game[i], i);
+	m_players.emplace_back(
+	    std::make_unique<LocalPlayer>(m_win, m_game, &m_game[i], i));
       }
 
     updateViewPort();
@@ -44,7 +45,7 @@ namespace game
 
     for (std::size_t i = 0; i < static_cast<std::size_t>(size); ++i)
       {
-	m_players[i].setViewPort(
+	m_players[i]->setViewPort(
 	    static_cast<Ogre::Real>(
 	        static_cast<double>((i % 2) * ((size - 1) / 2)) * 0.5),
 	    static_cast<Ogre::Real>(
@@ -84,11 +85,11 @@ namespace game
       }
 
     std::size_t i = 0;
-    for (LocalPlayer &p : m_players)
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
 	std::cout << "		Pressed for player " << i << std::endl;
 
-	p.keyPressed(ke);
+	p->keyPressed(ke);
 	++i;
       }
     std::cout << std::endl;
@@ -97,18 +98,18 @@ namespace game
 
   bool ContextGame::keyReleased(OIS::KeyEvent const &ke)
   {
-    for (LocalPlayer &p : m_players)
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
-	p.keyReleased(ke);
+	p->keyReleased(ke);
       }
     return (true);
   }
 
   bool ContextGame::mouseMoved(OIS::MouseEvent const &me)
   {
-    for (LocalPlayer &p : m_players)
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
-	p.mouseMoved(me);
+	p->mouseMoved(me);
       }
     return (true);
   }
@@ -116,9 +117,9 @@ namespace game
   bool ContextGame::mousePressed(OIS::MouseEvent const &me,
                                  OIS::MouseButtonID     id)
   {
-    for (LocalPlayer &p : m_players)
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
-	p.mousePressed(me, id);
+	p->mousePressed(me, id);
       }
     return (true);
   }
@@ -126,9 +127,9 @@ namespace game
   bool ContextGame::mouseReleased(OIS::MouseEvent const &me,
                                   OIS::MouseButtonID     id)
   {
-    for (LocalPlayer &p : m_players)
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
-	p.mouseReleased(me, id);
+	p->mouseReleased(me, id);
       }
     return (true);
   }
