@@ -49,8 +49,8 @@ void core::MainMenu::initGUI()
   CEGUI::Window *playButton = static_cast<CEGUI::PushButton *>(
       m_gui.createButton("", glm::vec4(0.7f, 0.7f, 0.1f, 0.05f),
                          glm::vec4(0.0), "ExitButton"));
-  quitButton->setText("PLAY");
-  quitButton->subscribeEvent(
+  playButton->setText("PLAY");
+  playButton->subscribeEvent(
       CEGUI::PushButton::EventClicked,
       CEGUI::Event::Subscriber(&MainMenu::onPlayClick, this));
 }
