@@ -2,6 +2,7 @@
 #define CONTEXTGAME_HPP_
 
 #include <vector>
+#include <memory>
 #include <OGRE/OgreRenderWindow.h>
 #include <OIS/OISMouse.h>
 #include <OIS/OISKeyboard.h>
@@ -26,6 +27,8 @@ namespace game
     virtual void enable();
     virtual void disable();
 
+    void updateViewPort();
+
     virtual core::GameState update();
     virtual void            display();
 
@@ -39,8 +42,8 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
-    GameData                 m_game;
-    std::vector<LocalPlayer> m_players;
+    GameData                                  m_game;
+    std::vector<std::unique_ptr<LocalPlayer>> m_players;
   };
 }
 

@@ -10,7 +10,7 @@ namespace splash
         m_sceneMgr(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Splash scene manager")),
         // Create the entity
-        m_entity(m_sceneMgr->createEntity("ogrehead.mesh")),
+        m_entity(m_sceneMgr->createEntity("Jeep_default.mesh")),
         // Create the node
         m_node(m_sceneMgr->getRootSceneNode()->createChildSceneNode()),
         // Create the main light
