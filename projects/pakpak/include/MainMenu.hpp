@@ -14,11 +14,8 @@ namespace core
   {
   public:
     void draw();
-
     void entry();
-
     void exit();
-
     void destroy();
 
     GameState update() const;
@@ -26,13 +23,13 @@ namespace core
     void build();
 
   private:
-    void      initGUI();
-    bool      onExitClick(CEGUI::EventArgs const &);
-    bool      onPlayClick(CEGUI::EventArgs const &);
-    GUI       m_gui;
-    GameState m_curState;
-    // Camera m_camera;
-    // Window m_window;
+    void initGUI();
+    bool onExitClick(CEGUI::EventArgs const &);
+    bool onPlayClick(CEGUI::EventArgs const &);
+
+    GUI          m_gui;
+    GameState    m_curState;
+    Ogre::Camera m_camera;
   };
 }
 

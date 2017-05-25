@@ -7,7 +7,9 @@ void core::MainMenu::draw()
 
 void core::MainMenu::entry()
 {
-  // TODO : INIT Camera
+  m_camera.setPosition(Ogre::Vector3(0, 0, 0));
+  m_camera.lookAt(Ogre::Vector3(0, 0, 0));
+  m_camera.setNearClipDistance(2);
 
   initGUI();
 }

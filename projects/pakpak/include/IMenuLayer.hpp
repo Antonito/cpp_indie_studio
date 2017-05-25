@@ -26,7 +26,7 @@ namespace core
 
     virtual void destroy() = 0;
 
-    virtual void update() = 0;
+    virtual GameState update() const = 0;
 
     virtual void build() = 0;
   };
