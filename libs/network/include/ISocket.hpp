@@ -24,7 +24,8 @@ namespace network
     virtual bool closeConnection() = 0;
 
   protected:
-    virtual bool connectToHost() = 0;
+    virtual bool connectToHost(std::int32_t const socktype,
+                               std::int32_t const proto) = 0;
     virtual void hostConnection() = 0;
   };
 }

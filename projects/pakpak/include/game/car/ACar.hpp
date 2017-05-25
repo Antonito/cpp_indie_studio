@@ -10,9 +10,7 @@ namespace game
   class ACar
   {
   public:
-    ACar();
-    ACar(Ogre::Vector3 pos, Ogre::Vector3 dir, Ogre::Vector3 mov,
-         double speed);
+    ACar() = delete;
     ACar(ACar const &) = delete;
     ACar(ACar &&) = delete;
     virtual ~ACar();
@@ -20,25 +18,34 @@ namespace game
     ACar &operator=(ACar const &) = delete;
     ACar &operator=(ACar &&) = delete;
 
-    virtual void create(GameData &) = 0;
+    Ogre::Vector3 const &position() const;
+    Ogre::Vector3 const &direction() const;
+    Ogre::Vector3 const &movement() const;
+    double               speed() const;
 
-    virtual Ogre::Vector3 const &position() const = 0;
-    virtual Ogre::Vector3 const &direction() const = 0;
-    virtual Ogre::Vector3 const &movement() const = 0;
-    virtual double const &       speed() const = 0;
+    void move(double);
+    void turn(double);
 
-    virtual void position(Ogre::Vector3 const &) = 0;
-    virtual void direction(Ogre::Vector3 const &) = 0;
-    virtual void movement(Ogre::Vector3 const &) = 0;
-    virtual void speed(double) = 0;
+    void update(double);
+
+    Ogre::Camera *getCamera() const;
 
   protected:
-    Ogre::Vector3    m_pos;
-    Ogre::Vector3    m_dir;
-    Ogre::Vector3    m_mov;
-    double           m_speed;
+    ACar(Ogre::SceneManager *sceneMgr, std::string const &mesh,
+         Ogre::Vector3 const &pos, Ogre::Vector3 const &dir);
+
+    Ogre::Vector3 m_pos;
+    Ogre::Vector3 m_dir;
+    Ogre::Vector3 m_mov;
+    double        m_speed;
+
+    double m_tryMoving;
+    double m_tryTurning;
+
     Ogre::SceneNode *m_node;
+    Ogre::SceneNode *m_carNode;
     Ogre::Entity *   m_entity;
+    Ogre::Camera *   m_camera;
   };
 }
 

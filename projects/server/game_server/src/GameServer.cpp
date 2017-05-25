@@ -11,9 +11,9 @@ GameServer::GameServer(std::string const & connectManagerIp,
           m_gameServerPort, static_cast<std::uint32_t>(m_maxClients),
           network::ASocket::SocketType::BLOCKING), // TODO: Non-blocking ?
       m_connectSrv(),
-      m_clientList(), m_tokenList()
+      m_gameSrvTCP(), m_gameSrvUDP(), m_clientList(), m_tokenList()
 {
-  std::ifstream licenceFile(".licence");
+  std::ifstream licenceFile(".license");
 
   if (!licenceFile.is_open())
     {
@@ -100,7 +100,9 @@ bool GameServer::run()
       if (m_gameSock.openConnection())
 	{
 	  nope::log::Log(Info) << "Server started";
-	  m_connectSrv = std::thread(&GameServer::acceptLoop, this);
+	  m_connectSrv = std::thread(&GameServer::connectManagerCom, this);
+	  m_gameSrvTCP = std::thread(&GameServer::gameServerTCP, this);
+	  m_gameSrvUDP = std::thread(&GameServer::gameServerUDP, this);
 	}
     }
   return (false);
@@ -108,6 +110,18 @@ bool GameServer::run()
 
 void GameServer::stop()
 {
+  if (m_connectSrv.joinable())
+    {
+      m_connectSrv.join();
+    }
+  if (m_gameSrvTCP.joinable())
+    {
+      m_gameSrvTCP.join();
+    }
+  if (m_gameSrvUDP.joinable())
+    {
+      m_gameSrvUDP.join();
+    }
 }
 
 bool GameServer::addClient()
@@ -173,7 +187,113 @@ bool GameServer::hasTimedOut() const
   return (false);
 }
 
-void GameServer::acceptLoop()
+// Connection Manager TCP communication
+void GameServer::connectManagerCom()
 {
-  // TODO: Implement
+  std::int32_t const sock = m_connectManagerSock.getSocket();
+  bool               canWrite = false;
+
+  assert(sock >= 0);
+  while (1)
+    {
+      // Check activity
+      fd_set       readfds, writefds, exceptfds;
+      std::int32_t rc;
+
+      do
+	{
+	  struct timeval tv;
+
+	  FD_ZERO(&readfds);
+	  FD_ZERO(&writefds);
+	  tv.tv_sec = 5;
+	  tv.tv_usec = 0;
+
+	  FD_SET(sock, &readfds);
+	  if (canWrite)
+	    {
+	      FD_SET(sock, &writefds);
+	    }
+	  exceptfds = readfds;
+	  rc = select(sock + 1, &readfds, &writefds, &exceptfds, &tv);
+	}
+      while (rc == -1 && errno == EINTR);
+
+      // Treat data
+      if (rc < 0)
+	{
+	  // There was an error
+	  nope::log::Log(Error) << "select() failed [ConnectManager]";
+	  break;
+	}
+      else if (rc > 0)
+	{
+	  if (FD_ISSET(sock, &readfds))
+	    {
+	      // Treat input
+	    }
+	  if (canWrite && FD_ISSET(sock, &writefds))
+	    {
+	      // Treat output
+	    }
+	  if (FD_ISSET(sock, &exceptfds))
+	    {
+	      nope::log::Log(Error) << "Something happened";
+	      break;
+	    }
+	}
+    }
+  nope::log::Log(Info) << "Connection with license server closed.";
+}
+
+// GameServer -> GameClient TCP Connection
+void GameServer::gameServerTCP()
+{
+  std::int32_t const sock = m_gameSock.getSocket();
+  bool               canWrite = false;
+
+  assert(sock >= 0);
+  while (1)
+    {
+      // Check activity
+      fd_set       readfds, writefds, exceptfds;
+      std::int32_t rc;
+
+      do
+	{
+	  struct timeval tv;
+	  std::int32_t   maxSock = sock;
+
+	  FD_ZERO(&readfds);
+	  FD_ZERO(&writefds);
+	  tv.tv_sec = 5;
+	  tv.tv_usec = 0;
+
+	  FD_SET(sock, &readfds);
+	  if (canWrite)
+	    {
+	      FD_SET(sock, &writefds);
+	    }
+	  // TODO: Add clients
+
+	  exceptfds = readfds;
+	  rc = select(maxSock + 1, &readfds, &writefds, &exceptfds, &tv);
+	}
+      while (rc == -1 && errno == EINTR);
+
+      if (rc < 0)
+	{
+	  // There was an error
+	  nope::log::Log(Error) << "select() failed [TCP]";
+	  break;
+	}
+      else if (rc > 0)
+	{
+	}
+    }
+}
+
+// GameServer->GameClient UDP Connection
+void GameServer::gameServerUDP()
+{
 }

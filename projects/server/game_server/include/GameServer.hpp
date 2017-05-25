@@ -38,7 +38,9 @@ public:
 
 private:
   bool authenticateToConnectManager();
-  void acceptLoop();
+  void connectManagerCom();
+  void gameServerTCP();
+  void gameServerUDP();
 
   // Basic datas
   std::uint16_t      m_connectManagerPort;
@@ -51,6 +53,8 @@ private:
   network::TCPSocket m_connectManagerSock;
   network::TCPSocket m_gameSock;
   std::thread        m_connectSrv;
+  std::thread        m_gameSrvTCP;
+  std::thread        m_gameSrvUDP;
 
   // Tokens
   std::vector<GameClient> m_clientList;

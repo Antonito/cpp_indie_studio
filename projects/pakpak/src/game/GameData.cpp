@@ -5,11 +5,14 @@ namespace game
   GameData::GameData()
       : m_sceneMgr(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Game scene manager")),
-        m_players()
+        m_players(), m_map(m_sceneMgr, "map/map.dat")
   {
     // todo: move in Map
+    m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
     m_sceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
-    m_sceneMgr->createLight("MainLight")->setPosition(20, 80, 50);
+    Ogre::Light *l = m_sceneMgr->createLight("MainLight");
+    l->setPosition(20, 80, 50);
+    l->setCastShadows(true);
   }
 
   GameData::~GameData()
@@ -26,7 +29,7 @@ namespace game
     return (m_players[i]);
   }
 
-  void GameData::setPlayerNb(std::int32_t n)
+  void GameData::setPlayerNb(std::size_t n)
   {
     m_players.resize(n);
   }
@@ -38,7 +41,10 @@ namespace game
 
   void GameData::update()
   {
-    // TODO: implements lol
+    for (PlayerData &p : m_players)
+      {
+	p.car().update(1 / 60.0);
+      }
   }
 
   Ogre::Camera *GameData::createCamera(std::string const &name)
@@ -53,5 +59,10 @@ namespace game
   Ogre::SceneNode *GameData::createSceneNode()
   {
     return (m_sceneMgr->getRootSceneNode()->createChildSceneNode());
+  }
+
+  Ogre::SceneManager *GameData::sceneMgr()
+  {
+    return (m_sceneMgr);
   }
 }
