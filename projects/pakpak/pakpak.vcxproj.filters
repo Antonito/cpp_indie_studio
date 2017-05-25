@@ -37,6 +37,12 @@
     <Filter Include="Source Files\game\map">
       <UniqueIdentifier>{7bc6dffe-5d7b-4c02-82fc-23131be54ed4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\physic">
+      <UniqueIdentifier>{e0401159-fe17-4e45-8b11-ddcbde16491d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\physic">
+      <UniqueIdentifier>{66adec0e-a500-4558-aef7-ec9916af03ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">
@@ -115,6 +121,12 @@
       <Filter>Source Files\game\map</Filter>
     </ClCompile>
     <ClCompile Include="src\game\map\PathPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physic\Collision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physic\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -223,6 +235,15 @@
     </ClInclude>
     <ClInclude Include="include\game\map\PathPoint.hpp">
       <Filter>Header Files\game\map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physic\PhysicScene.hpp">
+      <Filter>Header Files\physic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physic\Entity.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physic\Collision.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

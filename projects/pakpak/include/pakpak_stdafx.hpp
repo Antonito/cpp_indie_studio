@@ -88,4 +88,11 @@
 //
 #include "Logger.hpp"
 
+//
+// Physic
+//
+#include "Collision.hpp"
+#include "Entity.hpp"
+#include "PhysicScene.hpp"
+
 #endif // !PAKPAK_STDAFX_HPP_
