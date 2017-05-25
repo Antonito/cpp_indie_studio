@@ -5,6 +5,7 @@
 #include "GUI.hpp"
 #include "IMenuLayer.hpp"
 #include "FastStack.hpp"
+#include "MainMenu.hpp"
 
 // Forward declaration for faster compilation
 namespace Ogre

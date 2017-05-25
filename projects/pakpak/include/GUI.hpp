@@ -45,6 +45,8 @@ namespace core
     CEGUI::OgreRenderer *m_renderer;
     CEGUI::Window *      m_root;
     CEGUI::GUIContext *  m_context;
+    GUI(GUI const &) = delete;
+    GUI &operator=(GUI const &) = delete;
   };
 }
 

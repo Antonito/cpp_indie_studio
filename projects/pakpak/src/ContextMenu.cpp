@@ -3,7 +3,7 @@
 namespace menu
 {
   ContextMenu::ContextMenu(Ogre::RenderWindow *win, core::InputListener *input)
-      : core::AContext(win, input), m_viewport(nullptr), m_camera(nullptr)
+      : core::AContext(win, input), m_viewport(nullptr), m_camera(nullptr), m_gui({})
   {
   }
 
@@ -22,7 +22,7 @@ namespace menu
 
   core::GameState ContextMenu::update()
   {
-    return (core::GameState::InGame);
+    return (core::GameState::Menu);
   }
 
   void ContextMenu::display()
