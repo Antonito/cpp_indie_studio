@@ -15,6 +15,18 @@ namespace core
     NbGameState
   };
 
+  enum class MenuState : std::int8_t
+  {
+    None = -1,
+    MainMenu,
+    Option,
+    Score,
+    SoloPlayerGame,
+    MultiPlayerGame,
+    Quit,
+    NbMenuState
+  };
+
   enum class InGameState : std::int8_t
   {
     None = -1,

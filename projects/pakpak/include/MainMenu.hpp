@@ -13,6 +13,10 @@ namespace core
   class MainMenu : public IMenuLayer
   {
   public:
+    MainMenu();
+    virtual ~MainMenu()
+    {
+    }
     void draw();
     void entry();
     void exit();
@@ -23,13 +27,17 @@ namespace core
     void build();
 
   private:
+    MainMenu(MainMenu const&) = delete;
+    MainMenu(MainMenu &&) = delete;
+    MainMenu &operator=(MainMenu &) = delete;
     void initGUI();
     bool onExitClick(CEGUI::EventArgs const &);
     bool onPlayClick(CEGUI::EventArgs const &);
 
-    GUI          m_gui;
-    GameState    m_curState;
-    Ogre::Camera m_camera;
+    Ogre::SceneManager *m_sceneMan;
+    GUI                 m_gui;
+    GameState           m_curState;
+    Ogre::Camera        *m_camera;
   };
 }
 

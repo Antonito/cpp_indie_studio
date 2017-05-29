@@ -173,7 +173,7 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
-      }
+	}
 
     return true;
   }

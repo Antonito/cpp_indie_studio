@@ -6,6 +6,8 @@
 #include "IMenuLayer.hpp"
 #include "FastStack.hpp"
 #include "MainMenu.hpp"
+#include "GameState.hpp"
+#include <array>
 
 // Forward declaration for faster compilation
 namespace Ogre
@@ -34,8 +36,12 @@ namespace menu
     virtual void            display();
 
   private:
-    Ogre::Viewport *                    m_viewport;
-    Ogre::Camera *                      m_camera;
+    Ogre::Viewport *m_viewport;
+    Ogre::Camera *  m_camera;
+
+    static constexpr size_t nbContext =
+        static_cast<size_t>(core::MenuState::NbMenuState);
+    std::array<std::unique_ptr<core::IMenuLayer>, nbContext> m_menuLayer;
     core::FastStack<core::IMenuLayer *> m_gui;
   };
 }

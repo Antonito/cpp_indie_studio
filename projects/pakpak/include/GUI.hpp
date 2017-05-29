@@ -41,6 +41,10 @@ namespace core
 
     CEGUI::GUIContext *getContext() const;
 
+    void showCursor();
+
+    void setCursorArrow(std::string const &);
+
   private:
     CEGUI::OgreRenderer *m_renderer;
     CEGUI::Window *      m_root;
@@ -50,4 +54,4 @@ namespace core
   };
 }
 
-#endif //CPP_INDIE_STUDIO_GUI_HPP_
+#endif // CPP_INDIE_STUDIO_GUI_HPP_

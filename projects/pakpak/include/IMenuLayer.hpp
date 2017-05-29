@@ -16,8 +16,6 @@ namespace core
   public:
     virtual ~IMenuLayer() {}
 
-    virtual core::GameState changeScreen() const = 0;
-
     virtual void draw() = 0;
 
     virtual void entry() = 0;
