@@ -37,5 +37,6 @@ check_dir "libs/multithread/"
 check_dir "libs/packet/"
 check_dir "projects/server/connect_manager/"
 check_dir "projects/server/game_server/"
+check_dir "projects/server/client_test/"
 
 exit 0

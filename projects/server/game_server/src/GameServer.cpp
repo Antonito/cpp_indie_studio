@@ -10,13 +10,14 @@ GameServer::GameServer(std::string const & connectManagerIp,
       m_gameSock(
           m_gameServerPort, static_cast<std::uint32_t>(m_maxClients),
           network::ASocket::SocketType::BLOCKING), // TODO: Non-blocking ?
-      m_connectSrv(),
-      m_gameSrvTCP(), m_gameSrvUDP(), m_clientList(), m_tokenList()
+      m_connectSrv(), m_gameSrvTCP(), m_gameSrvUDP(), m_clientList(),
+      m_tokenList()
 {
   std::ifstream licenceFile(".license");
 
   if (!licenceFile.is_open())
     {
+      nope::log::Log(Error) << "Cannot open file : .license";
       throw std::exception(); // TODO: Real exception
     }
   std::getline(licenceFile, m_licence);
@@ -103,6 +104,7 @@ bool GameServer::run()
 	  m_connectSrv = std::thread(&GameServer::connectManagerCom, this);
 	  m_gameSrvTCP = std::thread(&GameServer::gameServerTCP, this);
 	  m_gameSrvUDP = std::thread(&GameServer::gameServerUDP, this);
+	  return (true);
 	}
     }
   return (false);
@@ -293,4 +295,5 @@ void GameServer::gameServerTCP()
 
 void GameServer::gameServerUDP()
 {
+  // TODO: Open UDP connection
 }

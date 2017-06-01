@@ -150,6 +150,8 @@ network::IClient::ClientAction GameServer::treatIncomingData()
                            << " authenticated."; // TODO: Put here or output ?
       break;
     }
+
+  // Update IO
   if (ret == network::IClient::ClientAction::SUCCESS)
     {
       toggleWrite();
@@ -196,6 +198,8 @@ network::IClient::ClientAction GameServer::treatOutcomingData()
       ret = write(m_packet);
       break;
     }
+
+  // Update IO
   if (ret == network::IClient::ClientAction::SUCCESS)
     {
       toggleWrite();

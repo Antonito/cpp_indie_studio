@@ -34,6 +34,7 @@ int main(int ac, char **av)
 
   if (srv.run())
     {
+      srv.stop();
       return (EXIT_SUCCESS);
     }
   return (EXIT_FAILURE);

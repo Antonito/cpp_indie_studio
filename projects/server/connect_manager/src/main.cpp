@@ -33,6 +33,8 @@ int main(int ac, char **av)
 
       if (mainSrv.run())
 	{
+	  // Before starting the gameServer, wait for the mainSrv to be fully
+	  // initialized
 	  mainSrv.waitSignal();
 	  if (gameSrv.run())
 	    {
@@ -42,6 +44,7 @@ int main(int ac, char **av)
 	  // Accept Client's connection
 
 	  // Stop servers
+	  gameSrv.stop();
 	  mainSrv.stop();
 	}
     }

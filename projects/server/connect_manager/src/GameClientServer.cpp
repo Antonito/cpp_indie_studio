@@ -57,8 +57,8 @@ bool GameClientServer::addClient()
     {
       m_gameClient.push_back(std::make_unique<GameClient>(
           rc, m_gameServerList, m_gameServerListMut)); // TODO: Use in ?
-      nope::log::Log(Debug) << "Added client FD #"
-                            << m_gameClient.back()->getSocket();
+      nope::log::Log(Debug)
+          << "Added client FD #" << m_gameClient.back()->getSocket();
       return (true);
     }
   return (false);
@@ -110,6 +110,8 @@ std::int32_t GameClientServer::checkActivity(fd_set &readfds, fd_set &writefds,
 	    {
 	      FD_SET(sock, &writefds);
 	    }
+
+	  // Update maxFD
 	  if (sock > maxFd)
 	    {
 	      maxFd = sock;

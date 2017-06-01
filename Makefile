@@ -6,7 +6,8 @@ include $(MK_DIR)colors.mk $(MK_DIR)defs.mk
 PROJECT_DIR=		./projects/
 
 PROJECTS=		server/connect_manager	\
-			server/game_server
+			server/game_server	\
+			server/client_test
 
 LIB_DIR=		./libs/
 
@@ -22,7 +23,7 @@ PROJECTS_PATH=		$(addprefix $(LIB_DIR), $(LIBS))		\
 			$(addprefix $(PROJECT_DIR), $(PROJECTS))
 
 # Some useful variables
-DEBUG=			no
+DEBUG=			yes
 
 ARGS=			DEBUG=$(DEBUG) -s --warn-undefined-variables -C
 
