@@ -101,12 +101,37 @@ network::IClient::ClientAction GameClient::treatIncomingData()
       {
 	ret = read(m_packet);
 	nope::log::Log(Debug) << "Reading in state CONNECTED [GameClient]";
+
 	if (ret == network::IClient::ClientAction::SUCCESS)
 	  {
 	    m_packet >> rep;
-	    if (rep.pck.eventData.intEvent.event == 0)
+	    // What did the client request ?
+	    if (rep.pck.eventType == GameClientToCMEvent::REQUEST_EVENT)
 	      {
-		m_state = State::STATUS;
+		if (rep.pck.eventData.intEvent.event ==
+		    static_cast<std::uint16_t>(
+		        GameClientToCMPacketSimpleEvent::LIST_SERVERS))
+		  {
+		    // Switching to state REQU_LIST_SERV
+		    nope::log::Log(Info)
+		        << "Client requesting game server list";
+		    m_state = State::REQU_LIST_SERV;
+		  }
+		else if (rep.pck.eventData.intEvent.event ==
+		         static_cast<std::uint16_t>(
+		             GameClientToCMPacketSimpleEvent::GET_TOKEN))
+		  {
+		    // Switching to state GET_TOKEN
+		    nope::log::Log(Info)
+		        << "Client requesting game server token";
+		    m_state = State::REQU_TOKEN;
+		  }
+		else
+		  {
+		    // Unknown request, try again
+		    nope::log::Log(Warning) << "Client : unsupported request.";
+		    ret = network::IClient::ClientAction::FAILURE;
+		  }
 	      }
 	    else
 	      {
@@ -118,6 +143,15 @@ network::IClient::ClientAction GameClient::treatIncomingData()
 	  }
       }
       break;
+
+    // This should never happen
+    case State::REQU_LIST_SERV:
+      assert(0);
+      break;
+    case State::REQU_TOKEN:
+      assert(0);
+      break;
+
     case State::STATUS:
       break;
     }
@@ -128,16 +162,83 @@ network::IClient::ClientAction GameClient::treatIncomingData()
   return (ret);
 }
 
+network::IClient::ClientAction
+    GameClient::_listServers(GameClientToCMPacket &rep)
+{
+  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+
+  std::unique_lock<std::mutex> lock(m_gameServerListMut);
+
+  // Get server's infos
+  rep.pck.eventType = GameClientToCMEvent::LIST_SERVERS_EVENT;
+
+  rep.pck.eventData.serverList.nbServers =
+      static_cast<std::int32_t>(m_gameServerList.size());
+  nope::log::Log(Debug) << "There are "
+                        << rep.pck.eventData.serverList.nbServers
+                        << " game servers.";
+  rep.pck.eventData.serverList.servers = nullptr;
+  if (rep.pck.eventData.serverList.nbServers)
+    {
+      std::unique_ptr<GameClientToCMPacketStatus[]> serverListPtr =
+          std::make_unique<GameClientToCMPacketStatus[]>(
+              static_cast<std::size_t>(
+                  rep.pck.eventData.serverList.nbServers));
+
+      // Fill serverListPtr
+      for (std::size_t i = 0; i < m_gameServerList.size(); ++i)
+	{
+	  GameServerInfo const &cur = m_gameServerList[i];
+	  nope::log::Log(Debug)
+	      << "Server #" << i << ": " << std::string(cur.addr.data()) << ":"
+	      << cur.port << " [ " << cur.currentClients << " / "
+	      << cur.maxClients << " ]";
+	  serverListPtr[i].ip.data = cur.addr;
+	  serverListPtr[i].port = cur.port;
+	  serverListPtr[i].currentClients = cur.currentClients;
+	  serverListPtr[i].maxClients = cur.maxClients;
+	}
+
+      // Set pointer
+      rep.pck.eventData.serverList.servers = serverListPtr.get();
+    }
+
+  // Send packet
+  m_packet << rep;
+  ret = write(m_packet);
+  rep.pck.eventData.serverList.servers = nullptr;
+
+  // Display some infos
+  if (ret == network::IClient::ClientAction::SUCCESS)
+    {
+      nope::log::Log(Info) << "GameClient " << getSocket()
+                           << " ServerList sent.";
+    }
+  else
+    {
+      nope::log::Log(Error)
+          << "GameClient " << getSocket() << " cannot send serverList.";
+    }
+  m_state = State::CONNECTED; // Wait for more commands
+  return (ret);
+}
+
 network::IClient::ClientAction GameClient::treatOutcomingData()
 {
   network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
-  GameClientToCMPacket           rep;
+  GameClientToCMPacket           rep = {};
 
   switch (m_state)
     {
     case State::CONNECTED:
       break;
+    case State::REQU_LIST_SERV:
+      ret = _listServers(rep);
+      break;
+    case State::REQU_TOKEN:
+      break;
     case State::STATUS:
+#if 0
       {
 	// TODO modify the packet to set real info insteab of bebete string
 	std::unique_lock<std::mutex> lock(m_gameServerListMut);
@@ -156,10 +257,8 @@ network::IClient::ClientAction GameClient::treatOutcomingData()
 	    ret = write(m_packet);
 	  }
 	m_state = State::CONNECTED;
-	nope::log::Log(Info)
-	    << "GameClient " << getSocket()
-	    << " ServerList sent."; // TODO: Put here or output ?
-      }
+    }
+#endif
       break;
     }
   if (ret == network::IClient::ClientAction::SUCCESS)

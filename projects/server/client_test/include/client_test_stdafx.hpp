@@ -28,5 +28,8 @@
 #include "Logger.hpp"
 #include "TCPSocket.hpp"
 #include "SockError.hpp"
+#include "Packet.hpp"
+#include "GameClientCMPacket.hpp"
+#include "IClient.hpp"
 
 #endif // !CLIENT_TEST_STDAFX_HPP_

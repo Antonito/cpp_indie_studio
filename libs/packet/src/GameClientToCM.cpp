@@ -1,3 +1,4 @@
+#include "Logger.hpp"
 #include "packet_stdafx.hpp"
 
 GameClientToCMPacket::GameClientToCMPacket() : pck(), __padding()
@@ -23,17 +24,23 @@ std::unique_ptr<std::uint8_t[]>
   data->eventType = static_cast<GameClientToCMEvent>(
       htons(static_cast<std::uint16_t>(data->eventType)));
 
-  if (pck.eventType == GameClientToCMEvent::INT_EVENT)
+  if (pck.eventType == GameClientToCMEvent::REQUEST_EVENT)
     {
       data->eventData.intEvent.event = htons(data->eventData.intEvent.event);
     }
-  else if (pck.eventType == GameClientToCMEvent::SERVER_STATUS_EVENT)
+  else if (pck.eventType == GameClientToCMEvent::LIST_SERVERS_EVENT)
     {
-      data->eventData.status.port = htons(data->eventData.status.port);
-      data->eventData.status.currentClients =
-          htons(data->eventData.status.currentClients);
-      data->eventData.status.maxClients =
-          htons(data->eventData.status.maxClients);
+      for (std::int32_t i = 0; i < data->eventData.serverList.nbServers; ++i)
+	{
+	  GameClientToCMPacketStatus *cur =
+	      &data->eventData.serverList.servers[i];
+
+	  cur->port = htons(cur->port);
+	  cur->currentClients = htons(cur->currentClients);
+	  cur->maxClients = htons(cur->maxClients);
+	}
+      data->eventData.serverList.nbServers = static_cast<std::int32_t>(htonl(
+          static_cast<std::uint32_t>(data->eventData.serverList.nbServers)));
     }
 
   return (serial);
@@ -45,19 +52,29 @@ void GameClientToCMPacket::deserialize(std::size_t, std::uint8_t *data)
 
   pck.eventType = static_cast<GameClientToCMEvent>(
       ntohs(static_cast<std::uint16_t>(pck.eventType)));
-  if (pck.eventType == GameClientToCMEvent::INT_EVENT)
+  if (pck.eventType == GameClientToCMEvent::REQUEST_EVENT)
     {
       pck.eventData.intEvent.event = ntohs(pck.eventData.intEvent.event);
     }
-  else if (pck.eventType == GameClientToCMEvent::SERVER_STATUS_EVENT)
+  else if (pck.eventType == GameClientToCMEvent::LIST_SERVERS_EVENT)
     {
-      pck.eventData.status.port = ntohs(pck.eventData.status.port);
-      pck.eventData.status.currentClients =
-          htons(pck.eventData.status.currentClients);
-      pck.eventData.status.maxClients = htons(pck.eventData.status.maxClients);
+      pck.eventData.serverList.nbServers = static_cast<std::int32_t>(ntohl(
+          static_cast<std::uint32_t>(pck.eventData.serverList.nbServers)));
+
+      for (std::int32_t i = 0; i < pck.eventData.serverList.nbServers; ++i)
+	{
+	  GameClientToCMPacketStatus *cur =
+	      &pck.eventData.serverList.servers[i];
+
+	  cur->port = ntohs(cur->port);
+	  cur->currentClients = ntohs(cur->currentClients);
+	  cur->maxClients = ntohs(cur->maxClients);
+	}
     }
   else
     {
+      nope::log::Log(Error)
+          << "Received Event: " << static_cast<std::int32_t>(pck.eventType);
       throw std::runtime_error("Invalid packet received");
     }
 }

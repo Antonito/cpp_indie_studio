@@ -7,10 +7,23 @@
 #include "ISerializable.hpp"
 #include "PacketHeader.hpp"
 
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 enum class GameClientToCMEvent : std::uint16_t
 {
-  INT_EVENT = 0,
-  SERVER_STATUS_EVENT
+  REQUEST_EVENT = 0,
+  SERVER_STATUS_EVENT,
+  LIST_SERVERS_EVENT
+};
+
+enum class GameClientToCMPacketSimpleEvent : std::uint16_t
+{
+  LIST_SERVERS = 0xAB,
+  GET_TOKEN
 };
 
 struct GameClientToCMPacketSimple
@@ -32,13 +45,20 @@ struct GameClientToCMPacketStatus
   std::uint16_t          maxClients;
 };
 
+struct GameClientToCMPacketServerList
+{
+  std::int32_t                nbServers;
+  GameClientToCMPacketStatus *servers;
+};
+
 struct GameClientToCMPacketRaw
 {
   GameClientToCMEvent eventType;
   union
   {
-    GameClientToCMPacketSimple intEvent;
-    GameClientToCMPacketStatus status;
+    GameClientToCMPacketSimple     intEvent;
+    GameClientToCMPacketStatus     status;
+    GameClientToCMPacketServerList serverList;
   } eventData;
 };
 
@@ -61,5 +81,10 @@ namespace packetSize
   constexpr std::size_t GameClientToCMPacketSize =
       sizeof(PacketHeader) + sizeof(GameClientToCMPacket);
 }
+
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !GAMECLIENT_CM_PACKET_HPP_

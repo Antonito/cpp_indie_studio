@@ -19,11 +19,14 @@
 class GameClient : public network::IClient
 {
 public:
-  enum State
+  enum class State : std::int32_t
   {
     CONNECTED = 0,
-    STATUS,
+    REQU_LIST_SERV,
+    REQU_TOKEN,
+    STATUS
   };
+
   explicit GameClient(sock_t const fd, std::vector<GameServerInfo> const &,
                       std::mutex &);
   virtual ~GameClient();
@@ -49,6 +52,8 @@ private:
   Packet<GameClientToCMPacket>       m_packet;
   std::vector<GameServerInfo> const &m_gameServerList;
   std::mutex &                       m_gameServerListMut;
+
+  network::IClient::ClientAction _listServers(GameClientToCMPacket &rep);
 };
 
 // Disable clang warning for implicit padding

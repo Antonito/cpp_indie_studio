@@ -20,7 +20,8 @@ SRC_DIR=	./src/
 INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)				\
-		$(ROOT_DIR)/libs/network/include/
+		$(ROOT_DIR)/libs/network/include/	\
+		$(ROOT_DIR)/libs/logger/include/
 
 HEADER=		packet_stdafx.hpp
 
