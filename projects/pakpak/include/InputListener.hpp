@@ -6,6 +6,7 @@
 #include <OIS/OISInputManager.h>
 #include <OIS/OISMouse.h>
 #include <OIS/OISKeyboard.h>
+#include <OgreBulletDynamicsWorld.h>
 
 namespace core
 {
@@ -24,8 +25,8 @@ namespace core
 
     virtual void windowResized(Ogre::RenderWindow *rw);
     virtual void windowClosed(Ogre::RenderWindow *rw);
-    bool frameRenderingQueued(const Ogre::FrameEvent &evt);
-    void startOIS();
+    bool         frameRenderingQueued(const Ogre::FrameEvent &evt);
+    void         startOIS();
 
     void setMouseEventCallback(OIS::MouseListener *listener);
     void setKeyboardEventCallback(OIS::KeyListener *listener);
@@ -33,12 +34,20 @@ namespace core
     void capture();
     void shutdown();
 
+    bool frameStarted(Ogre::FrameEvent const &evt);
+    bool frameEnd(Ogre::FrameEvent const &evt);
+
+    void setPhysicWorld(OgreBulletDynamics::DynamicsWorld *world);
+
   private:
     Ogre::RenderWindow *m_window;
     OIS::InputManager * m_inputManager;
     OIS::Mouse *        m_mouse;
     OIS::Keyboard *     m_keyboard;
-    bool                m_shutdown;
+
+    OgreBulletDynamics::DynamicsWorld *m_physicWorld;
+
+    bool m_shutdown;
   };
 }
 

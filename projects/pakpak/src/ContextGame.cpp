@@ -16,17 +16,16 @@ namespace game
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
 
-    std::size_t nbPlayer = 6;
+    std::size_t nbPlayer = 1;
 
     m_game.setPlayerNb(nbPlayer);
 
-    std::size_t nbLocalPlayer = 3;
+    std::size_t nbLocalPlayer = 1;
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
-	m_game[i].setCar(std::make_unique<EmptyCar>(m_game.sceneMgr(),
-	                                            Ogre::Vector3(0, 0, 0),
-	                                            Ogre::Vector3(0, 0, -1)));
+	m_game[i].setCar(std::make_unique<EmptyCar>(
+	    m_game, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, -1)));
       }
 
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
@@ -36,6 +35,8 @@ namespace game
       }
 
     updateViewPort();
+
+    m_input->setPhysicWorld(m_game.physicWorld());
   }
 
   void ContextGame::updateViewPort()
@@ -64,6 +65,7 @@ namespace game
   void ContextGame::disable()
   {
     m_players.clear();
+    m_input->setPhysicWorld(nullptr);
   }
 
   core::GameState ContextGame::update()

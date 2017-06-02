@@ -88,4 +88,9 @@
 //
 #include "Logger.hpp"
 
+//
+// Physic
+//
+#include <Shapes/OgreBulletCollisionsBoxShape.h>
+
 #endif // !PAKPAK_STDAFX_HPP_

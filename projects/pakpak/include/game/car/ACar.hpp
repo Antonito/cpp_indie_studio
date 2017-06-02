@@ -31,7 +31,7 @@ namespace game
     Ogre::Camera *getCamera() const;
 
   protected:
-    ACar(Ogre::SceneManager *sceneMgr, std::string const &mesh,
+    ACar(game::GameData &gamedata, std::string const &mesh,
          Ogre::Vector3 const &pos, Ogre::Vector3 const &dir);
 
     Ogre::Vector3 m_pos;

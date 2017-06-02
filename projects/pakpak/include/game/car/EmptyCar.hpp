@@ -10,8 +10,7 @@ namespace game
   {
   public:
     EmptyCar() = delete;
-    EmptyCar(Ogre::SceneManager *sceneMgr, Ogre::Vector3 pos,
-             Ogre::Vector3 dir);
+    EmptyCar(game::GameData &gamedata, Ogre::Vector3 pos, Ogre::Vector3 dir);
     EmptyCar(EmptyCar const &) = delete;
     EmptyCar(EmptyCar &&) = delete;
     virtual ~EmptyCar();

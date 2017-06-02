@@ -4,6 +4,10 @@
 #include <vector>
 #include <cstdint>
 #include <OGRE/OgreSceneManager.h>
+#include <OgreBulletDynamicsWorld.h>
+#include <Debug/OgreBulletCollisionsDebugDrawer.h>
+#include <OgreBulletDynamicsRigidBody.h>
+#include <OgreBulletCollisionsShape.h>
 #include "PlayerData.hpp"
 #include "Map.hpp"
 
@@ -32,12 +36,24 @@ namespace game
     Ogre::Entity *   createEntity(std::string const &name);
     Ogre::SceneNode *createSceneNode();
 
-    Ogre::SceneManager *sceneMgr();
+    Ogre::SceneManager *               sceneMgr();
+    OgreBulletDynamics::DynamicsWorld *physicWorld();
+
+    OgreBulletDynamics::RigidBody *
+        addPhysicEntity(std::unique_ptr<OgreBulletCollisions::CollisionShape>,
+                        std::string const &);
 
   private:
-    Ogre::SceneManager *    m_sceneMgr;
-    std::vector<PlayerData> m_players;
-    Map                     m_map;
+    Ogre::SceneManager *                               m_sceneMgr;
+    std::vector<PlayerData>                            m_players;
+    Map                                                m_map;
+    std::unique_ptr<OgreBulletDynamics::DynamicsWorld> m_world;
+#ifdef DEBUG
+    std::unique_ptr<OgreBulletCollisions::DebugDrawer> m_debugDrawer;
+#endif
+    std::vector<std::unique_ptr<OgreBulletDynamics::RigidBody>> m_bodies;
+    std::vector<std::unique_ptr<OgreBulletCollisions::CollisionShape>>
+        m_shapes;
   };
 }
 

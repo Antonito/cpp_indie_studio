@@ -2,9 +2,9 @@
 
 namespace game
 {
-  EmptyCar::EmptyCar(Ogre::SceneManager *sceneMgr, Ogre::Vector3 pos,
+  EmptyCar::EmptyCar(game::GameData &gamedata, Ogre::Vector3 pos,
                      Ogre::Vector3 dir)
-      : ACar(sceneMgr, "Jeep_default.mesh", pos, dir)
+      : ACar(gamedata, "Jeep_default.mesh", pos, dir)
   {
   }
 

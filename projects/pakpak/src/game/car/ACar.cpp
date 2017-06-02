@@ -60,23 +60,12 @@ namespace game
 	m_speed = m_speed < 0.0 ? -1 : 1;
       }
 
-    Ogre::Quaternion rot(
-        Ogre::Radian(Ogre::Real(m_tryTurning * -m_speed * elapsedTime)),
-        Ogre::Vector3::UNIT_Y);
-
-    m_dir = rot * m_dir;
-    m_pos += Ogre::Real(500 * m_speed * elapsedTime) * m_dir;
-
-    m_node->setPosition(m_pos);
-    m_carNode->setDirection(rot * Ogre::Vector3(0, 0, -1));
-
-    Ogre::Vector3 pos = m_dir * 500;
-
-    pos.y = m_pos.y + 250;
-
-    m_camera->setPosition(pos);
-    // m_camera->setPosition(Ogre::Vector3(0, 300, 500));
-    m_camera->lookAt(m_pos);
+    m_node->setPosition(m_node->getPosition() + m_carNode->getPosition());
+    // m_node->rotate(m_carNode->getOrientation());
+    m_carNode->setPosition(0, 0, 0);
+    m_node->setDirection(Ogre::Vector3(0, 0, -1));
+    m_camera->setPosition(200, 250, 0);
+    m_camera->lookAt(m_node->getPosition());
   }
 
   Ogre::Camera *ACar::getCamera() const
@@ -84,7 +73,7 @@ namespace game
     return (m_camera);
   }
 
-  ACar::ACar(Ogre::SceneManager *sceneMgr, std::string const &mesh,
+  ACar::ACar(game::GameData &gamedata, std::string const &mesh,
              Ogre::Vector3 const &pos, Ogre::Vector3 const &dir)
       : m_pos(pos), m_dir(dir), m_mov(0, 0, 0), m_speed(0.0), m_tryMoving(0),
         m_tryTurning(0), m_node(nullptr), m_carNode(nullptr),
@@ -96,9 +85,10 @@ namespace game
 
     ss << "MainCarNode" << id;
 
-    m_entity = sceneMgr->createEntity(mesh);
+    m_entity = gamedata.sceneMgr()->createEntity(mesh);
     m_entity->setCastShadows(true);
-    m_node = sceneMgr->getRootSceneNode()->createChildSceneNode(ss.str());
+    m_node = gamedata.sceneMgr()->getRootSceneNode()->createChildSceneNode(
+        ss.str());
 
     m_node->setPosition(Ogre::Vector3(0, 0, 0));
     ss.str("");
@@ -114,8 +104,24 @@ namespace game
     ss.str("");
     ss << "CarCamera" << id;
 
-    m_camera = sceneMgr->createCamera(ss.str());
+    m_camera = gamedata.createCamera(ss.str());
     m_node->attachObject(m_camera);
+
+    Ogre::AxisAlignedBox boundingBox = m_entity->getBoundingBox();
+    Ogre::Vector3        size = boundingBox.getSize();
+
+    std::unique_ptr<OgreBulletCollisions::BoxCollisionShape> box =
+        std::make_unique<OgreBulletCollisions::BoxCollisionShape>(size);
+    OgreBulletCollisions::BoxCollisionShape *_box = box.get();
+
+    ss.str("");
+    ss << "CarRigidBody" << id;
+    OgreBulletDynamics::RigidBody *body;
+
+    body = gamedata.addPhysicEntity(std::move(box), ss.str());
+
+    body->setShape(m_carNode, _box, 0.6, 0.6, 1.0, pos,
+                   Ogre::Quaternion(Ogre::Radian(0), Ogre::Vector3::UNIT_Y));
 
     ++id;
   }
