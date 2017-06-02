@@ -80,6 +80,7 @@ GAME_MAP_FILES=		Map.cpp				\
 GAME_MENU_FILES=    GUI.cpp				\
                     MainMenu.cpp		\
 			        ContextMenu.cpp		\
+			        MenuManager.cpp     \
 
 SRC=	$(addprefix $(SRC_DIR), $(SRC_FILES))			    \
 		$(addprefix $(GAME_DIR), $(GAME_FILES))			    \

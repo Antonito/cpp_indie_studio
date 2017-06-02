@@ -4,29 +4,19 @@
 namespace menu
 {
   ContextMenu::ContextMenu(Ogre::RenderWindow *win, core::InputListener *input)
-      : core::AContext(win, input), m_viewport(nullptr), m_camera(nullptr), m_menuLayer({}), m_gui({})
+      : core::AContext(win, input), m_menu(std::make_unique<MenuManager>(win))
   {
-    m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)] =
-            std::make_unique<core::MainMenu>();
-    /*m_menuLayer[static_cast<size_t>(core::MenuState::Option)] =
-            std::make_unique<core::Option>();
-    m_menuLayer[static_cast<size_t>(core::MenuState::Score] =
-            std::make_unique<core::Score>();
-    m_menuLayer[static_cast<size_t>(core::MenuState::SoloPlayerGame)] =
-            std::make_unique<core::SoloPlayerGame>();
-    m_menuLayer[static_cast<size_t>(core::MenuState::MultiPlayerGame)] =
-            std::make_unique<core::MultiPlayerGame>();*/
-    m_gui.push(m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)].get());
-    m_gui.top()->entry();
   }
 
   ContextMenu::~ContextMenu()
   {
-    m_gui.top()->destroy();
   }
 
   void ContextMenu::enable()
   {
+    m_input->setMouseEventCallback(this);
+    m_input->setKeyboardEventCallback(this);
+
     // m_win->addViewport();
   }
 
@@ -36,11 +26,42 @@ namespace menu
 
   core::GameState ContextMenu::update()
   {
-    return m_gui.top()->update();
+    m_input->capture();
+    return m_menu.get()->getMenuLayer()->update();
   }
 
   void ContextMenu::display()
   {
-    m_gui.top()->draw();
+      m_menu.get()->getMenuLayer()->draw();
   }
+
+    bool ContextMenu::keyPressed(const OIS::KeyEvent &arg)
+    {
+        m_menu->keyPressed(arg);
+        return true;
+    }
+
+    bool ContextMenu::keyReleased(const OIS::KeyEvent &arg)
+    {
+        m_menu->keyReleased(arg);
+        return true;
+    }
+
+    bool ContextMenu::mouseMoved(const OIS::MouseEvent &arg)
+    {
+        m_menu->mouseMoved(arg);
+        return true;
+    }
+
+    bool ContextMenu::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
+    {
+        m_menu->mousePressed(arg, id);
+        return true;
+    }
+
+    bool ContextMenu::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
+    {
+        m_menu->mouseReleased(arg, id);
+        return false;
+    }
 }

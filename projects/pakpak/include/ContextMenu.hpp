@@ -7,6 +7,7 @@
 #include "FastStack.hpp"
 #include "MainMenu.hpp"
 #include "GameState.hpp"
+#include "MenuManager.hpp"
 #include <array>
 
 // Forward declaration for faster compilation
@@ -18,7 +19,9 @@ namespace Ogre
 
 namespace menu
 {
-  class ContextMenu final : public core::AContext
+  class ContextMenu final : public core::AContext,
+                            public OIS::KeyListener,
+                            public OIS::MouseListener
   {
   public:
     ContextMenu(Ogre::RenderWindow *win, core::InputListener *input);
@@ -35,14 +38,18 @@ namespace menu
     virtual core::GameState update();
     virtual void            display();
 
-  private:
-    Ogre::Viewport *m_viewport;
-    Ogre::Camera *  m_camera;
+      bool keyPressed(const OIS::KeyEvent &arg);
 
-    static constexpr size_t nbContext =
-        static_cast<size_t>(core::MenuState::NbMenuState);
-    std::array<std::unique_ptr<core::IMenuLayer>, nbContext> m_menuLayer;
-    core::FastStack<core::IMenuLayer *> m_gui;
+      bool keyReleased(const OIS::KeyEvent &arg);
+
+      bool mouseMoved(const OIS::MouseEvent &arg);
+
+      bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+
+      bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+
+  private:
+    std::unique_ptr<MenuManager> m_menu;
   };
 }
 

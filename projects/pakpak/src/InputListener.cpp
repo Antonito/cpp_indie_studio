@@ -55,7 +55,7 @@ namespace core
     return (*this);
   }
 
-  bool InputListener::frameRenderingQueued(const Ogre::FrameEvent &)
+  bool InputListener::frameRenderingQueued(const Ogre::FrameEvent &p_evt)
   {
     if (m_window->isClosed())
       return false;
@@ -65,7 +65,7 @@ namespace core
 
     if (m_shutdown)
       return false;
-
+    CEGUI::System::getSingleton().injectTimePulse(p_evt.timeSinceLastFrame);
     return true;
   }
 
@@ -100,11 +100,13 @@ namespace core
 
   void InputListener::setMouseEventCallback(OIS::MouseListener *listener)
   {
+    std::cout << "CLICKKK" << std::endl;
     m_mouse->setEventCallback(listener);
   }
 
   void InputListener::setKeyboardEventCallback(OIS::KeyListener *listener)
   {
+    std::cout << "CLICKKK" << std::endl;
     m_keyboard->setEventCallback(listener);
   }
 

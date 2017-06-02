@@ -1,16 +1,70 @@
 #include "MainMenu.hpp"
 
+bool core::MainMenu::keyPressed(OIS::KeyEvent const& arg)
+{
+  CEGUI::GUIContext &context =
+      CEGUI::System::getSingleton().getDefaultGUIContext();
+  context.injectKeyDown((CEGUI::Key::Scan)arg.key);
+  context.injectChar((CEGUI::Key::Scan)arg.text);
+  return true;
+}
+
+bool core::MainMenu::mouseMoved(OIS::MouseEvent const &arg)
+{
+  return CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseMove(
+      static_cast<float>(arg.state.X.rel),
+      static_cast<float>(arg.state.Y.rel));
+}
+
+bool core::MainMenu::mousePressed(OIS::MouseEvent const &arg,
+                                  OIS::MouseButtonID     id)
+{
+  (void)arg;
+  return CEGUI::System::getSingleton()
+      .getDefaultGUIContext()
+      .injectMouseButtonDown(convertButton(id));
+}
+
+bool core::MainMenu::mouseReleased(OIS::MouseEvent const &arg,
+                                   OIS::MouseButtonID     id)
+{
+  (void)arg;
+  return CEGUI::System::getSingleton()
+      .getDefaultGUIContext()
+      .injectMouseButtonUp(convertButton(id));
+}
+
+bool core::MainMenu::keyReleased(OIS::KeyEvent const &arg)
+{
+  CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(
+      (CEGUI::Key::Scan)arg.key);
+  return true;
+}
+
+CEGUI::MouseButton core::MainMenu::convertButton(OIS::MouseButtonID buttonID)
+{
+  switch (buttonID)
+    {
+    case OIS::MB_Left:
+      return CEGUI::LeftButton;
+
+    case OIS::MB_Right:
+      return CEGUI::RightButton;
+
+    case OIS::MB_Middle:
+      return CEGUI::MiddleButton;
+
+    default:
+      return CEGUI::LeftButton;
+    }
+}
+
 void core::MainMenu::draw()
 {
-  m_gui.draw();
 }
 
 void core::MainMenu::entry()
 {
-  m_camera->setPosition(Ogre::Vector3(0, 0, 0));
-  m_camera->lookAt(Ogre::Vector3(0, 0, 0));
-  m_camera->setNearClipDistance(2);
-
   initGUI();
 }
 
@@ -38,6 +92,25 @@ void core::MainMenu::initGUI()
   m_gui.loadSheme("TaharezLook.scheme");
   m_gui.setFont("DejaVuSans-10");
 
+#if defined(_WIN32)
+  m_param.insert(std::make_pair(std::string("w32_mouse"),
+                                std::string("DISCL_FOREGROUND")));
+  m_param.insert(std::make_pair(std::string("w32_mouse"),
+                                std::string("DISCL_NONEXCLUSIVE")));
+  m_param.insert(std::make_pair(std::string("w32_keyboard"),
+                                std::string("DISCL_FOREGROUND")));
+  m_param.insert(std::make_pair(std::string("w32_keyboard"),
+                                std::string("DISCL_NONEXCLUSIVE")));
+#else
+  m_param.insert(
+      std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
+  m_param.insert(
+      std::make_pair(std::string("x11_mouse_hide"), std::string("true")));
+  m_param.insert(
+      std::make_pair(std::string("x11_keyboard_grab"), std::string("false")));
+  m_param.insert(
+      std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
+#endif
   CEGUI::PushButton *quitButton =
       static_cast<CEGUI::PushButton *>(m_gui.createButton(
           "TaharezLook/Button", glm::vec4(0.5f, 0.7f, 0.1f, 0.05f),
@@ -56,7 +129,6 @@ void core::MainMenu::initGUI()
       CEGUI::PushButton::EventClicked,
       CEGUI::Event::Subscriber(&MainMenu::onPlayClick, this));
   m_gui.setCursorArrow("TaharezLook/MouseArrow");
-  m_gui.showCursor();
 }
 
 bool core::MainMenu::onExitClick(CEGUI::EventArgs const &e)
@@ -76,9 +148,6 @@ bool core::MainMenu::onPlayClick(CEGUI::EventArgs const &e)
 }
 
 core::MainMenu::MainMenu()
-    : m_sceneMan(Ogre::Root::getSingleton().createSceneManager(
-          "DefaultSceneManager", "Menu scene manager")),
-      m_gui(), m_curState(core::GameState::Menu),
-      m_camera(m_sceneMan->createCamera("MenuCamera"))
+    : m_gui(), m_param(), m_curState(core::GameState::Menu)
 {
 }

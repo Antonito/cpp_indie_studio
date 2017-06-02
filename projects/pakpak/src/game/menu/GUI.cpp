@@ -9,15 +9,6 @@ void core::GUI::init(std::string const &p_path)
 {
   m_renderer = &CEGUI::OgreRenderer::bootstrapSystem();
   (void)p_path;
-  // CEGUI::DefaultResourceProvider* rp =
-  // static_cast<CEGUI::DefaultResourceProvider*>(CEGUI::System::getSingleton().getResourceProvider());
-  /*std::cout << p_path + "/imagesets/" << std::endl;
-  rp->setResourceGroupDirectory("imagesets", p_path + "/imagesets/");
-  rp->setResourceGroupDirectory("schemes", p_path + "/schemes/");
-  rp->setResourceGroupDirectory("fonts", p_path + "/fonts/");
-  rp->setResourceGroupDirectory("layouts", p_path + "/layouts/");
-  rp->setResourceGroupDirectory("looknfeels", p_path + "/looknfeel/");
-  rp->setResourceGroupDirectory("lua_scripts", p_path + "/lua_scripts/");*/
 
   CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
   CEGUI::Font::setDefaultResourceGroup("Fonts");
@@ -92,10 +83,6 @@ core::GUI::~GUI()
 
 void core::GUI::draw()
 {
-  m_renderer->beginRendering();
-  m_context->draw();
-  m_context->getMouseCursor().draw();
-  m_renderer->endRendering();
 }
 
 core::GUI::GUI() : m_renderer(nullptr), m_root(nullptr), m_context(nullptr)
@@ -109,13 +96,18 @@ void core::GUI::loadSheme(std::string const &p_shem)
 
 void core::GUI::showCursor()
 {
-  m_context->getMouseCursor().show();
 }
 
 void core::GUI::setCursorArrow(std::string const &p_arrow)
 {
+  (void)p_arrow;
   CEGUI::System::getSingleton()
       .getDefaultGUIContext()
       .getMouseCursor()
       .setDefaultImage(p_arrow);
+}
+
+CEGUI::Window *core::GUI::getRoot() const
+{
+  return m_root;
 }

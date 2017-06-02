@@ -40,7 +40,6 @@ namespace game
 
   void ContextGame::updateViewPort()
   {
-
     int size = static_cast<int>(m_players.size());
 
     for (std::size_t i = 0; i < static_cast<std::size_t>(size); ++i)

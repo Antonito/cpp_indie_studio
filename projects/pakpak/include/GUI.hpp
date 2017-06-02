@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <OGRE/Ogre.h>
+#include <OIS/OIS.h>
 #include <glm/glm.hpp>
 #include <CEGUI/CEGUI.h>
 #include <CEGUI/RendererModules/Ogre/Renderer.h>
@@ -40,6 +41,8 @@ namespace core
     CEGUI::OgreRenderer *getRender() const;
 
     CEGUI::GUIContext *getContext() const;
+
+    CEGUI::Window *getRoot() const;
 
     void showCursor();
 
