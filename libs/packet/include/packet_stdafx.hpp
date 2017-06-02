@@ -16,6 +16,8 @@
 #include <iomanip>
 #include <fstream>
 #include <memory>
+#include <cassert>
+#include "Logger.hpp"
 #include "ISerializable.hpp"
 #include "PacketHeader.hpp"
 #include "Packet.hpp"

@@ -174,17 +174,14 @@ network::IClient::ClientAction
 
   rep.pck.eventData.serverList.nbServers =
       static_cast<std::int32_t>(m_gameServerList.size());
+  rep.pck.eventData.serverList.nbServers =
+      std::min(rep.pck.eventData.serverList.nbServers,
+               GameClientToCMPacketServerList::maxServers);
   nope::log::Log(Debug) << "There are "
                         << rep.pck.eventData.serverList.nbServers
                         << " game servers.";
-  rep.pck.eventData.serverList.servers = nullptr;
   if (rep.pck.eventData.serverList.nbServers)
     {
-      std::unique_ptr<GameClientToCMPacketStatus[]> serverListPtr =
-          std::make_unique<GameClientToCMPacketStatus[]>(
-              static_cast<std::size_t>(
-                  rep.pck.eventData.serverList.nbServers));
-
       // Fill serverListPtr
       for (std::size_t i = 0; i < m_gameServerList.size(); ++i)
 	{
@@ -193,20 +190,17 @@ network::IClient::ClientAction
 	      << "Server #" << i << ": " << std::string(cur.addr.data()) << ":"
 	      << cur.port << " [ " << cur.currentClients << " / "
 	      << cur.maxClients << " ]";
-	  serverListPtr[i].ip.data = cur.addr;
-	  serverListPtr[i].port = cur.port;
-	  serverListPtr[i].currentClients = cur.currentClients;
-	  serverListPtr[i].maxClients = cur.maxClients;
+	  rep.pck.eventData.serverList.servers[i].ip.data = cur.addr;
+	  rep.pck.eventData.serverList.servers[i].port = cur.port;
+	  rep.pck.eventData.serverList.servers[i].currentClients =
+	      cur.currentClients;
+	  rep.pck.eventData.serverList.servers[i].maxClients = cur.maxClients;
 	}
-
-      // Set pointer
-      rep.pck.eventData.serverList.servers = serverListPtr.get();
     }
 
   // Send packet
   m_packet << rep;
   ret = write(m_packet);
-  rep.pck.eventData.serverList.servers = nullptr;
 
   // Display some infos
   if (ret == network::IClient::ClientAction::SUCCESS)

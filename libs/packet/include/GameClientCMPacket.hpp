@@ -47,8 +47,11 @@ struct GameClientToCMPacketStatus
 
 struct GameClientToCMPacketServerList
 {
-  std::int32_t                nbServers;
-  GameClientToCMPacketStatus *servers;
+  static constexpr std::int32_t maxServers = 64;
+  std::int32_t                  nbServers;
+  std::array<GameClientToCMPacketStatus,
+             GameClientToCMPacketServerList::maxServers>
+      servers;
 };
 
 struct GameClientToCMPacketRaw

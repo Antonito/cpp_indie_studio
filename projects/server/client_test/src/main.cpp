@@ -87,7 +87,8 @@ static void client(network::TCPSocket &socket)
        ++i)
     {
       GameClientToCMPacketStatus *cur =
-          &pckContent.pck.eventData.serverList.servers[i];
+          &pckContent.pck.eventData.serverList
+               .servers[static_cast<std::size_t>(i)];
 
       nope::log::Log(Debug)
           << "Server #" << i << ": " << std::string(cur->ip.data.data()) << ":"

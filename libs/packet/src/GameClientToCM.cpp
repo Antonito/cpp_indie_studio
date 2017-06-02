@@ -1,5 +1,6 @@
-#include "Logger.hpp"
 #include "packet_stdafx.hpp"
+
+constexpr std::int32_t GameClientToCMPacketServerList::maxServers;
 
 GameClientToCMPacket::GameClientToCMPacket() : pck(), __padding()
 {
@@ -30,10 +31,13 @@ std::unique_ptr<std::uint8_t[]>
     }
   else if (pck.eventType == GameClientToCMEvent::LIST_SERVERS_EVENT)
     {
+      data->eventData.serverList.nbServers =
+          std::min(data->eventData.serverList.nbServers,
+                   GameClientToCMPacketServerList::maxServers);
       for (std::int32_t i = 0; i < data->eventData.serverList.nbServers; ++i)
 	{
 	  GameClientToCMPacketStatus *cur =
-	      &data->eventData.serverList.servers[i];
+	      &data->eventData.serverList.servers[static_cast<std::size_t>(i)];
 
 	  cur->port = htons(cur->port);
 	  cur->currentClients = htons(cur->currentClients);
@@ -64,12 +68,14 @@ void GameClientToCMPacket::deserialize(std::size_t, std::uint8_t *data)
       for (std::int32_t i = 0; i < pck.eventData.serverList.nbServers; ++i)
 	{
 	  GameClientToCMPacketStatus *cur =
-	      &pck.eventData.serverList.servers[i];
+	      &pck.eventData.serverList.servers[static_cast<std::size_t>(i)];
 
 	  cur->port = ntohs(cur->port);
 	  cur->currentClients = ntohs(cur->currentClients);
 	  cur->maxClients = ntohs(cur->maxClients);
 	}
+      assert(pck.eventData.serverList.nbServers <=
+             GameClientToCMPacketServerList::maxServers);
     }
   else
     {
