@@ -1,10 +1,12 @@
 #include "connect_manager_stdafx.hpp"
 
-GameClient::GameClient(sock_t const                       fd,
-                       std::vector<GameServerInfo> const &gameServerList,
-                       std::mutex &                       gameServerListMut)
+GameClient::GameClient(
+    sock_t const fd, std::vector<GameServerInfo> const &gameServerList,
+    std::mutex &                                             gameServerListMut,
+    multithread::Queue<multithread::ResultGetter<TokenCom>> &token)
     : m_sock(fd), m_write(false), m_state(State::CONNECTED), m_packet(),
-      m_gameServerList(gameServerList), m_gameServerListMut(gameServerListMut)
+      m_gameServerList(gameServerList), m_gameServerListMut(gameServerListMut),
+      m_token(token)
 {
 }
 
@@ -123,7 +125,11 @@ network::IClient::ClientAction GameClient::treatIncomingData()
 		  {
 		    // Switching to state GET_TOKEN
 		    nope::log::Log(Info)
-		        << "Client requesting game server token";
+		        << "Client requesting game server token { "
+		        << std::string(
+		               rep.pck.eventData.tokenRequ.ip.data.data())
+		        << ":" << rep.pck.eventData.tokenRequ.port << " }";
+		    // TODO: Send request to gameServer's thread
 		    m_state = State::REQU_TOKEN;
 		  }
 		else
@@ -217,6 +223,44 @@ network::IClient::ClientAction
   return (ret);
 }
 
+network::IClient::ClientAction
+    GameClient::_requToken(GameClientToCMPacket &rep)
+{
+  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+  TokenCom                       tokenRaw = {};
+  multithread::ResultGetter<TokenCom> tokenRequ(tokenRaw);
+
+  nope::log::Log(Debug) << "Pushing token request";
+  m_token.push(tokenRequ);
+  nope::log::Log(Debug) << "Waiting for token response";
+  tokenRequ.waitForNotif();
+
+  nope::log::Log(Debug) << "Got token response";
+  std::unique_lock<std::mutex> lock(tokenRequ.getMut());
+  nope::log::Log(Debug) << "Locked token response";
+  TokenCom const &tok = tokenRequ.getData();
+  rep.pck.eventType = GameClientToCMEvent::GET_TOKEN_EVENT;
+  rep.pck.eventData.token.valid = static_cast<std::uint16_t>(tok.treated);
+  rep.pck.eventData.token.data = tok.tokenData;
+  nope::log::Log(Debug) << "RECEIVED ---> Treated: " << tok.treated;
+  m_packet << rep;
+  nope::log::Log(Debug) << "Sending token response";
+  ret = write(m_packet);
+
+  // Display some infos
+  if (ret == network::IClient::ClientAction::SUCCESS)
+    {
+      nope::log::Log(Info) << "GameClient " << getSocket() << " token sent.";
+    }
+  else
+    {
+      nope::log::Log(Error)
+          << "GameClient " << getSocket() << " cannot send token.";
+    }
+  m_state = State::CONNECTED; // Wait for more commands
+  return (ret);
+}
+
 network::IClient::ClientAction GameClient::treatOutcomingData()
 {
   network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
@@ -230,6 +274,7 @@ network::IClient::ClientAction GameClient::treatOutcomingData()
       ret = _listServers(rep);
       break;
     case State::REQU_TOKEN:
+      ret = _requToken(rep);
       break;
     case State::STATUS:
 #if 0

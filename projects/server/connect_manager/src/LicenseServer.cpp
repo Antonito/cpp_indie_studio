@@ -2,13 +2,14 @@
 
 constexpr std::uint32_t LicenseServer::maxGameServer;
 
-LicenseServer::LicenseServer(std::uint16_t const licensePort,
-                             std::uint16_t const gameServerPort)
+LicenseServer::LicenseServer(
+    std::uint16_t const licensePort, std::uint16_t const gameServerPort,
+    multithread::Queue<multithread::ResultGetter<TokenCom>> &token)
     : m_license(licensePort, "localhost", false, network::ASocket::BLOCKING),
       m_gameServer(gameServerPort, LicenseServer::maxGameServer,
                    network::ASocket::BLOCKING),
       m_licenseList(), m_gameServerList(), m_thread(), m_cond(), m_mut(),
-      m_list(), m_gameServerListMut()
+      m_list(), m_gameServerListMut(), m_token(token)
 {
 }
 
@@ -61,9 +62,9 @@ bool LicenseServer::addClient()
   if (rc > 0)
     {
       m_gameServerList.push_back(
-          std::make_unique<GameServer>(rc, in, m_licenseList));
-      nope::log::Log(Debug) << "Added client FD #"
-                            << m_gameServerList.back()->getSocket();
+          std::make_unique<GameServer>(rc, in, m_licenseList, m_token));
+      nope::log::Log(Debug)
+          << "Added client FD #" << m_gameServerList.back()->getSocket();
       return (true);
     }
   return (false);
@@ -181,6 +182,18 @@ void LicenseServer::_loop()
   while (1)
     {
       fd_set readfds, writefds, exceptfds;
+
+      // TODO: REMOVE, temporary, for testing purpose
+      std::size_t const nbTokenRequ = m_token.size();
+      nope::log::Log(Debug)
+          << "{LicenseServer} TokenRequests -> " << nbTokenRequ;
+      for (std::size_t i = 0; i < nbTokenRequ; ++i)
+	{
+	  multithread::ResultGetter<TokenCom> &token = m_token.front();
+	  m_token.pop();
+	  token.getData().treated = 42;
+	  token.notify();
+	}
 
       updateGameServerList();
       std::int32_t const rc =

@@ -24,6 +24,7 @@
 #include <condition_variable>
 #include <algorithm>
 #include <mutex>
+#include <cstdlib>
 #include <algorithm>
 #include "Logger.hpp"
 #include "TCPSocket.hpp"

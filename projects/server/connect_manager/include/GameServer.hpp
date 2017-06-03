@@ -8,6 +8,9 @@
 #include "TCPSocket.hpp"
 #include "Packet.hpp"
 #include "GameServerCMPacket.hpp"
+#include "Queue.hpp"
+#include "ResultGetter.hpp"
+#include "RequestToken.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
@@ -25,8 +28,10 @@ public:
     AUTHENTICATED
   };
 
-  explicit GameServer(sock_t socket, sockaddr_in_t const &in,
-                      std::vector<std::string> const &licences);
+  explicit GameServer(
+      sock_t socket, sockaddr_in_t const &in,
+      std::vector<std::string> const &                         licences,
+      multithread::Queue<multithread::ResultGetter<TokenCom>> &token);
 
   GameServer(GameServer &&);
 
@@ -61,6 +66,7 @@ private:
   std::uint16_t                   m_curClients;
   std::uint16_t                   m_maxClients;
   std::array<char, INET6_ADDRSTRLEN> m_ip;
+  multithread::Queue<multithread::ResultGetter<TokenCom>> &m_token;
 };
 
 // Disable clang warning for implicit padding

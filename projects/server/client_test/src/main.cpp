@@ -45,8 +45,8 @@ static network::IClient::ClientAction readPck(network::TCPSocket &socket,
 
 // Place client logic here
 // -> Connect to the connectManager [OK]
-// -> Get the list of servers
-// -> Select a server
+// -> Get the list of servers [OK]
+// -> Select a server [OK]
 // -> Get a token from the choosen server
 // -> Connect to the game server.
 static void client(network::TCPSocket &socket)
@@ -86,15 +86,67 @@ static void client(network::TCPSocket &socket)
   for (std::int32_t i = 0; i < pckContent.pck.eventData.serverList.nbServers;
        ++i)
     {
-      GameClientToCMPacketStatus *cur =
-          &pckContent.pck.eventData.serverList
-               .servers[static_cast<std::size_t>(i)];
+      GameClientToCMPacketStatus const &cur =
+          pckContent.pck.eventData.serverList
+              .servers[static_cast<std::size_t>(i)];
 
       nope::log::Log(Debug)
-          << "Server #" << i << ": " << std::string(cur->ip.data.data()) << ":"
-          << cur->port << " [ " << cur->currentClients << " / "
-          << cur->maxClients << " ]";
+          << "Server #" << i << ": " << std::string(cur.ip.data.data()) << ":"
+          << cur.port << " [ " << cur.currentClients << " / " << cur.maxClients
+          << " ]";
     }
+
+  // Choose server
+  std::size_t serverToConnectTo = static_cast<std::size_t>(
+      std::rand() % pckContent.pck.eventData.serverList.nbServers);
+
+  // Copy it
+  GameClientToCMPacketStatus srv =
+      pckContent.pck.eventData.serverList.servers[serverToConnectTo];
+  nope::log::Log(Info) << "Going to connect to "
+                       << std::string(srv.ip.data.data()) << ":" << srv.port;
+
+  // Build packet
+  pckContent.pck.eventType = GameClientToCMEvent::REQUEST_EVENT;
+  pckContent.pck.eventData.intEvent.event =
+      static_cast<std::uint16_t>(GameClientToCMPacketSimpleEvent::GET_TOKEN);
+  assert(pckContent.pck.eventData.intEvent.event ==
+         pckContent.pck.eventData.tokenRequ.ev.event);
+  pckContent.pck.eventData.tokenRequ.ip.data = srv.ip.data;
+  pckContent.pck.eventData.tokenRequ.port = srv.port;
+  nope::log::Log(Debug) << "Built packet";
+
+  pck << pckContent;
+  ret = writePck(socket, pck);
+  if (ret != network::IClient::ClientAction::SUCCESS)
+    {
+      nope::log::Log(Error) << "Write failed !";
+      return;
+    }
+  nope::log::Log(Debug) << "Packet sent";
+
+  // Getting token
+  nope::log::Log(Debug) << "Reading packet";
+  ret = readPck(socket, pck);
+  if (ret != network::IClient::ClientAction::SUCCESS)
+    {
+      nope::log::Log(Error) << "Read failed !";
+      return;
+    }
+  pck >> pckContent;
+  nope::log::Log(Debug) << "Read successful !";
+  if (pckContent.pck.eventType != GameClientToCMEvent::GET_TOKEN_EVENT)
+    {
+      nope::log::Log(Error) << "Invalid event type";
+      return;
+    }
+
+  nope::log::Log(Info) << "TokenValid: "
+                       << pckContent.pck.eventData.token.valid;
+  nope::log::Log(Info) << "TokenData: "
+                       << std::string(
+                              pckContent.pck.eventData.token.data.data());
+
   nope::log::Log(Debug) << "Sleeping...";
   sleep(2);
 }
@@ -107,6 +159,8 @@ int main(int ac, char **av, char **)
       std::cout << *av << " port" << std::endl;
       return (EXIT_FAILURE);
     }
+
+  std::srand(static_cast<std::uint32_t>(std::time(0)));
 
   // Starts logger
   nope::log::Logger::start("client_test.log");
