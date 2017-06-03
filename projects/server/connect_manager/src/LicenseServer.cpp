@@ -2,13 +2,14 @@
 
 constexpr std::uint32_t LicenseServer::maxGameServer;
 
-LicenseServer::LicenseServer(std::uint16_t const licensePort,
-                             std::uint16_t const gameServerPort)
+LicenseServer::LicenseServer(
+    std::uint16_t const licensePort, std::uint16_t const gameServerPort,
+    multithread::Queue<multithread::ResultGetter<TokenCom>> &token)
     : m_license(licensePort, "localhost", false, network::ASocket::BLOCKING),
       m_gameServer(gameServerPort, LicenseServer::maxGameServer,
                    network::ASocket::BLOCKING),
       m_licenseList(), m_gameServerList(), m_thread(), m_cond(), m_mut(),
-      m_list(), m_gameServerListMut()
+      m_list(), m_gameServerListMut(), m_token(token)
 {
 }
 
@@ -62,8 +63,8 @@ bool LicenseServer::addClient()
     {
       m_gameServerList.push_back(
           std::make_unique<GameServer>(rc, in, m_licenseList));
-      nope::log::Log(Debug) << "Added client FD #"
-                            << m_gameServerList.back()->getSocket();
+      nope::log::Log(Debug)
+          << "Added client FD #" << m_gameServerList.back()->getSocket();
       return (true);
     }
   return (false);
@@ -110,8 +111,8 @@ std::int32_t LicenseServer::checkActivity(fd_set &readfds, fd_set &writefds,
       FD_ZERO(&readfds);
       FD_ZERO(&writefds);
       FD_ZERO(&exceptfds);
-      tv.tv_sec = 2;
-      tv.tv_usec = 0;
+      tv.tv_sec = 1;
+      tv.tv_usec = 50;
 
       // Add license manager's socket if needed
       maxFd = (monitorLicenseServer) ? m_license.getSocket() : 0;
@@ -136,6 +137,7 @@ std::int32_t LicenseServer::checkActivity(fd_set &readfds, fd_set &writefds,
 	      // Add it to the writefds set if you can
 	      if (game->canWrite())
 		{
+		  nope::log::Log(Debug) << "Adding to writefds: #" << sock;
 		  FD_SET(sock, &writefds);
 		}
 
@@ -181,6 +183,42 @@ void LicenseServer::_loop()
   while (1)
     {
       fd_set readfds, writefds, exceptfds;
+
+      // Notify each gameServer with pending requests
+      std::size_t const nbTokenRequ = m_token.size();
+      if (nbTokenRequ)
+	{
+	  nope::log::Log(Debug)
+	      << "{LicenseServer} TokenRequests -> " << nbTokenRequ;
+	  for (std::size_t i = 0; i < nbTokenRequ; ++i)
+	    {
+	      multithread::ResultGetter<TokenCom> &token = m_token.front();
+	      m_token.pop();
+
+	      // Find requested server
+	      bool found = false;
+	      for (std::size_t j = 0; j < m_gameServerList.size(); ++j)
+		{
+		  GameServer &game = *(m_gameServerList[j]);
+
+		  if (game.isRequested(token.getData()))
+		    {
+		      // Found requested server, request will be treated by it.
+		      nope::log::Log(Debug) << "Found requested server !";
+		      game.pushRequest(token);
+		      found = true;
+		      break;
+		    }
+		}
+	      if (!found)
+		{
+		  // Unavailable server
+		  nope::log::Log(Warning) << "Couldn't find requested server";
+		  token.getData().treated = 0;
+		  token.notify();
+		}
+	    }
+	}
 
       updateGameServerList();
       std::int32_t const rc =
@@ -239,7 +277,7 @@ void LicenseServer::_loop()
 		{
 		  network::IClient::ClientAction action;
 
-		  nope::log::Log(Debug) << "Can write to socket #" << sock;
+		  nope::log::Log(Debug) << "Can read from socket #" << sock;
 		  action = game->treatIncomingData();
 		  if (action != network::IClient::ClientAction::SUCCESS)
 		    {
@@ -266,7 +304,45 @@ void LicenseServer::_loop()
 		  deleted = true;
 		}
 
+	      // Checks token requests
+	      if (deleted == false && game->hasTimedOut())
+		{
+		  if (game->hasRequests())
+		    {
+		      if (!game->canWrite())
+			{
+			  // Turn to write mode
+			  game->toggleWrite();
+			}
+		    }
+		}
+
 	      // Check if we deleted anything
+	      if (!deleted)
+		++iter;
+	    }
+	}
+      else
+	{
+	  for (std::vector<std::unique_ptr<GameServer>>::iterator iter =
+	           m_gameServerList.begin();
+	       iter != m_gameServerList.end();)
+	    {
+	      bool                         deleted = false;
+	      std::unique_ptr<GameServer> &game = *iter;
+
+	      // Checks token requests
+	      if (deleted == false && game->hasTimedOut())
+		{
+		  if (game->hasRequests())
+		    {
+		      if (!game->canWrite())
+			{
+			  // Turn to write mode
+			  game->toggleWrite();
+			}
+		    }
+		}
 	      if (!deleted)
 		++iter;
 	    }

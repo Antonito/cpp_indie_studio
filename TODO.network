@@ -1,0 +1,8 @@
+## TODOLIST : Network
+
+===> ConnectManager  <===
+
+===> GameServer      <===
+--> Send current and max number of players
+
+===> Client          <===

@@ -24,15 +24,20 @@ int main(int ac, char **av)
   // Connection to License Manager + accept game servers
   try
     {
+      multithread::Queue<multithread::ResultGetter<TokenCom>> queue;
+
       LicenseServer mainSrv(
           static_cast<std::uint16_t>(std::strtol(*(av + 1), nullptr, 10)),
-          static_cast<std::uint16_t>(std::strtol(*(av + 2), nullptr, 10)));
+          static_cast<std::uint16_t>(std::strtol(*(av + 2), nullptr, 10)),
+          queue);
       GameClientServer gameSrv(
           static_cast<std::uint16_t>(std::strtol(*(av + 3), nullptr, 10)),
-          mainSrv.getGameServerList(), mainSrv.getGameServerListMut());
+          mainSrv.getGameServerList(), mainSrv.getGameServerListMut(), queue);
 
       if (mainSrv.run())
 	{
+	  // Before starting the gameServer, wait for the mainSrv to be fully
+	  // initialized
 	  mainSrv.waitSignal();
 	  if (gameSrv.run())
 	    {
@@ -42,6 +47,7 @@ int main(int ac, char **av)
 	  // Accept Client's connection
 
 	  // Stop servers
+	  gameSrv.stop();
 	  mainSrv.stop();
 	}
     }

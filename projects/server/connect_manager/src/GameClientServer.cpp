@@ -2,13 +2,14 @@
 
 constexpr std::uint32_t GameClientServer::maxGameClients;
 
-GameClientServer::GameClientServer(std::uint16_t const                port,
-                                   std::vector<GameServerInfo> const &com,
-                                   std::mutex &gameServerList)
+GameClientServer::GameClientServer(
+    std::uint16_t const port, std::vector<GameServerInfo> const &com,
+    std::mutex &                                             gameServerList,
+    multithread::Queue<multithread::ResultGetter<TokenCom>> &token)
     : m_sock(port, GameClientServer::maxGameClients,
              network::ASocket::BLOCKING),
       m_thread(), m_gameClient(), m_gameServerList(com),
-      m_gameServerListMut(gameServerList)
+      m_gameServerListMut(gameServerList), m_token(token)
 {
 }
 
@@ -56,9 +57,10 @@ bool GameClientServer::addClient()
   if (rc > 0)
     {
       m_gameClient.push_back(std::make_unique<GameClient>(
-          rc, m_gameServerList, m_gameServerListMut)); // TODO: Use in ?
-      nope::log::Log(Debug) << "Added client FD #"
-                            << m_gameClient.back()->getSocket();
+          rc, m_gameServerList, m_gameServerListMut,
+          m_token)); // TODO: Use in ?
+      nope::log::Log(Debug)
+          << "Added client FD #" << m_gameClient.back()->getSocket();
       return (true);
     }
   return (false);
@@ -110,6 +112,8 @@ std::int32_t GameClientServer::checkActivity(fd_set &readfds, fd_set &writefds,
 	    {
 	      FD_SET(sock, &writefds);
 	    }
+
+	  // Update maxFD
 	  if (sock > maxFd)
 	    {
 	      maxFd = sock;

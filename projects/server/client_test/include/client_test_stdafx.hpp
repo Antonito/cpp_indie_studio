@@ -3,10 +3,10 @@
 // are changed infrequently
 //
 
-#ifndef CONNECT_MANAGER_STDAFX_HPP_
-#define CONNECT_MANAGER_STDAFX_HPP_
+#ifndef CLIENT_TEST_STDAFX_HPP_
+#define CLIENT_TEST_STDAFX_HPP_
 
-#include "connect_manager_targetver.h"
+#include "client_test_targetver.h"
 
 #define WIN32_LEAN_AND_MEAN // Exclude rarely-used stuff from Windows headers
 
@@ -24,17 +24,13 @@
 #include <condition_variable>
 #include <algorithm>
 #include <mutex>
+#include <cstdlib>
 #include <algorithm>
-#if defined(__linux__) || defined(__APPLE__)
-#include <sys/select.h>
-#endif
-#include "LicenseServer.hpp"
-#include "GameClientServer.hpp"
-#include "GameClient.hpp"
 #include "Logger.hpp"
+#include "TCPSocket.hpp"
 #include "SockError.hpp"
-#include "Queue.hpp"
-#include "ResultGetter.hpp"
-#include "RequestToken.hpp"
+#include "Packet.hpp"
+#include "GameClientCMPacket.hpp"
+#include "IClient.hpp"
 
-#endif // !CONNECT_MANAGER_STDAFX_HPP_
+#endif // !CLIENT_TEST_STDAFX_HPP_

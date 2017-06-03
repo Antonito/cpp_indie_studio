@@ -10,13 +10,14 @@ GameServer::GameServer(std::string const & connectManagerIp,
       m_gameSock(
           m_gameServerPort, static_cast<std::uint32_t>(m_maxClients),
           network::ASocket::SocketType::BLOCKING), // TODO: Non-blocking ?
-      m_connectSrv(),
-      m_gameSrvTCP(), m_gameSrvUDP(), m_clientList(), m_tokenList()
+      m_connectSrv(), m_gameSrvTCP(), m_gameSrvUDP(), m_clientList(),
+      m_tokenList()
 {
   std::ifstream licenceFile(".license");
 
   if (!licenceFile.is_open())
     {
+      nope::log::Log(Error) << "Cannot open file : .license";
       throw std::exception(); // TODO: Real exception
     }
   std::getline(licenceFile, m_licence);
@@ -103,6 +104,7 @@ bool GameServer::run()
 	  m_connectSrv = std::thread(&GameServer::connectManagerCom, this);
 	  m_gameSrvTCP = std::thread(&GameServer::gameServerTCP, this);
 	  m_gameSrvUDP = std::thread(&GameServer::gameServerUDP, this);
+	  return (true);
 	}
     }
   return (false);
@@ -139,6 +141,7 @@ bool GameServer::disconnect()
   return (true);
 }
 
+// ConnectManager <--> GameServer
 network::IClient::ClientAction GameServer::write(IPacket const &pck)
 {
   network::IClient::ClientAction ret = network::IClient::ClientAction::SUCCESS;
@@ -153,6 +156,7 @@ network::IClient::ClientAction GameServer::write(IPacket const &pck)
   return (ret);
 }
 
+// ConnectManager <--> GameServer
 network::IClient::ClientAction GameServer::read(IPacket &pck)
 {
   network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
@@ -190,8 +194,9 @@ bool GameServer::hasTimedOut() const
 // Connection Manager TCP communication
 void GameServer::connectManagerCom()
 {
-  std::int32_t const sock = m_connectManagerSock.getSocket();
-  bool               canWrite = false;
+  std::int32_t const           sock = m_connectManagerSock.getSocket();
+  bool                         canWrite = false;
+  Packet<GameServerToCMPacket> packet;
 
   assert(sock >= 0);
   while (1)
@@ -230,20 +235,89 @@ void GameServer::connectManagerCom()
 	{
 	  if (FD_ISSET(sock, &readfds))
 	    {
+	      network::IClient::ClientAction ret =
+	          network::IClient::ClientAction::FAILURE;
+
 	      // Treat input
+	      ret = read(packet);
+	      if (ret == network::IClient::ClientAction::SUCCESS)
+		{
+		  GameServerToCMPacket rep;
+
+		  packet >> rep;
+		  if (rep.pck.eventType == GameServerToCMEvent::REQUEST_TOKEN)
+		    {
+		      nope::log::Log(Info) << "Token request [ConnectManager]";
+		      canWrite = true;
+		    }
+		  else
+		    {
+		      nope::log::Log(Warning)
+		          << "Received invalid packet [ConnectManager]";
+		    }
+		}
+	      else
+		{
+		  break;
+		}
 	    }
+
 	  if (canWrite && FD_ISSET(sock, &writefds))
 	    {
 	      // Treat output
+	      GameServerToCMPacket           rep = {};
+	      network::IClient::ClientAction ret =
+	          network::IClient::ClientAction::FAILURE;
+
+	      nope::log::Log(Debug)
+	          << "Responding to token request.. [ConnectManager]";
+
+	      rep.pck.eventType = GameServerToCMEvent::TOKEN;
+	      rep.pck.eventData.token.treated = 0;
+	      // Generate token
+	      if (m_curClients < m_maxClients)
+		{
+		  // Add new token
+		  m_tokenList.push_back(Token());
+		  Token &curToken = m_tokenList.back();
+		  curToken.generate();
+
+		  nope::log::Log(Debug)
+		      << "There is space on gameServer [ConnectManager]";
+		  if (curToken.isGenerated())
+		    {
+		      std::string const &tokenStr = curToken.getToken();
+		      nope::log::Log(Debug) << "Generated token: " << tokenStr;
+
+		      // Check token's length
+		      if (tokenStr.length() <= 40)
+			{
+			  rep.pck.eventData.token.treated = 1;
+			  rep.pck.eventData.token.port = m_gameServerPort;
+			  std::copy(tokenStr.begin(), tokenStr.end(),
+			            rep.pck.eventData.token.tokenData.data());
+			}
+		    }
+		}
+	      packet << rep;
+	      ret = write(packet);
+	      if (ret == network::IClient::ClientAction::SUCCESS)
+		{
+		  nope::log::Log(Debug)
+		      << "Sent token response [ConnectManager]";
+		}
+	      canWrite = false;
 	    }
+
 	  if (FD_ISSET(sock, &exceptfds))
 	    {
-	      nope::log::Log(Error) << "Something happened";
+	      // Treat exceptions
+	      nope::log::Log(Error) << "Something happened [ConnectManager]";
 	      break;
 	    }
 	}
     }
-  nope::log::Log(Info) << "Connection with license server closed.";
+  nope::log::Log(Info) << "Connection with connectManager closed.";
 }
 
 // GameServer -> GameClient TCP Connection
@@ -296,4 +370,5 @@ void GameServer::gameServerTCP()
 // GameServer->GameClient UDP Connection
 void GameServer::gameServerUDP()
 {
+  // TODO: Open UDP connection
 }

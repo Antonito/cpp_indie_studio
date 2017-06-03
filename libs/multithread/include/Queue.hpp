@@ -19,22 +19,10 @@ namespace multithread
     {
     }
 
-    T const &front() const
-    {
-      std::unique_lock<std::mutex> lock(m_mut);
-      return (m_queue.front());
-    }
-
     T &front()
     {
       std::unique_lock<std::mutex> lock(m_mut);
       return (m_queue.front());
-    }
-
-    T const &back() const
-    {
-      std::unique_lock<std::mutex> lock(m_mut);
-      return (m_queue.back());
     }
 
     T &back()
@@ -43,13 +31,13 @@ namespace multithread
       return (m_queue.bakc());
     }
 
-    bool empty() const
+    bool empty()
     {
       std::unique_lock<std::mutex> lock(m_mut);
       return (m_queue.empty());
     }
 
-    std::size_t size() const
+    std::size_t size()
     {
       std::unique_lock<std::mutex> lock(m_mut);
       return (m_queue.size());
@@ -66,7 +54,7 @@ namespace multithread
     void push(T &&value)
     {
       m_mut.lock();
-      m_queue.push(value);
+      m_queue.push(std::move(value));
       m_mut.unlock();
       m_sem.post();
     }
