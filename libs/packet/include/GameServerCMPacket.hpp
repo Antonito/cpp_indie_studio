@@ -11,7 +11,9 @@ enum class GameServerToCMEvent : std::uint16_t
 {
   STRINGIFIED_EVENT = 0,
   LICENCE_EVENT,
-  NB_CLIENTS
+  NB_CLIENTS,
+  REQUEST_TOKEN,
+  TOKEN
 };
 
 struct GameServerToCMPacketSimple
@@ -26,6 +28,13 @@ struct GameServerToCMPacketLicence
   std::uint16_t              port;
 };
 
+struct GameServerToCMPacketToken
+{
+  std::uint16_t port;
+  std::uint16_t treated;
+  std::array<char, 40> tokenData;
+};
+
 struct GameServerToCMPacketRaw
 {
   GameServerToCMEvent eventType;
@@ -33,6 +42,7 @@ struct GameServerToCMPacketRaw
   {
     GameServerToCMPacketSimple  string;
     GameServerToCMPacketLicence licence;
+    GameServerToCMPacketToken   token;
     uint16_t                    nbClients;
   } eventData;
 };

@@ -12,7 +12,7 @@ int main(int ac, char **av)
     }
 
   // Starts logger
-  nope::log::Logger::start("connect_manager.log");
+  nope::log::Logger::start("game_server.log");
 #if defined(DEBUG)
   nope::log::Logger::logLevel = nope::log::LogLevel::LOG_DEBUG;
   nope::log::Log(Debug) << "Starting log";

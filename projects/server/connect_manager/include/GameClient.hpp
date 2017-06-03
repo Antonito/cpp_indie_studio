@@ -26,8 +26,7 @@ public:
   {
     CONNECTED = 0,
     REQU_LIST_SERV,
-    REQU_TOKEN,
-    STATUS
+    REQU_TOKEN
   };
 
   explicit GameClient(
@@ -57,6 +56,10 @@ private:
   std::vector<GameServerInfo> const &                      m_gameServerList;
   std::mutex &                                             m_gameServerListMut;
   multithread::Queue<multithread::ResultGetter<TokenCom>> &m_token;
+
+  // Request's data
+  std::array<char, INET6_ADDRSTRLEN> m_requIp;
+  std::uint16_t m_requPort;
 
   network::IClient::ClientAction _listServers(GameClientToCMPacket &rep);
   network::IClient::ClientAction _requToken(GameClientToCMPacket &rep);

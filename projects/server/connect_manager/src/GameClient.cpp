@@ -6,7 +6,7 @@ GameClient::GameClient(
     multithread::Queue<multithread::ResultGetter<TokenCom>> &token)
     : m_sock(fd), m_write(false), m_state(State::CONNECTED), m_packet(),
       m_gameServerList(gameServerList), m_gameServerListMut(gameServerListMut),
-      m_token(token)
+      m_token(token), m_requIp(), m_requPort()
 {
 }
 
@@ -129,7 +129,8 @@ network::IClient::ClientAction GameClient::treatIncomingData()
 		        << std::string(
 		               rep.pck.eventData.tokenRequ.ip.data.data())
 		        << ":" << rep.pck.eventData.tokenRequ.port << " }";
-		    // TODO: Send request to gameServer's thread
+		    m_requIp = rep.pck.eventData.tokenRequ.ip.data;
+		    m_requPort = rep.pck.eventData.tokenRequ.port;
 		    m_state = State::REQU_TOKEN;
 		  }
 		else
@@ -156,9 +157,6 @@ network::IClient::ClientAction GameClient::treatIncomingData()
       break;
     case State::REQU_TOKEN:
       assert(0);
-      break;
-
-    case State::STATUS:
       break;
     }
   if (ret == network::IClient::ClientAction::SUCCESS)
@@ -230,6 +228,9 @@ network::IClient::ClientAction
   TokenCom                       tokenRaw = {};
   multithread::ResultGetter<TokenCom> tokenRequ(tokenRaw);
 
+  // Set request's data
+  tokenRaw.ip = m_requIp;
+  tokenRaw.port = m_requPort;
   nope::log::Log(Debug) << "Pushing token request";
   m_token.push(tokenRequ);
   nope::log::Log(Debug) << "Waiting for token response";
@@ -257,6 +258,11 @@ network::IClient::ClientAction
       nope::log::Log(Error)
           << "GameClient " << getSocket() << " cannot send token.";
     }
+
+  // Reset requests
+  m_requIp.fill('\0');
+  m_requPort = 0;
+
   m_state = State::CONNECTED; // Wait for more commands
   return (ret);
 }
@@ -275,29 +281,6 @@ network::IClient::ClientAction GameClient::treatOutcomingData()
       break;
     case State::REQU_TOKEN:
       ret = _requToken(rep);
-      break;
-    case State::STATUS:
-#if 0
-      {
-	// TODO modify the packet to set real info insteab of bebete string
-	std::unique_lock<std::mutex> lock(m_gameServerListMut);
-	for (std::uint32_t i = 0; i < m_gameServerList.size(); i++)
-	  {
-	    rep.pck.eventType = GameClientToCMEvent::SERVER_STATUS_EVENT;
-	    rep.pck.eventData.status.port = htons(m_gameServerList[i].port);
-	    rep.pck.eventData.status.currentClients =
-	        htons(m_gameServerList[i].currentClients);
-	    rep.pck.eventData.status.maxClients =
-	        htons(m_gameServerList[i].maxClients);
-	    GameClientToCMPacketIP &simple = rep.pck.eventData.status.ip;
-	    std::memcpy(simple.data.data(), m_gameServerList[i].addr.data(),
-	                m_gameServerList.size());
-	    m_packet << rep;
-	    ret = write(m_packet);
-	  }
-	m_state = State::CONNECTED;
-    }
-#endif
       break;
     }
   if (ret == network::IClient::ClientAction::SUCCESS)
