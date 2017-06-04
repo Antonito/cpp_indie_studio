@@ -49,6 +49,7 @@
 //
 #include "AppLauncher.hpp"
 #include "binary.hpp"
+#include "json.hpp"
 #include "ContextGame.hpp"
 #include "ContextMenu.hpp"
 #include "ContextSplash.hpp"
@@ -82,6 +83,9 @@
 // Game.Map
 #include "Map.hpp"
 #include "PathPoint.hpp"
+
+// Game.Settings
+#include "SettingsPlayer.hpp"
 
 //
 // Logger

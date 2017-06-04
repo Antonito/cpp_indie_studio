@@ -5,7 +5,8 @@ namespace game
   LocalPlayer::LocalPlayer(Ogre::RenderWindow *win, GameData &g, PlayerData *p,
                            int order)
       : m_data(p), m_cameraMode(CameraMode::Top), m_layers(),
-        m_currentLayers(), m_cam(nullptr), m_viewport(nullptr)
+        m_currentLayers(), m_cam(nullptr), m_viewport(nullptr), m_rounds(),
+        m_settings(), m_actions(), m_order(order)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
         std::make_unique<Loading>(g, *this);
@@ -41,13 +42,16 @@ namespace game
     m_viewport->setBackgroundColour(Ogre::ColourValue(0, 50, 0));
     m_cam->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
                           Ogre::Real(m_viewport->getActualHeight()));
+    setActionMap();
   }
 
   LocalPlayer::LocalPlayer(LocalPlayer &&that)
       : m_data(that.m_data), m_cameraMode(std::move(that.m_cameraMode)),
         m_layers(std::move(that.m_layers)),
         m_currentLayers(std::move(that.m_currentLayers)), m_cam(that.m_cam),
-        m_viewport(that.m_viewport)
+        m_viewport(that.m_viewport), m_rounds(that.m_rounds),
+        m_settings(that.m_settings), m_actions(that.m_actions),
+        m_order(that.m_order)
   {
     that.m_cam = nullptr;
     that.m_viewport = nullptr;
@@ -65,6 +69,19 @@ namespace game
     m_viewport->setDimensions(left, top, width, height);
     m_cam->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
                           Ogre::Real(m_viewport->getActualHeight()));
+  }
+
+  void LocalPlayer::crossFinishLine(
+      std::chrono::time_point<std::chrono::high_resolution_clock> finishTime,
+      int                                                         nbRounds)
+  {
+    static int currentRound = 0;
+
+    if (currentRound < nbRounds)
+      {
+	currentRound++;
+	m_rounds.push_back(finishTime);
+      }
   }
 
   bool LocalPlayer::keyPressed(OIS::KeyEvent const &ke)
@@ -149,5 +166,144 @@ namespace game
   ACar const &LocalPlayer::car() const
   {
     return (m_data->car());
+  }
+
+  SettingsPlayer &LocalPlayer::settings()
+  {
+    return (m_settings);
+  }
+
+  void LocalPlayer::setActionMap()
+  {
+    m_actions.emplace(
+        "speedUp",
+        std::make_pair(&LocalPlayer::speedUp, &LocalPlayer::speedUpReleased));
+    m_actions.emplace("slowDown",
+                      std::make_pair(&LocalPlayer::slowDown,
+                                     &LocalPlayer::slowDownReleased));
+    m_actions.emplace("turnLeft",
+                      std::make_pair(&LocalPlayer::turnLeft,
+                                     &LocalPlayer::turnLeftReleased));
+    m_actions.emplace("turnRight",
+                      std::make_pair(&LocalPlayer::turnRight,
+                                     &LocalPlayer::turnRightReleased));
+    m_actions.emplace("useObject",
+                      std::make_pair(&LocalPlayer::useObject,
+                                     &LocalPlayer::useObjectReleased));
+    m_actions.emplace("changeView",
+                      std::make_pair(&LocalPlayer::changeView,
+                                     &LocalPlayer::changeViewReleased));
+    m_actions.emplace("displayMap",
+                      std::make_pair(&LocalPlayer::displayMap,
+                                     &LocalPlayer::displayMapReleased));
+    m_actions.emplace("openChat",
+                      std::make_pair(&LocalPlayer::openChat,
+                                     &LocalPlayer::openChatReleased));
+    m_actions.emplace("openMenu",
+                      std::make_pair(&LocalPlayer::openMenu,
+                                     &LocalPlayer::openMenuReleased));
+  }
+
+  std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()> &
+      LocalPlayer::actions(std::string const &action)
+  {
+    std::cout << action << std::endl;
+    return (m_actions[action]);
+  }
+
+  void LocalPlayer::speedUp()
+  {
+    m_data->car().move(-1);
+  }
+
+  void LocalPlayer::slowDown()
+  {
+    m_data->car().move(1);
+  }
+
+  void LocalPlayer::turnLeft()
+  {
+    m_data->car().turn(2);
+  }
+
+  void LocalPlayer::turnRight()
+  {
+    m_data->car().turn(-2);
+  }
+
+  void LocalPlayer::useObject()
+  {
+    // TODO: implement Bonus Object
+  }
+
+  void LocalPlayer::changeView()
+  {
+  }
+
+  void LocalPlayer::displayMap()
+  {
+    // TODO: implement MiniMap
+  }
+
+  void LocalPlayer::openChat()
+  {
+    m_currentLayers.push(
+        m_layers[static_cast<std::size_t>(GameLayer::Chat)].get());
+  }
+
+  void LocalPlayer::openMenu()
+  {
+    m_currentLayers.push(
+        m_layers[static_cast<std::size_t>(GameLayer::Menu)].get());
+  }
+
+  void LocalPlayer::speedUpReleased()
+  {
+    m_data->car().move(0);
+  }
+
+  void LocalPlayer::slowDownReleased()
+  {
+    m_data->car().move(0);
+  }
+
+  void LocalPlayer::turnLeftReleased()
+  {
+    m_data->car().turn(0);
+  }
+
+  void LocalPlayer::turnRightReleased()
+  {
+    m_data->car().turn(0);
+  }
+
+  void LocalPlayer::useObjectReleased()
+  {
+  }
+
+  void LocalPlayer::changeViewReleased()
+  {
+  }
+
+  void LocalPlayer::displayMapReleased()
+  {
+  }
+
+  void LocalPlayer::openChatReleased()
+  {
+  }
+
+  void LocalPlayer::openMenuReleased()
+  {
+  }
+
+  int LocalPlayer::order() const
+  {
+    return (m_order);
+  }
+
+  void LocalPlayer::order(int order)
+  {
+    m_order = order;
   }
 }

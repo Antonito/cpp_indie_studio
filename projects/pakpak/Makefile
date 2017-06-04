@@ -32,13 +32,16 @@ GAME_CAR_DIR=	$(GAME_DIR)car/
 
 GAME_MAP_DIR=	$(GAME_DIR)map/
 
+GAME_SETTINGS_DIR=	$(GAME_DIR)settings/
+
 INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)		\
 		$(GAME_DIR)		\
 		$(GAME_LAYER_DIR)	\
 		$(GAME_CAR_DIR)		\
-		$(GAME_MAP_DIR)
+		$(GAME_MAP_DIR)		\
+		$(GAME_SETTINGS_DIR)
 
 HEADER=		pakpak_stdafx.hpp
 
@@ -75,11 +78,14 @@ GAME_CAR_FILES=		ACar.cpp			\
 GAME_MAP_FILES=		Map.cpp				\
 			PathPoint.cpp
 
+GAME_SETTINGS_FILES=	SettingsPlayer.cpp
+
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 		$(addprefix $(GAME_DIR), $(GAME_FILES))			\
 		$(addprefix $(GAME_LAYER_DIR), $(GAME_LAYER_FILES))	\
 		$(addprefix $(GAME_CAR_DIR), $(GAME_CAR_FILES))		\
-		$(addprefix $(GAME_MAP_DIR), $(GAME_MAP_FILES))
+		$(addprefix $(GAME_MAP_DIR), $(GAME_MAP_FILES))		\
+		$(addprefix $(GAME_SETTINGS_DIR), $(GAME_SETTINGS_FILES))
 
 INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)			\
 		$(ROOT_DIR)/libs/serializer/include/			\
