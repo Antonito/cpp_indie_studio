@@ -37,8 +37,14 @@ public:
   virtual bool                           hasTimedOut() const;
 
 private:
-  bool authenticateToConnectManager();
-  void connectManagerCom();
+  bool         authenticateToConnectManager();
+  void         connectManagerCom();
+  std::int32_t connectManagerComActivity(std::int32_t const sock,
+                                         fd_set &readfds, fd_set &writefds,
+                                         fd_set &exceptfds, bool canWrite);
+  network::IClient::ClientAction connectManagerComTreatInput(bool &canWrite);
+  network::IClient::ClientAction connectManagerComTreatOutput(bool &canWrite);
+
   void gameServerTCP();
   void gameServerUDP();
 

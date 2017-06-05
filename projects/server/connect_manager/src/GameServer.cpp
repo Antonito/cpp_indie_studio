@@ -246,10 +246,14 @@ network::IClient::ClientAction GameServer::treatOutcomingData()
 	}
       nope::log::Log(Debug) << "There are pending token requests";
       m_state = State::TOKEN;
+
 // Allow fall through
 #if defined(__clang__)
       [[clang::fallthrough]];
+#elif defined(__GNUC__)
+      __attribute__((fallthrough));
 #endif
+
     case State::TOKEN:
       nope::log::Log(Debug) << "Sending Token request to distant game server";
       rep.pck.eventType = GameServerToCMEvent::REQUEST_TOKEN;

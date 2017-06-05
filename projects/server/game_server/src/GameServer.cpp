@@ -191,37 +191,125 @@ bool GameServer::hasTimedOut() const
   return (false);
 }
 
+std::int32_t GameServer::connectManagerComActivity(std::int32_t const sock,
+                                                   fd_set &           readfds,
+                                                   fd_set &           writefds,
+                                                   fd_set &exceptfds,
+                                                   bool    canWrite)
+{
+  std::int32_t rc = 0;
+
+  do
+    {
+      struct timeval tv;
+
+      FD_ZERO(&readfds);
+      FD_ZERO(&writefds);
+      tv.tv_sec = 5;
+      tv.tv_usec = 0;
+
+      FD_SET(sock, &readfds);
+      if (canWrite)
+	{
+	  FD_SET(sock, &writefds);
+	}
+      exceptfds = readfds;
+      rc = select(sock + 1, &readfds, &writefds, &exceptfds, &tv);
+    }
+  while (rc == -1 && errno == EINTR);
+  return (rc);
+}
+
+network::IClient::ClientAction
+    GameServer::connectManagerComTreatInput(bool &canWrite)
+{
+  Packet<GameServerToCMPacket>   packet;
+  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+
+  // Treat input
+  ret = read(packet);
+  if (ret == network::IClient::ClientAction::SUCCESS)
+    {
+      GameServerToCMPacket rep;
+
+      packet >> rep;
+      if (rep.pck.eventType == GameServerToCMEvent::REQUEST_TOKEN)
+	{
+	  nope::log::Log(Info) << "Token request [ConnectManager]";
+	  canWrite = true;
+	}
+      else
+	{
+	  nope::log::Log(Warning)
+	      << "Received invalid packet [ConnectManager]";
+	}
+    }
+  else
+    {
+      ret = network::IClient::ClientAction::DISCONNECT;
+    }
+  return (ret);
+}
+
+network::IClient::ClientAction
+    GameServer::connectManagerComTreatOutput(bool &canWrite)
+{
+  // Treat output
+  GameServerToCMPacket           rep = {};
+  Packet<GameServerToCMPacket>   packet;
+  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+
+  nope::log::Log(Debug) << "Responding to token request.. [ConnectManager]";
+
+  rep.pck.eventType = GameServerToCMEvent::TOKEN;
+  rep.pck.eventData.token.treated = 0;
+
+  // Generate token
+  if (m_curClients < m_maxClients)
+    {
+      // Add new token
+      m_tokenList.push_back(Token());
+      Token &curToken = m_tokenList.back();
+      curToken.generate();
+
+      nope::log::Log(Debug) << "There is space on gameServer [ConnectManager]";
+      if (curToken.isGenerated())
+	{
+	  std::string const &tokenStr = curToken.getToken();
+	  nope::log::Log(Debug) << "Generated token: " << tokenStr;
+
+	  // Check token's length
+	  if (tokenStr.length() <= 40)
+	    {
+	      rep.pck.eventData.token.treated = 1;
+	      rep.pck.eventData.token.port = m_gameServerPort;
+	      std::copy(tokenStr.begin(), tokenStr.end(),
+	                rep.pck.eventData.token.tokenData.data());
+	    }
+	}
+    }
+  packet << rep;
+  ret = write(packet);
+  if (ret == network::IClient::ClientAction::SUCCESS)
+    {
+      nope::log::Log(Debug) << "Sent token response [ConnectManager]";
+    }
+  canWrite = false;
+  return (ret);
+}
+
 void GameServer::connectManagerCom()
 {
-  std::int32_t const           sock = m_connectManagerSock.getSocket();
-  bool                         canWrite = false;
-  Packet<GameServerToCMPacket> packet;
+  std::int32_t const sock = m_connectManagerSock.getSocket();
+  bool               canWrite = false;
 
   assert(sock >= 0);
   while (1)
     {
       // Check activity
-      fd_set       readfds, writefds, exceptfds;
-      std::int32_t rc;
-
-      do
-	{
-	  struct timeval tv;
-
-	  FD_ZERO(&readfds);
-	  FD_ZERO(&writefds);
-	  tv.tv_sec = 5;
-	  tv.tv_usec = 0;
-
-	  FD_SET(sock, &readfds);
-	  if (canWrite)
-	    {
-	      FD_SET(sock, &writefds);
-	    }
-	  exceptfds = readfds;
-	  rc = select(sock + 1, &readfds, &writefds, &exceptfds, &tv);
-	}
-      while (rc == -1 && errno == EINTR);
+      fd_set             readfds, writefds, exceptfds;
+      std::int32_t const rc = connectManagerComActivity(
+          sock, readfds, writefds, exceptfds, canWrite);
 
       // Treat data
       if (rc < 0)
@@ -232,85 +320,29 @@ void GameServer::connectManagerCom()
 	}
       else if (rc > 0)
 	{
+	  // Treat incoming data
 	  if (FD_ISSET(sock, &readfds))
 	    {
-	      network::IClient::ClientAction ret =
-	          network::IClient::ClientAction::FAILURE;
-
-	      // Treat input
-	      ret = read(packet);
-	      if (ret == network::IClient::ClientAction::SUCCESS)
-		{
-		  GameServerToCMPacket rep;
-
-		  packet >> rep;
-		  if (rep.pck.eventType == GameServerToCMEvent::REQUEST_TOKEN)
-		    {
-		      nope::log::Log(Info) << "Token request [ConnectManager]";
-		      canWrite = true;
-		    }
-		  else
-		    {
-		      nope::log::Log(Warning)
-		          << "Received invalid packet [ConnectManager]";
-		    }
-		}
-	      else
+	      if (connectManagerComTreatInput(canWrite) ==
+	          network::IClient::ClientAction::DISCONNECT)
 		{
 		  break;
 		}
 	    }
 
+	  // Treat outgoing data
 	  if (canWrite && FD_ISSET(sock, &writefds))
 	    {
-	      // Treat output
-	      GameServerToCMPacket           rep = {};
-	      network::IClient::ClientAction ret =
-	          network::IClient::ClientAction::FAILURE;
-
-	      nope::log::Log(Debug)
-	          << "Responding to token request.. [ConnectManager]";
-
-	      rep.pck.eventType = GameServerToCMEvent::TOKEN;
-	      rep.pck.eventData.token.treated = 0;
-	      // Generate token
-	      if (m_curClients < m_maxClients)
+	      if (connectManagerComTreatOutput(canWrite) ==
+	          network::IClient::ClientAction::DISCONNECT)
 		{
-		  // Add new token
-		  m_tokenList.push_back(Token());
-		  Token &curToken = m_tokenList.back();
-		  curToken.generate();
-
-		  nope::log::Log(Debug)
-		      << "There is space on gameServer [ConnectManager]";
-		  if (curToken.isGenerated())
-		    {
-		      std::string const &tokenStr = curToken.getToken();
-		      nope::log::Log(Debug) << "Generated token: " << tokenStr;
-
-		      // Check token's length
-		      if (tokenStr.length() <= 40)
-			{
-			  rep.pck.eventData.token.treated = 1;
-			  rep.pck.eventData.token.port = m_gameServerPort;
-			  std::copy(tokenStr.begin(), tokenStr.end(),
-			            rep.pck.eventData.token.tokenData.data());
-			}
-		    }
+		  break;
 		}
-	      packet << rep;
-	      ret = write(packet);
-	      if (ret == network::IClient::ClientAction::SUCCESS)
-		{
-		  nope::log::Log(Debug)
-		      << "Sent token response [ConnectManager]";
-		}
-	      canWrite = false;
 	    }
 
+	  // Treat exceptions
 	  if (FD_ISSET(sock, &exceptfds))
 	    {
-	      // Treat exceptions
 	      nope::log::Log(Error) << "Something happened [ConnectManager]";
 	      break;
 	    }
