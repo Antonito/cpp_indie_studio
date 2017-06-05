@@ -224,8 +224,8 @@ network::IClient::ClientAction
 network::IClient::ClientAction
     GameClient::_requToken(GameClientToCMPacket &rep)
 {
-  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
-  TokenCom                       tokenRaw = {};
+  network::IClient::ClientAction      ret;
+  TokenCom                            tokenRaw = {};
   multithread::ResultGetter<TokenCom> tokenRequ(tokenRaw);
 
   // Set request's data

@@ -51,7 +51,7 @@ static network::IClient::ClientAction readPck(network::TCPSocket &socket,
 // -> Connect to the game server.
 static void client(network::TCPSocket &socket)
 {
-  network::IClient::ClientAction ret = network::IClient::ClientAction::SUCCESS;
+  network::IClient::ClientAction ret;
   Packet<GameClientToCMPacket>   pck = {};
   GameClientToCMPacket           pckContent = {};
 
