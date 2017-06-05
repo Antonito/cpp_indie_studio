@@ -15,9 +15,18 @@ namespace game
     {
       GameSettings();
 
+      GameSettings(GameSettings const &);
+      GameSettings(GameSettings &&);
+      GameSettings &operator=(GameSettings const &);
+      GameSettings &operator=(GameSettings &&);
+
       struct Key
       {
 	Key();
+	Key(Key const &);
+	Key(Key &&);
+	Key &operator=(Key const &);
+	Key &operator=(Key &&);
 
 	// clang-format off
       NOPE_SERIAL_MEMBER(
@@ -36,7 +45,10 @@ namespace game
       struct Graphic
       {
 	Graphic();
-
+	Graphic(Graphic const &);
+	Graphic(Graphic &&);
+	Graphic &operator=(Graphic const &);
+	Graphic &operator=(Graphic &&);
 	// clang-format off
 	NOPE_SERIAL_MEMBER(
 	std::int32_t, sensibility,

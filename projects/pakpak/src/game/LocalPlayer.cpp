@@ -43,6 +43,7 @@ namespace game
     m_cam->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
                           Ogre::Real(m_viewport->getActualHeight()));
     setActionMap();
+    m_settings.loadFromFile(order);
   }
 
   LocalPlayer::LocalPlayer(LocalPlayer &&that)

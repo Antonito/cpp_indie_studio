@@ -20,7 +20,7 @@ namespace game
 
     m_game.setPlayerNb(nbPlayer);
 
-    std::size_t nbLocalPlayer = 3;
+    std::size_t nbLocalPlayer = 2;
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {

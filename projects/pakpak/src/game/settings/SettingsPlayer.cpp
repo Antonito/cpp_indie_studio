@@ -14,9 +14,6 @@ namespace game
     m_players.resize(5);
     m_keycodes.resize(5);
     m_used.resize(256);
-    // TODO : remove
-    setUsed(0, true);
-    fillKey(0);
   }
 
   SettingsPlayer::SettingsPlayer(SettingsPlayer const &that)
@@ -41,6 +38,8 @@ namespace game
     ss << fs.rdbuf();
     std::string content = ss.str();
 
+    std::cout << "Index " << playerIndex << ' ' << m_players.size()
+              << std::endl;
     m_players[playerIndex] =
         nope::serialization::from_json<SettingsPlayer::GameSettings>(content);
     if (check_used(playerIndex))
@@ -154,6 +153,108 @@ namespace game
   }
 
   SettingsPlayer::GameSettings::GameSettings() : key(), graphic()
+  {
+  }
+
+  SettingsPlayer::GameSettings::GameSettings(GameSettings const &that)
+      : key(that.key), graphic(that.graphic)
+  {
+  }
+
+  SettingsPlayer::GameSettings::GameSettings(GameSettings &&that)
+      : key(std::move(that.key)), graphic(std::move(that.graphic))
+  {
+  }
+
+  SettingsPlayer::GameSettings &SettingsPlayer::GameSettings::
+      operator=(GameSettings const &that)
+  {
+    this->key = that.key;
+    this->graphic = that.graphic;
+    return (*this);
+  }
+
+  SettingsPlayer::GameSettings &SettingsPlayer::GameSettings::
+      operator=(GameSettings &&that)
+  {
+    this->key = std::move(that.key);
+    this->graphic = std::move(that.graphic);
+    return (*this);
+  }
+
+  SettingsPlayer::GameSettings::Key &SettingsPlayer::GameSettings::Key::
+      operator=(GameSettings::Key const &that)
+  {
+    this->speedUp = that.speedUp;
+    this->slowDown = that.slowDown;
+    this->turnLeft = that.turnLeft;
+    this->turnRight = that.turnRight;
+    this->useObject = that.useObject;
+    this->changeView = that.changeView;
+    this->displayMap = that.displayMap;
+    this->openChat = that.openChat;
+    this->openMenu = that.openMenu;
+    return (*this);
+  }
+
+  SettingsPlayer::GameSettings::Key &SettingsPlayer::GameSettings::Key::
+      operator=(GameSettings::Key &&that)
+  {
+    this->speedUp = that.speedUp;
+    this->slowDown = that.slowDown;
+    this->turnLeft = that.turnLeft;
+    this->turnRight = that.turnRight;
+    this->useObject = that.useObject;
+    this->changeView = that.changeView;
+    this->displayMap = that.displayMap;
+    this->openChat = that.openChat;
+    this->openMenu = that.openMenu;
+    return (*this);
+  }
+
+  SettingsPlayer::GameSettings::Key::Key(Key const &that)
+      : speedUp(that.speedUp), slowDown(that.slowDown),
+        turnLeft(that.turnLeft), turnRight(that.turnRight),
+        useObject(that.useObject), changeView(that.changeView),
+        displayMap(that.displayMap), openChat(that.openChat),
+        openMenu(that.openMenu)
+  {
+  }
+
+  SettingsPlayer::GameSettings::Key::Key(Key &&that)
+      : speedUp(that.speedUp), slowDown(that.slowDown),
+        turnLeft(that.turnLeft), turnRight(that.turnRight),
+        useObject(that.useObject), changeView(that.changeView),
+        displayMap(that.displayMap), openChat(that.openChat),
+        openMenu(that.openMenu)
+  {
+  }
+
+  SettingsPlayer::GameSettings::Graphic &
+      SettingsPlayer::GameSettings::Graphic::
+          operator=(GameSettings::Graphic const &that)
+  {
+    this->sensibility = that.sensibility;
+    this->fov = that.fov;
+    return (*this);
+  }
+
+  SettingsPlayer::GameSettings::Graphic &
+      SettingsPlayer::GameSettings::Graphic::
+          operator=(GameSettings::Graphic &&that)
+  {
+    this->sensibility = that.sensibility;
+    this->fov = that.fov;
+    return (*this);
+  }
+
+  SettingsPlayer::GameSettings::Graphic::Graphic(Graphic const &that)
+      : sensibility(that.sensibility), fov(that.fov)
+  {
+  }
+
+  SettingsPlayer::GameSettings::Graphic::Graphic(Graphic &&that)
+      : sensibility(that.sensibility), fov(that.fov)
   {
   }
 
