@@ -30,9 +30,12 @@ HEADER=		game_server_stdafx.hpp
 
 # Project's files
 
-SRC_FILES=	main.cpp	\
-		GameServer.cpp	\
-		Token.cpp	\
+SRC_FILES=	main.cpp		\
+		GameServer.cpp		\
+		GameServerCM.cpp	\
+		GameServerTCP.cpp	\
+		GameServerUDP.cpp	\
+		Token.cpp		\
 		GameClient.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))

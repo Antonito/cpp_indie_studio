@@ -27,6 +27,8 @@ public:
   // IServer
   virtual bool run();
   virtual void stop();
+
+  // TCP
   virtual bool addClient();
   virtual bool removeClient(network::IClient &);
 
@@ -37,6 +39,7 @@ public:
   virtual bool                           hasTimedOut() const;
 
 private:
+  // ConnectManager methods
   bool         authenticateToConnectManager();
   void         connectManagerCom();
   std::int32_t connectManagerComActivity(std::int32_t const sock,
@@ -45,7 +48,16 @@ private:
   network::IClient::ClientAction connectManagerComTreatInput(bool &canWrite);
   network::IClient::ClientAction connectManagerComTreatOutput(bool &canWrite);
 
-  void gameServerTCP();
+  // GameServerTCP methods
+  void         gameServerTCP();
+  std::int32_t gameServerTCPActivity(std::int32_t const sock, fd_set &readfds,
+                                     fd_set &writefds, fd_set &exceptfds,
+                                     bool canWrite);
+  std::int32_t gameServerTCPIO(std::int32_t const sock, fd_set &readfds,
+                               fd_set &writefds, fd_set &exceptfds,
+                               bool canWrite);
+
+  // GameServerUDP methods
   void gameServerUDP();
 
   // Basic datas

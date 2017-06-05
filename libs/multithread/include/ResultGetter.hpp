@@ -17,7 +17,7 @@ namespace multithread
   class ResultGetter
   {
   public:
-    ResultGetter(T &data)
+    explicit ResultGetter(T &data)
         : m_data(data), m_mut(std::make_unique<std::mutex>()),
           m_cond(std::make_unique<std::condition_variable>())
     {
