@@ -151,14 +151,10 @@ static void client(network::TCPSocket &socket)
   sleep(2);
 }
 
-int main(int ac, char **av, char **)
+int main(int, char **, char **)
 {
-  if (ac != 2)
-    {
-      // We need at least to know the port
-      std::cout << *av << " port" << std::endl;
-      return (EXIT_FAILURE);
-    }
+  ini::Ini config;
+  config.loadFrom("client.ini");
 
   std::srand(static_cast<std::uint32_t>(std::time(0)));
 
@@ -172,9 +168,9 @@ int main(int ac, char **av, char **)
 #endif
 
   // Basic connection informations
+  std::string const   connectManagerAddr = config["Network"]["address"];
   std::uint16_t const port =
-      static_cast<std::uint16_t>(std::strtol(*(av + 1), nullptr, 10));
-  std::string const connectManagerAddr = "127.0.0.1";
+      static_cast<std::uint16_t>(std::stoi(config["Network"]["port"]));
 
   // Create socket
   nope::log::Log(Debug) << "Port: " << port;

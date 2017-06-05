@@ -32,5 +32,6 @@
 #include "Packet.hpp"
 #include "GameClientCMPacket.hpp"
 #include "IClient.hpp"
+#include "Ini.hpp"
 
 #endif // !CLIENT_TEST_STDAFX_HPP_

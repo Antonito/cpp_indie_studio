@@ -9,6 +9,7 @@ cppcheck -I./include/ -I../../../libs/network/include -I../../../libs/logger/inc
 	 -I../../../libs/exceptions/include \
 	 -I../../../libs/multithread/include \
 	 -I../../../libs/packet/include \
+ 	 -I../../../libs/ini/include \
 	 --enable=all --force --language=c++ --std=c++11 -q --suppress=missingIncludeSystem \
 	 --error-exitcode=1 .
 exit $?

@@ -1,14 +1,8 @@
 #include "connect_manager_stdafx.hpp"
 
-int main(int ac, char **av)
+int main(int, char **)
 {
-
-  if (ac != 4)
-    {
-      std::cout << "Usage: " << *av
-                << " licensePort gameServerPort gameClientPort" << std::endl;
-      return (1);
-    }
+  ini::Ini config;
 
   // Starts logger
   nope::log::Logger::start("connect_manager.log");
@@ -20,19 +14,25 @@ int main(int ac, char **av)
 #endif
   nope::log::Log(Info) << "Starting server";
 
+  nope::log::Log(Info) << "Loading configuration";
+  config.loadFrom("connect_manager.ini");
+  std::uint16_t const licensePort = static_cast<std::uint16_t>(
+      std::stoi(config["Network"]["licenseServerPort"]));
+  std::uint16_t const gameServerPort = static_cast<std::uint16_t>(
+      std::stoi(config["Network"]["gameServerPort"]));
+  std::uint16_t const gameClientPort = static_cast<std::uint16_t>(
+      std::stoi(config["Network"]["gameClientPort"]));
+  nope::log::Log(Info) << "Configuration loaded.";
+
   nope::log::Log(Debug) << "Starting license manager";
   // Connection to License Manager + accept game servers
   try
     {
       multithread::Queue<multithread::ResultGetter<TokenCom>> queue;
 
-      LicenseServer mainSrv(
-          static_cast<std::uint16_t>(std::strtol(*(av + 1), nullptr, 10)),
-          static_cast<std::uint16_t>(std::strtol(*(av + 2), nullptr, 10)),
-          queue);
-      GameClientServer gameSrv(
-          static_cast<std::uint16_t>(std::strtol(*(av + 3), nullptr, 10)),
-          mainSrv.getGameServerList(), mainSrv.getGameServerListMut(), queue);
+      LicenseServer    mainSrv(licensePort, gameServerPort, queue);
+      GameClientServer gameSrv(gameClientPort, mainSrv.getGameServerList(),
+                               mainSrv.getGameServerListMut(), queue);
 
       if (mainSrv.run())
 	{

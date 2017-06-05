@@ -7,7 +7,7 @@ NAME=			$(ROOT_DIR)/build/game_server
 
 LOCAL_COMP_FLAGS=	-O2
 
-LOCAL_LINK_FLAGS=	-L$(ROOT_DIR)/build/ -lindie_network -lindie_logger -lindie_exceptions -lindie_multithread -lindie_packet -lindie_crypto
+LOCAL_LINK_FLAGS=	-L$(ROOT_DIR)/build/ -lindie_network -lindie_logger -lindie_exceptions -lindie_multithread -lindie_packet -lindie_crypto -lindie_ini
 
 LOCAL_DEBUG_FLAGS=
 
@@ -24,6 +24,7 @@ DIR_LIST=	$(SRC_DIR)				\
 		$(ROOT_DIR)/libs/logger/include/	\
 		$(ROOT_DIR)/libs/exceptions/include/	\
 		$(ROOT_DIR)/libs/crypto/include/	\
+		$(ROOT_DIR)/libs/ini/include/	\
 		$(ROOT_DIR)/libs/packet/include/
 
 HEADER=		game_server_stdafx.hpp
