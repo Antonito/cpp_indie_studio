@@ -5,7 +5,8 @@ include $(MK_DIR)colors.mk $(MK_DIR)defs.mk
 ###### Add your projects here #####
 PROJECT_DIR=		./projects/
 
-PROJECTS=		server/connect_manager	\
+PROJECTS=		pakpak			\
+			server/connect_manager	\
 			server/game_server	\
 			server/client_test
 
@@ -16,8 +17,10 @@ LIBS=			logger		\
 			memory		\
 			exceptions	\
 			network		\
-			multithread	\
-			packet
+			packet		\
+			ini		\
+			pythonpp	\
+			multithread
 
 PROJECTS_PATH=		$(addprefix $(LIB_DIR), $(LIBS))		\
 			$(addprefix $(PROJECT_DIR), $(PROJECTS))
@@ -58,4 +61,16 @@ $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(PROJECTS))):
 			@$(ECHO) "$(YELLOW)$(PROJECT_DIR)$(_proj)/ :$(CLEAR)\n"
 			@$(MAKE) $(ARGS) $(PROJECT_DIR)$(_proj) $(_rule);
 
-.PHONY: no_rule all $(RULES) $(PROJECTS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(PROJECTS)))
+
+$(LIBS):
+			@$(ECHO) "$(YELLOW)./$(PROJECT_DIR)$@/ :$(CLEAR)\n"
+			@$(MAKE) $(ARGS) $(PROJECT_DIR)$@
+
+$(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(LIBS))):
+			$(eval _rule := $(lastword $(subst -, ,$@)))
+			$(eval _proj := $(@:%-$(_rule)=%))
+			@$(ECHO) "$(YELLOW)$(LIB_DIR)$(_proj)/ :$(CLEAR)\n"
+			@$(MAKE) $(ARGS) $(LIB_DIR)$(_proj) $(_rule);
+
+.PHONY: no_rule all $(RULES) $(PROJECTS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(PROJECTS))) \
+	$(LIBS) $(foreach _rule, $(RULES), $(addsuffix -$(_rule),$(LIBS)))

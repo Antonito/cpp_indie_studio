@@ -15,11 +15,11 @@ namespace nope
 // Creation
 
 #if defined(NOPE_NO_LOG)
-    EmptyLogger Trace = (LogLevel::LOG_TRACE);
-    EmptyLogger Debug = (LogLevel::LOG_DEBUG);
-    EmptyLogger Info = (LogLevel::LOG_INFO);
-    EmptyLogger Warning = (LogLevel::LOG_WARNING);
-    EmptyLogger Error = (LogLevel::LOG_ERROR);
+    EmptyLogger Trace(LogLevel::LOG_TRACE);
+    EmptyLogger Debug(LogLevel::LOG_DEBUG);
+    EmptyLogger Info(LogLevel::LOG_INFO);
+    EmptyLogger Warning(LogLevel::LOG_WARNING);
+    EmptyLogger Error(LogLevel::LOG_ERROR);
 #else
     Logger Trace(LogLevel::LOG_TRACE);
 #ifdef DEBUG

@@ -83,7 +83,7 @@
     <ProjectGuid>{A8F21223-719D-4971-A303-6FFB7C3C44EA}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Hash</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <ProjectName>crypto</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

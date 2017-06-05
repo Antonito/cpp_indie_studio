@@ -63,7 +63,7 @@ clean:
 		@$(RM) $(OBJ)
 		@$(RM) $(PRECOMPILED_OBJ)
 		@$(RM_DIR) $(OBJ_DIR)
-		@$(RM_EMPTY_DIR) $(MAIN_OBJ_DIR) &> /dev/null || $(ECHO) ""
+		@$(RM_EMPTY_DIR) $(MAIN_OBJ_DIR) >&- 2>&- || $(ECHO) ""
 		@$(ECHO) "$(WHITE)[$(YELLOW)RM$(WHITE)] Removed OBJs files and directory\n$(CLEAR)"
 
 
