@@ -138,7 +138,12 @@ namespace network
 #endif
     if (*buffLen < 0)
       {
+	nope::log::Log(Debug) << "recBlocking -> < 0 [TCP]";
 	return (false);
+      }
+    if (!*buffLen)
+      {
+	nope::log::Log(Debug) << "recBlocking -> 0 [TCP]";
       }
     return (true);
   }
@@ -177,6 +182,7 @@ namespace network
 	  }
 	else if (ret == 0)
 	  {
+	    nope::log::Log(Debug) << "recNonBlocking -> 0 [TCP]";
 	    *buffLen = 0;
 	    break;
 	  }
