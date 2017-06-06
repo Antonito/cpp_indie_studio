@@ -103,9 +103,9 @@ namespace network
   // Close the socket
   bool ASocket::closeConnection()
   {
-    nope::log::Log(Debug) << "Closing socket #" << m_socket;
     if (m_socket > 0 && !closesocket(m_socket))
       {
+	nope::log::Log(Debug) << "Closing socket #" << m_socket;
 	m_socket = -1;
       }
     return (!isStarted());

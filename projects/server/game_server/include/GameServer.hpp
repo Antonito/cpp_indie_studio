@@ -4,6 +4,7 @@
 #include <string>
 #include <cstdint>
 #include <thread>
+#include <memory>
 #include "TCPSocket.hpp"
 #include "IServer.hpp"
 #include "IClient.hpp"
@@ -75,8 +76,8 @@ private:
   std::thread        m_gameSrvUDP;
 
   // Tokens
-  std::vector<GameClient> m_clientList;
-  std::vector<Token>      m_tokenList;
+  std::vector<std::unique_ptr<GameClient>> m_clientList;
+  std::vector<Token>                       m_tokenList;
 };
 
 // Disable clang warning for implicit padding

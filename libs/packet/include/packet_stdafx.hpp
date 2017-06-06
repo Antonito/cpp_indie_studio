@@ -23,5 +23,6 @@
 #include "Packet.hpp"
 #include "GameServerCMPacket.hpp"
 #include "GameClientCMPacket.hpp"
+#include "GameClientGSPacket.hpp"
 
 #endif // !PACKET_STDAFX_HPP_

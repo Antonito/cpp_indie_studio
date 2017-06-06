@@ -43,13 +43,8 @@ static network::IClient::ClientAction readPck(network::TCPSocket &socket,
   return (ret);
 }
 
-// Place client logic here
-// -> Connect to the connectManager [OK]
-// -> Get the list of servers [OK]
-// -> Select a server [OK]
-// -> Get a token from the choosen server
-// -> Connect to the game server.
-static void client(network::TCPSocket &socket)
+static int getToken(network::TCPSocket &socket, std::uint16_t &gameServerPort,
+                    std::string &gameServerAddr, std::string &gameServerToken)
 {
   network::IClient::ClientAction ret;
   Packet<GameClientToCMPacket>   pck = {};
@@ -63,7 +58,7 @@ static void client(network::TCPSocket &socket)
   if (ret != network::IClient::ClientAction::SUCCESS)
     {
       nope::log::Log(Error) << "Write failed !";
-      return;
+      return (1);
     }
 
   nope::log::Log(Debug) << "Reading packet";
@@ -71,7 +66,7 @@ static void client(network::TCPSocket &socket)
   if (ret != network::IClient::ClientAction::SUCCESS)
     {
       nope::log::Log(Error) << "Read failed !";
-      return;
+      return (1);
     }
   pck >> pckContent;
   nope::log::Log(Debug) << "Read successful !";
@@ -79,7 +74,7 @@ static void client(network::TCPSocket &socket)
   if (pckContent.pck.eventType != GameClientToCMEvent::LIST_SERVERS_EVENT)
     {
       nope::log::Log(Error) << "Invalid event type";
-      return;
+      return (1);
     }
   nope::log::Log(Info) << "Servers: "
                        << pckContent.pck.eventData.serverList.nbServers;
@@ -121,7 +116,7 @@ static void client(network::TCPSocket &socket)
   if (ret != network::IClient::ClientAction::SUCCESS)
     {
       nope::log::Log(Error) << "Write failed !";
-      return;
+      return (1);
     }
   nope::log::Log(Debug) << "Packet sent";
 
@@ -131,21 +126,58 @@ static void client(network::TCPSocket &socket)
   if (ret != network::IClient::ClientAction::SUCCESS)
     {
       nope::log::Log(Error) << "Read failed !";
-      return;
+      return (1);
     }
   pck >> pckContent;
   nope::log::Log(Debug) << "Read successful !";
   if (pckContent.pck.eventType != GameClientToCMEvent::GET_TOKEN_EVENT)
     {
       nope::log::Log(Error) << "Invalid event type";
-      return;
+      return (1);
     }
 
-  nope::log::Log(Info) << "TokenValid: "
-                       << pckContent.pck.eventData.token.valid;
-  nope::log::Log(Info) << "TokenData: "
-                       << std::string(
-                              pckContent.pck.eventData.token.data.data());
+  nope::log::Log(Debug) << "TokenValid: "
+                        << pckContent.pck.eventData.token.valid;
+  nope::log::Log(Debug) << "TokenData: "
+                        << std::string(
+                               pckContent.pck.eventData.token.data.data());
+  if (pckContent.pck.eventData.token.valid != 1)
+    {
+      return (1);
+    }
+  gameServerToken = std::string(pckContent.pck.eventData.token.data.data());
+  gameServerAddr = std::string(srv.ip.data.data());
+  gameServerPort = srv.port;
+  return (0);
+}
+
+// Place client logic here
+// -> Connect to the game server.
+static void client(network::TCPSocket &socket)
+{
+  std::uint16_t gameServerPort;
+  std::string   gameServerToken;
+  std::string   gameServerAddr;
+  if (getToken(socket, gameServerPort, gameServerAddr, gameServerToken))
+    {
+      nope::log::Log(Error) << "Could not get token.";
+      return;
+    }
+  nope::log::Log(Info) << "GameServerAddr  -> " << gameServerAddr;
+  nope::log::Log(Info) << "GameServerPort  -> " << gameServerPort;
+  nope::log::Log(Info) << "GameServerToken -> " << gameServerToken;
+
+  // Now connect to gameServer
+  nope::log::Log(Info) << "Connecting to game server";
+  network::TCPSocket gameServerSock(gameServerPort, gameServerAddr, false,
+                                    network::ASocket::SocketType::BLOCKING);
+  if (gameServerSock.openConnection())
+    {
+      nope::log::Log(Info) << "Connection opened [" << gameServerAddr << ":"
+                           << gameServerPort << "]";
+      // Starts game client logic
+      sleep(1);
+    }
 
   nope::log::Log(Debug) << "Sleeping...";
   sleep(2);

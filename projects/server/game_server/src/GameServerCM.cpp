@@ -194,16 +194,16 @@ network::IClient::ClientAction
   // Generate token
   if (m_curClients < m_maxClients)
     {
+      nope::log::Log(Debug) << "There is space on gameServer [ConnectManager]";
+
       // Add new token
       m_tokenList.push_back(Token());
       Token &curToken = m_tokenList.back();
       curToken.generate();
 
-      nope::log::Log(Debug) << "There is space on gameServer [ConnectManager]";
       if (curToken.isGenerated())
 	{
 	  std::string const &tokenStr = curToken.getToken();
-	  nope::log::Log(Debug) << "Generated token: " << tokenStr;
 
 	  // Check token's length
 	  if (tokenStr.length() <= 40)
