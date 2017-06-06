@@ -1,4 +1,4 @@
-#include "GameClient.hpp"
+#include "game_server_stdafx.hpp"
 
 GameClient::GameClient(sock_t const fd, std::vector<Token> &tokenList,
                        std::size_t const ndx)

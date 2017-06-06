@@ -19,6 +19,7 @@
 #include <memory>
 #include <vector>
 #include <cstring>
+#include <algorithm>
 #include "Logger.hpp"
 #include "GameServer.hpp"
 #include "TCPSocket.hpp"
@@ -27,5 +28,6 @@
 #include "Token.hpp"
 #include "Ini.hpp"
 #include "Config.hpp"
+#include "GameClient.hpp"
 
 #endif // !GAME_SERVER_STDAFX_HPP_
