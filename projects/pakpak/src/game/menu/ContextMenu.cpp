@@ -17,11 +17,12 @@ namespace menu
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
 
-    // m_win->addViewport();
+    m_menu->begin();
   }
 
   void ContextMenu::disable()
   {
+      m_menu->end();
   }
 
   core::GameState ContextMenu::update()

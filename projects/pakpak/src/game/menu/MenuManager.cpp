@@ -69,12 +69,12 @@ void menu::MenuManager::popLayer()
 
 menu::MenuManager::MenuManager(Ogre::RenderWindow *win)
     : m_sceneMan(Ogre::Root::getSingleton().createSceneManager(
-          "DefaultSceneManager", "Menu scene manager")),
+        "DefaultSceneManager", "Menu scene manager")),
       m_camera(m_sceneMan->createCamera("MenuCamera")), m_viewport(nullptr),
       m_menuLayer({}), m_gui({})
 {
-  m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)] =
-      std::make_unique<core::MainMenu>();
+    m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)] =
+     std::make_unique<core::MainMenu>();
   /*m_menuLayer[static_cast<size_t>(core::MenuState::Option)] =
           std::make_unique<core::Option>();
   m_menuLayer[static_cast<size_t>(core::MenuState::Score] =
@@ -85,7 +85,8 @@ menu::MenuManager::MenuManager(Ogre::RenderWindow *win)
           std::make_unique<core::MultiPlayerGame>();*/
   m_gui.push(
       m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)].get());
-  m_camera->setPosition(Ogre::Vector3(0, 0, 0));
+    (void) win;
+  /*m_camera->setPosition(Ogre::Vector3(0, 0, 0));
   m_camera->lookAt(Ogre::Vector3(0, 0, 0));
   m_camera->setNearClipDistance(2);
   m_viewport = win->addViewport(m_camera, 5);
@@ -93,8 +94,17 @@ menu::MenuManager::MenuManager(Ogre::RenderWindow *win)
   m_viewport->setClearEveryFrame(true);
   m_viewport->setBackgroundColour(Ogre::ColourValue::Black);
   m_camera->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
-                           Ogre::Real(m_viewport->getActualHeight()));
-  m_gui[0]->entry();
+                           Ogre::Real(m_viewport->getActualHeight()));*/
+}
+
+void menu::MenuManager::begin()
+{
+    m_gui[0]->entry();
+}
+
+void menu::MenuManager::end()
+{
+    m_gui[0]->destroy();
 }
 
 core::IMenuLayer *menu::MenuManager::getMenuLayer()

@@ -44,7 +44,7 @@ namespace core
 
     CEGUI::Window *getRoot() const;
 
-    void showCursor();
+    void hideCursor();
 
     void setCursorArrow(std::string const &);
 
@@ -52,6 +52,7 @@ namespace core
     CEGUI::OgreRenderer *m_renderer;
     CEGUI::Window *      m_root;
     CEGUI::GUIContext *  m_context;
+
     GUI(GUI const &) = delete;
     GUI &operator=(GUI const &) = delete;
   };

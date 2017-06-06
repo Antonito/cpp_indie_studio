@@ -55,7 +55,7 @@ namespace core
     return (*this);
   }
 
-  bool InputListener::frameRenderingQueued(const Ogre::FrameEvent &p_evt)
+  bool InputListener::frameRenderingQueued(const Ogre::FrameEvent &)
   {
     if (m_window->isClosed())
       return false;
@@ -65,7 +65,7 @@ namespace core
 
     if (m_shutdown)
       return false;
-    CEGUI::System::getSingleton().injectTimePulse(p_evt.timeSinceLastFrame);
+//    CEGUI::System::getSingleton().injectTimePulse(p_evt.timeSinceLastFrame);
     return true;
   }
 

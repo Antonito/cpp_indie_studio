@@ -17,19 +17,22 @@ namespace core
     virtual ~MainMenu()
     {
     }
-    void draw();
     void entry();
-    void exit();
     void destroy();
 
-    bool keyPressed(const OIS::KeyEvent &arg);
+      void draw() override;
+
+      void exit() override;
+
+      void build() override;
+
+      bool keyPressed(const OIS::KeyEvent &arg);
     bool mouseMoved(const OIS::MouseEvent &arg);
     bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     bool keyReleased(const OIS::KeyEvent &arg);
     CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID);
     GameState update() const;
-    void      build();
 
   private:
     MainMenu(MainMenu const &) = delete;

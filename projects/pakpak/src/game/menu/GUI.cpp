@@ -23,7 +23,6 @@ void core::GUI::init(std::string const &p_path)
 
 void core::GUI::destroy()
 {
-  CEGUI::System::getSingleton().destroyGUIContext(*m_context);
   CEGUI::WindowManager::getSingleton().destroyWindow(m_root);
 }
 
@@ -94,13 +93,13 @@ void core::GUI::loadSheme(std::string const &p_shem)
   CEGUI::SchemeManager::getSingleton().createFromFile(p_shem);
 }
 
-void core::GUI::showCursor()
+void core::GUI::hideCursor()
 {
+  CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().hide();
 }
 
 void core::GUI::setCursorArrow(std::string const &p_arrow)
 {
-  (void)p_arrow;
   CEGUI::System::getSingleton()
       .getDefaultGUIContext()
       .getMouseCursor()

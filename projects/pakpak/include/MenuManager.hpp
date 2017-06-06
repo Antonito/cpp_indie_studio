@@ -42,13 +42,18 @@ namespace menu
 
     void popLayer();
 
+    void begin();
+
+    void end();
+
     core::IMenuLayer *getMenuLayer();
 
   private:
-    Ogre::SceneManager *    m_sceneMan;
-    Ogre::Camera *          m_camera;
-    Ogre::Viewport *        m_viewport;
-    static constexpr size_t nbContext =
+      Ogre::SceneManager *    m_sceneMan;
+      Ogre::Camera *          m_camera;
+      Ogre::Viewport *        m_viewport;
+
+      static constexpr size_t nbContext =
         static_cast<size_t>(core::MenuState::NbMenuState);
     std::array<std::unique_ptr<core::IMenuLayer>, nbContext> m_menuLayer;
     core::FastStack<core::IMenuLayer *> m_gui;

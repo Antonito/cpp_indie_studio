@@ -59,31 +59,20 @@ CEGUI::MouseButton core::MainMenu::convertButton(OIS::MouseButtonID buttonID)
     }
 }
 
-void core::MainMenu::draw()
-{
-}
-
 void core::MainMenu::entry()
 {
   initGUI();
 }
 
-void core::MainMenu::exit()
-{
-  m_gui.destroy();
-}
-
 void core::MainMenu::destroy()
 {
+    m_gui.destroy();
+    m_gui.hideCursor();
 }
 
 core::GameState core::MainMenu::update() const
 {
   return m_curState;
-}
-
-void core::MainMenu::build()
-{
 }
 
 void core::MainMenu::initGUI()
@@ -150,4 +139,19 @@ bool core::MainMenu::onPlayClick(CEGUI::EventArgs const &e)
 core::MainMenu::MainMenu()
     : m_gui(), m_param(), m_curState(core::GameState::Menu)
 {
+}
+
+void core::MainMenu::draw()
+{
+
+}
+
+void core::MainMenu::exit()
+{
+
+}
+
+void core::MainMenu::build()
+{
+
 }
