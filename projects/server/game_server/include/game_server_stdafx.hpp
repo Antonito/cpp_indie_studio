@@ -26,5 +26,6 @@
 #include "GameServerCMPacket.hpp"
 #include "Token.hpp"
 #include "Ini.hpp"
+#include "Config.hpp"
 
 #endif // !GAME_SERVER_STDAFX_HPP_

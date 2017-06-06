@@ -2,8 +2,6 @@
 
 int main(int, char **)
 {
-  ini::Ini config;
-
   // Starts logger
   nope::log::Logger::start("game_server.log");
 #if defined(DEBUG)
@@ -15,14 +13,14 @@ int main(int, char **)
 
   // Load configuration
   nope::log::Log(Info) << "Loading configuration";
-  config.loadFrom("game_server.ini");
-  std::string const   connectManagerIp = config["Network"]["connectManagerIp"];
-  std::uint16_t const connectManagerPort = static_cast<std::uint16_t>(
-      std::stoi(config["Network"]["connectManagerPort"]));
-  std::uint16_t const gameServerPort = static_cast<std::uint16_t>(
-      std::stoi(config["Network"]["gameServerPort"]));
-  std::int32_t const maxClients = static_cast<std::uint16_t>(
-      std::stoi(config["Network"]["maxNumberClients"]));
+  std::string const &connectManagerIp =
+      Config::getInstance().getConnectManagerIp();
+  std::uint16_t const connectManagerPort =
+      Config::getInstance().getConnectManagerPort();
+  std::uint16_t const gameServerPort =
+      Config::getInstance().getGameServerPort();
+  std::int32_t const maxClients =
+      Config::getInstance().getGameServerMaxClients();
   nope::log::Log(Info) << "Configuration loaded";
 
   nope::log::Log(Debug) << "Starting GameServer [" << connectManagerPort
