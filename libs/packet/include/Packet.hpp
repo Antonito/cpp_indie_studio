@@ -8,6 +8,7 @@
 #include "ISerializable.hpp"
 #include "GenNetwork.hpp"
 #include "PacketHeader.hpp"
+#include "Logger.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
