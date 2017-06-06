@@ -82,6 +82,7 @@ namespace network
       {
 	return (false);
       }
+    nope::log::Log(Debug) << "Sent " << ret << "/" << len;
     return (true);
   }
 
@@ -145,6 +146,7 @@ namespace network
       {
 	nope::log::Log(Debug) << "recBlocking -> 0 [TCP]";
       }
+    nope::log::Log(Debug) << "Read " << *buffLen << "/" << rlen;
     return (true);
   }
 
