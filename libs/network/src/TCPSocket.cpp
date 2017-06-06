@@ -145,7 +145,7 @@ namespace network
 	if (*buffLen <= 0)
 	  {
 	    nope::log::Log(Debug) << "recBlocking -> <= 0 [TCP]";
-	    return (false);
+	    return (!*buffLen);
 	  }
 	off += static_cast<std::size_t>(*buffLen);
       }
