@@ -32,6 +32,7 @@ public:
   };
 
   explicit GameServer(sock_t socket, sockaddr_in_t const &in,
+                      std::string const &             publicIp,
                       std::vector<std::string> const &licences);
 
   GameServer(GameServer &&);

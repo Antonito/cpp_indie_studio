@@ -4,12 +4,13 @@ constexpr std::uint32_t LicenseServer::maxGameServer;
 
 LicenseServer::LicenseServer(
     std::uint16_t const licensePort, std::uint16_t const gameServerPort,
+    std::string const &                                      publicIp,
     multithread::Queue<multithread::ResultGetter<TokenCom>> &token)
     : m_license(licensePort, "localhost", false, network::ASocket::BLOCKING),
       m_gameServer(gameServerPort, LicenseServer::maxGameServer,
                    network::ASocket::BLOCKING),
       m_licenseList(), m_gameServerList(), m_thread(), m_cond(), m_mut(),
-      m_list(), m_gameServerListMut(), m_token(token)
+      m_list(), m_gameServerListMut(), m_publicIp(publicIp), m_token(token)
 {
 }
 
@@ -62,7 +63,7 @@ bool LicenseServer::addClient()
   if (rc > 0)
     {
       m_gameServerList.push_back(
-          std::make_unique<GameServer>(rc, in, m_licenseList));
+          std::make_unique<GameServer>(rc, in, m_publicIp, m_licenseList));
       nope::log::Log(Debug)
           << "Added client FD #" << m_gameServerList.back()->getSocket();
       return (true);

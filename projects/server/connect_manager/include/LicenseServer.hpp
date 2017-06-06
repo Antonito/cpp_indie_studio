@@ -15,6 +15,7 @@ class LicenseServer : public network::IServer
 public:
   explicit LicenseServer(
       std::uint16_t const port, std::uint16_t const gameServerPort,
+      std::string const &                                      publicIP,
       multithread::Queue<multithread::ResultGetter<TokenCom>> &token);
   virtual ~LicenseServer();
 
@@ -60,6 +61,7 @@ private:
   std::mutex                                               m_mut;
   std::vector<GameServerInfo>                              m_list;
   std::mutex                                               m_gameServerListMut;
+  std::string const &                                      m_publicIp;
   multithread::Queue<multithread::ResultGetter<TokenCom>> &m_token;
 };
 

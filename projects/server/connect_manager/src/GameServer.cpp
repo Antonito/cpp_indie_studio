@@ -1,6 +1,7 @@
 #include "connect_manager_stdafx.hpp"
 
 GameServer::GameServer(sock_t socket, sockaddr_in_t const &in,
+                       std::string const &             publicIp,
                        std::vector<std::string> const &licences)
     : m_sock(socket), m_port(0), m_in(in), m_licences(licences),
       m_write(false), m_state(State::CONNECTED), m_packet(), m_curClients(0),
@@ -11,6 +12,17 @@ GameServer::GameServer(sock_t socket, sockaddr_in_t const &in,
                     m_ip.data(), sizeof(m_ip), nullptr, 0,
                     NI_NUMERICHOST | NI_NUMERICSERV) == 0)
     {
+      std::string const ipStr(m_ip.data());
+
+      if (ipStr == "127.0.0.1")
+	{
+	  nope::log::Log(Debug)
+	      << "Local address detected, switching to internet one ["
+	      << publicIp << "]";
+	  assert(publicIp.length() <= INET6_ADDRSTRLEN);
+	  m_ip.fill('\0');
+	  std::memcpy(m_ip.data(), publicIp.c_str(), publicIp.length());
+	}
       nope::log::Log(Info) << "Client joined " << std::string(m_ip.data());
     }
 }

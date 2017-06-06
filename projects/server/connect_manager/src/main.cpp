@@ -23,6 +23,7 @@ int main(int, char **)
   std::uint16_t const gameClientPort = static_cast<std::uint16_t>(
       std::stoi(config["Network"]["gameClientPort"]));
   nope::log::Log(Info) << "Configuration loaded.";
+  std::string const publicIp = config["Network"]["publicIp"];
 
   nope::log::Log(Debug) << "Starting license manager";
   // Connection to License Manager + accept game servers
@@ -30,7 +31,7 @@ int main(int, char **)
     {
       multithread::Queue<multithread::ResultGetter<TokenCom>> queue;
 
-      LicenseServer    mainSrv(licensePort, gameServerPort, queue);
+      LicenseServer    mainSrv(licensePort, gameServerPort, publicIp, queue);
       GameClientServer gameSrv(gameClientPort, mainSrv.getGameServerList(),
                                mainSrv.getGameServerListMut(), queue);
 
