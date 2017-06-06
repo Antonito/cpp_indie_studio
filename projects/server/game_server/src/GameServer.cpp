@@ -54,7 +54,6 @@ bool GameServer::run()
 
 void GameServer::stop()
 {
-  nope::log::Log(Info) << "Stopping game servers";
   if (m_connectSrv.joinable())
     {
       m_connectSrv.join();

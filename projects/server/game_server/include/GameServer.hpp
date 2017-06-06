@@ -52,11 +52,9 @@ private:
   // GameServerTCP methods
   void         gameServerTCP();
   std::int32_t gameServerTCPActivity(std::int32_t const sock, fd_set &readfds,
-                                     fd_set &writefds, fd_set &exceptfds,
-                                     bool canWrite);
+                                     fd_set &writefds, fd_set &exceptfds);
   std::int32_t gameServerTCPIO(std::int32_t const sock, fd_set &readfds,
-                               fd_set &writefds, fd_set &exceptfds,
-                               bool canWrite);
+                               fd_set &writefds, fd_set &exceptfds);
 
   // GameServerUDP methods
   void gameServerUDP();

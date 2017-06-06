@@ -17,9 +17,12 @@ bool GameServer::addClient()
   // Check if the socket is valid
   if (rc > 0)
     {
-      m_clientList.push_back(std::make_unique<GameClient>(rc));
+      m_clientList.push_back(
+          std::make_unique<GameClient>(rc, m_tokenList, m_clientList.size()));
       nope::log::Log(Debug)
           << "Added client FD #" << m_clientList.back()->getSocket();
+      nope::log::Log(Info) << "New player connected #"
+                           << m_clientList.back()->getId();
       return (true);
     }
   return (false);
@@ -30,6 +33,7 @@ bool GameServer::removeClient(network::IClient &c)
   GameClient &g = static_cast<GameClient &>(c);
 
   nope::log::Log(Debug) << "Removing GameClient";
+  nope::log::Log(Info) << "Player disconnected #" << g.getId();
   g.disconnect();
 
   // Remove asked element
@@ -44,8 +48,7 @@ bool GameServer::removeClient(network::IClient &c)
 std::int32_t GameServer::gameServerTCPActivity(std::int32_t const sock,
                                                fd_set &           readfds,
                                                fd_set &           writefds,
-                                               fd_set &           exceptfds,
-                                               bool               canWrite)
+                                               fd_set &           exceptfds)
 {
   std::int32_t rc = 0;
   do
@@ -59,10 +62,6 @@ std::int32_t GameServer::gameServerTCPActivity(std::int32_t const sock,
       tv.tv_usec = 0;
 
       FD_SET(sock, &readfds);
-      if (canWrite)
-	{
-	  FD_SET(sock, &writefds);
-	}
 
       // Loop over all the clients
       for (std::vector<std::unique_ptr<GameClient>>::const_iterator ite =
@@ -91,7 +90,7 @@ std::int32_t GameServer::gameServerTCPActivity(std::int32_t const sock,
 
 std::int32_t GameServer::gameServerTCPIO(std::int32_t const sock,
                                          fd_set &readfds, fd_set &writefds,
-                                         fd_set &exceptfds, bool canWrite)
+                                         fd_set &exceptfds)
 {
   if (FD_ISSET(sock, &readfds))
     {
@@ -152,7 +151,6 @@ std::int32_t GameServer::gameServerTCPIO(std::int32_t const sock,
 void GameServer::gameServerTCP()
 {
   std::int32_t const sock = m_gameSock.getSocket();
-  bool               canWrite = false;
 
   assert(sock >= 0);
   while (1)
@@ -160,7 +158,7 @@ void GameServer::gameServerTCP()
       // Check activity
       fd_set             readfds, writefds, exceptfds;
       std::int32_t const rc =
-          gameServerTCPActivity(sock, readfds, writefds, exceptfds, canWrite);
+          gameServerTCPActivity(sock, readfds, writefds, exceptfds);
 
       if (rc < 0)
 	{
@@ -171,7 +169,7 @@ void GameServer::gameServerTCP()
       else if (rc > 0)
 	{
 	  // Treat I/O
-	  gameServerTCPIO(sock, readfds, writefds, exceptfds, canWrite);
+	  gameServerTCPIO(sock, readfds, writefds, exceptfds);
 	}
     }
 }

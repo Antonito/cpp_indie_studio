@@ -31,6 +31,7 @@
 #include "SockError.hpp"
 #include "Packet.hpp"
 #include "GameClientCMPacket.hpp"
+#include "GameClientGSPacket.hpp"
 #include "IClient.hpp"
 #include "Ini.hpp"
 

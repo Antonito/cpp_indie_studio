@@ -90,6 +90,11 @@ static int getToken(network::TCPSocket &socket, std::uint16_t &gameServerPort,
           << cur.port << " [ " << cur.currentClients << " / " << cur.maxClients
           << " ]";
     }
+  if (pckContent.pck.eventData.serverList.nbServers <= 0)
+    {
+      nope::log::Log(Warning) << "Invalid number of servers.";
+      return (1);
+    }
 
   // Choose server
   std::size_t serverToConnectTo = static_cast<std::size_t>(
@@ -155,9 +160,11 @@ static int getToken(network::TCPSocket &socket, std::uint16_t &gameServerPort,
 // -> Connect to the game server.
 static void client(network::TCPSocket &socket)
 {
-  std::uint16_t gameServerPort;
-  std::string   gameServerToken;
-  std::string   gameServerAddr;
+  std::uint16_t                  gameServerPort;
+  std::string                    gameServerToken;
+  std::string                    gameServerAddr;
+  network::IClient::ClientAction ret;
+
   if (getToken(socket, gameServerPort, gameServerAddr, gameServerToken))
     {
       nope::log::Log(Error) << "Could not get token.";
@@ -176,6 +183,38 @@ static void client(network::TCPSocket &socket)
       nope::log::Log(Info) << "Connection opened [" << gameServerAddr << ":"
                            << gameServerPort << "]";
       // Starts game client logic
+      GameClientToGSPacket         pckContent = {};
+      Packet<GameClientToGSPacket> pck = {};
+
+      // Send token
+      pckContent.pck.eventType = GameClientToGSEvent::TOKEN_EVENT;
+      std::memcpy(pckContent.pck.eventData.token.data.data(),
+                  gameServerToken.c_str(), 40);
+      pck << pckContent;
+      ret = writePck(gameServerSock, pck);
+      if (ret != network::IClient::ClientAction::SUCCESS)
+	{
+	  nope::log::Log(Error) << "Write failed !";
+	  return;
+	}
+      nope::log::Log(Debug) << "Packet sent";
+
+      // Reading response
+      ret = readPck(gameServerSock, pck);
+      if (ret != network::IClient::ClientAction::SUCCESS)
+	{
+	  nope::log::Log(Error) << "Read failed !";
+	  return;
+	}
+      pck >> pckContent;
+      if (pckContent.pck.eventType != GameClientToGSEvent::VALIDATION_EVENT)
+	{
+	  nope::log::Log(Error) << "Invalid event type";
+	  return;
+	}
+      nope::log::Log(Debug) << "Read successful !";
+      nope::log::Log(Debug)
+          << "Validation: " << pckContent.pck.eventData.valid;
       sleep(1);
     }
 

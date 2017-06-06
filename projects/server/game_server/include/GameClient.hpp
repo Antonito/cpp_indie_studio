@@ -1,7 +1,11 @@
 #ifndef GAMECLIENT_HPP_
 #define GAMECLIENT_HPP_
 
+#include <vector>
 #include "IClient.hpp"
+#include "Packet.hpp"
+#include "GameClientGSPacket.hpp"
+#include "Token.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
@@ -15,10 +19,12 @@ public:
   enum class State : std::int32_t
   {
     CONNECTED = 0,
+    AUTHENTICATING,
     AUTHENTICATED
   };
 
-  GameClient(sock_t const fd);
+  GameClient(sock_t const fd, std::vector<Token> &m_tokenList,
+             std::size_t const ndx);
   virtual ~GameClient();
 
   GameClient(GameClient const &);
@@ -34,13 +40,19 @@ public:
 
   sock_t getSocket() const;
   bool   canWrite() const;
+  void   toggleWrite();
+
+  std::int32_t getId() const;
 
   bool operator==(GameClient const &other) const;
 
 private:
-  network::TCPSocket m_sock;
-  bool               m_canWrite;
-  State              m_state;
+  network::TCPSocket           m_sock;
+  bool                         m_canWrite;
+  State                        m_state;
+  Packet<GameClientToGSPacket> m_packet;
+  std::vector<Token> &         m_tokenList;
+  std::int32_t                 m_id;
 };
 
 // Disable clang warning for implicit padding

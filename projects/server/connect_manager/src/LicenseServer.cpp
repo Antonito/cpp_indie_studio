@@ -326,13 +326,12 @@ void LicenseServer::_loop()
 	{
 	  for (std::vector<std::unique_ptr<GameServer>>::iterator iter =
 	           m_gameServerList.begin();
-	       iter != m_gameServerList.end();)
+	       iter != m_gameServerList.end(); ++iter)
 	    {
-	      bool                         deleted = false;
 	      std::unique_ptr<GameServer> &game = *iter;
 
 	      // Checks token requests
-	      if (deleted == false && game->hasTimedOut())
+	      if (game->hasTimedOut())
 		{
 		  if (game->hasRequests())
 		    {
@@ -343,8 +342,6 @@ void LicenseServer::_loop()
 			}
 		    }
 		}
-	      if (!deleted)
-		++iter;
 	    }
 	}
     }

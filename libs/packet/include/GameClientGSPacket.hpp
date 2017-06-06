@@ -16,7 +16,8 @@
 // All the possible packets
 enum class GameClientToGSEvent : std::uint16_t
 {
-  TOKEN_EVENT
+  TOKEN_EVENT,
+  VALIDATION_EVENT
 };
 
 // Expected with GET_TOKEN_EVENT packets
@@ -31,6 +32,7 @@ struct GameClientToGSPacketRaw
   GameClientToGSEvent eventType;
   union
   {
+    std::uint16_t             valid;
     GameClientToGSPacketToken token;
   } eventData;
 };

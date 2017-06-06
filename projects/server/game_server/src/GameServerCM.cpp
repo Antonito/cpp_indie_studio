@@ -151,7 +151,7 @@ network::IClient::ClientAction
     GameServer::connectManagerComTreatInput(bool &canWrite)
 {
   Packet<GameServerToCMPacket>   packet;
-  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+  network::IClient::ClientAction ret;
 
   // Treat input
   ret = read(packet);

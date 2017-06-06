@@ -1,8 +1,9 @@
-#include "GameClientGSPacket.hpp"
 #include "GameClient.hpp"
 
-GameClient::GameClient(sock_t const fd)
-    : m_sock(fd), m_canWrite(false), m_state(GameClient::State::CONNECTED)
+GameClient::GameClient(sock_t const fd, std::vector<Token> &tokenList,
+                       std::size_t const ndx)
+    : m_sock(fd), m_canWrite(false), m_state(GameClient::State::CONNECTED),
+      m_packet(), m_tokenList(tokenList), m_id(static_cast<std::int32_t>(ndx))
 {
 }
 
@@ -74,16 +75,67 @@ bool GameClient::canWrite() const
   return (m_canWrite);
 }
 
+void GameClient::toggleWrite()
+{
+  m_canWrite = !m_canWrite;
+}
+
+std::int32_t GameClient::getId() const
+{
+  return (m_id);
+}
+
 network::IClient::ClientAction GameClient::treatIncomingData()
 {
   network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+  GameClientToGSPacket           rep;
 
   switch (m_state)
     {
     case State::CONNECTED:
+      nope::log::Log(Debug) << "Reading in state CONNECTED [GameClient]";
+      ret = read(m_packet);
+      if (ret == network::IClient::ClientAction::SUCCESS)
+	{
+	  m_packet >> rep;
+
+	  // The only event allowed here is TOKEN_EVENT
+	  if (rep.pck.eventType == GameClientToGSEvent::TOKEN_EVENT)
+	    {
+	      std::string tokenStr =
+	          std::string(rep.pck.eventData.token.data.data(), 40);
+	      nope::log::Log(Debug) << "Received Token: " << tokenStr;
+	      ret = network::IClient::ClientAction::FAILURE;
+	      for (Token const &tok : m_tokenList)
+		{
+		  nope::log::Log(Debug) << "Is it ? -> " << tok.getToken();
+		  if (tok == tokenStr)
+		    {
+		      nope::log::Log(Debug) << "Found token in token list";
+		      if (tok.isValid())
+			{
+			  nope::log::Log(Debug) << "Token is valid";
+			  m_state = State::AUTHENTICATING;
+			  ret = network::IClient::ClientAction::SUCCESS;
+			}
+		      // Found it, now remove it from the list
+		      m_tokenList.erase(std::remove(m_tokenList.begin(),
+		                                    m_tokenList.end(), tok),
+		                        m_tokenList.end());
+		      break;
+		    }
+		}
+	    }
+	}
+      break;
+    case State::AUTHENTICATING:
       break;
     case State::AUTHENTICATED:
       break;
+    }
+  if (ret == network::IClient::ClientAction::SUCCESS)
+    {
+      toggleWrite();
     }
   return (ret);
 }
@@ -91,13 +143,27 @@ network::IClient::ClientAction GameClient::treatIncomingData()
 network::IClient::ClientAction GameClient::treatOutgoingData()
 {
   network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+  GameClientToGSPacket           rep;
 
   switch (m_state)
     {
     case State::CONNECTED:
       break;
+    case State::AUTHENTICATING:
+      // Notify the client that it is authenticated
+      rep.pck.eventType = GameClientToGSEvent::VALIDATION_EVENT;
+      rep.pck.eventData.valid = 1;
+
+      m_packet << rep;
+      ret = write(m_packet);
+      m_state = State::AUTHENTICATED;
+      break;
     case State::AUTHENTICATED:
       break;
+    }
+  if (ret == network::IClient::ClientAction::SUCCESS)
+    {
+      toggleWrite();
     }
   return (ret);
 }

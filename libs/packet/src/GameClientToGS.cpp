@@ -25,6 +25,11 @@ std::unique_ptr<std::uint8_t[]>
   data->eventType = static_cast<GameClientToGSEvent>(
       htons(static_cast<std::uint16_t>(data->eventType)));
 
+  if (pck.eventType == GameClientToGSEvent::VALIDATION_EVENT)
+    {
+      data->eventData.valid = htons(pck.eventData.valid);
+    }
+
   return (serial);
 }
 
@@ -36,6 +41,10 @@ void GameClientToGSPacket::deserialize(std::size_t, std::uint8_t *data)
       ntohs(static_cast<std::uint16_t>(pck.eventType)));
   if (pck.eventType == GameClientToGSEvent::TOKEN_EVENT)
     {
+    }
+  else if (pck.eventType == GameClientToGSEvent::VALIDATION_EVENT)
+    {
+      pck.eventData.valid = ntohs(pck.eventData.valid);
     }
   else
     {
