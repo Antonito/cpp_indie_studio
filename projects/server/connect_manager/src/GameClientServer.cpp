@@ -106,11 +106,14 @@ std::int32_t GameClientServer::checkActivity(fd_set &readfds, fd_set &writefds,
 	{
 	  std::int32_t const sock = game->getSocket();
 
-	  FD_SET(sock, &readfds);
 	  FD_SET(sock, &exceptfds);
 	  if (game->canWrite())
 	    {
 	      FD_SET(sock, &writefds);
+	    }
+	  else
+	    {
+	      FD_SET(sock, &readfds);
 	    }
 
 	  // Update maxFD
