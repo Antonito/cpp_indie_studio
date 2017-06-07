@@ -213,8 +213,8 @@ network::IClient::ClientAction
   rep.pck.eventData.serverList.nbServers =
       static_cast<std::int32_t>(m_gameServerList.size());
   rep.pck.eventData.serverList.nbServers =
-      std::min(rep.pck.eventData.serverList.nbServers,
-               GameClientToCMPacketServerList::maxServers);
+      std::min<std::int32_t>(rep.pck.eventData.serverList.nbServers,
+                             GameClientToCMPacketServerList::maxServers);
   nope::log::Log(Debug) << "There are "
                         << rep.pck.eventData.serverList.nbServers
                         << " game servers.";

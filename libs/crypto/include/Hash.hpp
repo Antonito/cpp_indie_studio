@@ -142,11 +142,10 @@ namespace crypto
       Hash<AHash::Algorithm::MD6_512>::compute(std::uint8_t const *data,
                                                std::size_t const   len);
 
-  extern template Hash<AHash::Algorithm::SHA1>::Hash();
-  extern template Hash<AHash::Algorithm::SHA1>::~Hash();
-  extern template bool
-      Hash<AHash::Algorithm::SHA1>::compute(std::uint8_t const *data,
-                                            std::size_t const   len);
+  template Hash<AHash::Algorithm::SHA1>::Hash();
+  template Hash<AHash::Algorithm::SHA1>::~Hash();
+  template bool Hash<AHash::Algorithm::SHA1>::compute(std::uint8_t const *data,
+                                                      std::size_t const   len);
 
   extern template Hash<AHash::Algorithm::SHA224>::Hash();
   extern template Hash<AHash::Algorithm::SHA224>::~Hash();

@@ -19,26 +19,53 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\GameClientServer.cpp" />
-    <ClCompile Include="src\LicenseServer.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\stdafx.cpp" />
+    <ClCompile Include="src\GameClient.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\GameClientServer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\GameServer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\LicenseServer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\connect_manager_stdafx.hpp" />
     <ClInclude Include="include\connect_manager_targetver.h" />
+    <ClInclude Include="include\GameClient.hpp" />
     <ClInclude Include="include\GameClientServer.hpp" />
+    <ClInclude Include="include\GameServer.hpp" />
+    <ClInclude Include="include\GameServerInfo.hpp" />
     <ClInclude Include="include\LicenseServer.hpp" />
+    <ClInclude Include="include\RequestToken.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\exceptions\exceptions.vcxproj">
       <Project>{ffdce64e-932c-4d89-b5b4-934708a5ac52}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\libs\ini\ini.vcxproj">
+      <Project>{dd5c24e8-81c8-413a-8f04-26db6e2b6406}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\libs\logger\logger.vcxproj">
       <Project>{241420dc-d873-413c-ab83-b483d362558c}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\libs\multithread\multithread.vcxproj">
+      <Project>{48ec69d9-a84b-4bf2-87f6-a6f06a426c56}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\libs\network\network.vcxproj">
       <Project>{79e40ad2-4e62-4892-838e-295e56bf43c8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\libs\packet\packet.vcxproj">
+      <Project>{6ff3ddfe-85a5-40e9-9668-21fc5e58fd7a}</Project>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -97,25 +124,25 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\multithread\include\;$(SolutionDir)libs\packet\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)build\</OutDir>
-    <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <OutDir>$(SolutionDir)</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\multithread\include\;$(SolutionDir)libs\packet\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\multithread\include\;$(SolutionDir)libs\packet\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\multithread\include\;$(SolutionDir)libs\packet\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

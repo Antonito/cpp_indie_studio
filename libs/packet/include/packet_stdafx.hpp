@@ -17,6 +17,7 @@
 #include <fstream>
 #include <memory>
 #include <cassert>
+#include <algorithm>
 #include "Logger.hpp"
 #include "ISerializable.hpp"
 #include "PacketHeader.hpp"

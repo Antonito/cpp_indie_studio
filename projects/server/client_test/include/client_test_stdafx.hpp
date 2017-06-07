@@ -12,6 +12,10 @@
 
 // Reference additional headers your program requires here
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 #include <cassert>
 #include <iostream>
 #include <iomanip>
