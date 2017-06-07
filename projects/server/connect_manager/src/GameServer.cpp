@@ -109,6 +109,8 @@ network::IClient::ClientAction GameServer::read(IPacket &pck)
 	      nope::log::Log(Debug)
 	          << "Should read " << sizeToRead << "[GameServer]";
 	      // Read rest of the packet
+	      assert(static_cast<std::size_t>(headerLen + sizeToRead) <=
+	             packetSize::GameServerToCMPacketSize);
 	      if (m_sock.rec(buff.get() + headerLen, sizeToRead, &buffLen))
 		{
 		  assert(buffLen >= 0);
