@@ -24,6 +24,24 @@ int main(int, char **)
       std::stoi(config["Network"]["gameClientPort"]));
   nope::log::Log(Info) << "Configuration loaded.";
   std::string const publicIp = config["Network"]["publicIp"];
+  std::string const internetAccess = config["Network"]["allowInternet"];
+
+  bool allowInternetAccess;
+  if (internetAccess == "yes" || internetAccess == "1")
+    {
+      allowInternetAccess = true;
+    }
+  else if (internetAccess == "no" || internetAccess == "0")
+    {
+      allowInternetAccess = false;
+    }
+  else
+    {
+      nope::log::Log(Error)
+          << "Configuration error: allowInternet should be [yes / 1] or [no / "
+             "0]";
+      throw std::exception(); // TODO
+    }
 
   nope::log::Log(Debug) << "Starting license manager";
   // Connection to License Manager + accept game servers
@@ -31,7 +49,8 @@ int main(int, char **)
     {
       multithread::Queue<multithread::ResultGetter<TokenCom>> queue;
 
-      LicenseServer    mainSrv(licensePort, gameServerPort, publicIp, queue);
+      LicenseServer mainSrv(licensePort, gameServerPort, publicIp,
+                            allowInternetAccess, queue);
       GameClientServer gameSrv(gameClientPort, mainSrv.getGameServerList(),
                                mainSrv.getGameServerListMut(), queue);
 

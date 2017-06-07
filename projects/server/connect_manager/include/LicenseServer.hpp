@@ -10,12 +10,18 @@
 #include "ResultGetter.hpp"
 #include "RequestToken.hpp"
 
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 class LicenseServer : public network::IServer
 {
 public:
   explicit LicenseServer(
       std::uint16_t const port, std::uint16_t const gameServerPort,
-      std::string const &                                      publicIP,
+      std::string const &publicIP, bool const allowInternetAccess,
       multithread::Queue<multithread::ResultGetter<TokenCom>> &token);
   virtual ~LicenseServer();
 
@@ -62,7 +68,13 @@ private:
   std::vector<GameServerInfo>                              m_list;
   std::mutex                                               m_gameServerListMut;
   std::string const &                                      m_publicIp;
+  bool const                                               m_allowInternet;
   multithread::Queue<multithread::ResultGetter<TokenCom>> &m_token;
 };
+
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !LICENSE_SERVER_HPP_

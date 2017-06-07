@@ -1,7 +1,7 @@
 #include "connect_manager_stdafx.hpp"
 
 GameServer::GameServer(sock_t socket, sockaddr_in_t const &in,
-                       std::string const &             publicIp,
+                       std::string const &publicIp, bool const allowInternet,
                        std::vector<std::string> const &licences)
     : m_sock(socket), m_port(0), m_in(in), m_licences(licences),
       m_write(false), m_state(State::CONNECTED), m_packet(), m_curClients(0),
@@ -14,7 +14,7 @@ GameServer::GameServer(sock_t socket, sockaddr_in_t const &in,
     {
       std::string const ipStr(m_ip.data());
 
-      if (ipStr == "127.0.0.1")
+      if (allowInternet && ipStr == "127.0.0.1")
 	{
 	  nope::log::Log(Debug)
 	      << "Local address detected, switching to internet one ["
