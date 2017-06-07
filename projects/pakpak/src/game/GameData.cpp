@@ -5,12 +5,17 @@ namespace game
   GameData::GameData()
       : m_sceneMgr(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Game scene manager")),
-        m_players(), m_map(m_sceneMgr, "../indie_resource/maps/test/map.dat"),
-        m_world(nullptr),
+        m_players(), m_world(new OgreBulletDynamics::DynamicsWorld(
+                         m_sceneMgr,
+                         Ogre::AxisAlignedBox(
+                             Ogre::Vector3(-100000000, -100000000, -100000000),
+                             Ogre::Vector3(100000000, 100000000, 100000000)),
+                         Ogre::Vector3(0, -9.81, 0))),
 #ifdef DEBUG
         m_debugDrawer(nullptr),
 #endif
-        m_bodies(), m_shapes()
+        m_bodies(), m_shapes(),
+        m_map(*this, "../indie_resource/maps/test/map.dat")
   {
     // todo: move in Map
     m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
@@ -18,13 +23,8 @@ namespace game
     Ogre::Light *l = m_sceneMgr->createLight("MainLight");
     l->setPosition(20, 80, 50);
     l->setCastShadows(true);
-    m_world = std::make_unique<OgreBulletDynamics::DynamicsWorld>(
-        m_sceneMgr,
-        Ogre::AxisAlignedBox(Ogre::Vector3(-100000000, -100000000, -100000000),
-                             Ogre::Vector3(100000000, 100000000, 100000000)),
-        Ogre::Vector3(0, -9.81 / 10, 0));
 
-#ifdef DEBUG
+#ifdef DEBUG_
     m_debugDrawer = std::make_unique<OgreBulletCollisions::DebugDrawer>();
     m_debugDrawer->setDrawWireframe(true);
     m_world->setDebugDrawer(m_debugDrawer.get());

@@ -13,8 +13,8 @@ namespace game
   {
   public:
     Map() = delete;
-    Map(Ogre::SceneManager *sceneMgr);
-    Map(Ogre::SceneManager *sceneMgr, std::string const &filename);
+    Map(game::GameData &gamedata);
+    Map(game::GameData &gamedata, std::string const &filename);
     Map(Map const &) = delete;
     Map(Map &&) = delete;
     ~Map();
@@ -70,7 +70,7 @@ namespace game
       // clang-format on
     };
 
-    Ogre::SceneManager *   m_sceneMgr;
+    game::GameData &       m_gamedata;
     std::vector<PathPoint> m_points;
     Ogre::Entity *         m_map;
     Ogre::SceneNode *      m_node;

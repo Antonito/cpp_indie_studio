@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
@@ -90,7 +90,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
@@ -453,6 +453,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\tools\Tools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AContext.hpp" />
@@ -490,6 +491,7 @@
     <ClInclude Include="include\InputListener.hpp" />
     <ClInclude Include="include\pakpak_stdafx.hpp" />
     <ClInclude Include="include\targetver.h" />
+    <ClInclude Include="include\tools\Tools.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\libs\logger\logger.vcxproj">

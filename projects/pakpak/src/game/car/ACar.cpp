@@ -64,7 +64,7 @@ namespace game
     // m_node->rotate(m_carNode->getOrientation());
     m_carNode->setPosition(0, 0, 0);
     m_node->setDirection(Ogre::Vector3(0, 0, -1));
-    m_camera->setPosition(200, 250, 0);
+    m_camera->setPosition(0, 250, -200);
     m_camera->lookAt(m_node->getPosition());
   }
 
@@ -123,6 +123,7 @@ namespace game
     body->setShape(m_carNode, _box, 0.6, 0.6, 1.0, pos,
                    Ogre::Quaternion(Ogre::Radian(0), Ogre::Vector3::UNIT_Y));
 
+    m_node->setPosition(0, 800, 0);
     ++id;
   }
 }

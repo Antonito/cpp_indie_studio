@@ -46,7 +46,6 @@ namespace game
   private:
     Ogre::SceneManager *                               m_sceneMgr;
     std::vector<PlayerData>                            m_players;
-    Map                                                m_map;
     std::unique_ptr<OgreBulletDynamics::DynamicsWorld> m_world;
 #ifdef DEBUG
     std::unique_ptr<OgreBulletCollisions::DebugDrawer> m_debugDrawer;
@@ -54,6 +53,7 @@ namespace game
     std::vector<std::unique_ptr<OgreBulletDynamics::RigidBody>> m_bodies;
     std::vector<std::unique_ptr<OgreBulletCollisions::CollisionShape>>
         m_shapes;
+    Map m_map;
   };
 }
 
