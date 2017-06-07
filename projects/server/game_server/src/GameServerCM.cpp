@@ -27,21 +27,55 @@ network::IClient::ClientAction GameServer::read(IPacket &pck)
   std::unique_ptr<std::uint8_t[]> buff =
       std::make_unique<std::uint8_t[]>(packetSize::GameServerToCMPacketSize);
   ssize_t buffLen = 0;
+  ssize_t headerLen = 0;
 
-  if (m_connectManagerSock.rec(buff.get(),
-                               packetSize::GameServerToCMPacketSize, &buffLen))
+  // Read header first
+  if (m_connectManagerSock.rec(buff.get(), sizeof(PacketHeader), &headerLen))
     {
-      assert(buffLen >= 0);
-      if (buffLen == 0)
+      assert(headerLen >= 0);
+      if (headerLen == 0)
 	{
 	  nope::log::Log(Debug)
-	      << "Read failed, shall disconnect [GameServer]";
+	      << "Read failed, shall disconnect [GameServer Header]";
 	  ret = network::IClient::ClientAction::DISCONNECT;
 	}
       else
 	{
-	  ret = network::IClient::ClientAction::SUCCESS;
-	  pck.setData(static_cast<std::size_t>(buffLen), std::move(buff));
+	  nope::log::Log(Debug) << "Received header, checking it [GameServer]";
+	  // Check header
+	  PacketHeader *header = reinterpret_cast<PacketHeader *>(buff.get());
+
+	  header->magic.magic = ntohs(header->magic.magic);
+	  std::uint8_t vers = header->getVersion();
+	  std::uint8_t magic = header->getMagic();
+	  header->magic.magic = htons(header->magic.magic);
+	  if (vers == PacketHeader::Version && magic == PacketHeader::Magic)
+	    {
+	      // Get size to read
+	      std::uint16_t sizeToRead = ntohs(header->size);
+
+	      nope::log::Log(Debug)
+	          << "Should read " << sizeToRead << "[GameServer]";
+	      // Read rest of the packet
+	      if (m_connectManagerSock.rec(buff.get() + headerLen, sizeToRead,
+	                                   &buffLen))
+		{
+		  assert(buffLen >= 0);
+		  if (buffLen == 0)
+		    {
+		      nope::log::Log(Debug)
+		          << "Read failed, shall disconnect [GameServer]";
+		      ret = network::IClient::ClientAction::DISCONNECT;
+		    }
+		  else
+		    {
+		      ret = network::IClient::ClientAction::SUCCESS;
+		      pck.setData(
+		          static_cast<std::size_t>(buffLen + headerLen),
+		          std::move(buff));
+		    }
+		}
+	    }
 	}
     }
   return (ret);

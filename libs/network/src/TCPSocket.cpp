@@ -69,19 +69,26 @@ namespace network
 
   bool TCPSocket::sendBlocking(void const *data, std::size_t len) const
   {
-    ssize_t ret;
+    ssize_t     ret;
+    std::size_t off = 0;
 
     assert(getType() == ASocket::BLOCKING);
-#if defined(__linux__) || defined(__APPLE__)
-    ret = ::send(m_socket, static_cast<char const *>(data), len, 0);
-#elif defined(_WIN32)
-    ret = ::send(m_socket, static_cast<char const *>(data),
-                 static_cast<std::int32_t>(len), 0);
-#endif
-    if (ret < 0)
+    do
       {
-	return (false);
+#if defined(__linux__) || defined(__APPLE__)
+	ret = ::send(m_socket, static_cast<char const *>(data) + off,
+	             len - off, 0);
+#elif defined(_WIN32)
+	ret = ::send(m_socket, static_cast<char const *>(data) + off,
+	             static_cast<std::int32_t>(len - off), 0);
+#endif
+	if (ret <= 0)
+	  {
+	    return (!ret);
+	  }
+	off += static_cast<std::size_t>(ret);
       }
+    while (off != len);
     nope::log::Log(Debug) << "Sent " << ret << "/" << len;
     return (true);
   }
