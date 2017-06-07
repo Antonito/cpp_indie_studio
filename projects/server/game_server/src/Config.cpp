@@ -1,8 +1,8 @@
 #include "game_server_stdafx.hpp"
 
 Config::Config()
-    : m_connectManagerIp(), m_connectManagerPort(), m_gameServerPort(),
-      m_gameServerMaxClients()
+    : m_config(), m_connectManagerIp(), m_connectManagerPort(),
+      m_gameServerPort(), m_gameServerMaxClients()
 {
   loadConfig("game_server.ini");
 }
