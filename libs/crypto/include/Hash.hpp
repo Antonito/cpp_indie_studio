@@ -105,7 +105,8 @@ namespace crypto
     std::array<std::uint8_t, _blockSize[A]> m_hash;
   };
 
-  // Template definition
+#if defined(__linux__) || defined(__APPLE__)
+  // Template definition for Linux and OSX
   extern template Hash<AHash::Algorithm::MD2>::Hash();
   extern template Hash<AHash::Algorithm::MD2>::~Hash();
   extern template bool
@@ -171,6 +172,7 @@ namespace crypto
   extern template bool
       Hash<AHash::Algorithm::SHA512>::compute(std::uint8_t const *data,
                                               std::size_t const   len);
+#endif
 }
 
 #if defined(__clang__)
