@@ -246,11 +246,19 @@ static void client(network::TCPSocket &socket)
       nope::log::Log(Debug) << "Read successful !";
       nope::log::Log(Debug)
           << "Validation: " << pckContent.pck.eventData.valid;
+#ifdef _WIN32
+      Sleep(1000);
+#else
       sleep(1);
+#endif
     }
 
   nope::log::Log(Debug) << "Sleeping...";
+#ifdef _WIN32
+  Sleep(2000);
+#else
   sleep(2);
+#endif
 }
 
 int main(int, char **, char **)

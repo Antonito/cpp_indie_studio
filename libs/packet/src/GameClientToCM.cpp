@@ -41,8 +41,8 @@ std::unique_ptr<std::uint8_t[]>
   else if (pck.eventType == GameClientToCMEvent::LIST_SERVERS_EVENT)
     {
       data->eventData.serverList.nbServers =
-          std::min(data->eventData.serverList.nbServers,
-                   GameClientToCMPacketServerList::maxServers);
+          std::min<std::int32_t>(data->eventData.serverList.nbServers,
+                                 GameClientToCMPacketServerList::maxServers);
       for (std::int32_t i = 0; i < data->eventData.serverList.nbServers; ++i)
 	{
 	  GameClientToCMPacketStatus &cur =
