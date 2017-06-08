@@ -19,7 +19,7 @@ GameServer::GameServer(sock_t socket, sockaddr_in_t const &in,
 	  nope::log::Log(Debug)
 	      << "Local address detected, switching to internet one ["
 	      << publicIp << "]";
-	  assert(publicIp.length() <= INET6_ADDRSTRLEN_INDIE_INDIE_INDIE);
+	  assert(publicIp.length() <= INET6_ADDRSTRLEN_INDIE);
 	  m_ip.fill('\0');
 	  std::memcpy(m_ip.data(), publicIp.c_str(), publicIp.length());
 	}
