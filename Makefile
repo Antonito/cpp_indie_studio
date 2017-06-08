@@ -5,8 +5,7 @@ include $(MK_DIR)colors.mk $(MK_DIR)defs.mk
 ###### Add your projects here #####
 PROJECT_DIR=		./projects/
 
-PROJECTS=		pakpak			\
-			server/connect_manager	\
+PROJECTS=		server/connect_manager	\
 			server/game_server	\
 			server/client_test
 

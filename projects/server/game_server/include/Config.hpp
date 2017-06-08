@@ -1,6 +1,7 @@
 #ifndef CONFIG_HPP_
 #define CONFIG_HPP_
 
+#include "ConfigTools.hpp"
 #include "Ini.hpp"
 
 class Config
@@ -30,10 +31,11 @@ private:
   ini::Ini m_config;
 
   // Network
-  std::string   m_connectManagerIp;
-  std::uint16_t m_connectManagerPort;
-  std::uint16_t m_gameServerPort;
-  std::int32_t  m_gameServerMaxClients;
+  std::string            m_connectManagerIp;
+  std::uint16_t          m_connectManagerPort;
+  std::uint16_t          m_gameServerPort;
+  std::int32_t           m_gameServerMaxClients;
+  std::vector<MapConfig> m_mapConfig;
 
   // Game
 };
