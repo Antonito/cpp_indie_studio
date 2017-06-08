@@ -150,6 +150,7 @@ bool GameServer::authenticateToConnectManager()
   // Read "OK"
   if (read(pck) != network::IClient::ClientAction::SUCCESS)
     {
+      nope::log::Log(Info) << "License is invalid.";
       return (false);
     }
   pck >> data;
