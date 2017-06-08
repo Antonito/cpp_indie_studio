@@ -58,7 +58,7 @@ private:
   multithread::Queue<multithread::ResultGetter<TokenCom>> &m_token;
 
   // Request's data
-  std::array<char, INET6_ADDRSTRLEN> m_requIp;
+  std::array<char, INET6_ADDRSTRLEN_INDIE> m_requIp;
   std::uint16_t m_requPort;
 
   network::IClient::ClientAction _listServers(GameClientToCMPacket &rep);

@@ -6,7 +6,7 @@
 
 struct GameServerInfo
 {
-  GameServerInfo(std::array<char, INET6_ADDRSTRLEN> _addr,
+  GameServerInfo(std::array<char, INET6_ADDRSTRLEN_INDIE> _addr,
                  std::uint16_t const _port,
                  std::uint16_t const _currentClients,
                  std::uint16_t const _maxClients)
@@ -15,7 +15,7 @@ struct GameServerInfo
   {
   }
 
-  std::array<char, INET6_ADDRSTRLEN> addr;
+  std::array<char, INET6_ADDRSTRLEN_INDIE> addr;
   std::uint16_t port;
   std::uint16_t currentClients;
   std::uint16_t maxClients;
