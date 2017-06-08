@@ -67,4 +67,11 @@ The _game server_ should automatically connect to the selected _connect manager_
 
 ## Client
 
-> Client must only know the address of the connect manager. They will connect to a game server through the connect manager.
+```ini
+# Network configuration of client
+[Network]
+address=127.0.0.1
+port=12346
+```
+
+Clients must only know the address of the connect manager. They will connect to a game server through the connect manager.
