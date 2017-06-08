@@ -11,7 +11,7 @@ struct TokenCom
   {
   }
 
-  std::array<char, INET6_ADDRSTRLEN> ip;
+  std::array<char, INET6_ADDRSTRLEN_INDIE> ip;
   std::uint16_t port;
   std::int32_t  treated;
   std::array<char, 40> tokenData;

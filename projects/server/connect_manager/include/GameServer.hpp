@@ -52,7 +52,7 @@ public:
 
   bool operator==(GameServer const &other) const;
 
-  std::array<char, INET6_ADDRSTRLEN> const &getIp() const;
+  std::array<char, INET6_ADDRSTRLEN_INDIE> const &getIp() const;
   std::uint16_t getPort() const;
   std::uint16_t getCurrentClients() const;
   std::uint16_t getMaxClients() const;
@@ -72,7 +72,7 @@ private:
   Packet<GameServerToCMPacket>    m_packet;
   std::uint16_t                   m_curClients;
   std::uint16_t                   m_maxClients;
-  std::array<char, INET6_ADDRSTRLEN> m_ip;
+  std::array<char, INET6_ADDRSTRLEN_INDIE> m_ip;
   std::queue<multithread::ResultGetter<TokenCom>> m_token;
   std::queue<multithread::ResultGetter<TokenCom>> m_tokenTreating;
 
