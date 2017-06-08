@@ -20,6 +20,8 @@ typedef struct sockaddr    sockaddr_t;
 typedef struct in_addr     _in_addr_t;
 typedef struct addrinfo    addrinfo_t;
 
+static_assert(INET6_ADDRSTRLEN == 46, "INET6_ADDRSTRLEN changed.");
+
 #elif defined(_WIN32)
 
 // Prevent inclusion of winsock.h in windows.h
@@ -45,5 +47,7 @@ typedef struct addrinfo addrinfo_t;
 #error "Network is not supported for this plateform"
 
 #endif
+
+#define INET6_ADDRSTRLEN_INDIE 46
 
 #endif // !GENNETWORK_HPP_
