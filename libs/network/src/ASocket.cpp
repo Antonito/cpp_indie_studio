@@ -23,6 +23,16 @@ namespace network
         m_curClients(0), m_addr{}, m_type()
   {
     nope::log::Log(Debug) << "Loading socket #" << m_socket;
+#if defined(_WIN32)
+    // Do we need to load the network DLL ?
+    if (!m_nbSockets && !initWSA())
+      {
+	nope::log::Log(Error) << "Cannot load network DLL";
+	throw network::SockError("Cannot load network DLL");
+      }
+    nope::log::Log(Debug) << "Adding socket " << m_nbSockets;
+    ++m_nbSockets;
+#endif
   }
 
   ASocket::ASocket(SocketType type)
@@ -89,7 +99,8 @@ namespace network
   {
     closeConnection();
 #if defined(_WIN32)
-    assert(m_nbSockets);
+    if (m_nbSockets)
+      assert(m_nbSockets);
     --m_nbSockets;
     if (!m_nbSockets)
       {
