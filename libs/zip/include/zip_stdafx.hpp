@@ -3,10 +3,10 @@
 // are changed infrequently
 //
 
-#ifndef PACKET_STDAFX_HPP_
-#define PACKET_STDAFX_HPP_
+#ifndef ZIP_STDAFX_HPP_
+#define ZIP_STDAFX_HPP_
 
-#include "packet_targetver.h"
+#include "zip_targetver.h"
 
 #define WIN32_LEAN_AND_MEAN // Exclude rarely-used stuff from Windows headers
 
@@ -16,14 +16,7 @@
 #include <iomanip>
 #include <fstream>
 #include <memory>
-#include <cassert>
-#include <algorithm>
 #include "Logger.hpp"
-#include "ISerializable.hpp"
-#include "PacketHeader.hpp"
-#include "Packet.hpp"
-#include "GameServerCMPacket.hpp"
-#include "GameClientCMPacket.hpp"
-#include "GameClientGSPacket.hpp"
+#include "Zip.hpp"
 
-#endif // !PACKET_STDAFX_HPP_
+#endif // !ZIP_STDAFX_HPP_

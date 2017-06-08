@@ -8,6 +8,7 @@
 #include "ISerializable.hpp"
 #include "GenNetwork.hpp"
 #include "PacketHeader.hpp"
+#include "Logger.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
@@ -104,10 +105,14 @@ public:
     m_header.magic.magic = ntohs(header->magic.magic);
     if (m_header.getMagic() != PacketHeader::Magic)
       {
+	nope::log::Log(Error)
+	    << "Magic number is invalid ! Got " << m_header.getMagic();
 	throw std::runtime_error("Magic number is invalid");
       }
     else if (m_header.getVersion() != PacketHeader::Version)
       {
+	nope::log::Log(Error)
+	    << "Packet version is invalid ! Got " << m_header.getVersion();
 	throw std::runtime_error("Invalid packet version");
       }
     m_header.size = ntohs(header->size);
@@ -118,6 +123,8 @@ public:
         m_size - sizeof(m_header), m_data.get() + sizeof(m_header));
     if (m_header.checkSum != foundCheckSum)
       {
+	nope::log::Log(Error)
+	    << "Packet Checksum is invalid ! Got " << m_header.checkSum;
 	throw std::runtime_error("Invalid packet : checksum is incorrect");
       }
   }

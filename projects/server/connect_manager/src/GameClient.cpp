@@ -43,20 +43,63 @@ network::IClient::ClientAction GameClient::read(IPacket &pck)
   // Allocate buffer
   std::unique_ptr<uint8_t[]> buff = std::make_unique<std::uint8_t[]>(buffSize);
   ssize_t                    buffLen = 0;
+  ssize_t                    headerLen = 0;
 
-  if (m_sock.rec(buff.get(), buffSize, &buffLen))
+  // Read header first
+  if (m_sock.rec(buff.get(), sizeof(PacketHeader), &headerLen))
     {
-      assert(buffLen >= 0);
-      if (buffLen == 0)
+      assert(headerLen >= 0);
+      if (headerLen == 0)
 	{
 	  nope::log::Log(Debug)
-	      << "Read failed, shall disconnect [GameClient]";
+	      << "Read failed, shall disconnect [GameClient Header]";
 	  ret = network::IClient::ClientAction::DISCONNECT;
 	}
       else
 	{
-	  ret = network::IClient::ClientAction::SUCCESS;
-	  pck.setData(static_cast<std::size_t>(buffLen), std::move(buff));
+	  nope::log::Log(Debug) << "Received header, checking it [GameClient]";
+	  // Check header
+	  PacketHeader *header = reinterpret_cast<PacketHeader *>(buff.get());
+
+	  header->magic.magic = ntohs(header->magic.magic);
+	  std::uint8_t vers = header->getVersion();
+	  std::uint8_t magic = header->getMagic();
+	  header->magic.magic = htons(header->magic.magic);
+	  if (vers == PacketHeader::Version && magic == PacketHeader::Magic)
+	    {
+	      // Get size to read
+	      std::uint16_t sizeToRead = ntohs(header->size);
+
+	      nope::log::Log(Debug)
+	          << "Should read " << sizeToRead << "[GameClient]";
+	      if (static_cast<std::size_t>(headerLen + sizeToRead) <=
+	          packetSize::GameClientToCMPacketSize)
+		{
+		  if (m_sock.rec(buff.get() + headerLen, sizeToRead, &buffLen))
+		    {
+		      assert(buffLen >= 0);
+		      if (buffLen == 0)
+			{
+			  nope::log::Log(Debug)
+			      << "Read failed, shall disconnect [GameClient]";
+			  ret = network::IClient::ClientAction::DISCONNECT;
+			}
+		      else
+			{
+			  ret = network::IClient::ClientAction::SUCCESS;
+			  pck.setData(
+			      static_cast<std::size_t>(buffLen + headerLen),
+			      std::move(buff));
+			}
+		    }
+		}
+	      else
+		{
+		  nope::log::Log(Debug)
+		      << "Invalid packet received [GameClient]";
+		  ret = network::IClient::ClientAction::DISCONNECT;
+		}
+	    }
 	}
     }
   return (ret);
@@ -179,8 +222,8 @@ network::IClient::ClientAction
   rep.pck.eventData.serverList.nbServers =
       static_cast<std::int32_t>(m_gameServerList.size());
   rep.pck.eventData.serverList.nbServers =
-      std::min(rep.pck.eventData.serverList.nbServers,
-               GameClientToCMPacketServerList::maxServers);
+      std::min<std::int32_t>(rep.pck.eventData.serverList.nbServers,
+                             GameClientToCMPacketServerList::maxServers);
   nope::log::Log(Debug) << "There are "
                         << rep.pck.eventData.serverList.nbServers
                         << " game servers.";

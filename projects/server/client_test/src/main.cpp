@@ -24,20 +24,51 @@ static network::IClient::ClientAction readPck(network::TCPSocket &socket,
   std::unique_ptr<std::uint8_t[]> buff =
       std::make_unique<std::uint8_t[]>(packetSize::GameClientToCMPacketSize);
   ssize_t buffLen = 0;
+  ssize_t headerLen = 0;
 
-  if (socket.rec(buff.get(), packetSize::GameClientToCMPacketSize, &buffLen))
+  // Read header first
+  if (socket.rec(buff.get(), sizeof(PacketHeader), &headerLen))
     {
-      assert(buffLen >= 0);
-      if (buffLen == 0)
+      assert(headerLen >= 0);
+      if (headerLen == 0)
 	{
-	  nope::log::Log(Debug)
-	      << "Read failed, shall disconnect [GameServer]";
+	  nope::log::Log(Debug) << "Read failed, shall disconnect";
 	  ret = network::IClient::ClientAction::DISCONNECT;
 	}
       else
 	{
-	  ret = network::IClient::ClientAction::SUCCESS;
-	  pck.setData(static_cast<std::size_t>(buffLen), std::move(buff));
+	  nope::log::Log(Debug) << "Received header, checking it";
+	  // Check header
+	  PacketHeader *header = reinterpret_cast<PacketHeader *>(buff.get());
+
+	  header->magic.magic = ntohs(header->magic.magic);
+	  std::uint8_t vers = header->getVersion();
+	  std::uint8_t magic = header->getMagic();
+	  header->magic.magic = htons(header->magic.magic);
+	  if (vers == PacketHeader::Version && magic == PacketHeader::Magic)
+	    {
+	      // Get size to read
+	      std::uint16_t sizeToRead = ntohs(header->size);
+
+	      nope::log::Log(Debug) << "Should read " << sizeToRead;
+	      // Read rest of the packet
+	      if (socket.rec(buff.get() + headerLen, sizeToRead, &buffLen))
+		{
+		  assert(buffLen >= 0);
+		  if (buffLen == 0)
+		    {
+		      nope::log::Log(Debug) << "Read failed, shall disconnect";
+		      ret = network::IClient::ClientAction::DISCONNECT;
+		    }
+		  else
+		    {
+		      ret = network::IClient::ClientAction::SUCCESS;
+		      pck.setData(
+		          static_cast<std::size_t>(buffLen + headerLen),
+		          std::move(buff));
+		    }
+		}
+	    }
 	}
     }
   return (ret);
@@ -215,11 +246,19 @@ static void client(network::TCPSocket &socket)
       nope::log::Log(Debug) << "Read successful !";
       nope::log::Log(Debug)
           << "Validation: " << pckContent.pck.eventData.valid;
+#ifdef _WIN32
+      Sleep(1000);
+#else
       sleep(1);
+#endif
     }
 
   nope::log::Log(Debug) << "Sleeping...";
+#ifdef _WIN32
+  Sleep(2000);
+#else
   sleep(2);
+#endif
 }
 
 int main(int, char **, char **)

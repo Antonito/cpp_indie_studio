@@ -1,6 +1,7 @@
 #include "connect_manager_stdafx.hpp"
 
 GameServer::GameServer(sock_t socket, sockaddr_in_t const &in,
+                       std::string const &publicIp, bool const allowInternet,
                        std::vector<std::string> const &licences)
     : m_sock(socket), m_port(0), m_in(in), m_licences(licences),
       m_write(false), m_state(State::CONNECTED), m_packet(), m_curClients(0),
@@ -11,6 +12,17 @@ GameServer::GameServer(sock_t socket, sockaddr_in_t const &in,
                     m_ip.data(), sizeof(m_ip), nullptr, 0,
                     NI_NUMERICHOST | NI_NUMERICSERV) == 0)
     {
+      std::string const ipStr(m_ip.data());
+
+      if (allowInternet && ipStr == "127.0.0.1")
+	{
+	  nope::log::Log(Debug)
+	      << "Local address detected, switching to internet one ["
+	      << publicIp << "]";
+	  assert(publicIp.length() <= INET6_ADDRSTRLEN);
+	  m_ip.fill('\0');
+	  std::memcpy(m_ip.data(), publicIp.c_str(), publicIp.length());
+	}
       nope::log::Log(Info) << "Client joined " << std::string(m_ip.data());
     }
 }
@@ -66,23 +78,68 @@ network::IClient::ClientAction GameServer::read(IPacket &pck)
   // Allocate buffer
   std::unique_ptr<std::uint8_t[]> buff =
       std::make_unique<std::uint8_t[]>(packetSize::GameServerToCMPacketSize);
+  ssize_t headerLen = 0;
   ssize_t buffLen = 0;
 
-  if (m_sock.rec(buff.get(), packetSize::GameServerToCMPacketSize, &buffLen))
+  // Read header first
+  if (m_sock.rec(buff.get(), sizeof(PacketHeader), &headerLen))
     {
-      assert(buffLen >= 0);
-      if (buffLen == 0)
+      assert(headerLen >= 0);
+      if (headerLen == 0)
 	{
 	  nope::log::Log(Debug)
-	      << "Read failed, shall disconnect [GameServer]";
+	      << "Read failed, shall disconnect [GameServer Header]";
 	  ret = network::IClient::ClientAction::DISCONNECT;
 	}
       else
 	{
-	  ret = network::IClient::ClientAction::SUCCESS;
-	  pck.setData(static_cast<std::size_t>(buffLen), std::move(buff));
+	  nope::log::Log(Debug) << "Received header, checking it [GameServer]";
+	  // Check header
+	  PacketHeader *header = reinterpret_cast<PacketHeader *>(buff.get());
+
+	  header->magic.magic = ntohs(header->magic.magic);
+	  std::uint8_t vers = header->getVersion();
+	  std::uint8_t magic = header->getMagic();
+	  header->magic.magic = htons(header->magic.magic);
+	  if (vers == PacketHeader::Version && magic == PacketHeader::Magic)
+	    {
+	      // Get size to read
+	      std::uint16_t sizeToRead = ntohs(header->size);
+
+	      nope::log::Log(Debug)
+	          << "Should read " << sizeToRead << "[GameServer]";
+	      if (static_cast<std::size_t>(headerLen + sizeToRead) <=
+	          packetSize::GameServerToCMPacketSize)
+		{
+		  // Read rest of the packet
+		  if (m_sock.rec(buff.get() + headerLen, sizeToRead, &buffLen))
+		    {
+		      assert(buffLen >= 0);
+		      if (buffLen == 0)
+			{
+			  nope::log::Log(Debug)
+			      << "Read failed, shall disconnect [GameServer]";
+			  ret = network::IClient::ClientAction::DISCONNECT;
+			}
+		      else
+			{
+			  ret = network::IClient::ClientAction::SUCCESS;
+			  pck.setData(
+			      static_cast<std::size_t>(buffLen + headerLen),
+			      std::move(buff));
+			}
+		    }
+		}
+	      else
+		{
+		  nope::log::Log(Debug)
+		      << "Invalid packet received [GameServer]";
+		  ret = network::IClient::ClientAction::DISCONNECT;
+		}
+	    }
 	}
     }
+
   updateLastAction();
   return (ret);
 }

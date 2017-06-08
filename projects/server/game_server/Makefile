@@ -5,7 +5,7 @@ MK_COMMON_DIR=	./../../../mk/
 # Definitions for Makefile
 NAME=			$(ROOT_DIR)/build/game_server
 
-LOCAL_COMP_FLAGS=	-O2
+LOCAL_COMP_FLAGS=	-O2 -Wno-exit-time-destructors
 
 LOCAL_LINK_FLAGS=	-L$(ROOT_DIR)/build/ -lindie_network -lindie_logger -lindie_exceptions -lindie_multithread -lindie_packet -lindie_crypto -lindie_ini
 
@@ -37,7 +37,8 @@ SRC_FILES=	main.cpp		\
 		GameServerTCP.cpp	\
 		GameServerUDP.cpp	\
 		Token.cpp		\
-		GameClient.cpp
+		GameClient.cpp		\
+		Config.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 
