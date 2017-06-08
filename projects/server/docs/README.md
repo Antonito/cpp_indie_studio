@@ -42,7 +42,7 @@ Once everything is perfectly started, you can list or add licenses on the licens
 Simply type "help", and you'll get a list of available commands.
 
 
->  **TD;DR** -> "_add_" adds a license, "_list_" lists all the valid licenses.
+>  **TL;DR** -> "_add_" adds a license, "_list_" lists all the valid licenses.
 
 ## Game Server
 
