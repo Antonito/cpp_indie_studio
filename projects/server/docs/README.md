@@ -1,6 +1,6 @@
 # Server's Guide
 
-Our software provides two server's binaries. Each binary load its configuration from a given .ini file.
+Our software provides two server's binaries. Each binary loads its configuration from a given .ini file.
 
 The first one is called the "_connect manager_" which is a server monitoring all the game servers and game clients.
 
