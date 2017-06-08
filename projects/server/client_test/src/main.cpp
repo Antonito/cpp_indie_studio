@@ -246,6 +246,8 @@ static void client(network::TCPSocket &socket)
       nope::log::Log(Debug) << "Read successful !";
       nope::log::Log(Debug)
           << "Validation: " << pckContent.pck.eventData.valid;
+      nope::log::Log(Info)
+          << "Client connected and authenticated to game server.";
 #ifdef _WIN32
       Sleep(1000);
 #else
