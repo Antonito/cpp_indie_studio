@@ -176,6 +176,12 @@ network::IClient::ClientAction GameClient::treatIncomingData()
       break;
     case State::AUTHENTICATED:
       break;
+    case State::CHECKING_MAPS:
+      break;
+    case State::WAITING:
+      break;
+    case State::PLAYING:
+      break;
     }
   if (ret == network::IClient::ClientAction::SUCCESS)
     {
@@ -203,6 +209,12 @@ network::IClient::ClientAction GameClient::treatOutgoingData()
       m_state = State::AUTHENTICATED;
       break;
     case State::AUTHENTICATED:
+      break;
+    case State::CHECKING_MAPS:
+      break;
+    case State::WAITING:
+      break;
+    case State::PLAYING:
       break;
     }
   if (ret == network::IClient::ClientAction::SUCCESS)

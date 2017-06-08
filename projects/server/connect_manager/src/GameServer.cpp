@@ -209,6 +209,7 @@ network::IClient::ClientAction GameServer::treatIncomingData()
 		nope::log::Log(Debug) << "Error in state SETTING, invalid "
 		                         "payload, shall disconnect "
 		                         "[GameServer]";
+		nope::log::Log(Info) << "License is invalid.";
 		return (network::IClient::ClientAction::DISCONNECT);
 	      }
 	    m_port = rep.pck.eventData.licence.port;

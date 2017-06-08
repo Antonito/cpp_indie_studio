@@ -20,7 +20,10 @@ public:
   {
     CONNECTED = 0,
     AUTHENTICATING,
-    AUTHENTICATED
+    AUTHENTICATED,
+    CHECKING_MAPS,
+    WAITING,
+    PLAYING
   };
 
   GameClient(sock_t const fd, std::vector<Token> &m_tokenList,
