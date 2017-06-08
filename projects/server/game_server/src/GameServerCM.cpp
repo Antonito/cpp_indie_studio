@@ -36,7 +36,7 @@ network::IClient::ClientAction GameServer::read(IPacket &pck)
       if (headerLen == 0)
 	{
 	  nope::log::Log(Debug)
-	      << "Read failed, shall disconnect [GameServer Header]";
+	      << "1Read failed, shall disconnect [GameServer Header]";
 	  ret = network::IClient::ClientAction::DISCONNECT;
 	}
       else
