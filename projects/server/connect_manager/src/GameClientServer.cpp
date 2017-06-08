@@ -161,7 +161,7 @@ void GameClientServer::_loop()
 	      std::unique_ptr<GameClient> &client = *iter;
 	      std::int32_t                 sock = client->getSocket();
 
-	      if (ite + 1 == m_gameClient.end())
+	      if (iter + 1 == m_gameClient.end())
 		{
 		  last = true;
 		}
@@ -201,7 +201,7 @@ void GameClientServer::_loop()
 		}
 	      else if (last)
 		{
-		  ite = m_gameClient.end();
+		  iter = m_gameClient.end();
 		}
 	    }
 	}
