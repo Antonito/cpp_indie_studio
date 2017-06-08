@@ -156,9 +156,15 @@ void GameClientServer::_loop()
 	           m_gameClient.begin();
 	       iter != m_gameClient.end();)
 	    {
+	      bool                         last = false;
 	      bool                         deleted = false;
 	      std::unique_ptr<GameClient> &client = *iter;
 	      std::int32_t                 sock = client->getSocket();
+
+	      if (ite + 1 == m_gameClient.end())
+		{
+		  last = true;
+		}
 
 	      if (FD_ISSET(sock, &readfds))
 		{
@@ -192,6 +198,10 @@ void GameClientServer::_loop()
 	      if (!deleted)
 		{
 		  ++iter;
+		}
+	      else if (last)
+		{
+		  ite = m_gameClient.end();
 		}
 	    }
 	}
