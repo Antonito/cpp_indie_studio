@@ -42,6 +42,7 @@ network::IClient::ClientAction GameServer::read(IPacket &pck)
       else
 	{
 	  nope::log::Log(Debug) << "Received header, checking it [GameServer]";
+
 	  // Check header
 	  PacketHeader *header = reinterpret_cast<PacketHeader *>(buff.get());
 
@@ -57,23 +58,33 @@ network::IClient::ClientAction GameServer::read(IPacket &pck)
 	      nope::log::Log(Debug)
 	          << "Should read " << sizeToRead << "[GameServer]";
 	      // Read rest of the packet
-	      if (m_connectManagerSock.rec(buff.get() + headerLen, sizeToRead,
-	                                   &buffLen))
+	      if (static_cast<std::size_t>(headerLen + sizeToRead) <=
+	          packetSize::GameServerToCMPacketSize)
 		{
-		  assert(buffLen >= 0);
-		  if (buffLen == 0)
+		  if (m_connectManagerSock.rec(buff.get() + headerLen,
+		                               sizeToRead, &buffLen))
 		    {
-		      nope::log::Log(Debug)
-		          << "Read failed, shall disconnect [GameServer]";
-		      ret = network::IClient::ClientAction::DISCONNECT;
+		      assert(buffLen >= 0);
+		      if (buffLen == 0)
+			{
+			  nope::log::Log(Debug)
+			      << "Read failed, shall disconnect [GameServer]";
+			  ret = network::IClient::ClientAction::DISCONNECT;
+			}
+		      else
+			{
+			  ret = network::IClient::ClientAction::SUCCESS;
+			  pck.setData(
+			      static_cast<std::size_t>(buffLen + headerLen),
+			      std::move(buff));
+			}
 		    }
-		  else
-		    {
-		      ret = network::IClient::ClientAction::SUCCESS;
-		      pck.setData(
-		          static_cast<std::size_t>(buffLen + headerLen),
-		          std::move(buff));
-		    }
+		}
+	      else
+		{
+		  nope::log::Log(Debug)
+		      << "Invalid packet received [GameServer]";
+		  ret = network::IClient::ClientAction::DISCONNECT;
 		}
 	    }
 	}
