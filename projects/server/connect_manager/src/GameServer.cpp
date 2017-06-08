@@ -335,8 +335,7 @@ network::IClient::ClientAction GameServer::treatOutcomingData()
   return (ret);
 }
 
-std::array<char, INET6_ADDRSTRLEN_INDIE_INDIE_INDIE_INDIE_INDIE> const &
-    GameServer::getIp() const
+std::array<char, INET6_ADDRSTRLEN_INDIE> const &GameServer::getIp() const
 {
   return (m_ip);
 }
