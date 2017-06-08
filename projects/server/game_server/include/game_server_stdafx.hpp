@@ -29,5 +29,6 @@
 #include "Ini.hpp"
 #include "Config.hpp"
 #include "GameClient.hpp"
+#include "json.hpp"
 
 #endif // !GAME_SERVER_STDAFX_HPP_

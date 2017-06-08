@@ -24,8 +24,9 @@ DIR_LIST=	$(SRC_DIR)				\
 		$(ROOT_DIR)/libs/logger/include/	\
 		$(ROOT_DIR)/libs/exceptions/include/	\
 		$(ROOT_DIR)/libs/crypto/include/	\
-		$(ROOT_DIR)/libs/ini/include/	\
-		$(ROOT_DIR)/libs/packet/include/
+		$(ROOT_DIR)/libs/ini/include/		\
+		$(ROOT_DIR)/libs/packet/include/	\
+		$(ROOT_DIR)/libs/serializer/include/
 
 HEADER=		game_server_stdafx.hpp
 
