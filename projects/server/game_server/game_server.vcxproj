@@ -72,21 +72,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\crypto\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)libs\serializer\include\;$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\crypto\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\crypto\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)libs\serializer\include\;$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\crypto\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\crypto\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)libs\serializer\include\;$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\crypto\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <OutDir>$(SolutionDir)build\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\crypto\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)libs\serializer\include\;$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\crypto\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -122,7 +123,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

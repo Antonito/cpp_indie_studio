@@ -2,6 +2,7 @@
 #define CONFIG_TOOLS_HPP_
 
 #include <string>
+#include <map>
 #include "Metadata.hpp"
 
 // Disable clang warning for implicit padding
@@ -13,12 +14,14 @@
 // clang-format off
 struct MapConfig
 {
+  //TODO check serialization std::map
+  using map_t = std::map<std::string, std::string>;
   NOPE_SERIAL_MEMBER(
   std::string, name,
   std::string, directory,
   std::string, gameMode,
-  int32_t,     nbLaps
-  )
+  int32_t,     nbLaps)
+  map_t       md5;
 };
 // clang-format on
 
