@@ -50,12 +50,9 @@ Simply type "help", and you'll get a list of available commands.
 
 ```ini
 [Network]
-#connectManagerIp=127.0.0.1
-connectManagerIp=176.31.101.117
-#connectManagerPort=12345
-#gameServerPort=12347
-connectManagerPort=5340
-gameServerPort=5342
+connectManagerIp=127.0.0.1
+connectManagerPort=12345
+gameServerPort=12347
 maxNumberClients=32
 ```
 
