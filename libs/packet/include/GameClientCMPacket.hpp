@@ -45,7 +45,7 @@ struct GameClientToCMPacketToken
 // Contains an IP address
 struct GameClientToCMPacketIP
 {
-  std::array<char, INET6_ADDRSTRLEN> data;
+  std::array<char, INET6_ADDRSTRLEN_INDIE> data;
 };
 
 // Expected with REQUEST_EVENT packets when event is GET_TOKEN
