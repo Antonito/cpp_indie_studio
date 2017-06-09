@@ -342,3 +342,6 @@ build/game_server
 build/lib*
 build/.license
 build/.license_keys
+
+#confiug file
+*.ini
