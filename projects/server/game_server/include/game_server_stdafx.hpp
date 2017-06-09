@@ -31,4 +31,10 @@
 #include "GameClient.hpp"
 #include "json.hpp"
 
+#if defined(_WIN32)
+#include "dirent/dirent.h"
+#else
+#include <dirent.h>
+#endif
+
 #endif // !GAME_SERVER_STDAFX_HPP_
