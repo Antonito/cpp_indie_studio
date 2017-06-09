@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "GUI.hpp"
+#include "game/menu/GUI.hpp"
 
 void core::GUI::init(std::string const &p_path)
 {

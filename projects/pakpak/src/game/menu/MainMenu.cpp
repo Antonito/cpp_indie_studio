@@ -1,4 +1,4 @@
-#include "MainMenu.hpp"
+#include "game/menu/MainMenu.hpp"
 
 bool core::MainMenu::keyPressed(OIS::KeyEvent const& arg)
 {

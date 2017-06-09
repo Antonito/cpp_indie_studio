@@ -2,8 +2,8 @@
 // Created by duhieu_b on 31/05/17.
 //
 
-#include "MenuManager.hpp"
-#include "MainMenu.hpp"
+#include "game/menu/MenuManager.hpp"
+#include "game/menu/MainMenu.hpp"
 
 bool menu::MenuManager::keyPressed(OIS::KeyEvent const &ke)
 {
