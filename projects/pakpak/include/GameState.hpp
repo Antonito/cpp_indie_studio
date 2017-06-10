@@ -20,9 +20,10 @@ namespace core
     None = -1,
     MainMenu,
     Option,
-    Score,
+    Keymap,
     SoloPlayerGame,
     MultiPlayerGame,
+    Score,
     Quit,
     NbMenuState
   };

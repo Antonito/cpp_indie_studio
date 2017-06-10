@@ -4,7 +4,7 @@
 namespace menu
 {
   ContextMenu::ContextMenu(Ogre::RenderWindow *win, core::InputListener *input)
-      : core::AContext(win, input), m_menu(std::make_unique<MenuManager>(win))
+      : core::AContext(win, input), m_menu(win)
   {
   }
 
@@ -17,52 +17,52 @@ namespace menu
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
 
-    m_menu->begin();
+    m_menu.begin();
   }
 
   void ContextMenu::disable()
   {
-      m_menu->end();
+      m_menu.end();
   }
 
   core::GameState ContextMenu::update()
   {
     m_input->capture();
-    return m_menu.get()->getMenuLayer()->update();
+    return m_menu.getMenuLayer()->update();
   }
 
   void ContextMenu::display()
   {
-      m_menu.get()->getMenuLayer()->draw();
+      m_menu.getMenuLayer()->draw();
   }
 
     bool ContextMenu::keyPressed(const OIS::KeyEvent &arg)
     {
-        m_menu->keyPressed(arg);
+        m_menu.keyPressed(arg);
         return true;
     }
 
     bool ContextMenu::keyReleased(const OIS::KeyEvent &arg)
     {
-        m_menu->keyReleased(arg);
+        m_menu.keyReleased(arg);
         return true;
     }
 
     bool ContextMenu::mouseMoved(const OIS::MouseEvent &arg)
     {
-        m_menu->mouseMoved(arg);
+        m_menu.mouseMoved(arg);
         return true;
     }
 
     bool ContextMenu::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
     {
-        m_menu->mousePressed(arg, id);
+        m_menu.mousePressed(arg, id);
         return true;
     }
 
     bool ContextMenu::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
     {
-        m_menu->mouseReleased(arg, id);
+        m_menu.mouseReleased(arg, id);
         return false;
     }
 }

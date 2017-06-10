@@ -1,6 +1,43 @@
 #include "game/menu/MainMenu.hpp"
 
-bool core::MainMenu::keyPressed(OIS::KeyEvent const& arg)
+core::MainMenu::MainMenu(menu::MenuManager &menuManager, GUI &gui)
+    : m_gui(gui), m_curState(core::GameState::Menu), m_menuManager(menuManager)
+{
+}
+
+void core::MainMenu::entry()
+{
+  initGUI();
+}
+
+void core::MainMenu::initGUI()
+{
+  m_gui.loadLayout("indie.layout");
+
+  m_gui.getRoot()
+      ->getChild("quit_button")
+      ->subscribeEvent(CEGUI::PushButton::EventClicked,
+                       CEGUI::Event::Subscriber(&MainMenu::onExitClick, this));
+  m_gui.getRoot()
+      ->getChild("play_button")
+      ->subscribeEvent(CEGUI::PushButton::EventClicked,
+                       CEGUI::Event::Subscriber(&MainMenu::onSoloClick, this));
+  m_gui.getRoot()
+      ->getChild("options_button")
+      ->subscribeEvent(
+          CEGUI::PushButton::EventClicked,
+          CEGUI::Event::Subscriber(&MainMenu::onOptionClick, this));
+
+  m_gui.getRoot()
+      ->getChild("multi")
+      ->subscribeEvent(
+          CEGUI::PushButton::EventClicked,
+          CEGUI::Event::Subscriber(&MainMenu::onMultiClick, this));
+
+  m_gui.setCursorArrow("TaharezLook/MouseArrow");
+}
+
+bool core::MainMenu::keyPressed(OIS::KeyEvent const &arg)
 {
   CEGUI::GUIContext &context =
       CEGUI::System::getSingleton().getDefaultGUIContext();
@@ -59,15 +96,9 @@ CEGUI::MouseButton core::MainMenu::convertButton(OIS::MouseButtonID buttonID)
     }
 }
 
-void core::MainMenu::entry()
-{
-  initGUI();
-}
-
 void core::MainMenu::destroy()
 {
-    m_gui.destroy();
-    m_gui.hideCursor();
+  m_gui.destroy();
 }
 
 core::GameState core::MainMenu::update() const
@@ -75,83 +106,43 @@ core::GameState core::MainMenu::update() const
   return m_curState;
 }
 
-void core::MainMenu::initGUI()
+void core::MainMenu::draw()
 {
-  m_gui.init("");
-  m_gui.loadSheme("TaharezLook.scheme");
-  m_gui.setFont("DejaVuSans-10");
+}
 
-#if defined(_WIN32)
-  m_param.insert(std::make_pair(std::string("w32_mouse"),
-                                std::string("DISCL_FOREGROUND")));
-  m_param.insert(std::make_pair(std::string("w32_mouse"),
-                                std::string("DISCL_NONEXCLUSIVE")));
-  m_param.insert(std::make_pair(std::string("w32_keyboard"),
-                                std::string("DISCL_FOREGROUND")));
-  m_param.insert(std::make_pair(std::string("w32_keyboard"),
-                                std::string("DISCL_NONEXCLUSIVE")));
-#else
-  m_param.insert(
-      std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
-  m_param.insert(
-      std::make_pair(std::string("x11_mouse_hide"), std::string("true")));
-  m_param.insert(
-      std::make_pair(std::string("x11_keyboard_grab"), std::string("false")));
-  m_param.insert(
-      std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
-#endif
-  CEGUI::PushButton *quitButton =
-      static_cast<CEGUI::PushButton *>(m_gui.createButton(
-          "TaharezLook/Button", glm::vec4(0.5f, 0.7f, 0.1f, 0.05f),
-          glm::vec4(0.0), "ExitButton"));
-  quitButton->setText("QUIT");
-  quitButton->subscribeEvent(
-      CEGUI::PushButton::EventClicked,
-      CEGUI::Event::Subscriber(&MainMenu::onExitClick, this));
+void core::MainMenu::exit()
+{
+}
 
-  CEGUI::PushButton *playButton =
-      static_cast<CEGUI::PushButton *>(m_gui.createButton(
-          "TaharezLook/Button", glm::vec4(0.5f, 0.5f, 0.1f, 0.05f),
-          glm::vec4(0.0), "PlayButton"));
-  playButton->setText("PLAY");
-  playButton->subscribeEvent(
-      CEGUI::PushButton::EventClicked,
-      CEGUI::Event::Subscriber(&MainMenu::onPlayClick, this));
-  m_gui.setCursorArrow("TaharezLook/MouseArrow");
+void core::MainMenu::build()
+{
+}
+
+bool core::MainMenu::onOptionClick(CEGUI::EventArgs const &)
+{
+  m_menuManager.push(core::MenuState::Option);
+  m_menuManager.begin();
+  return true;
 }
 
 bool core::MainMenu::onExitClick(CEGUI::EventArgs const &e)
 {
   (void)e;
-  std::cout << "Click on quit !!" << std::endl;
   m_curState = core::GameState::Quit;
   return true;
 }
 
-bool core::MainMenu::onPlayClick(CEGUI::EventArgs const &e)
+bool core::MainMenu::onSoloClick(CEGUI::EventArgs const &e)
 {
   (void)e;
-  std::cout << "Click on play !!" << std::endl;
-  m_curState = core::GameState::InGame;
+  m_menuManager.push(core::MenuState::SoloPlayerGame);
+  m_menuManager.begin();
   return true;
 }
-
-core::MainMenu::MainMenu()
-    : m_gui(), m_param(), m_curState(core::GameState::Menu)
+bool core::MainMenu::onMultiClick(CEGUI::EventArgs const &e)
 {
-}
-
-void core::MainMenu::draw()
-{
-
-}
-
-void core::MainMenu::exit()
-{
-
-}
-
-void core::MainMenu::build()
-{
-
+  (void)e;
+  m_menuManager.push(core::MenuState::MultiPlayerGame);
+  m_menuManager.begin();
+  return true;
 }

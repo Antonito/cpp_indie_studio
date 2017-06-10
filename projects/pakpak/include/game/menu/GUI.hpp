@@ -19,39 +19,29 @@ namespace core
   public:
     ~GUI();
     GUI();
-    void init(std::string const &);
-
+    void init();
     void destroy();
-
     void draw();
-
     void setFont(std::string const &);
-
     CEGUI::Window *createButton(CEGUI::Window *, std::string const &,
                                 glm::vec4 const &, glm::vec4 const &,
                                 std::string const &);
-
     CEGUI::Window *createButton(std::string const &, glm::vec4 const &,
                                 glm::vec4 const &, std::string const &);
-
     void setPos(CEGUI::Window *, glm::vec4 const &, glm::vec4 const &);
-
     void loadSheme(std::string const &);
-
+    void loadLayout(std::string const &);
     CEGUI::OgreRenderer *getRender() const;
-
     CEGUI::GUIContext *getContext() const;
-
     CEGUI::Window *getRoot() const;
-
     void hideCursor();
-
     void setCursorArrow(std::string const &);
 
   private:
     CEGUI::OgreRenderer *m_renderer;
     CEGUI::Window *      m_root;
     CEGUI::GUIContext *  m_context;
+    OIS::ParamList      m_param;
 
     GUI(GUI const &) = delete;
     GUI &operator=(GUI const &) = delete;

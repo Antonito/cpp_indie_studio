@@ -5,25 +5,22 @@
 #include <iostream>
 #include "game/menu/GUI.hpp"
 
-void core::GUI::init(std::string const &p_path)
+void core::GUI::init()
 {
   m_renderer = &CEGUI::OgreRenderer::bootstrapSystem();
-  (void)p_path;
-
   CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
   CEGUI::Font::setDefaultResourceGroup("Fonts");
   CEGUI::Scheme::setDefaultResourceGroup("Schemes");
   CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
   CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
   m_context = &CEGUI::System::getSingleton().getDefaultGUIContext();
-  m_root = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow",
-                                                             "root");
-  m_context->setRootWindow(m_root);
+  loadSheme("TaharezLook.scheme");
 }
 
 void core::GUI::destroy()
 {
   CEGUI::WindowManager::getSingleton().destroyWindow(m_root);
+  m_root = nullptr;
 }
 
 void core::GUI::setFont(std::string const &p_font)
@@ -84,8 +81,32 @@ void core::GUI::draw()
 {
 }
 
-core::GUI::GUI() : m_renderer(nullptr), m_root(nullptr), m_context(nullptr)
+core::GUI::GUI() : m_renderer(nullptr),
+                   m_root(nullptr),
+                   m_context(nullptr),
+                   m_param()
 {
+  #if defined(_WIN32)
+  m_param.insert(std::make_pair(std::string("w32_mouse"),
+                                std::string("DISCL_FOREGROUND")));
+  m_param.insert(std::make_pair(std::string("w32_mouse"),
+                                std::string("DISCL_NONEXCLUSIVE")));
+  m_param.insert(std::make_pair(std::string("w32_keyboard"),
+                                std::string("DISCL_FOREGROUND")));
+  m_param.insert(std::make_pair(std::string("w32_keyboard"),
+                                std::string("DISCL_NONEXCLUSIVE")));
+  #else
+  m_param.insert(
+      std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
+  m_param.insert(
+      std::make_pair(std::string("x11_mouse_hide"), std::string("true")));
+  m_param.insert(
+      std::make_pair(std::string("x11_keyboard_grab"), std::string("false")));
+  m_param.insert(
+      std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
+  #endif
+
+  init();
 }
 
 void core::GUI::loadSheme(std::string const &p_shem)
@@ -110,3 +131,12 @@ CEGUI::Window *core::GUI::getRoot() const
 {
   return m_root;
 }
+
+void core::GUI::loadLayout(std::string const &p_path)
+{
+  if (m_root)
+    destroy();
+  m_root = CEGUI::WindowManager::getSingleton().loadLayoutFromFile(p_path);
+  m_context->setRootWindow(m_root);
+}
+

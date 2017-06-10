@@ -7,13 +7,14 @@
 
 #include "IMenuLayer.hpp"
 #include "GUI.hpp"
+#include "MenuManager.hpp"
 
 namespace core
 {
   class MainMenu : public IMenuLayer
   {
   public:
-    MainMenu();
+    MainMenu(menu::MenuManager &menuManager, GUI &gui);
     virtual ~MainMenu()
     {
     }
@@ -37,14 +38,16 @@ namespace core
   private:
     MainMenu(MainMenu const &) = delete;
     MainMenu(MainMenu &&) = delete;
-    MainMenu &operator=(MainMenu &) = delete;
+    MainMenu &operator=(MainMenu const &) = delete;
     void      initGUI();
     bool      onExitClick(CEGUI::EventArgs const &);
-    bool      onPlayClick(CEGUI::EventArgs const &);
+    bool      onSoloClick(CEGUI::EventArgs const &);
+    bool      onMultiClick(CEGUI::EventArgs const &);
+    bool      onOptionClick(CEGUI::EventArgs const &);
 
-    GUI                 m_gui;
-    OIS::ParamList      m_param;
+    GUI                 &m_gui;
     GameState           m_curState;
+    menu::MenuManager   &m_menuManager;
   };
 }
 
