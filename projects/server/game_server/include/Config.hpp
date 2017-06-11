@@ -26,6 +26,7 @@ public:
 private:
   Config();
   void loadConfig(std::string const &file);
+  void checkMD5(std::string const &filePath, std::map<std::string, std::string> &md5);
 
   // Ini configuration
   ini::Ini m_config;
