@@ -56,6 +56,8 @@ private:
   Packet<GameClientToGSPacket> m_packet;
   std::vector<Token> &         m_tokenList;
   std::int32_t                 m_id;
+
+  bool checkMaps();
 };
 
 // Disable clang warning for implicit padding

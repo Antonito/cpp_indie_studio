@@ -175,6 +175,25 @@ network::IClient::ClientAction GameClient::treatIncomingData()
     case State::AUTHENTICATING:
       break;
     case State::AUTHENTICATED:
+      nope::log::Log(Debug) << "Reading in state AUTHENTICATED [GameClient]";
+      ret = read(m_packet);
+      if (ret == network::IClient::ClientAction::SUCCESS)
+	{
+	  m_packet >> rep;
+	  // The only event allowed is a VALIDATION event
+	  if (rep.pck.eventType == GameClientToGSEvent::VALIDATION_EVENT)
+	    {
+	      nope::log::Log(Debug)
+	          << "Got Validation: " << rep.pck.eventData.valid
+	          << " [GameClient]";
+	      if (rep.pck.eventData.valid == 1)
+		{
+		  nope::log::Log(Debug)
+		      << "Switching to CHECKING_MAPS state [GameClient]";
+		  m_state = State::CHECKING_MAPS;
+		}
+	    }
+	}
       break;
     case State::CHECKING_MAPS:
       break;
@@ -211,6 +230,10 @@ network::IClient::ClientAction GameClient::treatOutgoingData()
     case State::AUTHENTICATED:
       break;
     case State::CHECKING_MAPS:
+      if (checkMaps())
+	{
+	  ret = network::IClient::ClientAction::SUCCESS;
+	}
       break;
     case State::WAITING:
       break;
@@ -229,6 +252,27 @@ bool GameClient::operator==(GameClient const &other) const
   if (this != &other)
     {
       return (m_sock == other.m_sock);
+    }
+  return (true);
+}
+
+bool GameClient::checkMaps()
+{
+  // Check global MD5
+  nope::log::Log(Info) << "Checking integrity of client's maps";
+
+  nope::log::Log(Debug) << "Global MD5: " << Config::getInstance().getMapMD5();
+
+  std::vector<MapConfig> const &maps = Config::getInstance().getMapConfig();
+
+  // Check MD5 for each map
+  for (MapConfig const &map : maps)
+    {
+      nope::log::Log(Debug) << map.name << ": " << map.md5Str;
+      for (std::pair<std::string const, std::string> file : map.md5)
+	{
+	  nope::log::Log(Debug) << file.first << ": " << file.second;
+	}
     }
   return (true);
 }
