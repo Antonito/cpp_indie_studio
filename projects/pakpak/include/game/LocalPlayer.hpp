@@ -24,7 +24,8 @@ namespace game
   {
   public:
     LocalPlayer() = delete;
-    LocalPlayer(Ogre::RenderWindow *win, GameData &, PlayerData *, int);
+    LocalPlayer(Ogre::RenderWindow *win, GameData &, PlayerData *, int,
+                core::SettingsPlayer &);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&);
     virtual ~LocalPlayer();
@@ -58,8 +59,8 @@ namespace game
     void order(int);
 
     std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()> &
-                    actions(std::string const &);
-    SettingsPlayer &settings();
+                          actions(std::string const &);
+    core::SettingsPlayer &settings();
 
   private:
     void setActionMap();
@@ -98,8 +99,8 @@ namespace game
     Ogre::Viewport *m_viewport;
 
     std::vector<std::chrono::time_point<std::chrono::high_resolution_clock>>
-                   m_rounds;
-    SettingsPlayer m_settings;
+                          m_rounds;
+    core::SettingsPlayer &m_settings;
     std::map<std::string,
              std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()>>
         m_actions;

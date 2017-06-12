@@ -2,8 +2,9 @@
 
 namespace game
 {
-  ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input)
-      : core::AContext(win, input), m_game(), m_players()
+  ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
+                           core::SettingsPlayer &settings)
+      : core::AContext(win, input), m_game(), m_players(), m_settings(settings)
   {
   }
 
@@ -31,8 +32,8 @@ namespace game
 
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
-	m_players.emplace_back(
-	    std::make_unique<LocalPlayer>(m_win, m_game, &m_game[i], i));
+	m_players.emplace_back(std::make_unique<LocalPlayer>(
+	    m_win, m_game, &m_game[i], i, m_settings));
       }
 
     updateViewPort();

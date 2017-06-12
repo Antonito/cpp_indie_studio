@@ -1,6 +1,6 @@
 #include "pakpak_stdafx.hpp"
 
-namespace game
+namespace core
 {
   static std::map<int, std::string const> playerFile = {
       {0, "player0_settings"},

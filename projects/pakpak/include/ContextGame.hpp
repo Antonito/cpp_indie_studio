@@ -16,7 +16,8 @@ namespace game
                             public OIS::MouseListener
   {
   public:
-    ContextGame(Ogre::RenderWindow *win, core::InputListener *input);
+    ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
+                core::SettingsPlayer &);
     ContextGame(ContextGame const &) = delete;
     ContextGame(ContextGame &&) = delete;
     virtual ~ContextGame();
@@ -44,6 +45,7 @@ namespace game
   private:
     GameData                                  m_game;
     std::vector<std::unique_ptr<LocalPlayer>> m_players;
+    core::SettingsPlayer &                    m_settings;
   };
 }
 

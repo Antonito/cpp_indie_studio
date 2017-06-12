@@ -5,6 +5,7 @@
 #include <memory>
 #include "IContext.hpp"
 #include "GameState.hpp"
+#include "SettingsPlayer.hpp"
 
 // Forward declaration for faster compilation
 namespace Ogre
@@ -46,8 +47,9 @@ namespace core
         static_cast<std::size_t>(GameState::NbGameState);
 
     std::array<std::unique_ptr<IContext>, nbContext> m_contexts;
-    IContext *                                       m_currentContext;
-    GameState                                        m_gameState;
+    IContext *     m_currentContext;
+    GameState      m_gameState;
+    SettingsPlayer m_settings;
   };
 }
 

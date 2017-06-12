@@ -55,6 +55,7 @@
 #include "ContextSplash.hpp"
 #include "GameState.hpp"
 #include "InputListener.hpp"
+#include "SettingsPlayer.hpp"
 
 // Game
 #include "AContext.hpp"
@@ -83,9 +84,6 @@
 // Game.Map
 #include "Map.hpp"
 #include "PathPoint.hpp"
-
-// Game.Settings
-#include "SettingsPlayer.hpp"
 
 //
 // Logger

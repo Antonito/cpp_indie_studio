@@ -5,7 +5,7 @@
 #include <OIS/OIS.h>
 #include "Metadata.hpp"
 
-namespace game
+namespace core
 {
   class SettingsPlayer
   {

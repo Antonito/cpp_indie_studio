@@ -3,10 +3,10 @@
 namespace game
 {
   LocalPlayer::LocalPlayer(Ogre::RenderWindow *win, GameData &g, PlayerData *p,
-                           int order)
+                           int order, core::SettingsPlayer &settings)
       : m_data(p), m_cameraMode(CameraMode::Top), m_layers(),
         m_currentLayers(), m_cam(nullptr), m_viewport(nullptr), m_rounds(),
-        m_settings(), m_actions(), m_order(order)
+        m_settings(settings), m_actions(), m_order(order)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
         std::make_unique<Loading>(g, *this);
@@ -169,7 +169,7 @@ namespace game
     return (m_data->car());
   }
 
-  SettingsPlayer &LocalPlayer::settings()
+  core::SettingsPlayer &LocalPlayer::settings()
   {
     return (m_settings);
   }

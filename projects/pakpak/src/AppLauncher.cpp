@@ -5,7 +5,8 @@ namespace core
 {
   AppLauncher::AppLauncher()
       : m_root(nullptr), m_window(nullptr), m_inputListener(nullptr),
-        m_contexts(), m_currentContext(nullptr), m_gameState(GameState::None)
+        m_contexts(), m_currentContext(nullptr), m_gameState(GameState::None),
+        m_settings()
   {
   }
 
@@ -133,7 +134,8 @@ namespace core
 
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
-        std::make_unique<game::ContextGame>(m_window, m_inputListener);
+        std::make_unique<game::ContextGame>(m_window, m_inputListener,
+                                            m_settings);
 
     m_currentContext =
         m_contexts[static_cast<std::size_t>(GameState::Splash)].get();
