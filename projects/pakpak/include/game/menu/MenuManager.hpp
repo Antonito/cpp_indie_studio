@@ -18,7 +18,7 @@ namespace menu
   class MenuManager : public game::IEventHandler
   {
   public:
-    MenuManager(Ogre::RenderWindow *);
+    explicit MenuManager(Ogre::RenderWindow *win);
     MenuManager(MenuManager const &) = delete;
     MenuManager(MenuManager &&) = delete;
     virtual ~MenuManager()

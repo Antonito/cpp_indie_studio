@@ -44,6 +44,7 @@ namespace game
   private:
     GameData                                  m_game;
     std::vector<std::unique_ptr<LocalPlayer>> m_players;
+    bool                                      m_quit;
   };
 }
 

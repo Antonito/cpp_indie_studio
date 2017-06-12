@@ -34,7 +34,7 @@ namespace core
     CEGUI::OgreRenderer *getRender() const;
     CEGUI::GUIContext *getContext() const;
     CEGUI::Window *getRoot() const;
-    void hideCursor();
+    void hideCursor(bool disable = true);
     void setCursorArrow(std::string const &);
 
   private:

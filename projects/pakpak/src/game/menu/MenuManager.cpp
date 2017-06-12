@@ -4,10 +4,12 @@
 
 #include "game/menu/MenuSolo.hpp"
 #include "game/menu/MenuMultiplayer.hpp"
-#include "game/menu/MenuManager.hpp"
 #include "game/menu/MainMenu.hpp"
 #include "game/menu/MenuOptions.hpp"
 #include "game/menu/MenuKeymap.hpp"
+#include "game/menu/InGameHUD.hpp"
+#include "game/menu/InGamePause.hpp"
+#include "game/menu/MenuScores.hpp"
 
 bool menu::MenuManager::keyPressed(OIS::KeyEvent const &ke)
 {
@@ -84,12 +86,12 @@ menu::MenuManager::MenuManager(Ogre::RenderWindow *win)
   m_menuLayer[static_cast<size_t>(core::MenuState::Keymap)] =
       std::make_unique<core::MenuKeymap>(*this, m_gui);
   m_menuLayer[static_cast<size_t>(core::MenuState::SoloPlayerGame)] =
-          std::make_unique<core::MenuSolo>(*this, m_gui);
+      std::make_unique<core::MenuSolo>(*this, m_gui);
   m_menuLayer[static_cast<size_t>(core::MenuState::MultiPlayerGame)] =
-          std::make_unique<core::MenuMultiplayer>(*this, m_gui); /*
-  m_menuLayer[static_cast<size_t>(core::MenuState::MultiPlayerGame)] =
-          std::make_unique<core::MultiPlayerGame>();
-          */
+      std::make_unique<core::MenuMultiplayer>(*this, m_gui);
+  m_menuLayer[static_cast<size_t>(core::MenuState::Score)] =
+      std::make_unique<core::MenuScores>(*this, m_gui);
+
   m_layers.push(
       m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)].get());
   (void)win;
@@ -97,6 +99,13 @@ menu::MenuManager::MenuManager(Ogre::RenderWindow *win)
 
 void menu::MenuManager::begin()
 {
+  if (!m_layers.size())
+    {
+      m_gui.setCursorArrow("TaharezLook/MouseArrow");
+      m_gui.hideCursor(false);
+      m_layers.push(
+          m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)].get());
+    }
   m_layers[m_layers.size() - 1]->entry();
 }
 
@@ -105,11 +114,11 @@ void menu::MenuManager::end()
   int size = static_cast<int>(m_layers.size());
 
   while (size > 0)
-  {
-    m_layers[size - 1]->destroy();
-    m_layers.pop();
-    --size;
-  }
+    {
+      m_layers[size - 1]->destroy();
+      m_layers.pop();
+      --size;
+    }
 }
 
 core::IMenuLayer *menu::MenuManager::getMenuLayer()

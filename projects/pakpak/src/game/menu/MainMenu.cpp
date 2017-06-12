@@ -34,6 +34,12 @@ void core::MainMenu::initGUI()
           CEGUI::PushButton::EventClicked,
           CEGUI::Event::Subscriber(&MainMenu::onMultiClick, this));
 
+  m_gui.getRoot()
+      ->getChild("stats_button")
+      ->subscribeEvent(
+          CEGUI::PushButton::EventClicked,
+          CEGUI::Event::Subscriber(&MainMenu::onScoreClick, this));
+
   m_gui.setCursorArrow("TaharezLook/MouseArrow");
 }
 
@@ -125,24 +131,29 @@ bool core::MainMenu::onOptionClick(CEGUI::EventArgs const &)
   return true;
 }
 
-bool core::MainMenu::onExitClick(CEGUI::EventArgs const &e)
+bool core::MainMenu::onExitClick(CEGUI::EventArgs const &)
 {
-  (void)e;
   m_curState = core::GameState::Quit;
   return true;
 }
 
-bool core::MainMenu::onSoloClick(CEGUI::EventArgs const &e)
+bool core::MainMenu::onSoloClick(CEGUI::EventArgs const &)
 {
-  (void)e;
   m_menuManager.push(core::MenuState::SoloPlayerGame);
   m_menuManager.begin();
   return true;
 }
-bool core::MainMenu::onMultiClick(CEGUI::EventArgs const &e)
+
+bool core::MainMenu::onMultiClick(CEGUI::EventArgs const &)
 {
-  (void)e;
   m_menuManager.push(core::MenuState::MultiPlayerGame);
+  m_menuManager.begin();
+  return true;
+}
+
+bool core::MainMenu::onScoreClick(CEGUI::EventArgs const &)
+{
+  m_menuManager.push(core::MenuState::Score);
   m_menuManager.begin();
   return true;
 }

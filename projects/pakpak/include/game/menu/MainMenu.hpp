@@ -20,14 +20,10 @@ namespace core
     }
     void entry();
     void destroy();
-
-      void draw() override;
-
-      void exit() override;
-
-      void build() override;
-
-      bool keyPressed(const OIS::KeyEvent &arg);
+    void draw();
+    void exit();
+    void build();
+    bool keyPressed(const OIS::KeyEvent &arg);
     bool mouseMoved(const OIS::MouseEvent &arg);
     bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
@@ -44,10 +40,11 @@ namespace core
     bool      onSoloClick(CEGUI::EventArgs const &);
     bool      onMultiClick(CEGUI::EventArgs const &);
     bool      onOptionClick(CEGUI::EventArgs const &);
+    bool      onScoreClick(CEGUI::EventArgs const &);
 
-    GUI                 &m_gui;
-    GameState           m_curState;
-    menu::MenuManager   &m_menuManager;
+    GUI &              m_gui;
+    GameState          m_curState;
+    menu::MenuManager &m_menuManager;
   };
 }
 

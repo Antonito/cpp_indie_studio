@@ -19,6 +19,7 @@ void core::MenuSolo::entry()
 {
   m_gui.loadLayout("soloplayer.layout");
   m_gui.setCursorArrow("TaharezLook/MouseArrow");
+  m_curState = core::GameState::Menu;
 
   m_gui.getRoot()
       ->getChild("back_button")

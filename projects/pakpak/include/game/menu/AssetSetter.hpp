@@ -37,22 +37,31 @@ namespace core
       TRED
     };
 
+    struct s_ButtonStyle
+    {
+      TEXT_COLOR   text;
+      BUTTON_COLOR button;
+    };
+
+    typedef s_ButtonStyle ButtonStyle;
+
     AssetSetter();
     ~AssetSetter();
-
-    static void setTextColor(CEGUI::Window &obj,
-                             enum TEXT_COLOR col);
-    static void setButtonBack(CEGUI::Window &obj,
-                               enum BUTTON_COLOR col);
+    static void setTextColor(CEGUI::Window &obj, enum TEXT_COLOR col);
+    static void setButtonBack(CEGUI::Window &obj, enum BUTTON_COLOR col);
+    static ButtonStyle yellowButton;
+    static ButtonStyle greenButton;
+    static ButtonStyle redButton;
+    static ButtonStyle greyButton;
 
   private:
     AssetSetter(AssetSetter const &) = delete;
     AssetSetter(AssetSetter &&) = delete;
     AssetSetter &operator=(AssetSetter const &) = delete;
     AssetSetter &operator=(AssetSetter &&) = delete;
-
-    static std::map<BUTTON_COLOR, std::map<BUTTON_TYPE, std::string>> m_buttons;
-    static std::map<TEXT_COLOR, std::string>   m_texts;
+    static std::map<BUTTON_COLOR, std::map<BUTTON_TYPE, std::string>>
+        m_buttons;
+    static std::map<TEXT_COLOR, std::string> m_texts;
   };
 }
 

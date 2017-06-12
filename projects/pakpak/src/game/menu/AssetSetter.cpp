@@ -62,3 +62,19 @@ std::map<core::AssetSetter::TEXT_COLOR, std::string>
          "tl:FF000000 tr:FF000000 bl:FF646464 br:FF646464"},
         {TEXT_COLOR::TBLUE, "tl:FFDCFAFF tr:FFDCFAFF bl:FFFAFAFF br:FFFAFAFF"},
         {TEXT_COLOR::TRED, "tl:FFAA1E00 tr:FFAA1E00 bl:FFD2500A br:FFD2500A"}};
+
+core::AssetSetter::ButtonStyle core::AssetSetter::yellowButton = {
+    core::AssetSetter::TEXT_COLOR::TRED,
+    core::AssetSetter::BUTTON_COLOR::BYELLOW};
+
+core::AssetSetter::ButtonStyle core::AssetSetter::greenButton = {
+    core::AssetSetter::TEXT_COLOR::TBLUE,
+    core::AssetSetter::BUTTON_COLOR::BGREEN};
+
+core::AssetSetter::ButtonStyle core::AssetSetter::redButton = {
+    core::AssetSetter::TEXT_COLOR::TYELLOW,
+    core::AssetSetter::BUTTON_COLOR::BRED};
+
+core::AssetSetter::ButtonStyle core::AssetSetter::greyButton = {
+    core::AssetSetter::TEXT_COLOR::TBLACK,
+    core::AssetSetter::BUTTON_COLOR::BGREY};

@@ -3,7 +3,7 @@
 namespace game
 {
   ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input)
-      : core::AContext(win, input), m_game(), m_players()
+      : core::AContext(win, input), m_game(), m_players(), m_quit(false)
   {
   }
 
@@ -69,7 +69,7 @@ namespace game
   {
     m_input->capture();
     m_game.update();
-    return (core::GameState::InGame);
+    return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }
 
   void ContextGame::display()
@@ -80,7 +80,7 @@ namespace game
   {
     if (ke.key == OIS::KC_ESCAPE)
       {
-	m_input->shutdown();
+        m_quit = true;
       }
 
     std::size_t i = 0;

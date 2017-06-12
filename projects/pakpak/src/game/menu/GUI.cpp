@@ -81,12 +81,10 @@ void core::GUI::draw()
 {
 }
 
-core::GUI::GUI() : m_renderer(nullptr),
-                   m_root(nullptr),
-                   m_context(nullptr),
-                   m_param()
+core::GUI::GUI()
+    : m_renderer(nullptr), m_root(nullptr), m_context(nullptr), m_param()
 {
-  #if defined(_WIN32)
+#if defined(_WIN32)
   m_param.insert(std::make_pair(std::string("w32_mouse"),
                                 std::string("DISCL_FOREGROUND")));
   m_param.insert(std::make_pair(std::string("w32_mouse"),
@@ -95,7 +93,7 @@ core::GUI::GUI() : m_renderer(nullptr),
                                 std::string("DISCL_FOREGROUND")));
   m_param.insert(std::make_pair(std::string("w32_keyboard"),
                                 std::string("DISCL_NONEXCLUSIVE")));
-  #else
+#else
   m_param.insert(
       std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
   m_param.insert(
@@ -104,7 +102,7 @@ core::GUI::GUI() : m_renderer(nullptr),
       std::make_pair(std::string("x11_keyboard_grab"), std::string("false")));
   m_param.insert(
       std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
-  #endif
+#endif
 
   init();
 }
@@ -114,9 +112,18 @@ void core::GUI::loadSheme(std::string const &p_shem)
   CEGUI::SchemeManager::getSingleton().createFromFile(p_shem);
 }
 
-void core::GUI::hideCursor()
+void core::GUI::hideCursor(bool disable)
 {
-  CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().hide();
+  if (!disable)
+    CEGUI::System::getSingleton()
+        .getDefaultGUIContext()
+        .getMouseCursor()
+        .show();
+  else
+    CEGUI::System::getSingleton()
+        .getDefaultGUIContext()
+        .getMouseCursor()
+        .hide();
 }
 
 void core::GUI::setCursorArrow(std::string const &p_arrow)
@@ -139,4 +146,3 @@ void core::GUI::loadLayout(std::string const &p_path)
   m_root = CEGUI::WindowManager::getSingleton().loadLayoutFromFile(p_path);
   m_context->setRootWindow(m_root);
 }
-
