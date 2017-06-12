@@ -43,6 +43,9 @@ namespace game
       case OIS::KC_D:
 	m_player.car().turn(-2);
 	break;
+      case OIS::KC_SPACE:
+	m_player.car().move(0);
+	break;
       default:
 	return false;
       }

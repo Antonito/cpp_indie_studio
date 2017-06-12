@@ -38,7 +38,7 @@ namespace game
     m_cam->setNearClipDistance(3);
 
     m_viewport = win->addViewport(m_cam, order);
-    m_viewport->setBackgroundColour(Ogre::ColourValue(0, 50, 0));
+    m_viewport->setBackgroundColour(Ogre::ColourValue(0.1, 0.1, 0.1));
     m_cam->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
                           Ogre::Real(m_viewport->getActualHeight()));
   }

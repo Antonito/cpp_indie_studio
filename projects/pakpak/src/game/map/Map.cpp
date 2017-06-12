@@ -123,11 +123,10 @@ namespace game
 
     body = m_gamedata.addPhysicEntity(std::move(shape), ss.str());
 
-    body->setStaticShape(
-        _shape, 0, 0, Ogre::Vector3(0, 0, 0),
-        Ogre::Quaternion(Ogre::Degree(0), Ogre::Vector3::UNIT_Y));
-    // body->setShape(m_node, _shape, 0.6, 0.6, 1.0, Ogre::Vector3::ZERO,
-    //               Ogre::Quaternion(Ogre::Radian(0), Ogre::Vector3::UNIT_Y));
+    body->setStaticShape(_shape, 0, 0.6, Ogre::Vector3(0, 0, 0));
+    // body->setDebugDisplayEnabled(false);
+    // body->showDebugShape(false);
+    // body->setShape(m_node, _shape2, 0.6, 0.6, 0, Ogre::Vector3::ZERO);
 
     ++id;
   }

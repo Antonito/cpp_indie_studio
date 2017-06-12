@@ -8,7 +8,7 @@ namespace game
 
   Ogre::Vector3 const &ACar::position() const
   {
-    return (m_pos);
+    return (m_carNode->getPosition());
   }
 
   Ogre::Vector3 const &ACar::direction() const
@@ -38,34 +38,23 @@ namespace game
 
   void ACar::update(double elapsedTime)
   {
-    if (std::fabs(m_tryMoving) < 0.001)
+    Ogre::Vector3 p = m_carNode->getPosition();
+
+    // m_node->setPosition(p);
+    // m_carNode->translate(-p);
+    // m_carNode->setPosition(Ogre::Vector3::ZERO);
+    m_carNode->setPosition(Ogre::Vector3::ZERO);
+    m_carNode->resetToInitialState();
+
+    if (m_tryMoving != 0.0)
       {
-	m_speed *= 0.95;
-	if (std::fabs(m_speed) < 0.001)
-	  m_speed = 0.0;
-      }
-    else if (m_tryMoving * m_speed < 0.0)
-      {
-	m_speed *= 0.5 - std::fabs(m_tryMoving) * 0.1;
-      }
-    else
-      {
-	if (std::fabs(m_speed) < 0.001)
-	  m_speed = m_tryMoving / 10.0;
-	m_speed *= 1.05;
+	m_body->applyImpulse(m_carNode->_getDerivedOrientation() *
+	                         Ogre::Vector3::UNIT_Z * 100 * -m_tryMoving,
+	                     Ogre::Vector3::ZERO);
       }
 
-    if (std::fabs(m_speed) > 1.0)
-      {
-	m_speed = m_speed < 0.0 ? -1 : 1;
-      }
-
-    m_node->setPosition(m_node->getPosition() + m_carNode->getPosition());
-    // m_node->rotate(m_carNode->getOrientation());
-    m_carNode->setPosition(0, 0, 0);
-    m_node->setDirection(Ogre::Vector3(0, 0, -1));
-    m_camera->setPosition(0, 250, -200);
-    m_camera->lookAt(m_node->getPosition());
+    m_camera->setPosition(Ogre::Vector3(0, 150, -200) + p);
+    m_camera->lookAt(p);
   }
 
   Ogre::Camera *ACar::getCamera() const
@@ -116,14 +105,16 @@ namespace game
 
     ss.str("");
     ss << "CarRigidBody" << id;
-    OgreBulletDynamics::RigidBody *body;
 
-    body = gamedata.addPhysicEntity(std::move(box), ss.str());
+    m_body = gamedata.addPhysicEntity(std::move(box), ss.str());
 
-    body->setShape(m_carNode, _box, 0.6, 0.6, 1.0, pos,
-                   Ogre::Quaternion(Ogre::Radian(0), Ogre::Vector3::UNIT_Y));
+    m_body->setShape(m_carNode, _box, 0.2, 0.6, 5.0,
+                     Ogre::Vector3(-30, 500, 0),
+                     Ogre::Quaternion(Ogre::Radian(0), Ogre::Vector3::UNIT_Y));
 
-    m_node->setPosition(0, 800, 0);
+    // body->setLinearVelocity(Ogre::Vector3::UNIT_Y);
+    // m_node->setPosition(0, 800, 0);
+    // body->setPosition(0, 8000, 0);
     ++id;
   }
 }

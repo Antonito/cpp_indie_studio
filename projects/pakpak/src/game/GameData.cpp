@@ -10,7 +10,7 @@ namespace game
                          Ogre::AxisAlignedBox(
                              Ogre::Vector3(-100000000, -100000000, -100000000),
                              Ogre::Vector3(100000000, 100000000, 100000000)),
-                         Ogre::Vector3(0, -9.81, 0))),
+                         Ogre::Vector3(0, -9.81 * 10, 0))),
 #ifdef DEBUG
         m_debugDrawer(nullptr),
 #endif

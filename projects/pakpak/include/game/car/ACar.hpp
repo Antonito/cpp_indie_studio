@@ -46,6 +46,8 @@ namespace game
     Ogre::SceneNode *m_carNode;
     Ogre::Entity *   m_entity;
     Ogre::Camera *   m_camera;
+
+    OgreBulletDynamics::RigidBody *m_body;
   };
 }
 
