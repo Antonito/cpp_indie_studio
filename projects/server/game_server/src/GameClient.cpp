@@ -261,15 +261,223 @@ bool GameClient::checkMaps()
   GameClientToGSPacket           rep;
   network::IClient::ClientAction ret;
   std::string                    clientGlobalMD5;
+  std::int32_t                   rc;
+
+  // Multiplex I if read == true or O if read == false
+  std::function<std::int32_t(bool read)> multiplex = [&](bool read) {
+    std::int32_t _rc;
+
+    do
+      {
+	sock_t const   fd = m_sock.getSocket();
+	fd_set         readfds, writefds;
+	struct timeval tv;
+
+	FD_ZERO(&readfds);
+	FD_ZERO(&writefds);
+	tv.tv_sec = 5;
+	tv.tv_usec = 0;
+
+	if (read)
+	  {
+	    FD_SET(fd, &readfds);
+	  }
+	else
+	  {
+	    FD_SET(fd, &writefds);
+	  }
+	_rc = select(fd + 1, &readfds, &writefds, nullptr, &tv);
+      }
+    while (_rc == -1 && errno == EINTR);
+    return (_rc);
+  };
 
   // Check global MD5
   nope::log::Log(Info) << "Checking integrity of client's maps";
   rep.pck.eventType = GameClientToGSEvent::MD5_REQUEST;
-  rep.pck.eventData.md5Requ.file.data("~GENERAL~", sizeof("~GENERAL~"));
+  std::memcpy(rep.pck.eventData.md5requ.file.data(), "~GENERAL~",
+              sizeof("~GENERAL~"));
   static_assert(sizeof("~GENERAL~") < GameClientToGSPacketToken::tokenLength,
                 "Filename is too large.");
 
-  // TODO: select to check if can write
+  rc = multiplex(false);
+  if (rc <= 0)
+    {
+      goto error_map;
+    }
+
+  m_packet << rep;
+  ret = write(m_packet);
+  if (ret != network::IClient::ClientAction::SUCCESS)
+    {
+      goto error_map;
+    }
+  nope::log::Log(Debug) << "Sent Global MD5 request";
+
+  rc = multiplex(true);
+  if (rc <= 0)
+    {
+      goto error_map;
+    }
+  ret = read(m_packet);
+  if (ret != network::IClient::ClientAction::SUCCESS)
+    {
+      goto error_map;
+    }
+  nope::log::Log(Debug) << "Got response.";
+  m_packet >> rep;
+  if (rep.pck.eventType != GameClientToGSEvent::MD5_RESPONSE)
+    {
+      nope::log::Log(Error) << "Invalid reponse [GameClient]";
+      goto error_map;
+    }
+  if (rep.pck.eventData.valid != 1)
+    {
+      nope::log::Log(Error) << "Invalid validation response [GameClient]";
+      goto error_map;
+    }
+
+  // Check Global MD5
+  clientGlobalMD5 = std::string(rep.pck.eventData.md5resp.md5.data(), 32);
+  nope::log::Log(Debug) << "Global MD5:          "
+                        << Config::getInstance().getMapMD5();
+  nope::log::Log(Debug) << "Received Global MD5: " << clientGlobalMD5;
+  if (clientGlobalMD5 != Config::getInstance().getMapMD5())
+    {
+      nope::log::Log(Warning) << "Global MD5 differs";
+      // If MD5 are different, check each maps
+      std::vector<MapConfig> const &maps =
+          Config::getInstance().getMapConfig();
+
+      // Check MD5 for each map
+      nope::log::Log(Debug) << "Looping over maps";
+      for (MapConfig const &map : maps)
+	{
+	  nope::log::Log(Debug) << map.name << ": " << map.md5Str;
+
+	  rc = multiplex(false);
+	  if (rc <= 0)
+	    {
+	      goto error_map;
+	    }
+	  rep.pck.eventType = GameClientToGSEvent::MD5_REQUEST;
+	  std::memcpy(rep.pck.eventData.md5requ.file.data(), map.name.c_str(),
+	              map.name.length());
+	  m_packet << rep;
+	  ret = write(m_packet);
+	  if (ret != network::IClient::ClientAction::SUCCESS)
+	    {
+	      goto error_map;
+	    }
+	  nope::log::Log(Debug) << "Sent MD5 request";
+
+	  rc = multiplex(true);
+	  if (rc <= 0)
+	    {
+	      goto error_map;
+	    }
+	  ret = read(m_packet);
+	  if (ret != network::IClient::ClientAction::SUCCESS)
+	    {
+	      goto error_map;
+	    }
+	  nope::log::Log(Debug) << "Received response";
+	  m_packet >> rep;
+	  if (rep.pck.eventType != GameClientToGSEvent::MD5_RESPONSE)
+	    {
+	      goto error_map;
+	    }
+	  std::string md5map(rep.pck.eventData.md5resp.md5.data(), 32);
+
+	  // Check if map is OK
+	  if (md5map != map.md5Str)
+	    {
+	      nope::log::Log(Warning) << "Corrupted map: " << map.name;
+	      nope::log::Log(Debug) << "Checking files";
+
+	      // Loop over all files
+	      for (std::pair<std::string const, std::string> file : map.md5)
+		{
+		  nope::log::Log(Debug) << file.first << ": " << file.second;
+
+		  std::string md5mapFile;
+		  do
+		    {
+		      rc = multiplex(false);
+		      if (rc <= 0)
+			{
+			  goto error_map;
+			}
+		      rep.pck.eventType = GameClientToGSEvent::MD5_REQUEST;
+		      std::memcpy(rep.pck.eventData.md5requ.file.data(),
+		                  map.name.c_str(), map.name.length());
+		      m_packet << rep;
+		      ret = write(m_packet);
+		      if (ret != network::IClient::ClientAction::SUCCESS)
+			{
+			  goto error_map;
+			}
+		      nope::log::Log(Debug) << "Sent MD5";
+
+		      rc = multiplex(true);
+		      if (rc <= 0)
+			{
+			  goto error_map;
+			}
+		      ret = read(m_packet);
+		      if (ret != network::IClient::ClientAction::SUCCESS)
+			{
+			  goto error_map;
+			}
+		      nope::log::Log(Debug) << "Received response";
+		      m_packet >> rep;
+		      if (rep.pck.eventType !=
+		          GameClientToGSEvent::MD5_RESPONSE)
+			{
+			  goto error_map;
+			}
+		      md5mapFile = std::string(
+		          rep.pck.eventData.md5resp.md5.data(), 32);
+
+		      nope::log::Log(Debug) << "Checking received MD5";
+		      if (md5mapFile != file.second)
+			{
+			  // Send file
+			  nope::log::Log(Warning)
+			      << "Corrupted file: " << file.first;
+			  rc = multiplex(false);
+			  if (rc <= 0)
+			    {
+			      goto error_map;
+			    }
+			  // TODO : send map
+			  ::write(m_sock.getSocket(), "Contenu d'un fichier\n",
+			          sizeof("Contenu d'un fichier\n") -
+			              1); // TODO: rm
+
+			  rc = multiplex(true);
+			  if (rc <= 0)
+			    {
+			      goto error_map;
+			    }
+			  // TODO: read OK
+			}
+		    }
+		  while (md5mapFile != file.second);
+		}
+	    }
+	}
+    }
+
+  // Send OK
+  rc = multiplex(false);
+  if (rc <= 0)
+    {
+      goto error_map;
+    }
+  nope::log::Log(Info) << "Map integrity checked: OK";
+  rep.pck.eventType = GameClientToGSEvent::VALIDATION_EVENT;
+  rep.pck.eventData.valid = 1;
   m_packet << rep;
   ret = write(m_packet);
   if (ret != network::IClient::ClientAction::SUCCESS)
@@ -277,122 +485,7 @@ bool GameClient::checkMaps()
       goto error_map;
     }
 
-  // TODO: select to check if can read
-  ret = read(m_packet);
-  if (ret != network::IClient::ClientAction::SUCCESS)
-    {
-      goto error_map;
-    }
-  m_packet >> rep;
-  if (rep.pck.eventType != GameClientToGSEvent::MD5_RESPONSE)
-    {
-      goto error_map;
-    }
-
-  // Check Global MD5
-   clientGlobalMD5 = std::string(rep.pck.eventData.md5Resp.md5.data(), 32));
-   nope::log::Log(Debug) << "Global MD5: "
-                         << Config::getInstance().getMapMD5();
-   nope::log::Log(Debug) << "Received: " << clientGlobalMD5;
-   if (clientGlobalMD5 != Config::getInstance().getMapMD5())
-     {
-       // If MD5 are different, check each maps
-       std::vector<MapConfig> const &maps =
-           Config::getInstance().getMapConfig();
-
-       // Check MD5 for each map
-       for (MapConfig const &map : maps)
-	 {
-	   nope::log::Log(Debug) << map.name << ": " << map.md5Str;
-
-	   // TODO: select to check if can write
-	   rep.pck.eventType = GameClientToGSEvent::MD5_REQUEST;
-	   rep.pck.eventData.md5Requ.file.data(map.name, map.name.length());
-	   m_packet << rep;
-	   ret = write(m_packet);
-	   if (ret != network::IClient::ClientAction::SUCCESS)
-	     {
-	       goto error_map;
-	     }
-
-	   // TODO: select to check if can read
-	   ret = read(m_packet);
-	   if (ret != network::IClient::ClientAction::SUCCESS)
-	     {
-	       goto error_map;
-	     }
-	   m_packet >> rep;
-	   if (rep.pck.eventType != GameClientToGSEvent::MD5_RESPONSE)
-	     {
-	       goto error_map;
-	     }
-	   std::string md5map(rep.pck.eventData.md5Resp.md5.data(), 32);
-
-	   // Check if map is OK
-	   if (md5map != map.md5Str)
-	     {
-	       nope::log::Log(Warning) << "Corrupted map: " << map.name;
-	       // Loop over all files
-	       for (std::pair<std::string const, std::string> file : map.md5)
-		 {
-		   nope::log::Log(Debug) << file.first << ": " << file.second;
-
-		   std::string md5mapFile;
-		   do
-		     {
-		       // TODO: select to check if can write
-		       rep.pck.eventType = GameClientToGSEvent::MD5_REQUEST;
-		       rep.pck.eventData.md5Requ.file.data(map.name,
-		                                           map.name.length());
-		       m_packet << rep;
-		       ret = write(m_packet);
-		       if (ret != network::IClient::ClientAction::SUCCESS)
-			 {
-			   goto error_map;
-			 }
-
-		       // TODO: select to check if can read
-		       ret = read(m_packet);
-		       if (ret != network::IClient::ClientAction::SUCCESS)
-			 {
-			   goto error_map;
-			 }
-		       m_packet >> rep;
-		       if (rep.pck.eventType !=
-		           GameClientToGSEvent::MD5_RESPONSE)
-			 {
-			   goto error_map;
-			 }
-
-		       md5mapFile = std::string(
-		           rep.pck.eventData.md5Resp.md5.data(), 32);
-
-		       if (md5mapFile != file.second)
-			 {
-			   // Send file
-			   nope::log::Log(Warning)
-			       << "Corrupted file: " << file.first;
-			   // TODO
-			 }
-		     }
-		   while (md5mapFile != file.second);
-		 }
-	     }
-	 }
-     }
-   // TODO: select to check if can write
-   // Send OK
-   nope::log::Log(Info) << "Map integrity checked: OK";
-   rep.pck.eventType = GameClientToGSEvent::VALIDATION_EVENT;
-   rep.pck.eventData.valid = 1;
-   m_packet << rep;
-   ret = write(m_packet);
-   if (ret != network::IClient::ClientAction::SUCCESS)
-     {
-       goto error_map;
-     }
-
-   return (true);
+  return (true);
 
 error_map:
   nope::log::Log(Error) << "Cannot check integrity of client's maps";
