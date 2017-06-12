@@ -10,7 +10,7 @@ namespace game
                          Ogre::AxisAlignedBox(
                              Ogre::Vector3(-100000000, -100000000, -100000000),
                              Ogre::Vector3(100000000, 100000000, 100000000)),
-                         Ogre::Vector3(0, -9.81 * 10, 0))),
+                         Ogre::Vector3(0, -9.81 * 80, 0))),
 #ifdef DEBUG
         m_debugDrawer(nullptr),
 #endif
@@ -106,5 +106,15 @@ namespace game
     m_bodies.push_back(std::move(body));
 
     return (ptr);
+  }
+
+  Map &GameData::map()
+  {
+    return (m_map);
+  }
+
+  Map const &GameData::map() const
+  {
+    return (m_map);
   }
 }

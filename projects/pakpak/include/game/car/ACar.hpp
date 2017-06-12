@@ -48,6 +48,8 @@ namespace game
     Ogre::Camera *   m_camera;
 
     OgreBulletDynamics::RigidBody *m_body;
+
+    GameData &m_gamedata;
   };
 }
 

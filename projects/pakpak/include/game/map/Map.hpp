@@ -22,8 +22,9 @@ namespace game
     Map &operator=(Map const &) = delete;
     Map &operator=(Map &&) = delete;
 
-    void loadFromFile(std::string filename);
-    void unload();
+    void                           loadFromFile(std::string filename);
+    void                           unload();
+    OgreBulletDynamics::RigidBody *rigidBody();
 
   private:
     struct MapData
@@ -70,10 +71,11 @@ namespace game
       // clang-format on
     };
 
-    game::GameData &       m_gamedata;
-    std::vector<PathPoint> m_points;
-    Ogre::Entity *         m_map;
-    Ogre::SceneNode *      m_node;
+    game::GameData &               m_gamedata;
+    std::vector<PathPoint>         m_points;
+    Ogre::Entity *                 m_map;
+    Ogre::SceneNode *              m_node;
+    OgreBulletDynamics::RigidBody *m_body;
     // std::vector<MapElement> m_elements;
     // std::vector<MapBonus> m_bonus;
   };

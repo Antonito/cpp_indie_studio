@@ -43,17 +43,55 @@ namespace game
     // m_node->setPosition(p);
     // m_carNode->translate(-p);
     // m_carNode->setPosition(Ogre::Vector3::ZERO);
-    m_carNode->setPosition(Ogre::Vector3::ZERO);
-    m_carNode->resetToInitialState();
+    // m_carNode->setPosition(Ogre::Vector3::ZERO);
+    // m_carNode->resetToInitialState();
 
-    if (m_tryMoving != 0.0)
+    btDynamicsWorld *world =
+        m_gamedata.physicWorld()->getBulletDynamicsWorld();
+    btCollisionObject *mapBody =
+        m_gamedata.map().rigidBody()->getBulletObject();
+    btCollisionObject *body = m_body->getBulletObject();
+
+    if (m_tryTurning != 0)
       {
-	m_body->applyImpulse(m_carNode->_getDerivedOrientation() *
-	                         Ogre::Vector3::UNIT_Z * 100 * -m_tryMoving,
-	                     Ogre::Vector3::ZERO);
+	m_carNode->setOrientation(m_carNode->getOrientation());
+	Ogre::Quaternion q(Ogre::Degree(m_tryTurning / 2),
+	                   Ogre::Vector3::UNIT_Y);
+	q = q * m_carNode->getOrientation();
+	btTransform tr;
+	btVector3   v(p.x, p.y, p.z);
+
+	tr.setIdentity();
+	btQuaternion quat;
+	quat.setX(q.x);
+	quat.setY(q.y);
+	quat.setZ(q.z);
+	quat.setW(q.w);
+	tr.setRotation(quat);
+	tr.setOrigin(v);
+	m_body->getBulletRigidBody()->setCenterOfMassTransform(tr);
       }
 
-    m_camera->setPosition(Ogre::Vector3(0, 150, -200) + p);
+    int numManifolds = world->getDispatcher()->getNumManifolds();
+    for (int i = 0; i < numManifolds; i++)
+      {
+	btPersistentManifold *contactManifold =
+	    world->getDispatcher()->getManifoldByIndexInternal(i);
+	const btCollisionObject *obA = contactManifold->getBody0();
+	const btCollisionObject *obB = contactManifold->getBody1();
+
+	int numContacts = contactManifold->getNumContacts();
+
+	if (numContacts != 0 && (mapBody == obA || mapBody == obB) &&
+	    (body == obA || body == obB) && m_tryMoving != 0.0)
+	  {
+	    m_body->applyImpulse(m_carNode->getOrientation() *
+	                             Ogre::Vector3::UNIT_Z * 250 *
+	                             -m_tryMoving,
+	                         Ogre::Vector3::ZERO);
+	  }
+      }
+    m_camera->setPosition(Ogre::Vector3(0, 2000, -200));
     m_camera->lookAt(p);
   }
 
@@ -66,7 +104,7 @@ namespace game
              Ogre::Vector3 const &pos, Ogre::Vector3 const &dir)
       : m_pos(pos), m_dir(dir), m_mov(0, 0, 0), m_speed(0.0), m_tryMoving(0),
         m_tryTurning(0), m_node(nullptr), m_carNode(nullptr),
-        m_entity(nullptr), m_camera(nullptr)
+        m_entity(nullptr), m_camera(nullptr), m_gamedata(gamedata)
   {
     static std::int32_t id = 0;
 
@@ -108,8 +146,7 @@ namespace game
 
     m_body = gamedata.addPhysicEntity(std::move(box), ss.str());
 
-    m_body->setShape(m_carNode, _box, 0.2, 0.6, 5.0,
-                     Ogre::Vector3(-30, 500, 0),
+    m_body->setShape(m_carNode, _box, 0.1, 0.6, 20.0, Ogre::Vector3(0, 100, 0),
                      Ogre::Quaternion(Ogre::Radian(0), Ogre::Vector3::UNIT_Y));
 
     // body->setLinearVelocity(Ogre::Vector3::UNIT_Y);

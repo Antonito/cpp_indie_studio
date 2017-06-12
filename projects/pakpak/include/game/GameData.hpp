@@ -40,8 +40,10 @@ namespace game
     OgreBulletDynamics::DynamicsWorld *physicWorld();
 
     OgreBulletDynamics::RigidBody *
-        addPhysicEntity(std::unique_ptr<OgreBulletCollisions::CollisionShape>,
-                        std::string const &);
+               addPhysicEntity(std::unique_ptr<OgreBulletCollisions::CollisionShape>,
+                               std::string const &);
+    Map &      map();
+    Map const &map() const;
 
   private:
     Ogre::SceneManager *                               m_sceneMgr;

@@ -119,11 +119,10 @@ namespace game
 
     ss.str("");
     ss << "MapRigidBody" << id;
-    OgreBulletDynamics::RigidBody *body;
 
-    body = m_gamedata.addPhysicEntity(std::move(shape), ss.str());
+    m_body = m_gamedata.addPhysicEntity(std::move(shape), ss.str());
 
-    body->setStaticShape(_shape, 0, 0.6, Ogre::Vector3(0, 0, 0));
+    m_body->setStaticShape(_shape, 0, 0.6, Ogre::Vector3(0, 0, 0));
     // body->setDebugDisplayEnabled(false);
     // body->showDebugShape(false);
     // body->setShape(m_node, _shape2, 0.6, 0.6, 0, Ogre::Vector3::ZERO);
@@ -134,6 +133,11 @@ namespace game
   void Map::unload()
   {
     m_points.clear();
+  }
+
+  OgreBulletDynamics::RigidBody *Map::rigidBody()
+  {
+    return (m_body);
   }
 
   Map::MapData::MapData() : points(), elements()
