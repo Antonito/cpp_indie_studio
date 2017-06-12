@@ -32,6 +32,7 @@ struct GameClientToGSPacketMD5Resp
 struct GameClientToGSPacketMD5Requ
 {
   static constexpr std::size_t fileLength = 256;
+  // TODO: Add -> file or map
   std::array<char, fileLength> file;
 };
 

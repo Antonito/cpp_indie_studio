@@ -38,5 +38,14 @@
 #include "GameClientGSPacket.hpp"
 #include "IClient.hpp"
 #include "Ini.hpp"
+#include "json.hpp"
+#include "Config.hpp"
+#include "Hash.hpp"
+
+#if defined(_WIN32)
+#include "dirent/dirent.h"
+#else
+#include <dirent.h>
+#endif
 
 #endif // !CLIENT_TEST_STDAFX_HPP_

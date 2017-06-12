@@ -187,6 +187,79 @@ static int getToken(network::TCPSocket &socket, std::uint16_t &gameServerPort,
   return (0);
 }
 
+static int checkFiles(network::TCPSocket &socket)
+{
+  GameClientToGSPacket         pckContent = {};
+  Packet<GameClientToGSPacket> pck = {};
+
+  nope::log::Log(Info) << "Starting to check files";
+  while (1)
+    {
+      if (readPck(socket, pck) != network::IClient::ClientAction::SUCCESS)
+	{
+	  nope::log::Log(Error) << "Cannot read";
+	  return (1);
+	}
+      pck >> pckContent;
+
+      if (pckContent.pck.eventType == GameClientToGSEvent::MD5_REQUEST)
+	{
+	  nope::log::Log(Debug) << "Received MD5 Request";
+	  std::string payload(pckContent.pck.eventData.md5requ.file.data(),
+	                      256);
+	  std::string const gen = "~GENERAL~";
+
+	  pckContent.pck.eventType = GameClientToGSEvent::MD5_RESPONSE;
+	  if (payload.compare(0, gen.length(), gen) == 0)
+	    {
+	      // Treat global MD5
+	      nope::log::Log(Debug) << "Treating Global MD5";
+	      std::memcpy(pckContent.pck.eventData.md5resp.md5.data(),
+	                  "GLOBAL.MD5......................", 32);
+	      pck << pckContent;
+	      if (writePck(socket, pck) !=
+	          network::IClient::ClientAction::SUCCESS)
+		{
+		  nope::log::Log(Error) << "Cannot write";
+		  return (1);
+		}
+	    }
+	  else
+	    {
+	      // Load file
+	      nope::log::Log(Debug) << "Requested MD5 of " << payload;
+
+	      std::memcpy(pckContent.pck.eventData.md5resp.md5.data(),
+	                  "FILE.MD5........................", 32);
+	      pck << pckContent;
+	      if (writePck(socket, pck) !=
+	          network::IClient::ClientAction::SUCCESS)
+		{
+		  nope::log::Log(Error) << "Cannot write";
+		  return (1);
+		}
+	    }
+	}
+      else if (pckContent.pck.eventType ==
+               GameClientToGSEvent::VALIDATION_EVENT)
+	{
+	  nope::log::Log(Debug) << "Received validation event";
+
+	  if (pckContent.pck.eventData.valid == 1)
+	    {
+	      nope::log::Log(Info) << "Files validated.";
+	      break;
+	    }
+	  nope::log::Log(Warning) << "Invalid validation event";
+	}
+      else
+	{
+	  nope::log::Log(Warning) << "Received invalid event";
+	}
+    }
+  return (0);
+}
+
 // Place client logic here
 // -> Connect to the game server.
 static void client(network::TCPSocket &socket)
@@ -248,6 +321,15 @@ static void client(network::TCPSocket &socket)
           << "Validation: " << pckContent.pck.eventData.valid;
       nope::log::Log(Info)
           << "Client connected and authenticated to game server.";
+
+      // Check files
+      pckContent.pck.eventType = GameClientToGSEvent::VALIDATION_EVENT;
+      pckContent.pck.eventData.valid = 1;
+      pck << pckContent;
+      writePck(gameServerSock, pck);
+
+      checkFiles(gameServerSock);
+
 #ifdef _WIN32
       Sleep(1000);
 #else
@@ -265,9 +347,6 @@ static void client(network::TCPSocket &socket)
 
 int main(int, char **, char **)
 {
-  ini::Ini config;
-  config.loadFrom("client.ini");
-
   std::srand(static_cast<std::uint32_t>(std::time(0)));
 
   // Starts logger
@@ -280,9 +359,9 @@ int main(int, char **, char **)
 #endif
 
   // Basic connection informations
-  std::string const   connectManagerAddr = config["Network"]["address"];
-  std::uint16_t const port =
-      static_cast<std::uint16_t>(std::stoi(config["Network"]["port"]));
+  std::string const connectManagerAddr =
+      Config::getInstance().getConnectManagerIp();
+  std::uint16_t const port = Config::getInstance().getConnectManagerPort();
 
   // Create socket
   nope::log::Log(Debug) << "Port: " << port;

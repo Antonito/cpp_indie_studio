@@ -331,11 +331,6 @@ bool GameClient::checkMaps()
       nope::log::Log(Error) << "Invalid reponse [GameClient]";
       goto error_map;
     }
-  if (rep.pck.eventData.valid != 1)
-    {
-      nope::log::Log(Error) << "Invalid validation response [GameClient]";
-      goto error_map;
-    }
 
   // Check Global MD5
   clientGlobalMD5 = std::string(rep.pck.eventData.md5resp.md5.data(), 32);
@@ -450,7 +445,9 @@ bool GameClient::checkMaps()
 			    {
 			      goto error_map;
 			    }
+
 			  // TODO : send map
+			  nope::log::Log(Debug) << "Sending file content";
 			  ::write(m_sock.getSocket(), "Contenu d'un fichier\n",
 			          sizeof("Contenu d'un fichier\n") -
 			              1); // TODO: rm
@@ -460,6 +457,18 @@ bool GameClient::checkMaps()
 			    {
 			      goto error_map;
 			    }
+			  nope::log::Log(Debug) << "Received response";
+			  m_packet >> rep;
+			  if (rep.pck.eventType !=
+			      GameClientToGSEvent::VALIDATION_EVENT)
+			    {
+			      goto error_map;
+			    }
+			  if (rep.pck.eventData.valid != 1)
+			    {
+			      goto error_map;
+			    }
+			  nope::log::Log(Debug) << "Validated event";
 			  // TODO: read OK
 			}
 		    }

@@ -46,6 +46,10 @@ void GameClientToGSPacket::deserialize(std::size_t, std::uint8_t *data)
     {
       pck.eventData.valid = ntohs(pck.eventData.valid);
     }
+  else if (pck.eventType == GameClientToGSEvent::MD5_REQUEST ||
+           pck.eventType == GameClientToGSEvent::MD5_RESPONSE)
+    {
+    }
   else
     {
       throw std::runtime_error("Invalid packet received");
