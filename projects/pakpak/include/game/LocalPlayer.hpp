@@ -97,15 +97,14 @@ namespace game
 
     Ogre::Camera *  m_cam;
     Ogre::Viewport *m_viewport;
-
     std::vector<std::chrono::time_point<std::chrono::high_resolution_clock>>
                           m_rounds;
     core::SettingsPlayer &m_settings;
     std::map<std::string,
              std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()>>
-        m_actions;
-
-    int m_order;
+                        m_actions;
+    Ogre::RenderWindow *m_win;
+    int                 m_order;
   };
 }
 

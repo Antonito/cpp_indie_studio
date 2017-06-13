@@ -89,6 +89,7 @@ namespace core
     std::vector<GameSettings> m_players;
     std::vector<std::map<std::int32_t, std::string>> m_keycodes;
     std::vector<bool> m_used;
+    std::vector<bool> m_loaded;
   };
 }
 

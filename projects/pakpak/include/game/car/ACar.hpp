@@ -34,10 +34,11 @@ namespace game
     ACar(Ogre::SceneManager *sceneMgr, std::string const &mesh,
          Ogre::Vector3 const &pos, Ogre::Vector3 const &dir);
 
-    Ogre::Vector3 m_pos;
-    Ogre::Vector3 m_dir;
-    Ogre::Vector3 m_mov;
-    double        m_speed;
+    Ogre::SceneManager *m_sceneMgr;
+    Ogre::Vector3       m_pos;
+    Ogre::Vector3       m_dir;
+    Ogre::Vector3       m_mov;
+    double              m_speed;
 
     double m_tryMoving;
     double m_tryTurning;

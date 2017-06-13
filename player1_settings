@@ -1,1 +1,1 @@
-{"key":{"speedUp":17,"slowDown":31,"turnLeft":30,"turnRight":32,"useObject":33,"changeView":34,"displayMap":35,"openChat":36,"openMenu":37},"graphic":{"sensibility":5,"fov":1}}
+{"key":{"speedUp":200,"slowDown":208,"turnLeft":203,"turnRight":205,"useObject":2,"changeView":3,"displayMap":4,"openChat":6,"openMenu":7},"graphic":{"sensibility":8,"fov":9}}

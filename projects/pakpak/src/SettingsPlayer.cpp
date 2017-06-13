@@ -9,16 +9,21 @@ namespace core
       {3, "player3_settings"},
   };
 
-  SettingsPlayer::SettingsPlayer() : m_players(), m_keycodes(), m_used()
+  SettingsPlayer::SettingsPlayer()
+      : m_players(), m_keycodes(), m_used(), m_loaded()
   {
     m_players.resize(5);
     m_keycodes.resize(5);
     m_used.resize(256);
+    for (int i = 0; i < 4; ++i)
+      {
+	m_loaded.push_back(false);
+      }
   }
 
   SettingsPlayer::SettingsPlayer(SettingsPlayer const &that)
       : m_players(that.m_players), m_keycodes(that.m_keycodes),
-        m_used(that.m_used)
+        m_used(that.m_used), m_loaded(that.m_loaded)
   {
   }
 
@@ -28,11 +33,23 @@ namespace core
 
   void SettingsPlayer::loadFromFile(int playerIndex)
   {
+    Log(nope::log::Debug) << "SettingsPlayer::LoadFromFile -> " << playerIndex
+                          << " : " << playerFile[playerIndex];
     std::stringstream ss;
-    std::ifstream     fs(playerFile[playerIndex].c_str());
+
+    if (m_loaded[playerIndex])
+      {
+	return;
+      }
+    else
+      {
+	m_loaded[playerIndex] = true;
+      }
+    std::ifstream fs(playerFile[playerIndex].c_str());
 
     if (fs.is_open() == false)
       {
+	Log(nope::log::Error) << "Can't open the file";
 	throw std::exception();
       }
     ss << fs.rdbuf();
@@ -44,6 +61,7 @@ namespace core
         nope::serialization::from_json<SettingsPlayer::GameSettings>(content);
     if (check_used(playerIndex))
       {
+	Log(nope::log::Error) << "Config File : key already used";
 	throw std::exception();
       }
 
@@ -84,7 +102,9 @@ namespace core
 
   void SettingsPlayer::unload(int playerIndex)
   {
-    save(playerIndex);
+    Log(nope::log::Debug) << "SettingsPlayer::unload -> " << playerIndex
+                          << " : " << playerFile[playerIndex];
+    // save(playerIndex);
     setUsed(playerIndex, false);
     m_players.erase(m_players.begin() + playerIndex);
     m_players.resize(5);
@@ -92,6 +112,8 @@ namespace core
 
   void SettingsPlayer::save(int playerIndex) const
   {
+    Log(nope::log::Debug) << "SettingsPlayer::save -> " << playerIndex << " : "
+                          << playerFile[playerIndex];
     std::stringstream ss;
     std::ofstream     fs(playerFile[playerIndex].c_str(),
                      std::ofstream::out | std::ofstream::trunc);
@@ -140,6 +162,9 @@ namespace core
   bool SettingsPlayer::updateKey(int playerIndex, OIS::KeyCode old,
                                  OIS::KeyCode newKey)
   {
+    Log(nope::log::Debug) << "SettingsPlayer::updateKey -> "
+                          << "oldKey = " << old << " : "
+                          << "newKey = " << newKey;
     if (old == newKey)
       return true;
     else if (m_used[newKey])

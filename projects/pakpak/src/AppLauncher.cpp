@@ -22,20 +22,28 @@ namespace core
 
 #ifdef DEBUG
 #ifdef _WIN32
+    if (m_root)
+      delete m_root;
     m_root = new Ogre::Root("../indie_resource/conf/windows/plugins_d.cfg",
                             "../indie_resource/conf/windows/ogre_d.cfg",
                             "Ogre.log");
 #else
+    if (m_root)
+      delete m_root;
     m_root =
         new Ogre::Root("../indie_resource/conf/linux/plugins_d.cfg",
                        "../indie_resource/conf/linux/ogre_d.cfg", "Ogre.log");
 #endif
 #else
 #ifdef _WIN32
+    if (m_root)
+      delete m_root;
     m_root =
         new Ogre::Root("../indie_resource/conf/windows/plugins.cfg",
                        "../indie_resource/conf/windows/ogre.cfg", "Ogre.log");
 #else
+    if (m_root)
+      delete m_root;
     m_root =
         new Ogre::Root("../indie_resource/conf/linux/plugins.cfg",
                        "../indie_resource/conf/linux/ogre.cfg", "Ogre.log");
@@ -175,7 +183,7 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
-      }
+	}
 
     return true;
   }
