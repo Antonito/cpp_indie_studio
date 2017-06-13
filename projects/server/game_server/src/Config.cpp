@@ -2,7 +2,7 @@
 
 Config::Config()
     : m_config(), m_connectManagerIp(), m_connectManagerPort(),
-      m_gameServerPort(), m_gameServerMaxClients()
+      m_gameServerPort(), m_gameServerMaxClients(), m_mapConfig(), m_mapMD5()
 {
   loadConfig("game_server.ini");
 }

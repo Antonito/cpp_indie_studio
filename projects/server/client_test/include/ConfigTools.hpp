@@ -14,6 +14,7 @@
 // clang-format off
 struct MapConfig
 {
+  MapConfig() : name(), md5Str(), md5{} {}
   using map_t = std::map<std::string, std::string>;
   NOPE_SERIAL_MEMBER(
   std::string, name,

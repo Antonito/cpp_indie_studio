@@ -13,6 +13,9 @@
 
 struct MapConfig
 {
+  MapConfig() : name(), directory(), md5Str(), gameMode(), nbLaps(), md5{}
+  {
+  }
   using map_t = std::map<std::string, std::string>;
   // clang-format off
   NOPE_SERIAL_MEMBER(
