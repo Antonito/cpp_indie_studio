@@ -526,8 +526,13 @@ bool GameClient::checkMaps()
 
 			    nope::log::Log(Debug) << "Sending file content ["
 			                          << fileSize << " bytes]";
+#if defined(_WIN32)
+			    _write(m_sock.getSocket(), fileBuff.get(),
+			           fileSize);
+#else
 			    ::write(m_sock.getSocket(), fileBuff.get(),
 			            fileSize);
+#endif
 			  }
 
 			  rc = multiplex(true);
