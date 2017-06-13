@@ -9,7 +9,10 @@ Config::Config()
 
 Config &Config::getInstance()
 {
-  static Config instance;
+  static std::mutex mut;
+  static Config     instance;
+
+  std::lock_guard<std::mutex> lock(mut);
   return (instance);
 }
 

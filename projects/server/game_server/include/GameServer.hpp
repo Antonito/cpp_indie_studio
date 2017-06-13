@@ -10,6 +10,7 @@
 #include "IClient.hpp"
 #include "Token.hpp"
 #include "GameClient.hpp"
+#include "GameLogic.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
@@ -65,6 +66,7 @@ private:
   std::int32_t const m_maxClients;
   std::int32_t       m_curClients;
   std::string        m_licence;
+  GameLogic          m_gameLogic;
 
   // Sockets and servers
   network::TCPSocket m_connectManagerSock;
@@ -72,6 +74,7 @@ private:
   std::thread        m_connectSrv;
   std::thread        m_gameSrvTCP;
   std::thread        m_gameSrvUDP;
+  std::thread        m_gameLogicThread;
 
   // Tokens
   std::vector<std::unique_ptr<GameClient>> m_clientList;
