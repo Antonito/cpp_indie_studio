@@ -17,7 +17,6 @@ void Config::checkMD5(std::string const &filePath,
                       std::map<std::string, std::string> &md5)
 {
   crypto::Hash<crypto::AHash::MD5> crypt;
-  std::string                      basePath = filePath;
   DIR *                            dir;
   struct dirent *                  ent;
 
@@ -61,7 +60,6 @@ void Config::checkMD5(std::string const &filePath,
 
 void Config::loadConfig(std::string const &file)
 {
-  std::string const mapCatDefault = "Track_";
   m_config.loadFrom(file);
 
   // Load network configuration

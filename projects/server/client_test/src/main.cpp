@@ -303,7 +303,6 @@ static int checkFiles(network::TCPSocket &socket)
 		      rc = -1;
 		    }
 #else
-		  // TODO: Check rights
 		  rc = mkdir(folderPath.c_str(), 0777);
 #endif
 		  if (rc == -1)
@@ -482,6 +481,9 @@ static void client(network::TCPSocket &socket)
 
       checkFiles(gameServerSock);
 
+// Join lobby
+
+// Play
 #ifdef _WIN32
       Sleep(1000);
 #else

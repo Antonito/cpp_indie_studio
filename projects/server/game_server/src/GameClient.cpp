@@ -197,7 +197,9 @@ network::IClient::ClientAction GameClient::treatIncomingData()
       break;
     case State::CHECKING_MAPS:
       break;
+
     case State::WAITING:
+      // Check if alone -> stop game, and switch to playing game
       break;
     case State::PLAYING:
       break;
@@ -233,6 +235,8 @@ network::IClient::ClientAction GameClient::treatOutgoingData()
       if (checkMaps())
 	{
 	  ret = network::IClient::ClientAction::SUCCESS;
+	  nope::log::Log(Debug) << "Switching to State::WAITING";
+	  m_state = State::WAITING;
 	}
       break;
     case State::WAITING:
