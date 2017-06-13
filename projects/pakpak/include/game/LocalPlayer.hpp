@@ -61,6 +61,8 @@ namespace game
 
     Ogre::Camera *  m_cam;
     Ogre::Viewport *m_viewport;
+    Ogre::RenderWindow *m_win;
+    int m_order;
   };
 }
 

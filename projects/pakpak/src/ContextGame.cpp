@@ -15,6 +15,7 @@ namespace game
   {
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
+    m_quit = false;
 
     std::size_t nbPlayer = 6;
 

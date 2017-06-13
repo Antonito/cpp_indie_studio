@@ -1,11 +1,12 @@
 #include "pakpak_stdafx.hpp"
+#include "Logger.hpp"
 
 namespace game
 {
   LocalPlayer::LocalPlayer(Ogre::RenderWindow *win, GameData &g, PlayerData *p,
                            int order)
       : m_data(p), m_cameraMode(CameraMode::Top), m_layers(),
-        m_currentLayers(), m_cam(nullptr), m_viewport(nullptr)
+        m_currentLayers(), m_cam(nullptr), m_viewport(nullptr), m_win(win), m_order(order)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
         std::make_unique<Loading>(g, *this);
@@ -37,7 +38,8 @@ namespace game
     m_cam->lookAt(Ogre::Vector3(0, 0, 0));
     m_cam->setNearClipDistance(3);
 
-    m_viewport = win->addViewport(m_cam, order);
+    Log(nope::log::Debug) << "Adding viewport '" << m_order << "' to window";
+    m_viewport = m_win->addViewport(m_cam, m_order);
     m_viewport->setBackgroundColour(Ogre::ColourValue(0, 50, 0));
     m_cam->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
                           Ogre::Real(m_viewport->getActualHeight()));
@@ -47,14 +49,18 @@ namespace game
       : m_data(that.m_data), m_cameraMode(std::move(that.m_cameraMode)),
         m_layers(std::move(that.m_layers)),
         m_currentLayers(std::move(that.m_currentLayers)), m_cam(that.m_cam),
-        m_viewport(that.m_viewport)
+        m_viewport(that.m_viewport), m_win(that.m_win), m_order(that.m_order)
   {
     that.m_cam = nullptr;
     that.m_viewport = nullptr;
+    that.m_win = nullptr;
+    that.m_order = 0;
   }
 
   LocalPlayer::~LocalPlayer()
   {
+    Log(nope::log::Debug) << "Removing viewport '" << m_order << "' from window";
+    m_win->removeViewport(m_order);
   }
 
   void LocalPlayer::setViewPort(Ogre::Real left, Ogre::Real top,
