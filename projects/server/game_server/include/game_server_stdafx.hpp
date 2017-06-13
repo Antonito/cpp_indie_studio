@@ -28,6 +28,7 @@
 #include "Token.hpp"
 #include "Ini.hpp"
 #include "Config.hpp"
+#include "GameLogic.hpp"
 #include "GameClient.hpp"
 #include "json.hpp"
 

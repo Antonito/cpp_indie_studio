@@ -57,7 +57,9 @@ private:
   std::vector<Token> &         m_tokenList;
   std::int32_t                 m_id;
 
-  bool checkMaps();
+  bool                           checkMaps();
+  network::IClient::ClientAction lobbyRead();
+  network::IClient::ClientAction lobbyWrite();
 };
 
 // Disable clang warning for implicit padding

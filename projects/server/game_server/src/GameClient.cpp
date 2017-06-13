@@ -129,6 +129,23 @@ std::int32_t GameClient::getId() const
   return (m_id);
 }
 
+network::IClient::ClientAction GameClient::lobbyRead()
+{
+  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+
+  // Check if alone -> stop game, and switch to playing game
+  // TODO
+
+  return (ret);
+}
+
+network::IClient::ClientAction GameClient::lobbyWrite()
+{
+  network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
+  // TODO
+  return (ret);
+}
+
 network::IClient::ClientAction GameClient::treatIncomingData()
 {
   network::IClient::ClientAction ret = network::IClient::ClientAction::FAILURE;
@@ -136,6 +153,7 @@ network::IClient::ClientAction GameClient::treatIncomingData()
 
   switch (m_state)
     {
+    // Authentication
     case State::CONNECTED:
       nope::log::Log(Debug) << "Reading in state CONNECTED [GameClient]";
       ret = read(m_packet);
@@ -198,9 +216,12 @@ network::IClient::ClientAction GameClient::treatIncomingData()
     case State::CHECKING_MAPS:
       break;
 
+    // Lobby
     case State::WAITING:
-      // Check if alone -> stop game, and switch to playing game
+      ret = lobbyRead();
       break;
+
+    // GameLogic
     case State::PLAYING:
       break;
     }
@@ -218,6 +239,7 @@ network::IClient::ClientAction GameClient::treatOutgoingData()
 
   switch (m_state)
     {
+    // Authentication
     case State::CONNECTED:
       break;
     case State::AUTHENTICATING:
@@ -239,8 +261,13 @@ network::IClient::ClientAction GameClient::treatOutgoingData()
 	  m_state = State::WAITING;
 	}
       break;
+
+    // Lobby
     case State::WAITING:
+      ret = lobbyWrite();
       break;
+
+    // Game logic
     case State::PLAYING:
       break;
     }
