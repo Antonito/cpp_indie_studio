@@ -355,8 +355,13 @@ static int checkFiles(network::TCPSocket &socket)
 	    std::unique_ptr<char[]> buff = std::make_unique<char[]>(len);
 	    do
 	      {
+#if defined(_WIN32)
+		ssize_t rc =
+		    _read(socket.getSocket(), buff.get() + off, len - off);
+#else
 		ssize_t rc =
 		    ::read(socket.getSocket(), buff.get() + off, len - off);
+#endif
 
 		if (rc == -1 && rc != EINTR)
 		  {
