@@ -28,8 +28,7 @@ HEADER=
 
 # Project's files
 
-SRC_FILES=	PythonModule.cpp 			\
-		PythonLiteralConverter.cpp
+SRC_FILES=	PythonModule.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 
