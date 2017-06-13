@@ -308,7 +308,7 @@ network::IClient::ClientAction GameServer::treatOutcomingData()
 // Allow fall through
 #if defined(__clang__)
       [[clang::fallthrough]];
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) && __GNUC__ > 6
       __attribute__((fallthrough));
 #endif
 
