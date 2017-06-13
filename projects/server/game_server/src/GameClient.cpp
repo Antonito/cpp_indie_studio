@@ -495,7 +495,7 @@ bool GameClient::checkMaps()
 			      {
 				nope::log::Log(Error)
 				    << "Cannot open file " << curMap;
-				throw std::exception();
+				throw IOError("Cannot open file " + curMap);
 			      }
 			    fileSize =
 			        static_cast<std::size_t>(fileReader.tellg());

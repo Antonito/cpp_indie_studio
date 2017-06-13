@@ -18,7 +18,7 @@ GameServer::GameServer(std::string const & connectManagerIp,
   if (!licenceFile.is_open())
     {
       nope::log::Log(Error) << "Cannot open file : .license";
-      throw std::exception(); // TODO: Real exception
+      throw IOError("Cannot open file: .license");
     }
   std::getline(licenceFile, m_licence);
   nope::log::Log(Debug) << "Loaded licence " << m_licence;

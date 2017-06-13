@@ -372,7 +372,7 @@ static int checkFiles(network::TCPSocket &socket)
 	    if (!outputFile.good() || !outputFile.is_open())
 	      {
 		nope::log::Log(Error) << "Cannot open file " << filename;
-		throw std::exception();
+		throw IOError("Cannot open file " + filename);
 	      }
 	    nope::log::Log(Debug) << "Writing to file " << filename;
 	    outputFile.write(buff.get(), len);
