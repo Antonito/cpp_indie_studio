@@ -39,6 +39,7 @@ void Config::checkMD5(std::string const &filePath,
       if (ent->d_name[0] == '.')
 	continue;
       std::string fileName = filePath + ent->d_name;
+      nope::log::Log(Debug) << "Found " + fileName;
       fileReader.open(fileName.c_str());
       if (!fileReader.good())
 	{
@@ -79,8 +80,10 @@ void Config::loadConfig(std::string const &file)
       if (it->name().compare(0, mapCatDefault.length(), mapCatDefault) == 0)
 	{
 	  MapConfig tmp;
+
 	  tmp.name = (*it)["name"];
 	  tmp.directory = (*it)["directory"];
+	  nope::log::Log(Debug) << "Found " + tmp.directory;
 	  checkMD5(tmp.directory, tmp.md5);
 	  std::string                      payload;
 	  crypto::Hash<crypto::AHash::MD5> crypt;
@@ -98,6 +101,12 @@ void Config::loadConfig(std::string const &file)
 	  m_mapConfig.push_back(std::move(tmp));
 	}
     }
+
+  // Alphabetically sort maps
+  std::sort(m_mapConfig.begin(), m_mapConfig.end(),
+            [&](MapConfig const &a, MapConfig const &b) {
+              return (a.directory < b.directory);
+            });
 
   // Get general MD5
   crypto::Hash<crypto::AHash::MD5> crypt;

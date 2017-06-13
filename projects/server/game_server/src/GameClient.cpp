@@ -348,7 +348,7 @@ bool GameClient::checkMaps()
       nope::log::Log(Debug) << "Looping over maps";
       for (MapConfig const &map : maps)
 	{
-	  nope::log::Log(Debug) << map.name << ": " << map.md5Str;
+	  nope::log::Log(Debug) << map.directory << ": " << map.md5Str;
 
 	  rc = multiplex(false);
 	  if (rc <= 0)
@@ -356,8 +356,9 @@ bool GameClient::checkMaps()
 	      goto error_map;
 	    }
 	  rep.pck.eventType = GameClientToGSEvent::MD5_REQUEST;
-	  std::memcpy(rep.pck.eventData.md5requ.file.data(), map.name.c_str(),
-	              map.name.length());
+	  rep.pck.eventData.md5requ.file.fill('\0');
+	  std::memcpy(rep.pck.eventData.md5requ.file.data(),
+	              map.directory.c_str(), map.directory.length());
 	  m_packet << rep;
 	  ret = write(m_packet);
 	  if (ret != network::IClient::ClientAction::SUCCESS)
@@ -382,12 +383,13 @@ bool GameClient::checkMaps()
 	    {
 	      goto error_map;
 	    }
-	  std::string md5map(rep.pck.eventData.md5resp.md5.data(), 32);
+	  std::string md5map(rep.pck.eventData.md5resp.md5.data());
 
 	  // Check if map is OK
+	  nope::log::Log(Debug) << "Received MD5: " << md5map;
 	  if (md5map != map.md5Str)
 	    {
-	      nope::log::Log(Warning) << "Corrupted map: " << map.name;
+	      nope::log::Log(Warning) << "Corrupted map: " << map.directory;
 	      nope::log::Log(Debug) << "Checking files";
 
 	      // Loop over all files
@@ -398,14 +400,16 @@ bool GameClient::checkMaps()
 		  std::string md5mapFile;
 		  do
 		    {
+		      std::string curMap = map.directory + file.first;
 		      rc = multiplex(false);
 		      if (rc <= 0)
 			{
 			  goto error_map;
 			}
 		      rep.pck.eventType = GameClientToGSEvent::MD5_REQUEST;
+		      rep.pck.eventData.md5requ.file.fill('\0');
 		      std::memcpy(rep.pck.eventData.md5requ.file.data(),
-		                  map.name.c_str(), map.name.length());
+		                  curMap.c_str(), curMap.length());
 		      m_packet << rep;
 		      ret = write(m_packet);
 		      if (ret != network::IClient::ClientAction::SUCCESS)
@@ -431,29 +435,77 @@ bool GameClient::checkMaps()
 			{
 			  goto error_map;
 			}
-		      md5mapFile = std::string(
-		          rep.pck.eventData.md5resp.md5.data(), 32);
+		      md5mapFile =
+		          std::string(rep.pck.eventData.md5resp.md5.data());
 
-		      nope::log::Log(Debug) << "Checking received MD5";
+		      nope::log::Log(Debug)
+		          << "Checking received MD5: " << md5mapFile;
 		      if (md5mapFile != file.second)
 			{
+
 			  // Send file
 			  nope::log::Log(Warning)
-			      << "Corrupted file: " << file.first;
+			      << "Corrupted file: " << curMap;
 			  rc = multiplex(false);
 			  if (rc <= 0)
 			    {
 			      goto error_map;
 			    }
 
-			  // TODO : send map
-			  nope::log::Log(Debug) << "Sending file content";
-			  ::write(m_sock.getSocket(), "Contenu d'un fichier\n",
-			          sizeof("Contenu d'un fichier\n") -
-			              1); // TODO: rm
+			  // Open file, read it, send it
+			  {
+			    std::ifstream fileReader;
+			    std::size_t   fileSize;
+
+			    nope::log::Log(Debug) << "Opening file " << curMap;
+			    fileReader.open(curMap.c_str(),
+			                    std::ios::binary | std::ios::ate);
+			    if (!fileReader.good() || !fileReader.is_open())
+			      {
+				nope::log::Log(Error)
+				    << "Cannot open file " << curMap;
+				throw std::exception();
+			      }
+			    fileSize =
+			        static_cast<std::size_t>(fileReader.tellg());
+			    fileReader.seekg(0, std::ios::beg);
+			    std::unique_ptr<char[]> fileBuff =
+			        std::make_unique<char[]>(fileSize);
+			    fileReader.read(
+			        fileBuff.get(),
+			        static_cast<std::streamsize>(fileSize));
+			    fileReader.close();
+			    nope::log::Log(Debug) << "Closing file " << curMap;
+
+			    nope::log::Log(Debug) << "Building file packet";
+			    rep.pck.eventType =
+			        GameClientToGSEvent::FILE_EVENT;
+			    rep.pck.eventData.file.len =
+			        static_cast<std::uint32_t>(fileSize);
+			    rep.pck.eventData.file.name.fill('\0');
+			    std::memcpy(rep.pck.eventData.file.name.data(),
+			                curMap.c_str(), curMap.length());
+			    nope::log::Log(Debug) << "Sending packet";
+			    m_packet << rep;
+			    ret = write(m_packet);
+			    if (ret != network::IClient::ClientAction::SUCCESS)
+			      {
+				goto error_map;
+			      }
+
+			    nope::log::Log(Debug) << "Sending file content ["
+			                          << fileSize << " bytes]";
+			    ::write(m_sock.getSocket(), fileBuff.get(),
+			            fileSize);
+			  }
 
 			  rc = multiplex(true);
 			  if (rc <= 0)
+			    {
+			      goto error_map;
+			    }
+			  ret = read(m_packet);
+			  if (ret != network::IClient::ClientAction::SUCCESS)
 			    {
 			      goto error_map;
 			    }
@@ -462,8 +514,13 @@ bool GameClient::checkMaps()
 			  if (rep.pck.eventType !=
 			      GameClientToGSEvent::VALIDATION_EVENT)
 			    {
+			      nope::log::Log(Error)
+			          << "Incorrect event type "
+			          << static_cast<std::int32_t>(
+			                 rep.pck.eventType);
 			      goto error_map;
 			    }
+			  nope::log::Log(Debug) << "Correct event type";
 			  if (rep.pck.eventData.valid != 1)
 			    {
 			      goto error_map;
@@ -484,7 +541,8 @@ bool GameClient::checkMaps()
     {
       goto error_map;
     }
-  nope::log::Log(Info) << "Map integrity checked: OK";
+
+  nope::log::Log(Debug) << "Integrity OK, sending validation.";
   rep.pck.eventType = GameClientToGSEvent::VALIDATION_EVENT;
   rep.pck.eventData.valid = 1;
   m_packet << rep;
@@ -493,7 +551,7 @@ bool GameClient::checkMaps()
     {
       goto error_map;
     }
-
+  nope::log::Log(Info) << "Map integrity checked.";
   return (true);
 
 error_map:

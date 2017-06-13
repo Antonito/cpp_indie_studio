@@ -72,6 +72,12 @@ void Config::loadConfig(std::string const &file)
 
   // Load game server configuration
   nope::log::Log(Info) << "Loading game configuration";
+  updateMD5();
+}
+
+// Update MD5
+void Config::updateMD5()
+{
   DIR *          dir;
   struct dirent *ent;
   dir = opendir("./maps/");

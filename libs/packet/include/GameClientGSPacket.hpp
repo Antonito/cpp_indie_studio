@@ -19,7 +19,17 @@ enum class GameClientToGSEvent : std::uint16_t
   TOKEN_EVENT,
   VALIDATION_EVENT,
   MD5_REQUEST,
-  MD5_RESPONSE
+  MD5_RESPONSE,
+  FILE_EVENT
+};
+
+// Expected with FILE_EVENT packets
+struct GameClientToGSPacketFile
+{
+  static constexpr std::size_t fileLength = 256;
+
+  std::array<char, fileLength> name;
+  std::uint32_t len;
 };
 
 // Expected with MD5_RESPONSE packets
@@ -52,6 +62,7 @@ struct GameClientToGSPacketRaw
     GameClientToGSPacketToken   token;
     GameClientToGSPacketMD5Requ md5requ;
     GameClientToGSPacketMD5Resp md5resp;
+    GameClientToGSPacketFile    file;
   } eventData;
 };
 

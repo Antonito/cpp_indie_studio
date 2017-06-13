@@ -11,10 +11,10 @@
 #pragma clang diagnostic ignored "-Wpadded"
 #endif
 
-// clang-format off
 struct MapConfig
 {
   using map_t = std::map<std::string, std::string>;
+  // clang-format off
   NOPE_SERIAL_MEMBER(
   std::string, name,
   std::string, directory,

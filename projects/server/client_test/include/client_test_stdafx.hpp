@@ -45,6 +45,7 @@
 #if defined(_WIN32)
 #include "dirent/dirent.h"
 #else
+#include <sys/stat.h>
 #include <dirent.h>
 #endif
 

@@ -187,10 +187,29 @@ static int getToken(network::TCPSocket &socket, std::uint16_t &gameServerPort,
   return (0);
 }
 
+void Tokenize(std::string const &str, std::vector<std::string> &tokens,
+              std::string const &delimiters = " ");
+
+void Tokenize(std::string const &str, std::vector<std::string> &tokens,
+              std::string const &delimiters)
+{
+
+  std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
+  std::string::size_type pos = str.find_first_of(delimiters, lastPos);
+
+  while (std::string::npos != pos || std::string::npos != lastPos)
+    {
+      tokens.push_back(str.substr(lastPos, pos - lastPos));
+      lastPos = str.find_first_not_of(delimiters, pos);
+      pos = str.find_first_of(delimiters, lastPos);
+    }
+}
+
 static int checkFiles(network::TCPSocket &socket)
 {
-  GameClientToGSPacket         pckContent = {};
-  Packet<GameClientToGSPacket> pck = {};
+  GameClientToGSPacket          pckContent = {};
+  Packet<GameClientToGSPacket>  pck = {};
+  std::vector<MapConfig> const &mapConf = Config::getInstance().getMapConfig();
 
   nope::log::Log(Info) << "Starting to check files";
   while (1)
@@ -205,8 +224,7 @@ static int checkFiles(network::TCPSocket &socket)
       if (pckContent.pck.eventType == GameClientToGSEvent::MD5_REQUEST)
 	{
 	  nope::log::Log(Debug) << "Received MD5 Request";
-	  std::string payload(pckContent.pck.eventData.md5requ.file.data(),
-	                      256);
+	  std::string payload(pckContent.pck.eventData.md5requ.file.data());
 	  std::string const gen = "~GENERAL~";
 
 	  pckContent.pck.eventType = GameClientToGSEvent::MD5_RESPONSE;
@@ -215,7 +233,7 @@ static int checkFiles(network::TCPSocket &socket)
 	      // Treat global MD5
 	      nope::log::Log(Debug) << "Treating Global MD5";
 	      std::memcpy(pckContent.pck.eventData.md5resp.md5.data(),
-	                  "GLOBAL.MD5......................", 32);
+	                  Config::getInstance().getMapMD5().c_str(), 32);
 	      pck << pckContent;
 	      if (writePck(socket, pck) !=
 	          network::IClient::ClientAction::SUCCESS)
@@ -227,10 +245,80 @@ static int checkFiles(network::TCPSocket &socket)
 	  else
 	    {
 	      // Load file
+	      std::vector<std::string> filePath;
+	      std::string              md5Found;
 	      nope::log::Log(Debug) << "Requested MD5 of " << payload;
 
+	      // Split according to /
+	      Tokenize(payload, filePath, "/");
+
+	      if (filePath.size() < 2)
+		{
+		  nope::log::Log(Error) << "Invalid map requested";
+		  return (1);
+		}
+	      bool found = false;
+	      for (MapConfig const &m : mapConf)
+		{
+		  if (filePath[1] == m.name)
+		    {
+		      found = true;
+		      nope::log::Log(Debug) << "Found requested map";
+
+		      if (filePath.size() > 2)
+			{
+			  std::map<std::string, std::string>::const_iterator
+			      it = m.md5.find(filePath[2]);
+
+			  // Check if key exist
+			  if (it != m.md5.end())
+			    {
+			      nope::log::Log(Debug) << "File is knowned.";
+			      md5Found = m.md5.at(filePath[2]);
+			    }
+			  else
+			    {
+			      nope::log::Log(Debug) << "Uknown file !";
+			      md5Found = "";
+			    }
+			}
+		      else
+			{
+			  md5Found = m.md5Str;
+			}
+		    }
+		}
+	      if (!found)
+		{
+		  // TODO: Check if folder exists
+		  nope::log::Log(Debug) << "Didn't find map";
+
+		  // Create folder
+		  std::string  folderPath = filePath[0] + "/" + filePath[1];
+		  std::int32_t rc;
+#if defined(_WIN32)
+		  rc = CreateDirectory(folderPath.c_str(), nullptr);
+		  if (!rc)
+		    {
+		      rc = -1;
+		    }
+#else
+		  rc = mkdir(folderPath.c_str(), 0644);
+#endif
+		  if (rc == -1)
+		    {
+		      nope::log::Log(Warning)
+		          << "Cannot create folder " << folderPath;
+		    }
+		  else
+		    {
+		      nope::log::Log(Info) << "Created folder " << folderPath;
+		    }
+		}
+
+	      pckContent.pck.eventData.md5resp.md5.fill('\0');
 	      std::memcpy(pckContent.pck.eventData.md5resp.md5.data(),
-	                  "FILE.MD5........................", 32);
+	                  md5Found.c_str(), 32);
 	      pck << pckContent;
 	      if (writePck(socket, pck) !=
 	          network::IClient::ClientAction::SUCCESS)
@@ -238,6 +326,7 @@ static int checkFiles(network::TCPSocket &socket)
 		  nope::log::Log(Error) << "Cannot write";
 		  return (1);
 		}
+	      nope::log::Log(Debug) << "Sent MD5 response";
 	    }
 	}
       else if (pckContent.pck.eventType ==
@@ -251,6 +340,63 @@ static int checkFiles(network::TCPSocket &socket)
 	      break;
 	    }
 	  nope::log::Log(Warning) << "Invalid validation event";
+	}
+      else if (pckContent.pck.eventType == GameClientToGSEvent::FILE_EVENT)
+	{
+	  nope::log::Log(Debug) << "Received file event";
+	  std::uint32_t len = pckContent.pck.eventData.file.len;
+	  std::string   filename(pckContent.pck.eventData.file.name.data());
+	  nope::log::Log(Debug)
+	      << "FileName: " << filename << " | Len: " << len;
+
+	  // Read file
+	  {
+	    std::uint32_t           off = 0;
+	    std::unique_ptr<char[]> buff = std::make_unique<char[]>(len);
+	    do
+	      {
+		ssize_t rc =
+		    ::read(socket.getSocket(), buff.get() + off, len - off);
+
+		if (rc == -1 && rc != EINTR)
+		  {
+		    nope::log::Log(Error) << "Cannot read file";
+		    return (1);
+		  }
+		off += static_cast<std::uint32_t>(rc);
+	      }
+	    while (off != len);
+	    nope::log::Log(Debug) << "Received file.";
+	    std::ofstream outputFile(
+	        filename, std::ios::binary | std::ios::out | std::ios::trunc);
+	    if (!outputFile.good() || !outputFile.is_open())
+	      {
+		nope::log::Log(Error) << "Cannot open file " << filename;
+		throw std::exception();
+	      }
+	    nope::log::Log(Debug) << "Writing to file " << filename;
+	    outputFile.write(buff.get(), len);
+	    outputFile.close();
+	    nope::log::Log(Debug) << "Closing file" << filename;
+	  }
+
+	  // Notify server it's OK
+	  nope::log::Log(Debug) << "Notifying server.." << filename;
+	  pckContent.pck.eventType = GameClientToGSEvent::VALIDATION_EVENT;
+	  nope::log::Log(Debug)
+	      << "Event Type: "
+	      << static_cast<std::int32_t>(pckContent.pck.eventType);
+	  pckContent.pck.eventData.valid = 1;
+	  pck << pckContent;
+	  if (writePck(socket, pck) != network::IClient::ClientAction::SUCCESS)
+	    {
+	      nope::log::Log(Error) << "Cannot write";
+	      return (1);
+	    }
+	  nope::log::Log(Debug) << "Send response to server." << filename;
+	  nope::log::Log(Info) << "Updating MD5 informations";
+	  Config::getInstance().updateMD5();
+	  nope::log::Log(Debug) << "MD5 informations updated.";
 	}
       else
 	{

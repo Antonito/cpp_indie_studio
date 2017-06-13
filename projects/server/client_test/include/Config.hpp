@@ -28,6 +28,7 @@ public:
   std::uint16_t                 getConnectManagerPort() const;
   std::vector<MapConfig> const &getMapConfig() const;
   std::string const &           getMapMD5() const;
+  void                          updateMD5();
 
 private:
   Config();
