@@ -5,7 +5,8 @@ namespace game
   GameData::GameData()
       : m_sceneMgr(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Game scene manager")),
-        m_players(), m_map(m_sceneMgr, "map/map.dat")
+        m_players(), m_map(m_sceneMgr, "../indie_resource/maps/test/map.dat"),
+        m_startTime()
   {
     // todo: move in Map
     m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
@@ -37,6 +38,11 @@ namespace game
   std::size_t GameData::getPlayerNb() const
   {
     return (m_players.size());
+  }
+
+  void GameData::startTime()
+  {
+    m_startTime = std::chrono::high_resolution_clock::now();
   }
 
   void GameData::update()
