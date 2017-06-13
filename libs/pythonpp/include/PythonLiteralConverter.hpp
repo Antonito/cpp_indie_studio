@@ -21,7 +21,7 @@ namespace pythonpp
 
       l_arg = PyLong_FromLong(arg);
       if (!l_arg)
-	      return (false);
+	return (false);
       PyTuple_SetItem(args, pos, l_arg);
       return (true);
     }
@@ -34,9 +34,9 @@ namespace pythonpp
   };
 
   template <>
-  inline bool PythonLiteralConverter::pushArgs<std::string &>(PyObject *   args,
-                                                       std::string &arg,
-                                                       int          pos)
+  inline bool PythonLiteralConverter::pushArgs<std::string &>(PyObject *args,
+                                                              std::string &arg,
+                                                              int          pos)
   {
     PyObject *l_arg;
 
@@ -49,7 +49,7 @@ namespace pythonpp
 
   template <>
   inline bool PythonLiteralConverter::pushArgs<bool>(PyObject *args, bool arg,
-                                              int pos)
+                                                     int pos)
   {
     PyObject *l_arg;
 
@@ -61,8 +61,8 @@ namespace pythonpp
   }
 
   template <>
-  inline bool PythonLiteralConverter::pushArgs<double>(PyObject *args, double arg,
-                                                     int pos)
+  inline bool PythonLiteralConverter::pushArgs<double>(PyObject *args,
+                                                       double arg, int pos)
   {
     PyObject *l_arg;
 
@@ -74,7 +74,8 @@ namespace pythonpp
   }
 
   template <>
-  inline bool PythonLiteralConverter::pushArgs<int>(PyObject *args, int arg, int pos)
+  inline bool PythonLiteralConverter::pushArgs<int>(PyObject *args, int arg,
+                                                    int pos)
   {
     PyObject *l_arg;
 
