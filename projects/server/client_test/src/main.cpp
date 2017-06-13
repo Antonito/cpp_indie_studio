@@ -303,7 +303,8 @@ static int checkFiles(network::TCPSocket &socket)
 		      rc = -1;
 		    }
 #else
-		  rc = mkdir(folderPath.c_str(), 0644);
+		  // TODO: Check rights
+		  rc = mkdir(folderPath.c_str(), 0777);
 #endif
 		  if (rc == -1)
 		    {
@@ -472,7 +473,12 @@ static void client(network::TCPSocket &socket)
       pckContent.pck.eventType = GameClientToGSEvent::VALIDATION_EVENT;
       pckContent.pck.eventData.valid = 1;
       pck << pckContent;
-      writePck(gameServerSock, pck);
+      ret = writePck(gameServerSock, pck);
+      if (ret != network::IClient::ClientAction::SUCCESS)
+	{
+	  nope::log::Log(Error) << "Write failed !";
+	  return;
+	}
 
       checkFiles(gameServerSock);
 
