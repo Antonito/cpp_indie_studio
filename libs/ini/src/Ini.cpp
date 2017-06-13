@@ -127,7 +127,7 @@ namespace ini
 
     if (os.is_open() == false)
       {
-	throw std::exception();
+	throw IOError("Cannot open " + filename);
       }
 
     bool first = true;
@@ -164,7 +164,7 @@ namespace ini
 
     if (fs.is_open() == false)
       {
-	throw std::exception();
+	throw IOError("Cannot open " + filename);
       }
 
     std::string line;
@@ -202,7 +202,6 @@ namespace ini
 	else
 	  {
 	    std::size_t start = i;
-
 
 	    while (line[i] != '=')
 	      {

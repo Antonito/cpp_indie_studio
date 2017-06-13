@@ -11,6 +11,7 @@
 #include "Token.hpp"
 #include "GameClient.hpp"
 #include "GameLogic.hpp"
+#include "IOError.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
