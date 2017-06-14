@@ -1,9 +1,9 @@
 #include "game_server_stdafx.hpp"
 
 GameLogic::GameLogic()
-    : m_running(false), m_maxPlayers(), m_currentHumanPlayers(),
-      m_currentAIs(), m_currentSpectators(), m_maps(), m_currentMap(),
-      m_nextMap(), m_prevState(GameState::LOADING),
+    : m_running(false), m_playing(false), m_maxPlayers(),
+      m_currentHumanPlayers(), m_currentAIs(), m_currentSpectators(), m_maps(),
+      m_currentMap(), m_nextMap(), m_prevState(GameState::LOADING),
       m_state(GameState::LOADING), m_humans(), m_spectators(), m_ai()
 {
 }
@@ -66,7 +66,7 @@ void GameLogic::loadingState()
   if (getCurrentPlayers() > 0)
     {
       // Move spectators to players
-      assert(m_currentSpectators = m_spectators.size());
+      assert(m_currentSpectators == m_spectators.size());
       for (std::size_t i = 0; i < m_currentSpectators; ++i)
 	{
 	  m_humans.push_back(std::move(m_spectators.back()));
@@ -83,12 +83,16 @@ void GameLogic::playingState()
 {
   nope::log::Log(Debug) << "GameLogic in Playing state";
   assert(m_state == GameState::PLAYING);
+  m_playing = true;
+  while (m_playing)
+    {
+      //   Get packets
+      //   GameLogic process
+      //   Send packets
+    }
 
-  // while
-  //   Get packets
-  //   GameLogic process
-  //   Send packets
-  // nextMap();
+  // Load next game
+  nextMap();
 }
 
 void GameLogic::run()
@@ -110,6 +114,12 @@ void GameLogic::run()
 	}
     }
   nope::log::Log(Info) << "GameLogic over.";
+}
+
+void GameLogic::requestNextGame()
+{
+  // Request next game
+  nope::log::Log(Debug) << "Requesting a map change";
 }
 
 void GameLogic::nextMap()

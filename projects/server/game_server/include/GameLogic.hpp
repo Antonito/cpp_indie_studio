@@ -31,8 +31,7 @@ public:
   // General configuration
   void run(); // Thread
 
-  // Stop current game, and play the next scheduled map
-  void nextMap();
+  void requestNextGame();
 
   // GamePlayer
   std::size_t getCurrentPlayers() const;
@@ -55,6 +54,9 @@ private:
 
   void setUp();
 
+  // Stop current game, and play the next scheduled map
+  void nextMap();
+
   void addSpectator();
   void addAI();
   void removeAI();
@@ -71,6 +73,7 @@ private:
 
   // General configuration
   std::atomic<bool> m_running;
+  std::atomic<bool> m_playing;
   std::size_t       m_maxPlayers;
   std::size_t       m_currentHumanPlayers;
   std::size_t       m_currentAIs;
