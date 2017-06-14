@@ -18,13 +18,17 @@ namespace game
     PlayerData &operator=(PlayerData const &) = delete;
     PlayerData &operator=(PlayerData &&) = delete;
 
-    void        setCar(std::unique_ptr<ACar> &&car);
+    void setCar(std::unique_ptr<ACar> &&car);
+    void setScore(int);
+
+    int         getScore() const;
     bool        hasCar() const;
     ACar &      car();
     ACar const &car() const;
 
   private:
     std::unique_ptr<ACar> m_car;
+    int                   m_score;
   };
 }
 

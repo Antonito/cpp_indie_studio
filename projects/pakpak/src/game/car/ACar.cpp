@@ -4,6 +4,7 @@ namespace game
 {
   ACar::~ACar()
   {
+    m_sceneMgr->getRootSceneNode()->removeChild(m_node);
   }
 
   Ogre::Vector3 const &ACar::position() const
@@ -86,9 +87,9 @@ namespace game
 
   ACar::ACar(Ogre::SceneManager *sceneMgr, std::string const &mesh,
              Ogre::Vector3 const &pos, Ogre::Vector3 const &dir)
-      : m_pos(pos), m_dir(dir), m_mov(0, 0, 0), m_speed(0.0), m_tryMoving(0),
-        m_tryTurning(0), m_node(nullptr), m_carNode(nullptr),
-        m_entity(nullptr), m_camera(nullptr)
+      : m_sceneMgr(sceneMgr), m_pos(pos), m_dir(dir), m_mov(0, 0, 0),
+        m_speed(0.0), m_tryMoving(0), m_tryTurning(0), m_node(nullptr),
+        m_carNode(nullptr), m_entity(nullptr), m_camera(nullptr)
   {
     static std::int32_t id = 0;
 

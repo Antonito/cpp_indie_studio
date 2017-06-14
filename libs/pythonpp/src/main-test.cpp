@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include "PythonModule.hpp"
 
 int main()
@@ -9,7 +8,9 @@ int main()
   std::string out;
   pythonpp::PythonModule pm("add");
 
-  pm.feedFunctions({"addition", "modify", "readString"});
+  nope::log::Logger::start("python.log");
+  nope::log::Logger::logLevel = nope::log::LogLevel::LOG_DEBUG;
+  pm.feedFunctions({"addition", "modify", "readString", "readStringReturn0"});
   if (pm.exec<int, int, int>(0, ret, 1, 2))
     std::cout << ret << std::endl;
 
@@ -19,6 +20,13 @@ int main()
   if (pm.exec<std::string, std::string&>(2, out, cc))
     std::cout << ret << std::endl;
 
-  std::cout << "coucou out = " << out << std::endl;
+  if (pm.exec<int, std::string&>(3, ret, cc))
+    std::cout << ret << std::endl;
+
+  try {
+    std::cout << "coucou out = " << out << std::endl;
+  } catch (std::exception &err) {
+    std::cout << err.what() << std::endl;
+  }
   return (0);
 }
