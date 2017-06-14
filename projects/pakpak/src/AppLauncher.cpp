@@ -138,7 +138,8 @@ namespace core
 
     // Menu context
     m_contexts[static_cast<std::size_t>(GameState::Menu)] =
-        std::make_unique<menu::ContextMenu>(m_window, m_inputListener);
+        std::make_unique<menu::ContextMenu>(m_window, m_inputListener,
+                                            m_settings);
 
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
@@ -183,7 +184,7 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
-	}
+      }
 
     return true;
   }

@@ -57,6 +57,22 @@
 #include "InputListener.hpp"
 #include "SettingsPlayer.hpp"
 
+// Menu
+
+#include "AssetSetter.hpp"
+#include "ContextMenu.hpp"
+#include "GUI.hpp"
+#include "IMenuLayer.hpp"
+#include "InGameHUD.hpp"
+#include "InGamePause.hpp"
+#include "MainMenu.hpp"
+#include "MenuKeymap.hpp"
+#include "MenuManager.hpp"
+#include "MenuMultiplayer.hpp"
+#include "MenuOptions.hpp"
+#include "MenuScores.hpp"
+#include "MenuSolo.hpp"
+
 // Game
 #include "AContext.hpp"
 #include "CameraMode.hpp"

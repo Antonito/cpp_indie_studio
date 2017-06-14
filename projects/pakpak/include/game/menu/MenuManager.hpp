@@ -18,7 +18,8 @@ namespace menu
   class MenuManager : public game::IEventHandler
   {
   public:
-    explicit MenuManager(Ogre::RenderWindow *win);
+    explicit MenuManager(Ogre::RenderWindow *  win,
+                         core::SettingsPlayer &settings);
     MenuManager(MenuManager const &) = delete;
     MenuManager(MenuManager &&) = delete;
     virtual ~MenuManager()
@@ -32,10 +33,10 @@ namespace menu
     bool mouseMoved(OIS::MouseEvent const &me);
     bool mousePressed(OIS::MouseEvent const &me, OIS::MouseButtonID id);
     bool mouseReleased(OIS::MouseEvent const &me, OIS::MouseButtonID id);
-    void push(core::MenuState);
-    void popLayer();
-    void begin();
-    void end();
+    void              push(core::MenuState);
+    void              popLayer();
+    void              begin();
+    void              end();
     core::IMenuLayer *getMenuLayer();
 
   private:

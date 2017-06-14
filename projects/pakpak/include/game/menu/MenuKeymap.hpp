@@ -5,16 +5,18 @@
 #ifndef MENUKEYMAP_HPP
 #define MENUKEYMAP_HPP
 
-#include "game/menu/GUI.hpp"
-#include "game/menu/MenuManager.hpp"
-#include "game/menu/IMenuLayer.hpp"
+#include "GUI.hpp"
+#include "MenuManager.hpp"
+#include "IMenuLayer.hpp"
+#include "SettingsPlayer.hpp"
 
 namespace core
 {
   class MenuKeymap : public IMenuLayer
   {
   public:
-    MenuKeymap(menu::MenuManager &menuManager, GUI &gui);
+    MenuKeymap(menu::MenuManager &menuManager, GUI &gui,
+               SettingsPlayer &settings);
     virtual ~MenuKeymap(){};
     void      draw();
     void      entry();
@@ -28,6 +30,7 @@ namespace core
     bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     bool keyReleased(const OIS::KeyEvent &arg);
     bool onBackClick(CEGUI::EventArgs const &);
+    bool setKeyListener(CEGUI::EventArgs const &);
 
   private:
     MenuKeymap(MenuKeymap const &) = delete;
@@ -46,6 +49,8 @@ namespace core
     menu::MenuManager &m_menuManager;
     size_t             m_playerSelected;
     CEGUI::Window *    m_buttons[4];
+    SettingsPlayer &   m_settings;
+    bool               m_listening;
   };
 }
 

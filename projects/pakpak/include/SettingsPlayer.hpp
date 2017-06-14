@@ -77,6 +77,7 @@ namespace core
     void save(int playerIndex) const;
 
     bool check_used(int playerIndex) const;
+    std::string const getTextForKey(OIS::KeyCode keycode) const;
     std::string const actionForKey(int          playerIndex,
                                    OIS::KeyCode keyCode) const;
     GameSettings::Graphic &graphics(int playerIndex);
