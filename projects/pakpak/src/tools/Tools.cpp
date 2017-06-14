@@ -119,11 +119,14 @@ namespace tools
 	        (submesh->useSharedVertices) ? shared_offset : current_offset;
 
 	    unsigned int vindex = use32bitindexes ? *pInt++ : *pShort++;
-	    indices[index_offset + 0] = vindex + offset;
+	    indices[index_offset + 0] =
+	        static_cast<unsigned int>(vindex + offset);
 	    vindex = use32bitindexes ? *pInt++ : *pShort++;
-	    indices[index_offset + 1] = vindex + offset;
+	    indices[index_offset + 1] =
+	        static_cast<unsigned int>(vindex + offset);
 	    vindex = use32bitindexes ? *pInt++ : *pShort++;
-	    indices[index_offset + 2] = vindex + offset;
+	    indices[index_offset + 2] =
+	        static_cast<unsigned int>(vindex + offset);
 
 	    index_offset += 3;
 	  }

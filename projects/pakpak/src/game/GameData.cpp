@@ -10,7 +10,7 @@ namespace game
                          Ogre::AxisAlignedBox(
                              Ogre::Vector3(-100000000, -100000000, -100000000),
                              Ogre::Vector3(100000000, 100000000, 100000000)),
-                         Ogre::Vector3(0, -9.81 * 80, 0))),
+                         Ogre::Vector3(0.0f, -9.81f * 80, 0.0f))),
 #ifdef DEBUG
         m_debugDrawer(nullptr),
 #endif
@@ -19,12 +19,12 @@ namespace game
   {
     // todo: move in Map
     m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-    m_sceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
+    m_sceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
     Ogre::Light *l = m_sceneMgr->createLight("MainLight");
     l->setPosition(20, 80, 50);
     l->setCastShadows(true);
 
-#ifdef DEBUG_
+#ifdef DEBUG
     m_debugDrawer = std::make_unique<OgreBulletCollisions::DebugDrawer>();
     m_debugDrawer->setDrawWireframe(true);
     m_world->setDebugDrawer(m_debugDrawer.get());
@@ -93,6 +93,13 @@ namespace game
   {
     return (m_world.get());
   }
+
+#ifdef DEBUG
+  OgreBulletCollisions::DebugDrawer *GameData::debugDrawer()
+  {
+    return (m_debugDrawer.get());
+  }
+#endif // !DEBUG
 
   OgreBulletDynamics::RigidBody *GameData::addPhysicEntity(
       std::unique_ptr<OgreBulletCollisions::CollisionShape> box,

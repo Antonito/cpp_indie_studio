@@ -25,13 +25,13 @@ namespace game
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
 	m_game[i].setCar(std::make_unique<EmptyCar>(
-	    m_game, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, -1)));
+	    m_game, Ogre::Vector3::ZERO, Ogre::Quaternion::IDENTITY));
       }
 
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
-	m_players.emplace_back(
-	    std::make_unique<LocalPlayer>(m_win, m_game, &m_game[i], i));
+	m_players.emplace_back(std::make_unique<LocalPlayer>(
+	    m_win, m_game, &m_game[i], static_cast<int>(i)));
       }
 
     updateViewPort();

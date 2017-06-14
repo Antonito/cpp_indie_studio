@@ -92,6 +92,7 @@
 // Physic
 //
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
+#include <Shapes/OgreBulletCollisionsSphereShape.h>
 #include <Shapes/OgreBulletCollisionsTrimeshShape.h>
 #include <Shapes/OgreBulletCollisionsConvexHullShape.h>
 #include "Tools.hpp"

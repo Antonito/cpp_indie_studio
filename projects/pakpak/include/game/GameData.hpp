@@ -39,6 +39,10 @@ namespace game
     Ogre::SceneManager *               sceneMgr();
     OgreBulletDynamics::DynamicsWorld *physicWorld();
 
+#ifdef DEBUG
+    OgreBulletCollisions::DebugDrawer *debugDrawer();
+#endif // !DEBUG
+
     OgreBulletDynamics::RigidBody *
                addPhysicEntity(std::unique_ptr<OgreBulletCollisions::CollisionShape>,
                                std::string const &);

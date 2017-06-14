@@ -2,8 +2,8 @@
 
 namespace game
 {
-  EmptyCar::EmptyCar(game::GameData &gamedata, Ogre::Vector3 pos,
-                     Ogre::Vector3 dir)
+  EmptyCar::EmptyCar(game::GameData &gamedata, Ogre::Vector3 const &pos,
+                     Ogre::Quaternion const &dir)
       : ACar(gamedata, "Jeep_default.mesh", pos, dir)
   {
   }

@@ -44,7 +44,7 @@ namespace game
 	m_player.car().turn(-2);
 	break;
       case OIS::KC_SPACE:
-	m_player.car().move(0);
+	m_player.car().resetOrientation();
 	break;
       default:
 	return false;
