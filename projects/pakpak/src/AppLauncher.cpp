@@ -20,18 +20,41 @@ namespace core
 // Create the Root
 
 #ifdef DEBUG
-    m_root =
-        new Ogre::Root("conf/plugins_d.cfg", "conf/ogre_d.cfg", "Ogre.log");
+#ifdef _WIN32
+    if (m_root)
+      delete m_root;
+    m_root = new Ogre::Root("../indie_resource/conf/windows/plugins_d.cfg",
+                            "../indie_resource/conf/windows/ogre_d.cfg",
+                            "Ogre.log");
 #else
-    m_root = new Ogre::Root("conf/plugins.cfg", "conf/ogre.cfg", "Ogre.log");
+    if (m_root)
+      delete m_root;
+    m_root =
+        new Ogre::Root("../indie_resource/conf/linux/plugins_d.cfg",
+                       "../indie_resource/conf/linux/ogre_d.cfg", "Ogre.log");
+#endif
+#else
+#ifdef _WIN32
+    if (m_root)
+      delete m_root;
+    m_root =
+        new Ogre::Root("../indie_resource/conf/windows/plugins.cfg",
+                       "../indie_resource/conf/windows/ogre.cfg", "Ogre.log");
+#else
+    if (m_root)
+      delete m_root;
+    m_root =
+        new Ogre::Root("../indie_resource/conf/linux/plugins.cfg",
+                       "../indie_resource/conf/linux/ogre.cfg", "Ogre.log");
+#endif
 #endif // !DEBUG
 
     // Load Ressource config file
     Ogre::ConfigFile configFile;
 #ifdef DEBUG
-    configFile.load("conf/resources_d.cfg");
+    configFile.load("../indie_resource/conf/resources_d.cfg");
 #else
-    configFile.load("conf/resources.cfg");
+    configFile.load("../indie_resource/conf/resources.cfg");
 #endif // !DEBUG
 
     // Load all the Ressources
@@ -158,7 +181,7 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
-      }
+	}
 
     return true;
   }

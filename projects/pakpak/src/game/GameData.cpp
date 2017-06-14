@@ -5,7 +5,7 @@ namespace game
   GameData::GameData()
       : m_sceneMgr(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Game scene manager")),
-        m_players(), m_map(m_sceneMgr, "map/map.dat")
+        m_players(), m_map(m_sceneMgr, "../indie_resource/maps/test/map.dat")
   {
     // todo: move in Map
     m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);

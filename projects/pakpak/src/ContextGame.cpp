@@ -3,7 +3,7 @@
 namespace game
 {
   ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input)
-      : core::AContext(win, input), m_game(), m_players()
+      : core::AContext(win, input), m_game(), m_players(), m_quit(false)
   {
   }
 
@@ -15,17 +15,49 @@ namespace game
   {
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
+    m_quit = false;
 
-    std::size_t nbPlayer = 1;
+    std::size_t nbPlayer = 6;
 
     m_game.setPlayerNb(nbPlayer);
+
+    std::size_t nbLocalPlayer = 3;
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
 	m_game[i].setCar(std::make_unique<EmptyCar>(m_game.sceneMgr(),
 	                                            Ogre::Vector3(0, 0, 0),
 	                                            Ogre::Vector3(0, 0, -1)));
-	m_players.emplace_back(m_win, m_game, m_game[i]);
+      }
+
+    for (std::size_t i = 0; i < nbLocalPlayer; ++i)
+      {
+	m_players.emplace_back(
+	    std::make_unique<LocalPlayer>(m_win, m_game, &m_game[i], i));
+      }
+
+    updateViewPort();
+  }
+
+  void ContextGame::updateViewPort()
+  {
+    int size = static_cast<int>(m_players.size());
+
+    for (std::size_t i = 0; i < static_cast<std::size_t>(size); ++i)
+      {
+	m_players[i]->setViewPort(
+	    static_cast<Ogre::Real>(
+	        static_cast<double>((i % 2) * ((size - 1) / 2)) * 0.5),
+	    static_cast<Ogre::Real>(
+	        static_cast<double>(
+	            (((size - 1) / 2) * i / 2 + (1 - (size - 1) / 2) * i)) *
+	        0.5),
+	    static_cast<Ogre::Real>(
+	        1 -
+	        0.5 * static_cast<double>((((size - 1) / 2) * (1 - (i / 2)) +
+	                                   (i / 2) * (size / 4)))),
+	    static_cast<Ogre::Real>(
+	        1 - 0.5 * static_cast<double>((size + 1) / 3)));
       }
   }
 
@@ -38,7 +70,7 @@ namespace game
   {
     m_input->capture();
     m_game.update();
-    return (core::GameState::InGame);
+    return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }
 
   void ContextGame::display()
@@ -49,30 +81,35 @@ namespace game
   {
     if (ke.key == OIS::KC_ESCAPE)
       {
-	m_input->shutdown();
+        m_quit = true;
       }
 
-    for (LocalPlayer &p : m_players)
+    std::size_t i = 0;
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
-	p.keyPressed(ke);
+	std::cout << "		Pressed for player " << i << std::endl;
+
+	p->keyPressed(ke);
+	++i;
       }
+    std::cout << std::endl;
     return (true);
   }
 
   bool ContextGame::keyReleased(OIS::KeyEvent const &ke)
   {
-    for (LocalPlayer &p : m_players)
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
-	p.keyReleased(ke);
+	p->keyReleased(ke);
       }
     return (true);
   }
 
   bool ContextGame::mouseMoved(OIS::MouseEvent const &me)
   {
-    for (LocalPlayer &p : m_players)
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
-	p.mouseMoved(me);
+	p->mouseMoved(me);
       }
     return (true);
   }
@@ -80,9 +117,9 @@ namespace game
   bool ContextGame::mousePressed(OIS::MouseEvent const &me,
                                  OIS::MouseButtonID     id)
   {
-    for (LocalPlayer &p : m_players)
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
-	p.mousePressed(me, id);
+	p->mousePressed(me, id);
       }
     return (true);
   }
@@ -90,9 +127,9 @@ namespace game
   bool ContextGame::mouseReleased(OIS::MouseEvent const &me,
                                   OIS::MouseButtonID     id)
   {
-    for (LocalPlayer &p : m_players)
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
-	p.mouseReleased(me, id);
+	p->mouseReleased(me, id);
       }
     return (true);
   }

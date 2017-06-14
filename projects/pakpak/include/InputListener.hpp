@@ -14,7 +14,7 @@ namespace core
   {
   public:
     InputListener() = delete;
-    InputListener(Ogre::RenderWindow *wnd);
+    explicit InputListener(Ogre::RenderWindow *wnd);
     InputListener(InputListener const &that);
     InputListener(InputListener &&that);
     virtual ~InputListener();

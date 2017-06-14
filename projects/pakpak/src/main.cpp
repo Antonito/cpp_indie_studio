@@ -12,6 +12,7 @@ int main(int, char **)
 
 {
   nope::log::Logger::start("nope.log");
+  nope::log::Logger::logLevel = nope::log::LogLevel::LOG_DEBUG;
   core::AppLauncher app;
 
   try

@@ -50,7 +50,7 @@
 #include "AppLauncher.hpp"
 #include "binary.hpp"
 #include "ContextGame.hpp"
-#include "ContextMenu.hpp"
+#include "game/menu/ContextMenu.hpp"
 #include "ContextSplash.hpp"
 #include "GameState.hpp"
 #include "InputListener.hpp"

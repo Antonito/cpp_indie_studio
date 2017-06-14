@@ -2,6 +2,7 @@
 #define CONTEXTGAME_HPP_
 
 #include <vector>
+#include <memory>
 #include <OGRE/OgreRenderWindow.h>
 #include <OIS/OISMouse.h>
 #include <OIS/OISKeyboard.h>
@@ -26,21 +27,24 @@ namespace game
     virtual void enable();
     virtual void disable();
 
+    void updateViewPort();
+
     virtual core::GameState update();
     virtual void            display();
+    bool keyPressed(const OIS::KeyEvent &arg);
 
-    virtual bool keyPressed(OIS::KeyEvent const &ke);
-    virtual bool keyReleased(OIS::KeyEvent const &ke);
+    bool keyReleased(const OIS::KeyEvent &arg);
 
-    virtual bool mouseMoved(OIS::MouseEvent const &me);
-    virtual bool mousePressed(OIS::MouseEvent const &me,
-                              OIS::MouseButtonID     id);
-    virtual bool mouseReleased(OIS::MouseEvent const &me,
-                               OIS::MouseButtonID     id);
+    bool mouseMoved(const OIS::MouseEvent &arg);
+
+    bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+
+    bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
   private:
-    GameData                 m_game;
-    std::vector<LocalPlayer> m_players;
+    GameData                                  m_game;
+    std::vector<std::unique_ptr<LocalPlayer>> m_players;
+    bool                                      m_quit;
   };
 }
 

@@ -22,7 +22,7 @@ namespace game
   {
   public:
     LocalPlayer() = delete;
-    LocalPlayer(Ogre::RenderWindow *win, GameData &, PlayerData &);
+    LocalPlayer(Ogre::RenderWindow *win, GameData &, PlayerData *, int);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&);
     virtual ~LocalPlayer();
@@ -42,11 +42,14 @@ namespace game
     virtual void push(GameLayer layer);
     virtual void popLayer();
 
+    void setViewPort(Ogre::Real left, Ogre::Real top, Ogre::Real width,
+                     Ogre::Real height);
+
     ACar &      car();
     ACar const &car() const;
 
   private:
-    PlayerData &m_data;
+    PlayerData *m_data;
     CameraMode  m_cameraMode;
 
     static constexpr std::size_t nbLayer =
@@ -58,8 +61,8 @@ namespace game
 
     Ogre::Camera *  m_cam;
     Ogre::Viewport *m_viewport;
-
-    ACar &m_car;
+    Ogre::RenderWindow *m_win;
+    int m_order;
   };
 }
 
