@@ -3,6 +3,7 @@
 
 namespace core
 {
+
   AppLauncher::AppLauncher()
       : m_root(nullptr), m_window(nullptr), m_inputListener(nullptr),
         m_contexts(), m_currentContext(nullptr), m_gameState(GameState::None),
@@ -17,38 +18,31 @@ namespace core
   bool AppLauncher::start()
   {
 
-// TODO : Create .cfg
-// Create the Root
+    // TODO : Create .cfg
+    // Create the Root
 
+    std::string ogreLog = "Ogre.log";
+    std::string confFolder = "../indie_resource/conf/";
 #ifdef DEBUG
-#ifdef _WIN32
-    if (m_root)
-      delete m_root;
-    m_root = new Ogre::Root("../indie_resource/conf/windows/plugins_d.cfg",
-                            "../indie_resource/conf/windows/ogre_d.cfg",
-                            "Ogre.log");
+    std::string plugin = "plugins_d.cfg";
+    std::string ogreFile = "ogre_d.cfg";
 #else
-    if (m_root)
-      delete m_root;
-    m_root =
-        new Ogre::Root("../indie_resource/conf/linux/plugins_d.cfg",
-                       "../indie_resource/conf/linux/ogre_d.cfg", "Ogre.log");
+    std::string plugin = "plugins.cfg";
+    std::string ogreFile = "ogre.cfg";
 #endif
-#else
+
 #ifdef _WIN32
-    if (m_root)
-      delete m_root;
-    m_root =
-        new Ogre::Root("../indie_resource/conf/windows/plugins.cfg",
-                       "../indie_resource/conf/windows/ogre.cfg", "Ogre.log");
+    std::string plateform = "windows/";
+#elif defined(__APPLE__)
+    std::string plateform = "osx/";
 #else
+    std::string plateform = "linux/";
+#endif
+
     if (m_root)
       delete m_root;
-    m_root =
-        new Ogre::Root("../indie_resource/conf/linux/plugins.cfg",
-                       "../indie_resource/conf/linux/ogre.cfg", "Ogre.log");
-#endif
-#endif // !DEBUG
+    m_root = new Ogre::Root(confFolder + plateform + plugin,
+                            confFolder + plateform + ogreFile, ogreLog);
 
     // Load Ressource config file
     Ogre::ConfigFile configFile;
@@ -183,7 +177,7 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
-	}
+      }
 
     return true;
   }
