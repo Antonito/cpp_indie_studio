@@ -92,7 +92,7 @@ namespace pythonpp
 	}
       catch (indie::AException &err)
 	{
-	  Log(nope::log::Warning) << err.what() << std::endl;
+          nope::log::Log(Warning) << err.what() << std::endl;
 	  return (false);
 	}
       return (true);
