@@ -7,18 +7,6 @@ GameLogic::GameLogic()
 {
 }
 
-GameLogic::GameLogic(GameLogic const &)
-{
-}
-
-GameLogic &GameLogic::operator=(GameLogic const &other)
-{
-  if (this != &other)
-    {
-    }
-  return (*this);
-}
-
 GameLogic::~GameLogic()
 {
 }

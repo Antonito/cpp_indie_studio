@@ -17,10 +17,10 @@ class GameLogic
 
 public:
   GameLogic();
-  GameLogic(GameLogic const &);
+  GameLogic(GameLogic const &) = delete;
   GameLogic(GameLogic &&) = default;
 
-  GameLogic &operator=(GameLogic const &);
+  GameLogic &operator=(GameLogic const &) = delete;
   GameLogic &operator=(GameLogic &&) = default;
 
   ~GameLogic();

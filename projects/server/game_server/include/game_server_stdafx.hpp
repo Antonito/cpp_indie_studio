@@ -20,6 +20,7 @@
 #include <vector>
 #include <cstring>
 #include <algorithm>
+#include <atomic>
 #include "Logger.hpp"
 #include "GameServer.hpp"
 #include "TCPSocket.hpp"
