@@ -4,6 +4,7 @@
 
 #include <cstdlib>
 #include <climits>
+#include <locale>
 #include "PyFunctionInitializationError.hpp"
 #include "PythonModule.hpp"
 #include "PyInitializationError.hpp"
