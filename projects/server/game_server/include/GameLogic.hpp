@@ -15,6 +15,9 @@ class GameLogic
   // TODO: Currently with MapConfig, should be something else in the future
   using map_t = MapConfig;
 
+  // TODO: Change player to player's type
+  using player_t = char;
+
 public:
   GameLogic();
   GameLogic(GameLogic const &) = delete;
@@ -41,6 +44,7 @@ public:
   map_t const &getCurrentMap() const;
 
   void addHumanPlayer();
+  void removeHumanPlayer();
 
 private:
   enum class GameState : std::uint16_t
@@ -53,14 +57,17 @@ private:
 
   void addSpectator();
   void addAI();
-  void deleteAI();
+  void removeAI();
 
   void loadMap();
 
   void setState(GameState const state);
 
   void loadingState();
+  void stopGame();
+  void syncClients();
   void playingState();
+  void updatePlayersCount();
 
   // General configuration
   std::atomic<bool> m_running;
@@ -72,8 +79,13 @@ private:
   // TODO: GameData ?
   std::vector<map_t>           m_maps;
   std::vector<map_t>::iterator m_currentMap;
+  std::vector<map_t>::iterator m_nextMap;
   GameState                    m_prevState;
   GameState                    m_state;
+
+  std::vector<player_t> m_humans;
+  std::vector<player_t> m_spectators;
+  std::vector<player_t> m_ai;
 };
 
 // Disable clang warning for implicit padding
