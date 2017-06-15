@@ -8,7 +8,7 @@
 // Disable clang warning for templated class padding
 #if defined(__clang__)
 #pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wpadded"
+#pragma clang diagnostic ignored "-Wno-effc++"
 #endif
 
 #include <OgreBulletDynamicsWorld.h>
