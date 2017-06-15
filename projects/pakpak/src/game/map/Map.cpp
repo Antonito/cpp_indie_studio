@@ -125,9 +125,13 @@ namespace game
 
     m_body = m_gamedata.addPhysicEntity(std::move(shape), ss.str());
 
-    // body->setDebugDisplayEnabled(false);
-    // body->showDebugShape(false);
-    // m_body->setShape(m_node, _shape, 0.6f, 0.6f, 0.0f, Ogre::Vector3::ZERO);
+// body->setDebugDisplayEnabled(false);
+// body->showDebugShape(false);
+
+#ifdef DEBUG
+    // Small trick to allow debug drawing
+    m_body->setShape(m_node, _shape, 0.6f, 0.6f, 0.0f, Ogre::Vector3::ZERO);
+#endif
     m_body->setStaticShape(_shape, 0.0f, 0.6f, Ogre::Vector3(0, 0, 0));
     // m_body->setKinematicObject(true);
 

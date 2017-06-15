@@ -16,11 +16,11 @@ namespace game
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
 
-    std::size_t nbPlayer = 1;
+    std::size_t nbPlayer = 5;
 
     m_game.setPlayerNb(nbPlayer);
 
-    std::size_t nbLocalPlayer = 1;
+    std::size_t nbLocalPlayer = 4;
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {

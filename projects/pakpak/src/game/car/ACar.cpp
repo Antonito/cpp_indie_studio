@@ -96,7 +96,7 @@ namespace game
 	// m_vehicle->setBrake(m_breakingForce, i);
       }
 
-    constexpr double alpha = 0.2;
+    constexpr double alpha = 0.1;
     Ogre::Vector3    newPos =
         m_carNode->getOrientation() *
             Ogre::Quaternion(Ogre::Degree(15), Ogre::Vector3::UNIT_X) *
