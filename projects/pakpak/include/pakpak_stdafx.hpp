@@ -92,10 +92,13 @@
 // Physic
 //
 
-// Disable clang warning for templated class padding
 #if defined(__clang__)
 #pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wno-effc++"
+#pragma clang            system_header
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #endif
 
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
@@ -107,6 +110,8 @@
 // Disable clang warning for templated class padding
 #if defined(__clang__)
 #pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
 #endif
 
 #endif // !PAKPAK_STDAFX_HPP_

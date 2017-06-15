@@ -8,7 +8,11 @@
 // Disable clang warning for templated class padding
 #if defined(__clang__)
 #pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wno-effc++"
+#pragma clang            system_header
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #endif
 
 #include <OgreBulletDynamicsWorld.h>
@@ -19,6 +23,8 @@
 // Disable clang warning for templated class padding
 #if defined(__clang__)
 #pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
 #endif
 
 #include "PlayerData.hpp"
@@ -37,7 +43,7 @@ namespace game
     GameData &operator=(GameData const &) = delete;
     GameData &operator=(GameData &&) = delete;
 
-    PlayerData &      operator[](std::size_t);
+    PlayerData &operator[](std::size_t);
     PlayerData const &operator[](std::size_t) const;
 
     void        setPlayerNb(std::size_t);
@@ -45,8 +51,8 @@ namespace game
 
     void update();
 
-    Ogre::Camera *   createCamera(std::string const &name);
-    Ogre::Entity *   createEntity(std::string const &name);
+    Ogre::Camera *createCamera(std::string const &name);
+    Ogre::Entity *createEntity(std::string const &name);
     Ogre::SceneNode *createSceneNode();
 
     Ogre::SceneManager *               sceneMgr();
@@ -57,8 +63,8 @@ namespace game
 #endif // !DEBUG
 
     OgreBulletDynamics::RigidBody *
-               addPhysicEntity(std::unique_ptr<OgreBulletCollisions::CollisionShape>,
-                               std::string const &);
+        addPhysicEntity(std::unique_ptr<OgreBulletCollisions::CollisionShape>,
+                        std::string const &);
     Map &      map();
     Map const &map() const;
 

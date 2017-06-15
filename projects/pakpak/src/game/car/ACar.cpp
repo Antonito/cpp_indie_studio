@@ -18,7 +18,7 @@ namespace game
 
   double ACar::speed() const
   {
-    return (m_vehicle->getCurrentSpeedKmHour());
+    return (static_cast<double>(m_vehicle->getCurrentSpeedKmHour()));
   }
 
   void ACar::move(double m)
@@ -49,7 +49,7 @@ namespace game
     m_body->getBulletRigidBody()->setCenterOfMassTransform(tr);
   }
 
-  void ACar::update(double elapsedTime)
+  void ACar::update(double)
   {
 #ifdef DEBUG
     // Draw the vehicle
@@ -64,7 +64,7 @@ namespace game
 
     // When steering, wake up the wheel rigidbodies so that their orientation
     // is updated
-    if (newSteering != 0.0f)
+    if (newSteering != 0.0)
       {
 	m_steering = m_steering * 0.95 + newSteering * 0.05;
       }
@@ -114,7 +114,15 @@ namespace game
   ACar::ACar(game::GameData &gamedata, std::string const &mesh,
              Ogre::Vector3 const &pos, Ogre::Quaternion const &dir)
       : m_tryMoving(0), m_tryTurning(0), m_node(nullptr), m_carNode(nullptr),
-        m_entity(nullptr), m_camera(nullptr), m_gamedata(gamedata)
+        m_entity(nullptr), m_camera(nullptr), m_body(nullptr),
+        m_hullbody(nullptr), m_tuning(), m_vehicle(nullptr),
+        m_raycaster(nullptr), m_gamedata(gamedata), m_steering(0.0),
+        m_engineForce(0.0), m_breakingForce(0.0), m_maxEngineForce(0.0),
+        m_maxBreakingForce(0.0), m_vehicleSteering(0.0),
+        m_steeringIncrement(0.0), m_steeringClamp(0.0), m_wheelRadius(0.0),
+        m_wheelWidth(0.0), m_wheelFriction(0.0), m_suspensionStiffness(0.0),
+        m_suspensionDamping(0.0), m_suspensionCompression(0.0),
+        m_rollInfluence(0.0), m_suspensionRestLength(0.0)
   {
     static std::int32_t id = 0;
 
@@ -218,24 +226,24 @@ namespace game
     btVector3 wheelAxis(-1, 0, 0);
     btVector3 connectionPoint;
 
-    constexpr double cubeHalf = 1;
-
     Ogre::Vector3 v = size;
 
     connectionHeight -= 0;
 
     // Add wheel 1
-    connectionPoint = btVector3(btScalar(v.x - (0.3 * m_wheelWidth)),
-                                btScalar(connectionHeight),
-                                btScalar(2 * v.z - m_wheelRadius));
+    connectionPoint =
+        btVector3(btScalar(static_cast<double>(v.x) - (0.3 * m_wheelWidth)),
+                  btScalar(connectionHeight),
+                  btScalar(static_cast<double>(2 * v.z) - m_wheelRadius));
     m_vehicle->addWheel(connectionPoint, wheelDirection, wheelAxis,
                         btScalar(m_suspensionRestLength),
                         btScalar(m_wheelRadius), m_tuning, isFrontWheel);
 
     // Add wheel 2
-    connectionPoint = btVector3(btScalar(-v.x + (0.3 * m_wheelWidth)),
-                                btScalar(connectionHeight),
-                                btScalar(2 * v.z - m_wheelRadius));
+    connectionPoint =
+        btVector3(btScalar(static_cast<double>(-v.x) + (0.3 * m_wheelWidth)),
+                  btScalar(connectionHeight),
+                  btScalar(static_cast<double>(2 * v.z) - m_wheelRadius));
     m_vehicle->addWheel(connectionPoint, wheelDirection, wheelAxis,
                         btScalar(m_suspensionRestLength),
                         btScalar(m_wheelRadius), m_tuning, isFrontWheel);
@@ -243,17 +251,19 @@ namespace game
     isFrontWheel = false;
 
     // Add wheel 3
-    connectionPoint = btVector3(btScalar(-v.x + (0.3 * m_wheelWidth)),
-                                btScalar(connectionHeight),
-                                btScalar(-2 * v.z + m_wheelRadius));
+    connectionPoint =
+        btVector3(btScalar(static_cast<double>(-v.x) + (0.3 * m_wheelWidth)),
+                  btScalar(connectionHeight),
+                  btScalar(static_cast<double>(-2 * v.z) + m_wheelRadius));
     m_vehicle->addWheel(connectionPoint, wheelDirection, wheelAxis,
                         btScalar(m_suspensionRestLength),
                         btScalar(m_wheelRadius), m_tuning, isFrontWheel);
 
     // Add wheel 4
-    connectionPoint = btVector3(btScalar(v.x - (0.3 * m_wheelWidth)),
-                                btScalar(connectionHeight),
-                                btScalar(-2 * v.z + m_wheelRadius));
+    connectionPoint =
+        btVector3(btScalar(static_cast<double>(v.x) - (0.3 * m_wheelWidth)),
+                  btScalar(connectionHeight),
+                  btScalar(static_cast<double>(-2 * v.z) + m_wheelRadius));
     m_vehicle->addWheel(connectionPoint, wheelDirection, wheelAxis,
                         btScalar(m_suspensionRestLength),
                         btScalar(m_wheelRadius), m_tuning, isFrontWheel);

@@ -44,9 +44,9 @@ namespace game
 
     int size = static_cast<int>(m_players.size());
 
-    for (std::size_t i = 0; i < static_cast<std::size_t>(size); ++i)
+    for (int i = 0; i < size; ++i)
       {
-	m_players[i]->setViewPort(
+	m_players[static_cast<std::size_t>(i)]->setViewPort(
 	    static_cast<Ogre::Real>(
 	        static_cast<double>((i % 2) * ((size - 1) / 2)) * 0.5),
 	    static_cast<Ogre::Real>(

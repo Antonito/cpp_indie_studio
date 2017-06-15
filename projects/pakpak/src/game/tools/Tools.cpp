@@ -15,13 +15,12 @@ namespace tools
     std::size_t shared_offset = vertex_count;
     std::size_t next_offset = vertex_count;
     std::size_t index_offset = index_count;
-    std::size_t prev_vert = vertex_count;
-    std::size_t prev_ind = index_count;
 
     // Calculate how many vertices and indices we're going to need
     for (int i = 0; i < mesh->getNumSubMeshes(); i++)
       {
-	Ogre::SubMesh *submesh = mesh->getSubMesh(i);
+	Ogre::SubMesh *submesh =
+	    mesh->getSubMesh(static_cast<std::uint16_t>(i));
 
 	// We only need to add the shared vertices once
 	if (submesh->useSharedVertices)
@@ -53,13 +52,13 @@ namespace tools
     // Run through the submeshes again, adding the data into the arrays
     for (int i = 0; i < mesh->getNumSubMeshes(); i++)
       {
-	Ogre::SubMesh *submesh = mesh->getSubMesh(i);
+	Ogre::SubMesh *submesh =
+	    mesh->getSubMesh(static_cast<std::uint16_t>(i));
 
 	Ogre::VertexData *vertex_data = submesh->useSharedVertices
 	                                    ? mesh->sharedVertexData
 	                                    : submesh->vertexData;
-	if ((!submesh->useSharedVertices) ||
-	    (submesh->useSharedVertices && !added_shared))
+	if (!submesh->useSharedVertices || !added_shared)
 	  {
 	    if (submesh->useSharedVertices)
 	      {
@@ -101,8 +100,8 @@ namespace tools
 	Ogre::IndexData *index_data = submesh->indexData;
 
 	std::size_t     numTris = index_data->indexCount / 3;
-	unsigned short *pShort;
-	unsigned int *  pInt;
+	unsigned short *pShort = nullptr;
+	unsigned int *  pInt = nullptr;
 	Ogre::HardwareIndexBufferSharedPtr ibuf = index_data->indexBuffer;
 	bool                               use32bitindexes =
 	    (ibuf->getType() == Ogre::HardwareIndexBuffer::IT_32BIT);

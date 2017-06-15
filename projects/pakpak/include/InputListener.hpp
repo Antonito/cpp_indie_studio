@@ -6,7 +6,24 @@
 #include <OIS/OISInputManager.h>
 #include <OIS/OISMouse.h>
 #include <OIS/OISKeyboard.h>
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang            system_header
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC            system_header
+#endif
+
 #include <OgreBulletDynamicsWorld.h>
+
+// Enable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 namespace core
 {
@@ -15,7 +32,7 @@ namespace core
   {
   public:
     InputListener() = delete;
-    InputListener(Ogre::RenderWindow *wnd);
+    explicit InputListener(Ogre::RenderWindow *wnd);
     InputListener(InputListener const &that);
     InputListener(InputListener &&that);
     virtual ~InputListener();
@@ -25,8 +42,8 @@ namespace core
 
     virtual void windowResized(Ogre::RenderWindow *rw);
     virtual void windowClosed(Ogre::RenderWindow *rw);
-    bool         frameRenderingQueued(const Ogre::FrameEvent &evt);
-    void         startOIS();
+    bool frameRenderingQueued(const Ogre::FrameEvent &evt);
+    void startOIS();
 
     void setMouseEventCallback(OIS::MouseListener *listener);
     void setKeyboardEventCallback(OIS::KeyListener *listener);
