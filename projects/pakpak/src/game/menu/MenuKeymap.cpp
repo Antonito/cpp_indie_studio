@@ -10,10 +10,7 @@ namespace core
                          SettingsPlayer &settings)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
         m_playerSelected(0), m_buttons(), m_settings(settings),
-        m_listening(false),
-        m_curKey(reinterpret_cast<OIS::KeyCode &>(
-            m_settings.getPlayer(static_cast<int>(0)).key.speedUp)),
-        m_curButton("")
+        m_listening(false), m_curKey(nullptr), m_curButton("")
 
   {
   }
@@ -86,6 +83,8 @@ namespace core
     m_buttons[3]->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MenuKeymap::onPlayer4Click, this));
+
+    loadLayout(m_playerSelected);
   }
 
   void MenuKeymap::exit()
@@ -110,13 +109,13 @@ namespace core
     if (m_listening)
       {
 	m_listening = false;
-	if (!m_settings.updateKey(static_cast<int>(m_playerSelected), m_curKey,
-	                          arg.key))
+	if (!m_settings.updateKey(static_cast<int>(m_playerSelected),
+	                          *m_curKey, arg.key))
 	  {
 	    Log(nope::log::Error) << "Key already used";
 	    return true;
 	  }
-	m_curKey = arg.key;
+	*m_curKey = arg.key;
 	m_gui.getRoot()
 	    ->getChild(m_curButton)
 	    ->setProperty("Text", m_settings.getTextForKey(arg.key));
@@ -197,8 +196,8 @@ namespace core
       {
 	m_listening = true;
       }
-    m_curKey = reinterpret_cast<OIS::KeyCode &>(
-        m_settings.getPlayer(static_cast<int>(m_playerSelected)).key.speedUp);
+    m_curKey = reinterpret_cast<OIS::KeyCode *>(
+        &m_settings.getPlayer(static_cast<int>(m_playerSelected)).key.speedUp);
     m_curButton = "up_button";
     return true;
   }
@@ -209,8 +208,9 @@ namespace core
       {
 	m_listening = true;
       }
-    m_curKey = reinterpret_cast<OIS::KeyCode &>(
-        m_settings.getPlayer(static_cast<int>(m_playerSelected)).key.slowDown);
+    m_curKey = reinterpret_cast<OIS::KeyCode *>(
+        &m_settings.getPlayer(static_cast<int>(m_playerSelected))
+             .key.slowDown);
     m_curButton = "down_button";
     return true;
   }
@@ -221,8 +221,9 @@ namespace core
       {
 	m_listening = true;
       }
-    m_curKey = reinterpret_cast<OIS::KeyCode &>(
-        m_settings.getPlayer(static_cast<int>(m_playerSelected)).key.turnLeft);
+    m_curKey = reinterpret_cast<OIS::KeyCode *>(
+        &m_settings.getPlayer(static_cast<int>(m_playerSelected))
+             .key.turnLeft);
     m_curButton = "left_button";
     return true;
   }
@@ -233,9 +234,9 @@ namespace core
       {
 	m_listening = true;
       }
-    m_curKey = reinterpret_cast<OIS::KeyCode &>(
-        m_settings.getPlayer(static_cast<int>(m_playerSelected))
-            .key.turnRight);
+    m_curKey = reinterpret_cast<OIS::KeyCode *>(
+        &m_settings.getPlayer(static_cast<int>(m_playerSelected))
+             .key.turnRight);
     m_curButton = "right_button";
     return true;
   }
@@ -246,8 +247,9 @@ namespace core
       {
 	m_listening = true;
       }
-    m_curKey = reinterpret_cast<OIS::KeyCode &>(
-        m_settings.getPlayer(static_cast<int>(m_playerSelected)).key.openMenu);
+    m_curKey = reinterpret_cast<OIS::KeyCode *>(
+        &m_settings.getPlayer(static_cast<int>(m_playerSelected))
+             .key.openMenu);
     m_curButton = "pause_button";
     return true;
   }
@@ -258,9 +260,9 @@ namespace core
       {
 	m_listening = true;
       }
-    m_curKey = reinterpret_cast<OIS::KeyCode &>(
-        m_settings.getPlayer(static_cast<int>(m_playerSelected))
-            .key.useObject);
+    m_curKey = reinterpret_cast<OIS::KeyCode *>(
+        &m_settings.getPlayer(static_cast<int>(m_playerSelected))
+             .key.useObject);
     m_curButton = "use_button";
     return true;
   }
@@ -282,27 +284,76 @@ namespace core
       }
   }
 
+  void MenuKeymap::loadLayout(size_t playerIndex)
+  {
+    m_gui.getRoot()
+        ->getChild("up_button")
+        ->setProperty("Text",
+                      m_settings.getTextForKey(static_cast<OIS::KeyCode>(
+                          m_settings.getPlayer(static_cast<int>(playerIndex))
+                              .key.speedUp)));
+
+    m_gui.getRoot()
+        ->getChild("down_button")
+        ->setProperty("Text",
+                      m_settings.getTextForKey(static_cast<OIS::KeyCode>(
+                          m_settings.getPlayer(static_cast<int>(playerIndex))
+                              .key.slowDown)));
+
+    m_gui.getRoot()
+        ->getChild("left_button")
+        ->setProperty("Text",
+                      m_settings.getTextForKey(static_cast<OIS::KeyCode>(
+                          m_settings.getPlayer(static_cast<int>(playerIndex))
+                              .key.turnLeft)));
+
+    m_gui.getRoot()
+        ->getChild("right_button")
+        ->setProperty("Text",
+                      m_settings.getTextForKey(static_cast<OIS::KeyCode>(
+                          m_settings.getPlayer(static_cast<int>(playerIndex))
+                              .key.turnRight)));
+
+    m_gui.getRoot()
+        ->getChild("pause_button")
+        ->setProperty("Text",
+                      m_settings.getTextForKey(static_cast<OIS::KeyCode>(
+                          m_settings.getPlayer(static_cast<int>(playerIndex))
+                              .key.openMenu)));
+
+    m_gui.getRoot()
+        ->getChild("use_button")
+        ->setProperty("Text",
+                      m_settings.getTextForKey(static_cast<OIS::KeyCode>(
+                          m_settings.getPlayer(static_cast<int>(playerIndex))
+                              .key.useObject)));
+  }
+
   bool MenuKeymap::onPlayer1Click(CEGUI::EventArgs const &)
   {
     swapButtons(0);
+    loadLayout(m_playerSelected);
     return true;
   }
 
   bool MenuKeymap::onPlayer2Click(CEGUI::EventArgs const &)
   {
     swapButtons(1);
+    loadLayout(m_playerSelected);
     return true;
   }
 
   bool MenuKeymap::onPlayer3Click(CEGUI::EventArgs const &)
   {
     swapButtons(2);
+    loadLayout(m_playerSelected);
     return true;
   }
 
   bool MenuKeymap::onPlayer4Click(CEGUI::EventArgs const &)
   {
     swapButtons(3);
+    loadLayout(m_playerSelected);
     return true;
   }
 }

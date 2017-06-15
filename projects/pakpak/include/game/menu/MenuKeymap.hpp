@@ -48,6 +48,7 @@ namespace core
     bool onPlayer3Click(CEGUI::EventArgs const &);
     bool onPlayer4Click(CEGUI::EventArgs const &);
     void swapButtons(size_t newSelected);
+    void loadLayout(size_t playerIndex);
 
     GUI &              m_gui;
     GameState          m_curState;
@@ -56,7 +57,7 @@ namespace core
     CEGUI::Window *    m_buttons[4];
     SettingsPlayer &   m_settings;
     bool               m_listening;
-    OIS::KeyCode &     m_curKey;
+    OIS::KeyCode *     m_curKey;
     std::string        m_curButton;
   };
 }
