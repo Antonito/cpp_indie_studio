@@ -107,7 +107,8 @@ namespace game
     Ogre::Vector3 oldPos = m_camera->getPosition();
 
     // Update the camera position and direction
-    m_camera->setPosition((1.0 - alpha) * oldPos + alpha * newPos);
+    m_camera->setPosition((static_cast<Ogre::Real>(1.0 - alpha)) * oldPos +
+                          static_cast<Ogre::Real>(alpha) * newPos);
     m_camera->lookAt(p);
   }
 
