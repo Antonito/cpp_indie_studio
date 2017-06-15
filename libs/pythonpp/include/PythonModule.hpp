@@ -38,7 +38,7 @@ namespace pythonpp
 
       pyArgs = PyTuple_New(n);
 
-      Log(nope::log::Debug) << "Parsing function '" << m_name << "' arguments...";
+      nope::log::Log(Debug) << "Parsing function '" << m_name << "' arguments...";
       nope::serialization::apply(tuple, [this, &index,
                                          &pyArgs](auto &e) -> bool {
 	if (!PythonLiteralConverter::pushArgs<decltype(e)>(pyArgs, e, index))
@@ -46,7 +46,7 @@ namespace pythonpp
 	++index;
 	return (true);
       });
-      Log(nope::log::Debug) << "Parsing done.";
+      nope::log::Log(Debug) << "Parsing done.";
 
       retValue = PyObject_CallObject(m_function, pyArgs);
       Py_DECREF(pyArgs);
@@ -55,10 +55,10 @@ namespace pythonpp
 	  throw(pythonpp::PyFunctionReturnError(m_name));
 	}
 
-      Log(nope::log::Debug) << "Converting function '" << m_name << "' return...";
+      nope::log::Log(Debug) << "Converting function '" << m_name << "' return...";
       convertedRet =
           std::move(PythonLiteralConverter::backConverter<Ret>(retValue));
-      Log(nope::log::Debug) << "Convertion done.";
+      nope::log::Log(Debug) << "Convertion done.";
       Py_DECREF(retValue);
       return (convertedRet);
     }
@@ -84,15 +84,15 @@ namespace pythonpp
     {
       try
 	{
-	  Log(nope::log::Debug) << "Executing '"
+	  nope::log::Log(Debug) << "Executing '"
 	                        << m_functions[index]->getName() << "'...";
 	  out = m_functions[index]->exec<Ret, Args...>(args...);
-          Log(nope::log::Debug) << "Execution of '"
+          nope::log::Log(Debug) << "Execution of '"
                                 << m_functions[index]->getName() << "' done.";
 	}
       catch (indie::AException &err)
 	{
-	  Log(nope::log::Warning) << err.what() << std::endl;
+          nope::log::Log(Warning) << err.what() << std::endl;
 	  return (false);
 	}
       return (true);

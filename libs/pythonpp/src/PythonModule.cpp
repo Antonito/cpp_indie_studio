@@ -4,6 +4,7 @@
 
 #include <cstdlib>
 #include <climits>
+#include <locale>
 #include "PyFunctionInitializationError.hpp"
 #include "PythonModule.hpp"
 #include "PyInitializationError.hpp"
@@ -19,7 +20,7 @@ pythonpp::PythonModule::PythonModule(std::string const &moduleName)
   char      buff[PATH_MAX];
   PyObject *name;
 
-  Log(nope::log::Debug) << "Starting python module '" << moduleName << "'";
+  nope::log::Log(Debug) << "Starting python module '" << moduleName << "'";
   Py_Initialize();
   PySys_SetPath(realpath(".", buff));
   if (!Py_IsInitialized())
@@ -46,7 +47,7 @@ void pythonpp::PythonModule::feedFunctions(
 {
   std::vector<std::string> stolenNames = std::move(functionNames);
 
-  Log(nope::log::Debug) << "Starting module '" << m_moduleName
+  nope::log::Log(Debug) << "Starting module '" << m_moduleName
                         << "' function feed...";
   for (std::string const &name : stolenNames)
     {
@@ -60,12 +61,12 @@ void pythonpp::PythonModule::feedFunctions(
 	  Log(nope::log::Warning) << err.what() << std::endl;
 	}
     }
-  Log(nope::log::Debug) << "Function feed over";
+  nope::log::Log(Debug) << "Function feed over";
 }
 
 pythonpp::PythonFunction::~PythonFunction()
 {
-  Log(nope::log::Debug) << "Decrementing function '" << m_name << "'";
+  nope::log::Log(Debug) << "Decrementing function '" << m_name << "'";
   Py_XDECREF(m_function);
 }
 
@@ -80,7 +81,7 @@ pythonpp::PythonFunction::PythonFunction(PyObject *         module,
   if (!PyCallable_Check(m_function))
     throw(pythonpp::PyFunctionInitializationError("Object '" + functionName +
                                                   "' is not callable"));
-  Log(nope::log::Debug) << "Function '" << m_name << "' feeded!";
+  nope::log::Log(Debug) << "Function '" << m_name << "' feeded!";
 }
 
 const std::string &pythonpp::PythonFunction::getName() const
