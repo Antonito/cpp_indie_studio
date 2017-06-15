@@ -60,7 +60,7 @@ namespace game
     Ogre::Vector3 p = m_carNode->getPosition();
 
     double newSteering = m_tryTurning * 0.5;
-    double accelerator = m_tryMoving * -30.0;
+    double accelerator = m_tryMoving * -5.0;
 
     // When steering, wake up the wheel rigidbodies so that their orientation
     // is updated
@@ -70,7 +70,7 @@ namespace game
       }
     else
       {
-	m_steering = m_steering * 0.8 + newSteering * 0.2;
+	m_steering = m_steering * 0.8;
       }
 
     // Set front wheel angles
@@ -96,13 +96,17 @@ namespace game
 	// m_vehicle->setBrake(m_breakingForce, i);
       }
 
-    // Update the camera position and direction
-    m_camera->setPosition(
+    constexpr double alpha = 0.2;
+    Ogre::Vector3    newPos =
         m_carNode->getOrientation() *
             Ogre::Quaternion(Ogre::Degree(15), Ogre::Vector3::UNIT_X) *
             Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y) *
             Ogre::Vector3::UNIT_Z * 300 +
-        p);
+        p;
+    Ogre::Vector3 oldPos = m_camera->getPosition();
+
+    // Update the camera position and direction
+    m_camera->setPosition((1.0 - alpha) * oldPos + alpha * newPos);
     m_camera->lookAt(p);
   }
 
@@ -182,7 +186,7 @@ namespace game
 
     nope::log::Log(Debug) << "Created rigid body: " << ss.str();
 
-    m_body->setShape(m_carNode, _box, 0.1f, 0.6f, 200.0f, pos, dir);
+    m_body->setShape(m_carNode, _box, 0.0f, 0.6f, 20.0f, pos, dir);
 
     // Set the car properties
     m_engineForce = 0.0;
@@ -197,9 +201,9 @@ namespace game
     m_wheelWidth = 10.0;
     m_wheelFriction = 10.0;        // BT_LARGE_FLOAT;
     m_suspensionStiffness = 10.0;  // 20.f;
-    m_suspensionDamping = 0.0;     // 2.3f;
-    m_suspensionCompression = 1.0; // 4.4f;
-    m_rollInfluence = 1.0;         // 1.0f;
+    m_suspensionDamping = 1.0;     // 2.3f;
+    m_suspensionCompression = 3.0; // 4.4f;
+    m_rollInfluence = 0.05;        // 1.0f;
     m_suspensionRestLength = 3.0;  // 0.6
 
     m_hullbody = m_body->getBulletRigidBody();
@@ -218,7 +222,7 @@ namespace game
 
     m_hullbody->setDamping(0.2f, 0.5f);
 
-    double connectionHeight = -7;
+    double connectionHeight = 0;
 
     bool isFrontWheel = true;
 
@@ -228,7 +232,7 @@ namespace game
 
     Ogre::Vector3 v = size;
 
-    connectionHeight -= 0;
+    connectionHeight -= 7;
 
     // Add wheel 1
     connectionPoint =

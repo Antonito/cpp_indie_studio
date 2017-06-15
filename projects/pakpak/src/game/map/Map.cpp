@@ -127,8 +127,9 @@ namespace game
 
     // body->setDebugDisplayEnabled(false);
     // body->showDebugShape(false);
-    m_body->setShape(m_node, _shape, 0.6f, 0.6f, 0.0f, Ogre::Vector3::ZERO);
+    // m_body->setShape(m_node, _shape, 0.6f, 0.6f, 0.0f, Ogre::Vector3::ZERO);
     m_body->setStaticShape(_shape, 0.0f, 0.6f, Ogre::Vector3(0, 0, 0));
+    // m_body->setKinematicObject(true);
 
     ++id;
   }
