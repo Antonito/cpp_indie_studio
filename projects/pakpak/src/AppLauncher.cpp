@@ -1,3 +1,4 @@
+#include <AL/al.h>
 #include "pakpak_stdafx.hpp"
 #include "AppLauncher.hpp"
 
@@ -6,7 +7,7 @@ namespace core
   AppLauncher::AppLauncher()
       : m_root(nullptr), m_window(nullptr), m_inputListener(nullptr),
         m_contexts(), m_currentContext(nullptr), m_gameState(GameState::None),
-        m_settings()
+        m_settings(), m_soundManager()
   {
   }
 
@@ -101,6 +102,8 @@ namespace core
 
     m_window->removeAllViewports();
 
+    initOpenAl(NULL);
+
     //// Create the Scene Manager
     // m_sceneMgr =
     //    m_root->createSceneManager("DefaultSceneManager", "Mon Scene
@@ -151,12 +154,16 @@ namespace core
 
     m_currentContext->enable();
 
+    m_soundManager.loadSound("Pew_Pew.wav");
+    m_soundManager.playSound();
+    m_soundManager.loopSound();
     // Render Loop
     while (true)
       {
 	GameState state;
-
 	Ogre::WindowEventUtilities::messagePump();
+	m_soundManager.getInfoLectureSound();
+
 	if (m_window->isClosed())
 	  return false;
 
@@ -184,8 +191,10 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
+	m_soundManager.state();
+	if (m_soundManager.getState() != AL_PLAYING)
+	  m_soundManager.clear();
       }
-
     return true;
   }
 
@@ -194,5 +203,10 @@ namespace core
     // Create and add a Framelistener
     m_inputListener = new InputListener(m_window);
     m_root->addFrameListener(m_inputListener);
+  }
+
+  void AppLauncher::initOpenAl(char const *deviceName = NULL)
+  {
+    m_soundManager.initOpenAl(deviceName);
   }
 }

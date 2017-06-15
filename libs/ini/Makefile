@@ -19,7 +19,8 @@ SRC_DIR=	./src/
 
 INCLUDE_DIR=	./include/
 
-DIR_LIST=	$(SRC_DIR)
+DIR_LIST=	$(SRC_DIR)				\
+		$(ROOT_DIR)/libs/exceptions/include/
 
 HEADER=		ini_stdafx.hpp
 

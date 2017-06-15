@@ -14,7 +14,7 @@ LOCAL_COMP_FLAGS+=	-Wno-global-constructors	\
 			-Wno-switch-enum
 endif
 
-LOCAL_LINK_FLAGS= -l OIS -l OgreMain -l boost_system -L $(ROOT_DIR)/build/ -l indie_logger -l CEGUIBase-0 -l CEGUIOgreRenderer-0
+LOCAL_LINK_FLAGS= -l OIS -l OgreMain -l boost_system -L $(ROOT_DIR)/build/ -l indie_logger -l CEGUIBase-0 -l CEGUIOgreRenderer-0 -lopenal -l indie_exceptions -l sndfile
 
 LOCAL_DEBUG_FLAGS=
 
@@ -54,6 +54,7 @@ SRC_FILES=		main.cpp			\
 			AContext.cpp			\
 			ContextGame.cpp			\
 			SettingsPlayer.cpp		\
+			SoundManager.cpp        \
 			ContextSplash.cpp
 
 GAME_FILES=		GameData.cpp			\
@@ -98,9 +99,10 @@ SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 		$(addprefix $(GAME_MAP_DIR), $(GAME_MAP_FILES))     	\
 		$(addprefix $(GAME_MENU_DIR), $(GAME_MENU_FILES))
 
-INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)			\
+INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)		\
 		$(ROOT_DIR)/libs/serializer/include/			\
-		$(ROOT_DIR)/libs/logger/include/
+		$(ROOT_DIR)/libs/logger/include/                \
+		$(ROOT_DIR)/libs/exceptions/include/            \
 
 PRECOMPILED_HEADER= $(addprefix $(INCLUDE_DIR),$(HEADER))
 

@@ -9,7 +9,10 @@ Config::Config()
 
 Config &Config::getInstance()
 {
-  static Config instance;
+  static std::mutex mut;
+  static Config     instance;
+
+  std::lock_guard<std::mutex> lock(mut);
   return (instance);
 }
 
@@ -23,8 +26,8 @@ void Config::checkMD5(std::string const &filePath,
   dir = opendir(filePath.c_str());
   if (!dir)
     {
-      // TODO do correct one
-      throw std::exception();
+      nope::log::Log(Error) << "Cannot open " + filePath;
+      throw IOError("Cannot open " + filePath);
     }
 
   // Loop over each file
@@ -42,7 +45,8 @@ void Config::checkMD5(std::string const &filePath,
       fileReader.open(fileName.c_str());
       if (!fileReader.good())
 	{
-	  throw std::exception();
+	  nope::log::Log(Error) << "Cannot open " + fileName;
+	  throw IOError("Cannot open " + fileName);
 	}
       buffer << fileReader.rdbuf();
       finalBuff = buffer.str();

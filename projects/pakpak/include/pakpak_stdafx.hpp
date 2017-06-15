@@ -105,5 +105,6 @@
 // Logger
 //
 #include "Logger.hpp"
+#include "IOError.hpp"
 
 #endif // !PAKPAK_STDAFX_HPP_
