@@ -7,5 +7,8 @@ def modify(modi):
 
 def readString(str):
     str = str + str
-    print str
+    return str
+
+def readStringReturn0(str):
+    print "python read:" + str
     return 0

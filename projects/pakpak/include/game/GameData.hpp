@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <chrono>
 #include <OGRE/OgreSceneManager.h>
 
 // Disable clang warning for templated class padding
@@ -49,6 +50,8 @@ namespace game
     void        setPlayerNb(std::size_t);
     std::size_t getPlayerNb() const;
 
+    void startTime();
+
     void update();
 
     Ogre::Camera *createCamera(std::string const &name);
@@ -77,8 +80,9 @@ namespace game
 #endif
     std::vector<std::unique_ptr<OgreBulletDynamics::RigidBody>> m_bodies;
     std::vector<std::unique_ptr<OgreBulletCollisions::CollisionShape>>
-        m_shapes;
-    Map m_map;
+                                                                m_shapes;
+    Map                                                         m_map;
+    std::chrono::time_point<std::chrono::high_resolution_clock> m_startTime;
   };
 }
 

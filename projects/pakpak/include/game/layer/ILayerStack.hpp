@@ -1,6 +1,7 @@
 #ifndef ILAYERSTACK_HPP_
 #define ILAYERSTACK_HPP_
 
+#include <GameState.hpp>
 #include "GameLayer.hpp"
 
 namespace game
@@ -13,7 +14,8 @@ namespace game
     }
 
     virtual void push(GameLayer layer) = 0;
-    virtual void popLayer() = 0;
+
+      virtual void popLayer() = 0;
   };
 }
 

@@ -7,14 +7,14 @@ NAME=		$(ROOT_DIR)/pakpak
 
 LOCAL_COMP_FLAGS=
 ifeq ($(CXX), clang++)
-LOCAL_COMP_FLAGS+=	-Wno-global-constructors		\
-			-Wno-exit-time-destructors		\
-			-Wno-weak-vtables			\
-			-Wno-padded				\
+LOCAL_COMP_FLAGS+=	-Wno-global-constructors	\
+			-Wno-exit-time-destructors		    \
+			-Wno-weak-vtables			        \
+			-Wno-padded				            \
 			-Wno-switch-enum
 endif
 
-LOCAL_LINK_FLAGS= -l OIS -l OgreMain -l boost_system -L $(ROOT_DIR)/build/ -l indie_logger \
+LOCAL_LINK_FLAGS= -l OIS -l OgreMain -l boost_system -L $(ROOT_DIR)/build/ -l indie_logger -l CEGUIBase-0 -l CEGUIOgreRenderer-0 \
 		-l BulletDynamics -l BulletCollision -l OgreBulletDynamics -l OgreBulletCollisions -l LinearMath	
 
 LOCAL_DEBUG_FLAGS=
@@ -35,14 +35,17 @@ GAME_MAP_DIR=	$(GAME_DIR)map/
 
 GAME_TOOLS_DIR=	$(GAME_DIR)tools/
 
+GAME_MENU_DIR=  $(GAME_DIR)menu/
+
 INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)		\
 		$(GAME_DIR)		\
 		$(GAME_LAYER_DIR)	\
 		$(GAME_CAR_DIR)		\
-		$(GAME_MAP_DIR)		\
-		$(GAME_TOOLS_DIR)
+		$(GAME_TOOLS_DIR)	\
+		$(GAME_MAP_DIR)     	\
+	        $(GAME_MENU_DIR)
 
 HEADER=		pakpak_stdafx.hpp
 
@@ -54,7 +57,7 @@ SRC_FILES=		main.cpp			\
 			InputListener.cpp		\
 			AContext.cpp			\
 			ContextGame.cpp			\
-			ContextMenu.cpp			\
+			SettingsPlayer.cpp		\
 			ContextSplash.cpp
 
 GAME_FILES=		GameData.cpp			\
@@ -81,12 +84,26 @@ GAME_MAP_FILES=		Map.cpp				\
 
 GAME_TOOLS_FILES=	Tools.cpp
 
+GAME_MENU_FILES=    	GUI.cpp				\
+                    	MainMenu.cpp			\
+			ContextMenu.cpp			\
+			MenuManager.cpp     		\
+			MenuOptions.cpp 		\
+			MenuKeymap.cpp 			\
+			MenuSolo.cpp 			\
+			MenuMultiplayer.cpp 		\
+			AssetSetter.cpp			\
+			MenuScores.cpp			\
+			InGameHUD.cpp			\
+			InGamePause.cpp
+
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 		$(addprefix $(GAME_DIR), $(GAME_FILES))			\
 		$(addprefix $(GAME_LAYER_DIR), $(GAME_LAYER_FILES))	\
 		$(addprefix $(GAME_CAR_DIR), $(GAME_CAR_FILES))		\
-		$(addprefix $(GAME_MAP_DIR), $(GAME_MAP_FILES))		\
-		$(addprefix $(GAME_TOOLS_DIR), $(GAME_TOOLS_FILES))
+		$(addprefix $(GAME_TOOLS_DIR), $(GAME_TOOLS_FILES))	\
+		$(addprefix $(GAME_MAP_DIR), $(GAME_MAP_FILES))     	\
+		$(addprefix $(GAME_MENU_DIR), $(GAME_MENU_FILES))
 
 INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)			\
 		$(ROOT_DIR)/libs/serializer/include/			\

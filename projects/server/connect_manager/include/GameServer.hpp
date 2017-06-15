@@ -4,10 +4,15 @@
 #include <vector>
 #include <string>
 #include <array>
+#include <queue>
+#include <chrono>
 #include "IClient.hpp"
 #include "TCPSocket.hpp"
 #include "Packet.hpp"
 #include "GameServerCMPacket.hpp"
+#include "Queue.hpp"
+#include "ResultGetter.hpp"
+#include "RequestToken.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
@@ -18,14 +23,16 @@
 class GameServer : public network::IClient
 {
 public:
-  enum State
+  enum class State : std::uint16_t
   {
     CONNECTED,
     SETTING,
-    AUTHENTICATED
+    AUTHENTICATED,
+    TOKEN
   };
 
   explicit GameServer(sock_t socket, sockaddr_in_t const &in,
+                      std::string const &publicIp, bool const allowInternet,
                       std::vector<std::string> const &licences);
 
   GameServer(GameServer &&);
@@ -45,10 +52,15 @@ public:
 
   bool operator==(GameServer const &other) const;
 
-  std::array<char, INET6_ADDRSTRLEN> const &getIp() const;
+  std::array<char, INET6_ADDRSTRLEN_INDIE> const &getIp() const;
   std::uint16_t getPort() const;
   std::uint16_t getCurrentClients() const;
   std::uint16_t getMaxClients() const;
+
+  bool isRequested(TokenCom const &tok) const;
+  bool hasRequests() const;
+
+  void pushRequest(multithread::ResultGetter<TokenCom> &tok);
 
 private:
   network::TCPSocket              m_sock;
@@ -60,7 +72,13 @@ private:
   Packet<GameServerToCMPacket>    m_packet;
   std::uint16_t                   m_curClients;
   std::uint16_t                   m_maxClients;
-  std::array<char, INET6_ADDRSTRLEN> m_ip;
+  std::array<char, INET6_ADDRSTRLEN_INDIE> m_ip;
+  std::queue<multithread::ResultGetter<TokenCom>> m_token;
+  std::queue<multithread::ResultGetter<TokenCom>> m_tokenTreating;
+
+  std::chrono::system_clock::time_point m_lastAction;
+
+  void updateLastAction();
 };
 
 // Disable clang warning for implicit padding

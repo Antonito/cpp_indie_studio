@@ -4,6 +4,7 @@
 #include <string>
 #include <cstdint>
 #include <thread>
+#include <memory>
 #include "TCPSocket.hpp"
 #include "IServer.hpp"
 #include "IClient.hpp"
@@ -27,6 +28,8 @@ public:
   // IServer
   virtual bool run();
   virtual void stop();
+
+  // TCP
   virtual bool addClient();
   virtual bool removeClient(network::IClient &);
 
@@ -37,9 +40,23 @@ public:
   virtual bool                           hasTimedOut() const;
 
 private:
-  bool authenticateToConnectManager();
-  void connectManagerCom();
-  void gameServerTCP();
+  // ConnectManager methods
+  bool         authenticateToConnectManager();
+  void         connectManagerCom();
+  std::int32_t connectManagerComActivity(std::int32_t const sock,
+                                         fd_set &readfds, fd_set &writefds,
+                                         fd_set &exceptfds, bool canWrite);
+  network::IClient::ClientAction connectManagerComTreatInput(bool &canWrite);
+  network::IClient::ClientAction connectManagerComTreatOutput(bool &canWrite);
+
+  // GameServerTCP methods
+  void         gameServerTCP();
+  std::int32_t gameServerTCPActivity(std::int32_t const sock, fd_set &readfds,
+                                     fd_set &writefds, fd_set &exceptfds);
+  std::int32_t gameServerTCPIO(std::int32_t const sock, fd_set &readfds,
+                               fd_set &writefds, fd_set &exceptfds);
+
+  // GameServerUDP methods
   void gameServerUDP();
 
   // Basic datas
@@ -57,8 +74,8 @@ private:
   std::thread        m_gameSrvUDP;
 
   // Tokens
-  std::vector<GameClient> m_clientList;
-  std::vector<Token>      m_tokenList;
+  std::vector<std::unique_ptr<GameClient>> m_clientList;
+  std::vector<Token>                       m_tokenList;
 };
 
 // Disable clang warning for implicit padding

@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <array>
 #include <memory>
+#include <utility>
 #include <OGRE/OgreCamera.h>
 #include <OGRE/OgreViewport.h>
 #include "GameData.hpp"
@@ -15,6 +16,7 @@
 #include "ILayerStack.hpp"
 #include "ACar.hpp"
 #include "ILayer.hpp"
+#include "SettingsPlayer.hpp"
 
 namespace game
 {
@@ -22,7 +24,8 @@ namespace game
   {
   public:
     LocalPlayer() = delete;
-    LocalPlayer(Ogre::RenderWindow *win, GameData &, PlayerData *, int);
+    LocalPlayer(Ogre::RenderWindow *win, GameData &, PlayerData *, int,
+                core::SettingsPlayer &);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&);
     virtual ~LocalPlayer();
@@ -45,10 +48,43 @@ namespace game
     void setViewPort(Ogre::Real left, Ogre::Real top, Ogre::Real width,
                      Ogre::Real height);
 
+    void crossFinishLine(
+        std::chrono::time_point<std::chrono::high_resolution_clock> finishTime,
+        int                                                         nbRounds);
+
     ACar &      car();
     ACar const &car() const;
 
+    int  order() const;
+    void order(int);
+
+    std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()> &
+                          actions(std::string const &);
+    core::SettingsPlayer &settings();
+
   private:
+    void setActionMap();
+
+    void speedUp();
+    void slowDown();
+    void turnLeft();
+    void turnRight();
+    void useObject();
+    void changeView();
+    void displayMap();
+    void openChat();
+    void openMenu();
+
+    void speedUpReleased();
+    void slowDownReleased();
+    void turnLeftReleased();
+    void turnRightReleased();
+    void useObjectReleased();
+    void changeViewReleased();
+    void displayMapReleased();
+    void openChatReleased();
+    void openMenuReleased();
+
     PlayerData *m_data;
     CameraMode  m_cameraMode;
 
@@ -61,6 +97,14 @@ namespace game
 
     Ogre::Camera *  m_cam;
     Ogre::Viewport *m_viewport;
+    std::vector<std::chrono::time_point<std::chrono::high_resolution_clock>>
+                          m_rounds;
+    core::SettingsPlayer &m_settings;
+    std::map<std::string,
+             std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()>>
+                        m_actions;
+    Ogre::RenderWindow *m_win;
+    int                 m_order;
   };
 }
 

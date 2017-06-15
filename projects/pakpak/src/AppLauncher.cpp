@@ -5,7 +5,8 @@ namespace core
 {
   AppLauncher::AppLauncher()
       : m_root(nullptr), m_window(nullptr), m_inputListener(nullptr),
-        m_contexts(), m_currentContext(nullptr), m_gameState(GameState::None)
+        m_contexts(), m_currentContext(nullptr), m_gameState(GameState::None),
+        m_settings()
   {
   }
 
@@ -21,20 +22,28 @@ namespace core
 
 #ifdef DEBUG
 #ifdef _WIN32
+    if (m_root)
+      delete m_root;
     m_root = new Ogre::Root("../indie_resource/conf/windows/plugins_d.cfg",
                             "../indie_resource/conf/windows/ogre_d.cfg",
                             "Ogre.log");
 #else
+    if (m_root)
+      delete m_root;
     m_root =
         new Ogre::Root("../indie_resource/conf/linux/plugins_d.cfg",
                        "../indie_resource/conf/linux/ogre_d.cfg", "Ogre.log");
 #endif
 #else
 #ifdef _WIN32
+    if (m_root)
+      delete m_root;
     m_root =
         new Ogre::Root("../indie_resource/conf/windows/plugins.cfg",
                        "../indie_resource/conf/windows/ogre.cfg", "Ogre.log");
 #else
+    if (m_root)
+      delete m_root;
     m_root =
         new Ogre::Root("../indie_resource/conf/linux/plugins.cfg",
                        "../indie_resource/conf/linux/ogre.cfg", "Ogre.log");
@@ -129,11 +138,13 @@ namespace core
 
     // Menu context
     m_contexts[static_cast<std::size_t>(GameState::Menu)] =
-        std::make_unique<menu::ContextMenu>(m_window, m_inputListener);
+        std::make_unique<menu::ContextMenu>(m_window, m_inputListener,
+                                            m_settings);
 
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
-        std::make_unique<game::ContextGame>(m_window, m_inputListener);
+        std::make_unique<game::ContextGame>(m_window, m_inputListener,
+                                            m_settings);
 
     m_currentContext =
         m_contexts[static_cast<std::size_t>(GameState::Splash)].get();

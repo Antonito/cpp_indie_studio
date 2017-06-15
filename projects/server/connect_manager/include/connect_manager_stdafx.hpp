@@ -34,5 +34,8 @@
 #include "Logger.hpp"
 #include "SockError.hpp"
 #include "Queue.hpp"
+#include "ResultGetter.hpp"
+#include "RequestToken.hpp"
+#include "Ini.hpp"
 
 #endif // !CONNECT_MANAGER_STDAFX_HPP_

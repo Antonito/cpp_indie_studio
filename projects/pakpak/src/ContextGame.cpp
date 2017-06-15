@@ -2,8 +2,10 @@
 
 namespace game
 {
-  ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input)
-      : core::AContext(win, input), m_game(), m_players()
+  ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
+                           core::SettingsPlayer &settings)
+      : core::AContext(win, input), m_game(), m_players(),
+        m_settings(settings), m_quit(false)
   {
   }
 
@@ -15,12 +17,14 @@ namespace game
   {
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
+    m_quit = false;
 
-    std::size_t nbPlayer = 5;
+    std::size_t nbPlayer = 2;
 
+    m_game.setPlayerNb(0);
     m_game.setPlayerNb(nbPlayer);
 
-    std::size_t nbLocalPlayer = 4;
+    std::size_t nbLocalPlayer = 2;
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
@@ -31,7 +35,7 @@ namespace game
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
 	m_players.emplace_back(std::make_unique<LocalPlayer>(
-	    m_win, m_game, &m_game[i], static_cast<int>(i)));
+	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings));
       }
 
     updateViewPort();
@@ -41,7 +45,6 @@ namespace game
 
   void ContextGame::updateViewPort()
   {
-
     int size = static_cast<int>(m_players.size());
 
     for (int i = 0; i < size; ++i)
@@ -72,7 +75,7 @@ namespace game
   {
     m_input->capture();
     m_game.update();
-    return (core::GameState::InGame);
+    return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }
 
   void ContextGame::display()
@@ -83,7 +86,7 @@ namespace game
   {
     if (ke.key == OIS::KC_ESCAPE)
       {
-	m_input->shutdown();
+	m_quit = true;
       }
 
     std::size_t i = 0;

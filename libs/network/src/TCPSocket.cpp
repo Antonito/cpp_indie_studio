@@ -69,19 +69,27 @@ namespace network
 
   bool TCPSocket::sendBlocking(void const *data, std::size_t len) const
   {
-    ssize_t ret;
+    ssize_t     ret;
+    std::size_t off = 0;
 
     assert(getType() == ASocket::BLOCKING);
-#if defined(__linux__) || defined(__APPLE__)
-    ret = ::send(m_socket, static_cast<char const *>(data), len, 0);
-#elif defined(_WIN32)
-    ret = ::send(m_socket, static_cast<char const *>(data),
-                 static_cast<std::int32_t>(len), 0);
-#endif
-    if (ret < 0)
+    do
       {
-	return (false);
+#if defined(__linux__) || defined(__APPLE__)
+	ret = ::send(m_socket, static_cast<char const *>(data) + off,
+	             len - off, 0);
+#elif defined(_WIN32)
+	ret = ::send(m_socket, static_cast<char const *>(data) + off,
+	             static_cast<std::int32_t>(len - off), 0);
+#endif
+	if (ret <= 0)
+	  {
+	    return (!ret);
+	  }
+	off += static_cast<std::size_t>(ret);
       }
+    while (off != len);
+    nope::log::Log(Debug) << "Sent " << ret << "/" << len;
     return (true);
   }
 
@@ -130,16 +138,31 @@ namespace network
                               ssize_t *buffLen) const
   {
     assert(getType() == ASocket::BLOCKING);
-#if defined(__linux__) || defined(__APPLE__)
-    *buffLen = ::recv(m_socket, static_cast<char *>(buffer), rlen, 0);
-#elif defined(_WIN32)
-    *buffLen = ::recv(m_socket, static_cast<char *>(buffer),
-                      static_cast<std::int32_t>(rlen), 0);
-#endif
-    if (*buffLen < 0)
+    std::size_t off = 0;
+
+    // TODO: Remove useless debug log, do while should be one level above (use
+    // header informations)
+    nope::log::Log(Debug) << "recblocking Rlen -> " << rlen;
+    do
       {
-	return (false);
+#if defined(__linux__) || defined(__APPLE__)
+	*buffLen =
+	    ::recv(m_socket, static_cast<char *>(buffer) + off, rlen - off, 0);
+#elif defined(_WIN32)
+	*buffLen = ::recv(m_socket, static_cast<char *>(buffer) + off,
+	                  static_cast<std::int32_t>(rlen - off), 0);
+#endif
+	nope::log::Log(Debug) << "recblocking BuffLen -> " << *buffLen;
+	if (*buffLen <= 0)
+	  {
+	    nope::log::Log(Debug) << "recBlocking -> <= 0 [TCP]";
+	    return (!*buffLen);
+	  }
+	off += static_cast<std::size_t>(*buffLen);
       }
+    while (off != rlen);
+    *buffLen = static_cast<ssize_t>(off);
+    nope::log::Log(Debug) << "Read " << *buffLen << "/" << rlen;
     return (true);
   }
 
@@ -177,6 +200,7 @@ namespace network
 	  }
 	else if (ret == 0)
 	  {
+	    nope::log::Log(Debug) << "recNonBlocking -> 0 [TCP]";
 	    *buffLen = 0;
 	    break;
 	  }

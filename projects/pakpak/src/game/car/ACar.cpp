@@ -4,6 +4,7 @@ namespace game
 {
   ACar::~ACar()
   {
+    m_gamedata.sceneMgr()->getRootSceneNode()->removeChild(m_node);
   }
 
   Ogre::Vector3 const &ACar::position() const

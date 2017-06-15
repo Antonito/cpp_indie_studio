@@ -16,10 +16,14 @@
 #include <iomanip>
 #include <fstream>
 #include <memory>
+#include <cassert>
+#include <algorithm>
+#include "Logger.hpp"
 #include "ISerializable.hpp"
 #include "PacketHeader.hpp"
 #include "Packet.hpp"
 #include "GameServerCMPacket.hpp"
 #include "GameClientCMPacket.hpp"
+#include "GameClientGSPacket.hpp"
 
 #endif // !PACKET_STDAFX_HPP_

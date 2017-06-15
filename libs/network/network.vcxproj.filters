@@ -39,9 +39,6 @@
     <ClInclude Include="include\network_targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Packet.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\PacketFactory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

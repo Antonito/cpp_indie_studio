@@ -55,7 +55,7 @@ namespace splash
     std::chrono::milliseconds t =
         std::chrono::duration_cast<std::chrono::milliseconds>(clock_t::now() -
                                                               m_start);
-    constexpr std::int32_t max = 0;
+    constexpr std::int32_t max = 3000;
 
     if (t.count() < max)
       {
@@ -63,7 +63,7 @@ namespace splash
 	return (core::GameState::Splash);
       }
     else
-      return (core::GameState::InGame);
+      return (core::GameState::Menu);
   }
 
   void ContextSplash::display()
