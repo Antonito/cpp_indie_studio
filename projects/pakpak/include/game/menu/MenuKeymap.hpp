@@ -30,7 +30,12 @@ namespace core
     bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     bool keyReleased(const OIS::KeyEvent &arg);
     bool onBackClick(CEGUI::EventArgs const &);
-    bool setKeyListener(CEGUI::EventArgs const &);
+    bool onUpClick(CEGUI::EventArgs const &);
+    bool onDownClick(CEGUI::EventArgs const &);
+    bool onLeftClick(CEGUI::EventArgs const &);
+    bool onRightClick(CEGUI::EventArgs const &);
+    bool onUseClick(CEGUI::EventArgs const &);
+    bool onPauseClick(CEGUI::EventArgs const &);
 
   private:
     MenuKeymap(MenuKeymap const &) = delete;
@@ -43,6 +48,7 @@ namespace core
     bool onPlayer3Click(CEGUI::EventArgs const &);
     bool onPlayer4Click(CEGUI::EventArgs const &);
     void swapButtons(size_t newSelected);
+    void loadLayout(size_t playerIndex);
 
     GUI &              m_gui;
     GameState          m_curState;
@@ -51,6 +57,8 @@ namespace core
     CEGUI::Window *    m_buttons[4];
     SettingsPlayer &   m_settings;
     bool               m_listening;
+    OIS::KeyCode *     m_curKey;
+    std::string        m_curButton;
   };
 }
 
