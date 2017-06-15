@@ -91,10 +91,22 @@
 //
 // Physic
 //
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include <Shapes/OgreBulletCollisionsSphereShape.h>
 #include <Shapes/OgreBulletCollisionsTrimeshShape.h>
 #include <Shapes/OgreBulletCollisionsConvexHullShape.h>
 #include "Tools.hpp"
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !PAKPAK_STDAFX_HPP_

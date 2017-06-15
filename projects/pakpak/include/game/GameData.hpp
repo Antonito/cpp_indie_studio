@@ -4,10 +4,23 @@
 #include <vector>
 #include <cstdint>
 #include <OGRE/OgreSceneManager.h>
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 #include <OgreBulletDynamicsWorld.h>
 #include <Debug/OgreBulletCollisionsDebugDrawer.h>
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreBulletCollisionsShape.h>
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+
 #include "PlayerData.hpp"
 #include "Map.hpp"
 

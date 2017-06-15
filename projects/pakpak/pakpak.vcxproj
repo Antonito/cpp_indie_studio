@@ -423,6 +423,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\game\tools\Tools.cpp" />
     <ClCompile Include="src\InputListener.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -453,7 +454,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="src\tools\Tools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AContext.hpp" />
@@ -486,12 +486,12 @@
     <ClInclude Include="include\game\map\Map.hpp" />
     <ClInclude Include="include\game\map\PathPoint.hpp" />
     <ClInclude Include="include\game\PlayerData.hpp" />
+    <ClInclude Include="include\game\tools\Tools.hpp" />
     <ClInclude Include="include\IEventHandler.hpp" />
     <ClInclude Include="include\IContext.hpp" />
     <ClInclude Include="include\InputListener.hpp" />
     <ClInclude Include="include\pakpak_stdafx.hpp" />
     <ClInclude Include="include\targetver.h" />
-    <ClInclude Include="include\tools\Tools.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\libs\logger\logger.vcxproj">
