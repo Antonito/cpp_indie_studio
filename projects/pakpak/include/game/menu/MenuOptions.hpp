@@ -5,10 +5,10 @@
 #ifndef MENUOPTIONS_HPP
 #define MENUOPTIONS_HPP
 
-#include "game/menu/GUI.hpp"
-#include "game/menu/MenuManager.hpp"
-#include "game/menu/IMenuLayer.hpp"
-#include "game/menu/AssetSetter.hpp"
+#include "GUI.hpp"
+#include "MenuManager.hpp"
+#include "IMenuLayer.hpp"
+#include "AssetSetter.hpp"
 
 namespace core
 {

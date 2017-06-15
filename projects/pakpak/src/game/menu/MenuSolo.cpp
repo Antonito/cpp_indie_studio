@@ -2,159 +2,166 @@
 // Created by brout_m on 09/06/17.
 //
 
-#include "game/menu/MenuSolo.hpp"
-#include "game/menu/AssetSetter.hpp"
+#include "pakpak_stdafx.hpp"
 
-core::MenuSolo::MenuSolo(menu::MenuManager &menuManager, GUI &gui)
-    : m_gui(gui), m_curState(core::GameState::Menu), m_menuManager(menuManager)
-
+namespace core
 {
-}
+  MenuSolo::MenuSolo(menu::MenuManager &menuManager, GUI &gui)
+      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager)
 
-void core::MenuSolo::draw()
-{
-}
+  {
+  }
 
-void core::MenuSolo::entry()
-{
-  m_gui.loadLayout("soloplayer.layout");
-  m_gui.setCursorArrow("TaharezLook/MouseArrow");
-  m_curState = core::GameState::Menu;
+  void MenuSolo::draw()
+  {
+  }
 
-  m_gui.getRoot()
-      ->getChild("back_button")
-      ->subscribeEvent(CEGUI::PushButton::EventClicked,
-                       CEGUI::Event::Subscriber(&MenuSolo::onBackClick, this));
+  void MenuSolo::entry()
+  {
+    m_gui.loadLayout("soloplayer.layout");
+    m_gui.setCursorArrow("TaharezLook/MouseArrow");
+    m_curState = GameState::Menu;
 
-  m_gui.getRoot()
-      ->getChild("play_button")
-      ->subscribeEvent(CEGUI::PushButton::EventClicked,
-                       CEGUI::Event::Subscriber(&MenuSolo::onPlayClick, this));
+    m_gui.getRoot()
+        ->getChild("back_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventClicked,
+            CEGUI::Event::Subscriber(&MenuSolo::onBackClick, this));
 
-  m_gui.getRoot()
-      ->getChild("easy_button")
-      ->subscribeEvent(CEGUI::PushButton::EventClicked,
-                       CEGUI::Event::Subscriber(&MenuSolo::onEasyClick, this));
+    m_gui.getRoot()
+        ->getChild("play_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventClicked,
+            CEGUI::Event::Subscriber(&MenuSolo::onPlayClick, this));
 
-  m_gui.getRoot()
-      ->getChild("hard_button")
-      ->subscribeEvent(CEGUI::PushButton::EventClicked,
-                       CEGUI::Event::Subscriber(&MenuSolo::onHardClick, this));
-}
+    m_gui.getRoot()
+        ->getChild("easy_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventClicked,
+            CEGUI::Event::Subscriber(&MenuSolo::onEasyClick, this));
 
-void core::MenuSolo::exit()
-{
-}
+    m_gui.getRoot()
+        ->getChild("hard_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventClicked,
+            CEGUI::Event::Subscriber(&MenuSolo::onHardClick, this));
+  }
 
-void core::MenuSolo::destroy()
-{
-}
+  void MenuSolo::exit()
+  {
+  }
 
-core::GameState core::MenuSolo::update() const
-{
-  return m_curState;
-}
+  void MenuSolo::destroy()
+  {
+  }
 
-void core::MenuSolo::build()
-{
-}
+  GameState MenuSolo::update() const
+  {
+    return m_curState;
+  }
 
-bool core::MenuSolo::keyPressed(const OIS::KeyEvent &arg)
-{
-  CEGUI::GUIContext &context =
-      CEGUI::System::getSingleton().getDefaultGUIContext();
-  context.injectKeyDown((CEGUI::Key::Scan)arg.key);
-  context.injectChar((CEGUI::Key::Scan)arg.text);
-  return true;
-}
+  void MenuSolo::build()
+  {
+  }
 
-bool core::MenuSolo::mouseMoved(const OIS::MouseEvent &arg)
-{
-  return CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseMove(
-      static_cast<float>(arg.state.X.rel),
-      static_cast<float>(arg.state.Y.rel));
-}
+  bool MenuSolo::keyPressed(const OIS::KeyEvent &arg)
+  {
+    CEGUI::GUIContext &context =
+        CEGUI::System::getSingleton().getDefaultGUIContext();
+    context.injectKeyDown((CEGUI::Key::Scan)arg.key);
+    context.injectChar((CEGUI::Key::Scan)arg.text);
+    return true;
+  }
 
-bool core::MenuSolo::mousePressed(const OIS::MouseEvent &arg,
-                                  OIS::MouseButtonID     id)
-{
-  (void)arg;
-  return CEGUI::System::getSingleton()
-      .getDefaultGUIContext()
-      .injectMouseButtonDown(convertButton(id));
-}
+  bool MenuSolo::mouseMoved(const OIS::MouseEvent &arg)
+  {
+    return CEGUI::System::getSingleton()
+        .getDefaultGUIContext()
+        .injectMouseMove(static_cast<float>(arg.state.X.rel),
+                         static_cast<float>(arg.state.Y.rel));
+  }
 
-bool core::MenuSolo::mouseReleased(const OIS::MouseEvent &arg,
-                                   OIS::MouseButtonID     id)
-{
-  (void)arg;
-  return CEGUI::System::getSingleton()
-      .getDefaultGUIContext()
-      .injectMouseButtonUp(convertButton(id));
-}
+  bool MenuSolo::mousePressed(const OIS::MouseEvent &arg,
+                              OIS::MouseButtonID     id)
+  {
+    (void)arg;
+    return CEGUI::System::getSingleton()
+        .getDefaultGUIContext()
+        .injectMouseButtonDown(convertButton(id));
+  }
 
-bool core::MenuSolo::keyReleased(const OIS::KeyEvent &arg)
-{
-  CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(
-      (CEGUI::Key::Scan)arg.key);
-  return true;
-}
+  bool MenuSolo::mouseReleased(const OIS::MouseEvent &arg,
+                               OIS::MouseButtonID     id)
+  {
+    (void)arg;
+    return CEGUI::System::getSingleton()
+        .getDefaultGUIContext()
+        .injectMouseButtonUp(convertButton(id));
+  }
 
-CEGUI::MouseButton core::MenuSolo::convertButton(OIS::MouseButtonID buttonID)
-{
-  switch (buttonID)
-    {
-    case OIS::MB_Left:
-      return CEGUI::LeftButton;
+  bool MenuSolo::keyReleased(const OIS::KeyEvent &arg)
+  {
+    CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(
+        (CEGUI::Key::Scan)arg.key);
+    return true;
+  }
 
-    case OIS::MB_Right:
-      return CEGUI::RightButton;
+  CEGUI::MouseButton MenuSolo::convertButton(OIS::MouseButtonID buttonID)
+  {
+    switch (buttonID)
+      {
+      case OIS::MB_Left:
+	return CEGUI::LeftButton;
 
-    case OIS::MB_Middle:
-      return CEGUI::MiddleButton;
+      case OIS::MB_Right:
+	return CEGUI::RightButton;
 
-    default:
-      return CEGUI::LeftButton;
-    }
-}
+      case OIS::MB_Middle:
+	return CEGUI::MiddleButton;
 
-bool core::MenuSolo::onBackClick(CEGUI::EventArgs const &)
-{
-  m_menuManager.popLayer();
-  m_menuManager.begin();
-  return false;
-}
+      default:
+	return CEGUI::LeftButton;
+      }
+  }
 
-bool core::MenuSolo::onPlayClick(CEGUI::EventArgs const &e)
-{
-  (void)e;
-  m_curState = core::GameState::InGame;
-  m_gui.hideCursor();
-  return true;
-}
+  bool MenuSolo::onBackClick(CEGUI::EventArgs const &)
+  {
+    m_menuManager.popLayer();
+    m_menuManager.begin();
+    return false;
+  }
 
-bool core::MenuSolo::onEasyClick(CEGUI::EventArgs const &)
-{
-  CEGUI::Window &easyButton = *m_gui.getRoot()->getChild("easy_button");
-  CEGUI::Window &hardButton = *m_gui.getRoot()->getChild("hard_button");
+  bool MenuSolo::onPlayClick(CEGUI::EventArgs const &e)
+  {
+    (void)e;
+    m_curState = GameState::InGame;
+    m_gui.hideCursor();
+    return true;
+  }
 
-  core::AssetSetter::setButtonBack(easyButton, core::AssetSetter::BUTTON_COLOR::BYELLOW);
-  core::AssetSetter::setTextColor(easyButton, core::AssetSetter::TEXT_COLOR::TRED);
+  bool MenuSolo::onEasyClick(CEGUI::EventArgs const &)
+  {
+    CEGUI::Window &easyButton = *m_gui.getRoot()->getChild("easy_button");
+    CEGUI::Window &hardButton = *m_gui.getRoot()->getChild("hard_button");
 
-  core::AssetSetter::setButtonBack(hardButton, core::AssetSetter::BUTTON_COLOR::BGREY);
-  core::AssetSetter::setTextColor(hardButton, core::AssetSetter::TEXT_COLOR::TBLACK);
-  return true;
-}
+    AssetSetter::setButtonBack(easyButton, AssetSetter::BUTTON_COLOR::BYELLOW);
+    AssetSetter::setTextColor(easyButton, AssetSetter::TEXT_COLOR::TRED);
 
-bool core::MenuSolo::onHardClick(CEGUI::EventArgs const &)
-{
-  CEGUI::Window &easyButton = *m_gui.getRoot()->getChild("easy_button");
-  CEGUI::Window &hardButton = *m_gui.getRoot()->getChild("hard_button");
+    AssetSetter::setButtonBack(hardButton, AssetSetter::BUTTON_COLOR::BGREY);
+    AssetSetter::setTextColor(hardButton, AssetSetter::TEXT_COLOR::TBLACK);
+    return true;
+  }
 
-  core::AssetSetter::setButtonBack(hardButton, core::AssetSetter::BUTTON_COLOR::BYELLOW);
-  core::AssetSetter::setTextColor(hardButton, core::AssetSetter::TEXT_COLOR::TRED);
+  bool MenuSolo::onHardClick(CEGUI::EventArgs const &)
+  {
+    CEGUI::Window &easyButton = *m_gui.getRoot()->getChild("easy_button");
+    CEGUI::Window &hardButton = *m_gui.getRoot()->getChild("hard_button");
 
-  core::AssetSetter::setButtonBack(easyButton, core::AssetSetter::BUTTON_COLOR::BGREY);
-  core::AssetSetter::setTextColor(easyButton, core::AssetSetter::TEXT_COLOR::TBLACK);
-  return true;
+    AssetSetter::setButtonBack(hardButton, AssetSetter::BUTTON_COLOR::BYELLOW);
+    AssetSetter::setTextColor(hardButton, AssetSetter::TEXT_COLOR::TRED);
+
+    AssetSetter::setButtonBack(easyButton, AssetSetter::BUTTON_COLOR::BGREY);
+    AssetSetter::setTextColor(easyButton, AssetSetter::TEXT_COLOR::TBLACK);
+    return true;
+  }
 }

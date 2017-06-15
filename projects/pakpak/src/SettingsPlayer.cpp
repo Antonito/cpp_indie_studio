@@ -9,6 +9,160 @@ namespace core
       {3, "player3_settings"},
   };
 
+  static std::map<OIS::KeyCode, std::string const> textForKey = {
+      {OIS::KeyCode::KC_ESCAPE, "ESC"},
+      {OIS::KeyCode::KC_1, "1"},
+      {OIS::KeyCode::KC_2, "2"},
+      {OIS::KeyCode::KC_3, "3"},
+      {OIS::KeyCode::KC_4, "4"},
+      {OIS::KeyCode::KC_5, "5"},
+      {OIS::KeyCode::KC_6, "6"},
+      {OIS::KeyCode::KC_7, "7"},
+      {OIS::KeyCode::KC_8, "8"},
+      {OIS::KeyCode::KC_9, "9"},
+      {OIS::KeyCode::KC_0, "0"},
+      {OIS::KeyCode::KC_MINUS, "<"}, // - on main keyboard
+      {OIS::KeyCode::KC_EQUALS, "="},
+      {OIS::KeyCode::KC_BACK, "<-"}, // backspace
+      {OIS::KeyCode::KC_TAB, "TAB"},
+      {OIS::KeyCode::KC_Q, "Q"},
+      {OIS::KeyCode::KC_W, "W"},
+      {OIS::KeyCode::KC_E, "E"},
+      {OIS::KeyCode::KC_R, "R"},
+      {OIS::KeyCode::KC_T, "T"},
+      {OIS::KeyCode::KC_Y, "Y"},
+      {OIS::KeyCode::KC_U, "U"},
+      {OIS::KeyCode::KC_I, "I"},
+      {OIS::KeyCode::KC_O, "O"},
+      {OIS::KeyCode::KC_P, "P"},
+      {OIS::KeyCode::KC_LBRACKET, "{"},
+      {OIS::KeyCode::KC_RBRACKET, "}"},
+      {OIS::KeyCode::KC_RETURN, "RET"}, // Enter on main keyboard
+      {OIS::KeyCode::KC_LCONTROL, "CTRL"},
+      {OIS::KeyCode::KC_A, "A"},
+      {OIS::KeyCode::KC_S, "S"},
+      {OIS::KeyCode::KC_D, "D"},
+      {OIS::KeyCode::KC_F, "F"},
+      {OIS::KeyCode::KC_G, "G"},
+      {OIS::KeyCode::KC_H, "H"},
+      {OIS::KeyCode::KC_J, "J"},
+      {OIS::KeyCode::KC_K, "K"},
+      {OIS::KeyCode::KC_L, "L"},
+      {OIS::KeyCode::KC_SEMICOLON, "SCOL"},
+      {OIS::KeyCode::KC_APOSTROPHE, "'"},
+      {OIS::KeyCode::KC_GRAVE, "GRA"}, // accent
+      {OIS::KeyCode::KC_LSHIFT, "LSHIFT"},
+      {OIS::KeyCode::KC_BACKSLASH, "\\"},
+      {OIS::KeyCode::KC_Z, "Z"},
+      {OIS::KeyCode::KC_X, "X"},
+      {OIS::KeyCode::KC_C, "C"},
+      {OIS::KeyCode::KC_V, "V"},
+      {OIS::KeyCode::KC_B, "B"},
+      {OIS::KeyCode::KC_N, "N"},
+      {OIS::KeyCode::KC_M, "M"},
+      {OIS::KeyCode::KC_COMMA, ","},
+      {OIS::KeyCode::KC_PERIOD, "PER"}, // . on main keyboard
+      {OIS::KeyCode::KC_SLASH, "/"},    // / on main keyboard
+      {OIS::KeyCode::KC_RSHIFT, ">"},
+      {OIS::KeyCode::KC_MULTIPLY, "*"}, // * on numeric keypad
+      {OIS::KeyCode::KC_LMENU, "LMEN"}, // left Alt
+      {OIS::KeyCode::KC_SPACE, "SPACE"},
+      {OIS::KeyCode::KC_CAPITAL, "CAP"},
+      {OIS::KeyCode::KC_F1, "F1"},
+      {OIS::KeyCode::KC_F2, "F2"},
+      {OIS::KeyCode::KC_F3, "F3"},
+      {OIS::KeyCode::KC_F4, "F4"},
+      {OIS::KeyCode::KC_F5, "F5"},
+      {OIS::KeyCode::KC_F6, "F6"},
+      {OIS::KeyCode::KC_F7, "F7"},
+      {OIS::KeyCode::KC_F8, "F8"},
+      {OIS::KeyCode::KC_F9, "F9"},
+      {OIS::KeyCode::KC_F10, "F10"},
+      {OIS::KeyCode::KC_NUMLOCK, "NUM"},
+      {OIS::KeyCode::KC_SCROLL, "SCROLL"}, // Scroll Lock
+      {OIS::KeyCode::KC_NUMPAD7, "PAD7"},
+      {OIS::KeyCode::KC_NUMPAD8, "PAD8"},
+      {OIS::KeyCode::KC_NUMPAD9, "PAD9"},
+      {OIS::KeyCode::KC_SUBTRACT, "-"}, // - on numeric keypad
+      {OIS::KeyCode::KC_NUMPAD4, "PAD4"},
+      {OIS::KeyCode::KC_NUMPAD5, "PAD5"},
+      {OIS::KeyCode::KC_NUMPAD6, "PAD6"},
+      {OIS::KeyCode::KC_ADD, "ADD"}, // + on numeric keypad
+      {OIS::KeyCode::KC_NUMPAD1, "PAD1"},
+      {OIS::KeyCode::KC_NUMPAD2, "PAD2"},
+      {OIS::KeyCode::KC_NUMPAD3, "PAD3"},
+      {OIS::KeyCode::KC_NUMPAD0, "PAD0"},
+      {OIS::KeyCode::KC_DECIMAL, "DEC"}, // . on numeric keypad
+      {OIS::KeyCode::KC_OEM_102, "OEM"}, // < > | on UK/Germany keyboards
+      {OIS::KeyCode::KC_F11, "F11"},
+      {OIS::KeyCode::KC_F12, "F12"},
+      {OIS::KeyCode::KC_F13, "F13"},   //                     (NEC PC98)
+      {OIS::KeyCode::KC_F14, "F14"},   //                     (NEC PC98)
+      {OIS::KeyCode::KC_F15, "F15"},   //                     (NEC PC98)
+      {OIS::KeyCode::KC_KANA, "KANA"}, // (Japanese keyboard)
+      {OIS::KeyCode::KC_ABNT_C1,
+       "ABNT"}, // / ? on Portugese (Brazilian) keyboards
+      {OIS::KeyCode::KC_CONVERT, "CONV"},    // (Japanese keyboard)
+      {OIS::KeyCode::KC_NOCONVERT, "NCONV"}, // (Japanese keyboard)
+      {OIS::KeyCode::KC_YEN, "YEN"},         // (Japanese keyboard)
+      {OIS::KeyCode::KC_ABNT_C2,
+       "ABNT"}, // Numpad . on Portugese (Brazilian) keyboards
+      {OIS::KeyCode::KC_NUMPADEQUALS,
+       "PAD="}, // , ""}, on numeric keypad (NEC PC98)
+      {OIS::KeyCode::KC_PREVTRACK,
+       "PREV"}, // Previous Track ({OIS::KeyCode::KC_CIRCUMFLEX on Japanese
+                // keyboard)
+      {OIS::KeyCode::KC_AT, "AT"},       //                     (NEC PC98)
+      {OIS::KeyCode::KC_COLON, "COL"},   //                     (NEC PC98)
+      {OIS::KeyCode::KC_UNDERLINE, "_"}, //                     (NEC PC98)
+      {OIS::KeyCode::KC_KANJI, "KANJI"}, // (Japanese keyboard)
+      {OIS::KeyCode::KC_STOP, "STOP"},   //                     (NEC PC98)
+      {OIS::KeyCode::KC_AX, "AX"},       //                     (Japan AX)
+      {OIS::KeyCode::KC_UNLABELED,
+       "UNLABLED"},                         //                        (J3100)
+      {OIS::KeyCode::KC_NEXTTRACK, "NEXT"}, // Next Track
+      {OIS::KeyCode::KC_NUMPADENTER, "PADENTR"}, // Enter on numeric keypad
+      {OIS::KeyCode::KC_RCONTROL, "RCTRL"},
+      {OIS::KeyCode::KC_MUTE, "MUTE"},       // Mute
+      {OIS::KeyCode::KC_CALCULATOR, "CALC"}, // Calculator
+      {OIS::KeyCode::KC_PLAYPAUSE, "PAUSE"}, // Play / Pause
+      {OIS::KeyCode::KC_MEDIASTOP, "STOP"},  // Media Stop
+      {OIS::KeyCode::KC_VOLUMEDOWN, "VOL-"}, // Volume -
+      {OIS::KeyCode::KC_VOLUMEUP, "VOL+"},   // Volume +
+      {OIS::KeyCode::KC_WEBHOME, "HOME"},    // Web home
+      {OIS::KeyCode::KC_NUMPADCOMMA,
+       "PADCOMMA"},                     // , on numeric keypad (NEC PC98)
+      {OIS::KeyCode::KC_DIVIDE, "DIV"}, // / on numeric keypad
+      {OIS::KeyCode::KC_SYSRQ, "SYSRQ"},
+      {OIS::KeyCode::KC_RMENU, "RMENU"},         // right Alt
+      {OIS::KeyCode::KC_PAUSE, "PAUSE"},         // Pause
+      {OIS::KeyCode::KC_HOME, "HOME"},           // Home on arrow keypad
+      {OIS::KeyCode::KC_UP, "UP"},               // UpArrow on arrow keypad
+      {OIS::KeyCode::KC_PGUP, "PGUP"},           // PgUp on arrow keypad
+      {OIS::KeyCode::KC_LEFT, "LEFT"},           // LeftArrow on arrow keypad
+      {OIS::KeyCode::KC_RIGHT, "RIGHT"},         // RightArrow on arrow keypad
+      {OIS::KeyCode::KC_END, "END"},             // End on arrow keypad
+      {OIS::KeyCode::KC_DOWN, "DOWN"},           // DownArrow on arrow keypad
+      {OIS::KeyCode::KC_PGDOWN, "PGDOWN"},       // PgDn on arrow keypad
+      {OIS::KeyCode::KC_INSERT, "INSERT"},       // Insert on arrow keypad
+      {OIS::KeyCode::KC_DELETE, "DEL"},          // Delete on arrow keypad
+      {OIS::KeyCode::KC_LWIN, "LWIN"},           // Left Windows key
+      {OIS::KeyCode::KC_RWIN, "RWIN"},           // Right Windows key
+      {OIS::KeyCode::KC_APPS, "APPS"},           // AppMenu key
+      {OIS::KeyCode::KC_POWER, "POWER"},         // System Power
+      {OIS::KeyCode::KC_SLEEP, "SLEEP"},         // System Sleep
+      {OIS::KeyCode::KC_WAKE, "WAKE"},           // System Wake
+      {OIS::KeyCode::KC_WEBSEARCH, "WEBSEARCH"}, // Web Search
+      {OIS::KeyCode::KC_WEBFAVORITES, "WEBFAV"}, // Web Favorites
+      {OIS::KeyCode::KC_WEBREFRESH, "WEBREFRESH"}, // Web Refresh
+      {OIS::KeyCode::KC_WEBSTOP, "WEBSTOP"},       // Web Stop
+      {OIS::KeyCode::KC_WEBFORWARD, "WEBFORW"},    // Web Forward
+      {OIS::KeyCode::KC_WEBBACK, "WEBBACK"},       // Web Back
+      {OIS::KeyCode::KC_MYCOMPUTER, "MYCOMPUTER"}, // My Computer
+      {OIS::KeyCode::KC_MAIL, "MAIL"},             // Mail
+      {OIS::KeyCode::KC_MEDIASELECT, "MEDIA"},     // Media Select
+  };
+
   SettingsPlayer::SettingsPlayer()
       : m_players(), m_keycodes(), m_used(), m_loaded()
   {
@@ -141,6 +295,11 @@ namespace core
 	return true;
       }
     return false;
+  }
+
+  std::string const SettingsPlayer::getTextForKey(OIS::KeyCode keycode) const
+  {
+    return (textForKey[keycode]);
   }
 
   std::string const SettingsPlayer::actionForKey(int          playerIndex,
