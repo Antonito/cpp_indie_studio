@@ -86,6 +86,8 @@ namespace core
     void fillKey(int playerIndex);
     void setUsed(int playerIndex, bool used);
 
+    GameSettings &getPlayer(int playerIndex);
+
   private:
     std::vector<GameSettings> m_players;
     std::vector<std::map<std::int32_t, std::string>> m_keycodes;

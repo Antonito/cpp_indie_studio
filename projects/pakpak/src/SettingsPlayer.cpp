@@ -172,6 +172,7 @@ namespace core
     for (int i = 0; i < 4; ++i)
       {
 	m_loaded.push_back(false);
+	loadFromFile(i);
       }
   }
 
@@ -327,13 +328,21 @@ namespace core
     if (old == newKey)
       return true;
     else if (m_used[newKey])
-      return false;
+      {
+	// swicth
+	return false;
+      }
     m_used[old] = false;
     m_used[newKey] = true;
     std::string action = m_keycodes[playerIndex][old];
     m_keycodes[playerIndex].erase(old);
     m_keycodes[playerIndex][newKey] = action;
     return true;
+  }
+
+  SettingsPlayer::GameSettings &SettingsPlayer::getPlayer(int playerIndex)
+  {
+    return (m_players[playerIndex]);
   }
 
   SettingsPlayer::GameSettings::GameSettings() : key(), graphic()
