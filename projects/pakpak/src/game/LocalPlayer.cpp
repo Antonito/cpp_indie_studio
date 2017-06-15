@@ -34,18 +34,14 @@ namespace game
                              .get()); // TODO: insert LOADING instead
 
     m_cam = m_data->car().getCamera();
-    // m_cam = g.createCamera("PlayerCam"); // todo: name
-    // m_cam->setPosition(m_car->position() - m_car->direction());
-    m_cam->lookAt(Ogre::Vector3(0, 0, 0));
     m_cam->setNearClipDistance(3);
 
     Log(nope::log::Debug) << "Adding viewport '" << m_order << "' to window";
     m_viewport = m_win->addViewport(m_cam, m_order);
-    m_viewport->setBackgroundColour(Ogre::ColourValue(0, 50, 0));
+    m_viewport->setBackgroundColour(Ogre::ColourValue(0.1f, 0.1f, 0.1f));
     m_cam->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
                           Ogre::Real(m_viewport->getActualHeight()));
     setActionMap();
-    m_settings.loadFromFile(order);
   }
 
   LocalPlayer::LocalPlayer(LocalPlayer &&that)

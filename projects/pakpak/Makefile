@@ -14,7 +14,8 @@ LOCAL_COMP_FLAGS+=	-Wno-global-constructors	\
 			-Wno-switch-enum
 endif
 
-LOCAL_LINK_FLAGS= -l OIS -l OgreMain -l boost_system -L $(ROOT_DIR)/build/ -l indie_logger -l CEGUIBase-0 -l CEGUIOgreRenderer-0 -lopenal -l indie_exceptions -l sndfile
+LOCAL_LINK_FLAGS= -l OIS -l OgreMain -l boost_system -L $(ROOT_DIR)/build/ -l indie_logger -l CEGUIBase-0 -l CEGUIOgreRenderer-0 -lopenal \
+                  -l indie_exceptions -l sndfile -l BulletDynamics -l BulletCollision -l OgreBulletDynamics -l OgreBulletCollisions -l LinearMath
 
 LOCAL_DEBUG_FLAGS=
 
@@ -32,16 +33,19 @@ GAME_CAR_DIR=	$(GAME_DIR)car/
 
 GAME_MAP_DIR=	$(GAME_DIR)map/
 
+GAME_TOOLS_DIR=	$(GAME_DIR)tools/
+
 GAME_MENU_DIR=  $(GAME_DIR)menu/
 
 INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)		\
-		$(GAME_DIR)		    \
+		$(GAME_DIR)		\
 		$(GAME_LAYER_DIR)	\
 		$(GAME_CAR_DIR)		\
-		$(GAME_MAP_DIR)     \
-        $(GAME_MENU_DIR)    \
+		$(GAME_TOOLS_DIR)	\
+		$(GAME_MAP_DIR)     	\
+	        $(GAME_MENU_DIR)
 
 HEADER=		pakpak_stdafx.hpp
 
@@ -79,6 +83,8 @@ GAME_CAR_FILES=		ACar.cpp			\
 GAME_MAP_FILES=		Map.cpp				\
 			PathPoint.cpp
 
+GAME_TOOLS_FILES=	Tools.cpp
+
 GAME_MENU_FILES=    	GUI.cpp				\
                     	MainMenu.cpp			\
 			ContextMenu.cpp			\
@@ -96,6 +102,7 @@ SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 		$(addprefix $(GAME_DIR), $(GAME_FILES))			\
 		$(addprefix $(GAME_LAYER_DIR), $(GAME_LAYER_FILES))	\
 		$(addprefix $(GAME_CAR_DIR), $(GAME_CAR_FILES))		\
+		$(addprefix $(GAME_TOOLS_DIR), $(GAME_TOOLS_FILES))	\
 		$(addprefix $(GAME_MAP_DIR), $(GAME_MAP_FILES))     	\
 		$(addprefix $(GAME_MENU_DIR), $(GAME_MENU_FILES))
 
@@ -103,6 +110,10 @@ INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)		\
 		$(ROOT_DIR)/libs/serializer/include/			\
 		$(ROOT_DIR)/libs/logger/include/                \
 		$(ROOT_DIR)/libs/exceptions/include/            \
+		/usr/local/include/OgreBullet/Dynamics 			\
+		/usr/local/include/OgreBullet/Collisions 		\
+		/usr/include/bullet					\
+		/usr/include/OGRE
 
 PRECOMPILED_HEADER= $(addprefix $(INCLUDE_DIR),$(HEADER))
 
