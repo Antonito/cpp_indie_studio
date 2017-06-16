@@ -6,8 +6,10 @@
 
 namespace core
 {
-  MenuScores::MenuScores(menu::MenuManager &menuManager, GUI &gui)
-      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager)
+  MenuScores::MenuScores(menu::MenuManager &menuManager, GUI &gui,
+                         SettingsPlayer &settings)
+      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
+        m_settings(settings)
 
   {
   }
@@ -26,7 +28,21 @@ namespace core
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MenuScores::onBackClick, this));
+      CEGUI::WindowManager *winManager = CEGUI::WindowManager::getSingletonPtr();
+      CEGUI::ItemEntry* itm = (CEGUI::ItemEntry*)winManager->createWindow("TaharezLook/ListboxItem");
+      CEGUI::ItemEntry* itm2 = (CEGUI::ItemEntry*)winManager->createWindow("TaharezLook/ListboxItem");
+      itm->setText("COUILLE");
+      itm2->setText("BITE");
+      ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_best_times"))->addItem(itm);
+      ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_total_km"))->addItem(itm2);
 
+//    m_gui.getRoot()->getChild("list_finished_tracks")->setProperty("Text", "Hoy");
+
+  //  m_gui.getRoot()->getChild("list_total_km")->setProperty("Text", "Hoy");
+
+    //m_gui.getRoot()->getChild("list_max_speed")->setProperty("Text", "Hay");
+
+    //m_gui.getRoot()->getChild("list_collision_count")->setProperty("Text", "Hiy");
   }
 
   void MenuScores::exit()
