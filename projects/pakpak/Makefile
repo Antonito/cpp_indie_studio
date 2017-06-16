@@ -20,7 +20,12 @@ LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
 			-l BulletDynamics -l BulletCollision	\
 			-l OgreBulletDynamics			\
 			-l OgreBulletCollisions			\
-			-l LinearMath -ObjC++ -framework Cocoa -framework Carbon
+			-l LinearMath
+
+ifeq ($(shell uname -s),Darwin)
+LOCAL_COMP_FLAGS+=		-x objective-c++
+LOCAL_LINK_FLAGS+=	-ObjC++ -framework Cocoa -framework Carbon
+endif
 
 LOCAL_DEBUG_FLAGS=
 
@@ -52,14 +57,18 @@ DIR_LIST=	$(SRC_DIR)		\
 		$(GAME_MAP_DIR)     	\
 	        $(GAME_MENU_DIR)
 
+ifeq ($(shell uname -s),Darwin)
 HEADER=
+else
+HEADER=		pakpak_stdafx.hpp
+endif
 
 # Project's files
 
 
-SRC_FILES=		main.mm				\
-			AppLauncher.mm			\
-			InputListener.mm		\
+SRC_FILES=		main.cpp			\
+			AppLauncher.cpp			\
+			InputListener.cpp		\
 			AContext.cpp			\
 			ContextGame.cpp			\
 			SettingsPlayer.cpp		\
