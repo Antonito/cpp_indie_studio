@@ -26,6 +26,7 @@ namespace core
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MenuScores::onBackClick, this));
+
   }
 
   void MenuScores::exit()
