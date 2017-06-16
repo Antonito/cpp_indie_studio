@@ -57,7 +57,7 @@ HEADER=
 # Project's files
 
 
-SRC_FILES=		main.cpp			\
+SRC_FILES=		main.mm				\
 			AppLauncher.mm			\
 			InputListener.mm		\
 			AContext.cpp			\
