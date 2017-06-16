@@ -1,7 +1,6 @@
 #if defined __APPLE__
 #import <Cocoa/Cocoa.h>
 #endif
-#include <AL/al.h>
 #include "pakpak_stdafx.hpp"
 #include "AppLauncher.hpp"
 
