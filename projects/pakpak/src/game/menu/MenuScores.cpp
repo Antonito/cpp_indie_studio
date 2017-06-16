@@ -28,21 +28,95 @@ namespace core
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MenuScores::onBackClick, this));
-      CEGUI::WindowManager *winManager = CEGUI::WindowManager::getSingletonPtr();
-      CEGUI::ItemEntry* itm = (CEGUI::ItemEntry*)winManager->createWindow("TaharezLook/ListboxItem");
-      CEGUI::ItemEntry* itm2 = (CEGUI::ItemEntry*)winManager->createWindow("TaharezLook/ListboxItem");
-      itm->setText("COUILLE");
-      itm2->setText("BITE");
-      ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_best_times"))->addItem(itm);
-      ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_total_km"))->addItem(itm2);
+    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_best_times"))
+        ->setAutoResizeEnabled(1);
+    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_finished_tracks"))
+        ->setAutoResizeEnabled(1);
+    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_max_speed"))
+        ->setAutoResizeEnabled(1);
+    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_collision_count"))
+        ->setAutoResizeEnabled(1);
+    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_total_km"))
+        ->setAutoResizeEnabled(1);
+    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_best_times"))
+        ->disable();
+    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_finished_tracks"))
+        ->disable();
+    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_max_speed"))
+        ->disable();
+    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_collision_count"))
+        ->disable();
+    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_total_km"))
+        ->disable();
+    CEGUI::WindowManager *winManager = CEGUI::WindowManager::getSingletonPtr();
 
-//    m_gui.getRoot()->getChild("list_finished_tracks")->setProperty("Text", "Hoy");
+    for (std::int32_t i = 0; i < 10; ++i)
+      {
+	CEGUI::ItemEntry *itm = (CEGUI::ItemEntry *)winManager->createWindow(
+	    "TaharezLook/ListboxItem");
+	CEGUI::ItemEntry *itm2 = (CEGUI::ItemEntry *)winManager->createWindow(
+	    "TaharezLook/ListboxItem");
+	CEGUI::ItemEntry *itm3 = (CEGUI::ItemEntry *)winManager->createWindow(
+	    "TaharezLook/ListboxItem");
+	CEGUI::ItemEntry *itm4 = (CEGUI::ItemEntry *)winManager->createWindow(
+	    "TaharezLook/ListboxItem");
+	CEGUI::ItemEntry *itm5 = (CEGUI::ItemEntry *)winManager->createWindow(
+	    "TaharezLook/ListboxItem");
 
-  //  m_gui.getRoot()->getChild("list_total_km")->setProperty("Text", "Hoy");
+	itm->setText(
+	    "Place " + std::to_string(i + 1) + " : " +
+	    std::to_string(m_settings.m_data[0].getData().s_bestTime[i]) +
+	    " seconds");
+	itm2->setText("Place " + std::to_string(i + 1) + " : " +
+	              std::to_string(
+	                  m_settings.m_data[0].getData().s_collisionCount[i]) +
+	              " collisions");
+	itm3->setText(
+	    "Place " + std::to_string(i + 1) + " : " +
+	    std::to_string(m_settings.m_data[0].getData().s_maxSpeed[i]) +
+	    " Km/h");
+	itm4->setText(
+	    "Place " + std::to_string(i + 1) + " : " +
+	    std::to_string(m_settings.m_data[0].getData().s_totalKm[i]) +
+	    " Km");
+	itm5->setText(
+	    "Place " + std::to_string(i + 1) + " : " +
+	    std::to_string(m_settings.m_data[0].getData().s_trackFinished[i]) +
+	    " track finished");
 
-    //m_gui.getRoot()->getChild("list_max_speed")->setProperty("Text", "Hay");
-
-    //m_gui.getRoot()->getChild("list_collision_count")->setProperty("Text", "Hiy");
+	((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_best_times"))
+	    ->addItem(itm);
+	((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
+	     "list_collision_count"))
+	    ->addItem(itm2);
+	((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_max_speed"))
+	    ->addItem(itm3);
+	((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_total_km"))
+	    ->addItem(itm4);
+	((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
+	     "list_finished_tracks"))
+	    ->addItem(itm5);
+      }
+    nope::log::Log(Debug) << "Nb Item of best_times : "
+                          << ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
+                                  "list_best_times"))
+                                 ->getItemCount();
+    nope::log::Log(Debug) << "Nb Item of best_times : "
+                          << ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
+                                  "list_finished_tracks"))
+                                 ->getItemCount();
+    nope::log::Log(Debug) << "Nb Item of best_times : "
+                          << ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
+                                  "list_max_speed"))
+                                 ->getItemCount();
+    nope::log::Log(Debug) << "Nb Item of best_times : "
+                          << ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
+                                  "list_collision_count"))
+                                 ->getItemCount();
+    nope::log::Log(Debug) << "Nb Item of best_times : "
+                          << ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
+                                  "list_total_km"))
+                                 ->getItemCount();
   }
 
   void MenuScores::exit()

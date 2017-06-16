@@ -88,10 +88,10 @@ namespace core
     void setUsed(int playerIndex, bool used);
     int switchKey(OIS::KeyCode old, OIS::KeyCode newKey);
     GameSettings &getPlayer(int playerIndex);
+    std::vector<SaveData> m_data;
 
   private:
     std::vector<GameSettings> m_players;
-    std::vector<SaveData>     m_data;
     std::vector<std::map<std::int32_t, std::string>> m_keycodes;
     std::vector<bool> m_used;
     std::vector<bool> m_loaded;

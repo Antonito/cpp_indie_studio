@@ -24,11 +24,6 @@ namespace core
   {
   }
 
-  SaveData &SaveData::operator=(SaveData &)
-  {
-    return *this;
-  }
-
   void SaveData::generate()
   {
     nope::log::Log(Debug) << "Generating key sav data";
@@ -98,8 +93,8 @@ namespace core
 	buf = ss.str().substr(32);
 	key = toXor(key);
 	char *xorToStruct = toXor(buf.c_str(), sizeof(m_data));
-	nope::log::Log(Debug)
-	    << "Recup from file : " << file << " Key : " << key;
+	nope::log::Log(Debug) << "Recup from file : " << file
+	                      << " Key : " << key;
 	std::memcpy(reinterpret_cast<char *>(&m_data), xorToStruct,
 	            sizeof(m_data));
 	delete xorToStruct;

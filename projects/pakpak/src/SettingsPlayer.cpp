@@ -170,7 +170,7 @@ namespace core
   };
 
   SettingsPlayer::SettingsPlayer()
-      : m_players(), m_data(), m_keycodes(), m_used(), m_loaded()
+      : m_data(), m_players(), m_keycodes(), m_used(), m_loaded()
   {
     m_players.resize(5);
     m_data.resize(5);
@@ -187,7 +187,7 @@ namespace core
   }
 
   SettingsPlayer::SettingsPlayer(SettingsPlayer const &that)
-      : m_players(that.m_players), m_data(that.m_data),
+      : m_data(that.m_data), m_players(that.m_players),
         m_keycodes(that.m_keycodes), m_used(that.m_used),
         m_loaded(that.m_loaded)
   {

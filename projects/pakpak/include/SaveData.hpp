@@ -18,7 +18,7 @@ namespace core
     SaveData();
     ~SaveData();
     SaveData(SaveData const &);
-    SaveData &operator=(SaveData &);
+    SaveData &operator=(SaveData &) = delete;
     SaveData(SaveData &&) = delete;
 
     void generate();

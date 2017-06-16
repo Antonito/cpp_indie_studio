@@ -40,6 +40,30 @@ struct Data
       }
   }
 
+  Data(Data const &cpy)
+  {
+      for (std::int32_t i = 0; i < 10; ++i)
+      {
+          s_bestTime[i] = cpy.s_bestTime[i];
+      }
+      for (std::int32_t i = 0; i < 10; ++i)
+      {
+          s_maxSpeed[i] = cpy.s_maxSpeed[i];
+      }
+      for (std::int32_t i = 0; i < 10; ++i)
+      {
+          s_trackFinished[i] = cpy.s_trackFinished[i];
+      }
+      for (std::int32_t i = 0; i < 10; ++i)
+      {
+          s_totalKm[i] = s_totalKm[i];
+      }
+      for (std::int32_t i = 0; i < 10; ++i)
+      {
+          s_collisionCount[i] = s_collisionCount[i];
+      }
+  }
+
   Data &operator=(Data &that)
   {
     if (&that != this)
