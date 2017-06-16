@@ -157,10 +157,9 @@ namespace core
     while (true)
       {
 	GameState state;
-<<<<<<< HEAD
 
-	#if defined(_WIN32) || defined(__linux__)
-	                           Ogre::WindowEventUtilities::messagePump();
+#if defined(_WIN32) || defined(__linux__)
+	Ogre::WindowEventUtilities::messagePump();
 #elif defined(__APPLE__)
 	NSEvent *event = [NSApp nextEventMatchingMask:NSAnyEventMask
 	                                    untilDate:nil
@@ -169,10 +168,7 @@ namespace core
 	[NSApp sendEvent:event];
 	[event release];
 #endif
-=======
-	Ogre::WindowEventUtilities::messagePump();
 
->>>>>>> master
 	if (m_window->isClosed())
 	  return false;
 
