@@ -86,7 +86,7 @@ namespace menu
     m_menuLayer[static_cast<size_t>(core::MenuState::MultiPlayerGame)] =
         std::make_unique<core::MenuMultiplayer>(*this, m_gui);
     m_menuLayer[static_cast<size_t>(core::MenuState::Score)] =
-        std::make_unique<core::MenuScores>(*this, m_gui);
+        std::make_unique<core::MenuScores>(*this, m_gui, settings);
 
     m_layers.push(
         m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)].get());

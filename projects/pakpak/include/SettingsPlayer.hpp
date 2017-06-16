@@ -8,6 +8,7 @@
 #include <OIS/OIS.h>
 #endif
 #include "Metadata.hpp"
+#include "SaveData.hpp"
 
 // Disable clang warning for templated class padding
 #if defined(__clang__)
@@ -97,7 +98,10 @@ namespace core
     void fillKey(std::size_t const playerIndex);
     void setUsed(std::size_t const playerIndex, bool used);
     int switchKey(OIS::KeyCode old, OIS::KeyCode newKey);
+
     GameSettings &getPlayer(std::size_t const playerIndex);
+
+    std::vector<SaveData> m_data;
 
   private:
     std::vector<GameSettings> m_players;
