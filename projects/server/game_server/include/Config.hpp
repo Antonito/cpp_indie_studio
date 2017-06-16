@@ -1,6 +1,7 @@
 #ifndef CONFIG_HPP_
 #define CONFIG_HPP_
 
+#include <mutex>
 #include "ConfigTools.hpp"
 #include "Ini.hpp"
 

@@ -14,6 +14,7 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#include <io.h>
 #endif
 
 #include <cassert>
@@ -41,6 +42,7 @@
 #include "json.hpp"
 #include "Config.hpp"
 #include "Hash.hpp"
+#include "IOError.hpp"
 
 #if defined(_WIN32)
 #include "dirent/dirent.h"

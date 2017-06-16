@@ -2,13 +2,15 @@
 
 namespace game
 {
-  Map::Map(Ogre::SceneManager *sceneMgr)
-      : m_sceneMgr(sceneMgr), m_points(), m_map(nullptr), m_node(nullptr)
+  Map::Map(game::GameData &gamedata)
+      : m_gamedata(gamedata), m_points(), m_map(nullptr), m_node(nullptr),
+        m_body(nullptr)
   {
   }
 
-  Map::Map(Ogre::SceneManager *sceneMgr, std::string const &filename)
-      : m_sceneMgr(sceneMgr), m_points(), m_map(nullptr), m_node(nullptr)
+  Map::Map(game::GameData &gamedata, std::string const &filename)
+      : m_gamedata(gamedata), m_points(), m_map(nullptr), m_node(nullptr),
+        m_body(nullptr)
   {
     this->loadFromFile(filename);
   }
@@ -91,15 +93,47 @@ namespace game
 
     meshSerializer.importMesh(stream, meshptr.getPointer());
 
-    m_map = m_sceneMgr->createEntity(ss.str() + "_ent", ss.str());
+    m_map = m_gamedata.sceneMgr()->createEntity(ss.str() + "_ent", ss.str());
 
     ss.str("");
     ss << "MapNode" << id;
-    m_node = m_sceneMgr->getRootSceneNode()->createChildSceneNode(ss.str());
+    m_node = m_gamedata.sceneMgr()->getRootSceneNode()->createChildSceneNode(
+        ss.str());
     m_node->attachObject(m_map);
 
-    m_node->setScale(1000, 100, 1000);
-    m_node->setPosition(0, 100, 0);
+    m_node->setScale(1, 1, 1);
+    m_node->setPosition(0, 0, 0);
+
+    std::size_t    vertexCount;
+    Ogre::Vector3 *vertices;
+    std::size_t    indexCount;
+    std::uint32_t *indices;
+
+    tools::getMeshInformation(meshptr.getPointer(), vertexCount, vertices,
+                              indexCount, indices);
+
+    std::unique_ptr<OgreBulletCollisions::TriangleMeshCollisionShape> shape =
+        std::make_unique<OgreBulletCollisions::TriangleMeshCollisionShape>(
+            vertices, static_cast<unsigned int>(vertexCount), indices,
+            static_cast<unsigned int>(indexCount));
+    nope::log::Log(Warning) << "VCount: " << vertexCount
+                            << "\nICount: " << indexCount << std::endl;
+    OgreBulletCollisions::TriangleMeshCollisionShape *_shape = shape.get();
+
+    ss.str("");
+    ss << "MapRigidBody" << id;
+
+    m_body = m_gamedata.addPhysicEntity(std::move(shape), ss.str());
+
+// body->setDebugDisplayEnabled(false);
+// body->showDebugShape(false);
+
+#ifdef DEBUG
+    // Small trick to allow debug drawing
+    m_body->setShape(m_node, _shape, 0.6f, 0.6f, 0.0f, Ogre::Vector3::ZERO);
+#endif
+    m_body->setStaticShape(_shape, 0.0f, 0.6f, Ogre::Vector3(0, 0, 0));
+    // m_body->setKinematicObject(true);
 
     ++id;
   }
@@ -107,6 +141,11 @@ namespace game
   void Map::unload()
   {
     m_points.clear();
+  }
+
+  OgreBulletDynamics::RigidBody *Map::rigidBody()
+  {
+    return (m_body);
   }
 
   Map::MapData::MapData() : points(), elements()

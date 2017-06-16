@@ -85,6 +85,8 @@ namespace core
     bool updateKey(int playerIndex, OIS::KeyCode old, OIS::KeyCode newKey);
     void fillKey(int playerIndex);
     void setUsed(int playerIndex, bool used);
+    int switchKey(OIS::KeyCode old, OIS::KeyCode newKey);
+    GameSettings &getPlayer(int playerIndex);
 
   private:
     std::vector<GameSettings> m_players;

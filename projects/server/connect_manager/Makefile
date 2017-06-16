@@ -7,7 +7,7 @@ NAME=			$(ROOT_DIR)/build/connect_manager
 
 LOCAL_COMP_FLAGS=	-O2
 
-LOCAL_LINK_FLAGS=	-L$(ROOT_DIR)/build/ -lindie_network -lindie_logger -lindie_exceptions -lindie_multithread -lindie_packet -lindie_ini
+LOCAL_LINK_FLAGS=	-L$(ROOT_DIR)/build/ -lindie_network -lindie_logger -lindie_multithread -lindie_packet -lindie_ini -lindie_exceptions
 
 LOCAL_DEBUG_FLAGS=
 

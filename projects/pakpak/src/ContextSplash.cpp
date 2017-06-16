@@ -8,7 +8,7 @@ namespace splash
       : core::AContext(win, input),
         // Create the scene manager
         m_sceneMgr(Ogre::Root::getSingleton().createSceneManager(
-                "DefaultSceneManager", "Splash scene manager")),
+            "DefaultSceneManager", "Splash scene manager")),
         // Create the entity
         m_entity(m_sceneMgr->createEntity("Jeep_default.mesh")),
         // Create the node

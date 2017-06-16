@@ -19,7 +19,7 @@ namespace game
     m_input->setKeyboardEventCallback(this);
     m_quit = false;
 
-    std::size_t nbPlayer = 6;
+    std::size_t nbPlayer = 2;
 
     m_game.setPlayerNb(0);
     m_game.setPlayerNb(nbPlayer);
@@ -28,27 +28,28 @@ namespace game
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
-	m_game[i].setCar(std::make_unique<EmptyCar>(m_game.sceneMgr(),
-	                                            Ogre::Vector3(0, 0, 0),
-	                                            Ogre::Vector3(0, 0, -1)));
+	m_game[i].setCar(std::make_unique<EmptyCar>(
+	    m_game, Ogre::Vector3::ZERO, Ogre::Quaternion::IDENTITY));
       }
 
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
 	m_players.emplace_back(std::make_unique<LocalPlayer>(
-	    m_win, m_game, &m_game[i], i, m_settings));
+	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings));
       }
 
     updateViewPort();
+
+    m_input->setPhysicWorld(m_game.physicWorld());
   }
 
   void ContextGame::updateViewPort()
   {
     int size = static_cast<int>(m_players.size());
 
-    for (std::size_t i = 0; i < static_cast<std::size_t>(size); ++i)
+    for (int i = 0; i < size; ++i)
       {
-	m_players[i]->setViewPort(
+	m_players[static_cast<std::size_t>(i)]->setViewPort(
 	    static_cast<Ogre::Real>(
 	        static_cast<double>((i % 2) * ((size - 1) / 2)) * 0.5),
 	    static_cast<Ogre::Real>(
@@ -67,6 +68,7 @@ namespace game
   void ContextGame::disable()
   {
     m_players.clear();
+    m_input->setPhysicWorld(nullptr);
   }
 
   core::GameState ContextGame::update()

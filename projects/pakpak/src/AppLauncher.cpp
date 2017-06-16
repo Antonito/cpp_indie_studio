@@ -1,12 +1,14 @@
+#include <AL/al.h>
 #include "pakpak_stdafx.hpp"
 #include "AppLauncher.hpp"
 
 namespace core
 {
+
   AppLauncher::AppLauncher()
       : m_root(nullptr), m_window(nullptr), m_inputListener(nullptr),
         m_contexts(), m_currentContext(nullptr), m_gameState(GameState::None),
-        m_settings()
+        m_settings(), m_soundManager()
   {
   }
 
@@ -17,38 +19,31 @@ namespace core
   bool AppLauncher::start()
   {
 
-// TODO : Create .cfg
-// Create the Root
+    // TODO : Create .cfg
+    // Create the Root
 
+    std::string ogreLog = "Ogre.log";
+    std::string confFolder = "../indie_resource/conf/";
 #ifdef DEBUG
-#ifdef _WIN32
-    if (m_root)
-      delete m_root;
-    m_root = new Ogre::Root("../indie_resource/conf/windows/plugins_d.cfg",
-                            "../indie_resource/conf/windows/ogre_d.cfg",
-                            "Ogre.log");
+    std::string plugin = "plugins_d.cfg";
+    std::string ogreFile = "ogre_d.cfg";
 #else
-    if (m_root)
-      delete m_root;
-    m_root =
-        new Ogre::Root("../indie_resource/conf/linux/plugins_d.cfg",
-                       "../indie_resource/conf/linux/ogre_d.cfg", "Ogre.log");
+    std::string plugin = "plugins.cfg";
+    std::string ogreFile = "ogre.cfg";
 #endif
-#else
+
 #ifdef _WIN32
-    if (m_root)
-      delete m_root;
-    m_root =
-        new Ogre::Root("../indie_resource/conf/windows/plugins.cfg",
-                       "../indie_resource/conf/windows/ogre.cfg", "Ogre.log");
+    std::string plateform = "windows/";
+#elif defined(__APPLE__)
+    std::string plateform = "osx/";
 #else
+    std::string plateform = "linux/";
+#endif
+
     if (m_root)
       delete m_root;
-    m_root =
-        new Ogre::Root("../indie_resource/conf/linux/plugins.cfg",
-                       "../indie_resource/conf/linux/ogre.cfg", "Ogre.log");
-#endif
-#endif // !DEBUG
+    m_root = new Ogre::Root(confFolder + plateform + plugin,
+                            confFolder + plateform + ogreFile, ogreLog);
 
     // Load Ressource config file
     Ogre::ConfigFile configFile;
@@ -101,6 +96,8 @@ namespace core
 
     m_window->removeAllViewports();
 
+    initOpenAl(NULL);
+
     //// Create the Scene Manager
     // m_sceneMgr =
     //    m_root->createSceneManager("DefaultSceneManager", "Mon Scene
@@ -151,12 +148,15 @@ namespace core
 
     m_currentContext->enable();
 
+    //     m_soundManager.loadSound("Pew_Pew.wav");
+    //     m_soundManager.playSound();
+    //     m_soundManager.loopSound();
     // Render Loop
     while (true)
       {
 	GameState state;
-
 	Ogre::WindowEventUtilities::messagePump();
+
 	if (m_window->isClosed())
 	  return false;
 
@@ -184,8 +184,10 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
+	// m_soundManager.state();
+	// if (m_soundManager.getState() != AL_PLAYING)
+	//   m_soundManager.clear();
       }
-
     return true;
   }
 
@@ -194,5 +196,10 @@ namespace core
     // Create and add a Framelistener
     m_inputListener = new InputListener(m_window);
     m_root->addFrameListener(m_inputListener);
+  }
+
+  void AppLauncher::initOpenAl(char const *deviceName = NULL)
+  {
+    m_soundManager.initOpenAl(deviceName);
   }
 }
