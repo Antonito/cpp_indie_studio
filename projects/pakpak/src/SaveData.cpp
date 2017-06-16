@@ -5,29 +5,29 @@
 #include <fstream>
 #include <IOError.hpp>
 #include <cstring>
-#include "saveData.hpp"
+#include "SaveData.hpp"
 #include "Logger.hpp"
 
-saveData::saveData() : m_key(""), m_crypto(), m_data(), m_xor(42)
+SaveData::SaveData() : m_key(""), m_crypto(), m_data(), m_xor(42)
 {
 }
 
-saveData::~saveData()
+SaveData::~SaveData()
 {
 }
 
-saveData::saveData(saveData const &cpy)
+SaveData::SaveData(SaveData const &cpy)
     : m_key(cpy.m_key), m_crypto(cpy.m_crypto), m_data(cpy.m_data),
       m_xor(cpy.m_xor)
 {
 }
 
-saveData &saveData::operator=(saveData &)
+SaveData &SaveData::operator=(SaveData &)
 {
   return *this;
 }
 
-void saveData::generate()
+void SaveData::generate()
 {
   nope::log::Log(Debug) << "Generating key sav data";
 
@@ -37,12 +37,12 @@ void saveData::generate()
   nope::log::Log(Debug) << "Generate key : " << m_key;
 }
 
-void saveData::setData(Data &that)
+void SaveData::setData(Data &that)
 {
   m_data = that;
 }
 
-void saveData::saveInFile(std::string const &file)
+void SaveData::saveInFile(std::string const &file)
 {
   if (isKeyGenerate())
     {
@@ -65,22 +65,22 @@ void saveData::saveInFile(std::string const &file)
     }
 }
 
-bool saveData::isKeyGenerate() const
+bool SaveData::isKeyGenerate() const
 {
   return (m_key != "");
 }
 
-Data &saveData::getData()
+Data &SaveData::getData()
 {
   return m_data;
 }
 
-bool saveData::compareKey(std::string const &key)
+bool SaveData::compareKey(std::string const &key)
 {
   return (key == m_key);
 }
 
-void saveData::recupDataFromFile(std::string const &file)
+void SaveData::recupDataFromFile(std::string const &file)
 {
   std::ifstream ifs;
   std::string   key;
@@ -114,24 +114,24 @@ void saveData::recupDataFromFile(std::string const &file)
     }
 }
 
-std::string saveData::toXor(std::string const &elem)
+std::string SaveData::toXor(std::string const &elem)
 {
   std::string xorStr(elem);
   for (char &c : xorStr)
     {
-      c ^= m_xor;
+      c ^= static_cast<char>(m_xor);
     }
   return xorStr;
 }
 
-char *saveData::toXor(char const *elem, std::int32_t length)
+char *SaveData::toXor(char const *elem, std::int32_t length)
 {
   char *xorStr = new char[length];
 
   std::memcpy(xorStr, elem, static_cast<std::size_t>(length));
   for (std::int32_t i = 0; i < length; ++i)
     {
-      xorStr[i] ^= m_xor;
+      xorStr[i] ^= static_cast<char>(m_xor);
     }
   return xorStr;
 }

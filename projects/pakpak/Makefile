@@ -15,7 +15,7 @@ LOCAL_COMP_FLAGS+=	-Wno-global-constructors	\
 endif
 
 LOCAL_LINK_FLAGS= -l OIS -l OgreMain -l boost_system -L $(ROOT_DIR)/build/ -l indie_logger -l CEGUIBase-0 -l CEGUIOgreRenderer-0 -lopenal \
-                  -l indie_exceptions -l sndfile -l BulletDynamics -l BulletCollision -l OgreBulletDynamics -l OgreBulletCollisions -l LinearMath
+                  -l indie_exceptions -l indie_crypto -l sndfile -l BulletDynamics -l BulletCollision -l OgreBulletDynamics -l OgreBulletCollisions -l LinearMath
 
 LOCAL_DEBUG_FLAGS=
 
@@ -59,6 +59,7 @@ SRC_FILES=		main.cpp			\
 			ContextGame.cpp			\
 			SettingsPlayer.cpp		\
 			SoundManager.cpp        \
+			SaveData.cpp            \
 			ContextSplash.cpp
 
 GAME_FILES=		GameData.cpp			\
@@ -110,9 +111,10 @@ INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)		\
 		$(ROOT_DIR)/libs/serializer/include/			\
 		$(ROOT_DIR)/libs/logger/include/                \
 		$(ROOT_DIR)/libs/exceptions/include/            \
+		$(ROOT_DIR)/libs/crypto/include/                \
 		/usr/local/include/OgreBullet/Dynamics 			\
 		/usr/local/include/OgreBullet/Collisions 		\
-		/usr/include/bullet					\
+		/usr/include/bullet         					\
 		/usr/include/OGRE
 
 PRECOMPILED_HEADER= $(addprefix $(INCLUDE_DIR),$(HEADER))

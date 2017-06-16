@@ -2,22 +2,22 @@
 // Created by duhieu_b on 14/06/17.
 //
 
-#ifndef CPP_INDIE_STUDIO_SAVEDATA_HPP
-#define CPP_INDIE_STUDIO_SAVEDATA_HPP
+#ifndef CPP_INDIE_STUDIO_SaveData_HPP
+#define CPP_INDIE_STUDIO_SaveData_HPP
 
 #include <iostream>
-#include <AHash.hpp>
-#include <Hash.hpp>
-#include "data.hpp"
+#include "AHash.hpp"
+#include "Hash.hpp"
+#include "Data.hpp"
 
-class saveData
+class SaveData
 {
 public:
-  saveData();
-  ~saveData();
-  saveData(saveData const &);
-  saveData &operator=(saveData &);
-  saveData(saveData &&) = delete;
+  SaveData();
+  ~SaveData();
+  SaveData(SaveData const &);
+  SaveData &operator=(SaveData &);
+  SaveData(SaveData &&) = delete;
 
   void generate();
 
@@ -44,4 +44,4 @@ private:
   std::int32_t                     m_xor;
 };
 
-#endif // CPP_INDIE_STUDIO_SAVEDATA_HPP
+#endif // CPP_INDIE_STUDIO_SaveData_HPP
