@@ -8,14 +8,19 @@ NAME=		$(ROOT_DIR)/pakpak
 LOCAL_COMP_FLAGS=
 ifeq ($(CXX), clang++)
 LOCAL_COMP_FLAGS+=	-Wno-global-constructors	\
-			-Wno-exit-time-destructors		    \
-			-Wno-weak-vtables			        \
-			-Wno-padded				            \
+			-Wno-exit-time-destructors	\
+			-Wno-weak-vtables		\
+			-Wno-padded			\
 			-Wno-switch-enum
 endif
 
-LOCAL_LINK_FLAGS= -l OIS -l OgreMain -l boost_system -L $(ROOT_DIR)/build/ -l indie_logger -l CEGUIBase-0 -l CEGUIOgreRenderer-0 \
-		-l BulletDynamics -l BulletCollision -l OgreBulletDynamics -l OgreBulletCollisions -l LinearMath	
+LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
+			-L $(ROOT_DIR)/build/ -l indie_logger 	\
+			-l CEGUIBase-0 -l CEGUIOgreRenderer-0 	\
+			-l BulletDynamics -l BulletCollision	\
+			-l OgreBulletDynamics			\
+			-l OgreBulletCollisions			\
+			-l LinearMath -ObjC++ -framework Cocoa
 
 LOCAL_DEBUG_FLAGS=
 
@@ -47,13 +52,13 @@ DIR_LIST=	$(SRC_DIR)		\
 		$(GAME_MAP_DIR)     	\
 	        $(GAME_MENU_DIR)
 
-HEADER=		pakpak_stdafx.hpp
+HEADER=
 
 # Project's files
 
 
 SRC_FILES=		main.cpp			\
-			AppLauncher.cpp			\
+			AppLauncher.mm			\
 			InputListener.cpp		\
 			AContext.cpp			\
 			ContextGame.cpp			\
@@ -85,7 +90,7 @@ GAME_MAP_FILES=		Map.cpp				\
 GAME_TOOLS_FILES=	Tools.cpp
 
 GAME_MENU_FILES=    	GUI.cpp				\
-                    	MainMenu.cpp			\
+			MainMenu.cpp			\
 			ContextMenu.cpp			\
 			MenuManager.cpp     		\
 			MenuOptions.cpp 		\
@@ -111,7 +116,9 @@ INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)			\
 		/usr/local/include/OgreBullet/Dynamics 			\
 		/usr/local/include/OgreBullet/Collisions 		\
 		/usr/include/bullet					\
-		/usr/include/OGRE
+		/usr/local/include/bullet				\
+		/usr/include/OGRE					\
+		/usr/local/include/OGRE
 
 PRECOMPILED_HEADER= $(addprefix $(INCLUDE_DIR),$(HEADER))
 
