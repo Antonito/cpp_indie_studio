@@ -113,6 +113,8 @@ SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)			\
 		$(ROOT_DIR)/libs/serializer/include/			\
 		$(ROOT_DIR)/libs/logger/include/			\
+		/usr/include/OgreBullet/Dynamics 			\
+		/usr/include/OgreBullet/Collisions 			\
 		/usr/local/include/OgreBullet/Dynamics 			\
 		/usr/local/include/OgreBullet/Collisions 		\
 		/usr/include/bullet					\
