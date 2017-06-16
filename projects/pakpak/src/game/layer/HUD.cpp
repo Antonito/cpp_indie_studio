@@ -2,9 +2,7 @@
 // Created by brout_m on 14/06/17.
 //
 
-#include <CEGUI/CEGUI.h>
-#include "HUD.hpp"
-#include "Logger.hpp"
+#include "pakpak_stdafx.hpp"
 
 core::HUD::HUD()
     : m_renderer(nullptr), m_rootWindow(nullptr), m_context(nullptr),

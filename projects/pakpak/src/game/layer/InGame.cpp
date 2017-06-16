@@ -1,5 +1,4 @@
 #include "pakpak_stdafx.hpp"
-#include <functional>
 
 namespace game
 {
