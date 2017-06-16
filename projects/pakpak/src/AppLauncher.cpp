@@ -150,10 +150,9 @@ namespace core
 
     m_currentContext->enable();
 
-    //     m_soundManager.loadSound("Pew_Pew.wav");
-    //     m_soundManager.playSound();
-    //     m_soundManager.loopSound();
-    // Render Loop
+    m_soundManager.loadSound("deps/indie_resource/songs/theme.wav");
+    m_soundManager.playSound();
+    m_soundManager.loopSound();
     while (true)
       {
 	GameState state;
@@ -196,9 +195,9 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
-	// m_soundManager.state();
-	// if (m_soundManager.getState() != AL_PLAYING)
-	//   m_soundManager.clear();
+	m_soundManager.state();
+	if (m_soundManager.getState() != AL_PLAYING)
+	  m_soundManager.clear();
       }
     return true;
   }

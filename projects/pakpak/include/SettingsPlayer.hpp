@@ -4,6 +4,7 @@
 #include <string>
 #include <OIS/OIS.h>
 #include "Metadata.hpp"
+#include "SaveData.hpp"
 
 namespace core
 {
@@ -87,6 +88,7 @@ namespace core
     void setUsed(int playerIndex, bool used);
     int switchKey(OIS::KeyCode old, OIS::KeyCode newKey);
     GameSettings &getPlayer(int playerIndex);
+    std::vector<SaveData> m_data;
 
   private:
     std::vector<GameSettings> m_players;
