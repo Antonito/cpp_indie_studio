@@ -181,9 +181,8 @@ namespace core
 	m_loaded.push_back(false);
 	loadFromFile(i);
 	m_data[i].generate();
-	Log(nope::log::Debug) << "SaveData::saveFile";
-	m_data[i].saveInFile(scoreFile[i]);
-	// m_data[i].recupFromFiles(scoreFile[i]);
+	Log(nope::log::Debug) << "SaveData::recupFile";
+	m_data[i].recupDataFromFile(scoreFile[i]);
       }
   }
 
