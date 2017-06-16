@@ -4,6 +4,7 @@
 #include <string>
 #include <OIS/OIS.h>
 #include "Metadata.hpp"
+#include "SaveData.hpp"
 
 namespace core
 {
@@ -90,6 +91,7 @@ namespace core
 
   private:
     std::vector<GameSettings> m_players;
+    std::vector<SaveData>     m_data;
     std::vector<std::map<std::int32_t, std::string>> m_keycodes;
     std::vector<bool> m_used;
     std::vector<bool> m_loaded;

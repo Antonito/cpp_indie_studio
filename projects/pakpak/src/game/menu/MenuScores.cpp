@@ -6,8 +6,10 @@
 
 namespace core
 {
-  MenuScores::MenuScores(menu::MenuManager &menuManager, GUI &gui)
-      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager)
+  MenuScores::MenuScores(menu::MenuManager &menuManager, GUI &gui,
+                         SettingsPlayer &settings)
+      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
+        m_settings(settings)
 
   {
   }
@@ -26,6 +28,14 @@ namespace core
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MenuScores::onBackClick, this));
+
+    m_gui.getRoot()->getChild("best_times")->setProperty("Text", "");
+
+    m_gui.getRoot()->getChild("finished_tracks")->setProperty("Text", "");
+
+    m_gui.getRoot()->getChild("total_km")->setProperty("Text", "");
+
+    m_gui.getRoot()->getChild("max_speed")->setProperty("Text", "");
   }
 
   void MenuScores::exit()

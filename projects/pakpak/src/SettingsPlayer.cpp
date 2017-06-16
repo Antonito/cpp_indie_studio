@@ -9,6 +9,12 @@ namespace core
       {3, "settings/player3_settings"},
   };
 
+  static std::map<int, std::string const> scoreFile = {
+      {0, "settings/player0_scores"},
+      {1, "settings/player1_scores"},
+      {2, "settings/player2_scores"},
+      {3, "settings/player3_scores"},
+  };
   static std::map<OIS::KeyCode, std::string const> textForKey = {
       {OIS::KeyCode::KC_ESCAPE, "ESC"},
       {OIS::KeyCode::KC_1, "1"},
@@ -164,21 +170,27 @@ namespace core
   };
 
   SettingsPlayer::SettingsPlayer()
-      : m_players(), m_keycodes(), m_used(), m_loaded()
+      : m_players(), m_data(), m_keycodes(), m_used(), m_loaded()
   {
     m_players.resize(5);
+    m_data.resize(5);
     m_keycodes.resize(5);
     m_used.resize(256);
     for (int i = 0; i < 4; ++i)
       {
 	m_loaded.push_back(false);
 	loadFromFile(i);
+	m_data[i].generate();
+	Log(nope::log::Debug) << "SaveData::saveFile";
+	m_data[i].saveInFile(scoreFile[i]);
+	// m_data[i].recupFromFiles(scoreFile[i]);
       }
   }
 
   SettingsPlayer::SettingsPlayer(SettingsPlayer const &that)
-      : m_players(that.m_players), m_keycodes(that.m_keycodes),
-        m_used(that.m_used), m_loaded(that.m_loaded)
+      : m_players(that.m_players), m_data(that.m_data),
+        m_keycodes(that.m_keycodes), m_used(that.m_used),
+        m_loaded(that.m_loaded)
   {
   }
 
