@@ -58,7 +58,6 @@
 #include "SettingsPlayer.hpp"
 
 // Menu
-
 #include "AssetSetter.hpp"
 #include "ContextMenu.hpp"
 #include "GUI.hpp"
@@ -74,6 +73,7 @@
 #include "MenuSolo.hpp"
 
 // Game
+#include "Pauser.hpp"
 #include "AContext.hpp"
 #include "CameraMode.hpp"
 #include "GameData.hpp"

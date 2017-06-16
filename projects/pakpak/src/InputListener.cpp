@@ -65,7 +65,7 @@ namespace core
 
     if (m_shutdown)
       return false;
-//    CEGUI::System::getSingleton().injectTimePulse(p_evt.timeSinceLastFrame);
+    //    CEGUI::System::getSingleton().injectTimePulse(p_evt.timeSinceLastFrame);
     return true;
   }
 
@@ -147,5 +147,13 @@ namespace core
 	    m_inputManager = 0;
 	  }
       }
+  }
+
+  void InputListener::setNormalstate()
+  {
+  }
+
+  void InputListener::setPausedState()
+  {
   }
 }

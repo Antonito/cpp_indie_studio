@@ -70,7 +70,9 @@ GAME_LAYER_FILES=	ALayer.cpp			\
 			PreGame.cpp			\
 			Score.cpp			\
 			SpecGUI.cpp			\
-			Spectator.cpp
+			Spectator.cpp		\
+			HUD.cpp				\
+			Pauser.cpp
 
 GAME_CAR_FILES=		ACar.cpp			\
 			EmptyCar.cpp

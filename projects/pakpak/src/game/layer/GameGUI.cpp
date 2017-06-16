@@ -2,8 +2,8 @@
 
 namespace game
 {
-  GameGUI::GameGUI(GameData &data, LocalPlayer &player)
-      : ALayer(data, player), m_player(player)
+  GameGUI::GameGUI(GameData &data, LocalPlayer &player, core::HUD *hud)
+      : ALayer(data, player, hud), m_player(player)
   {
   }
 
@@ -17,6 +17,8 @@ namespace game
 
   void GameGUI::disable()
   {
+    if (m_gui)
+      m_gui->removeLayout("gui_ingame.layout");
   }
 
   void GameGUI::update()

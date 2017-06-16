@@ -2,7 +2,8 @@
 
 namespace game
 {
-  Score::Score(GameData &data, ILayerStack &layer) : ALayer(data, layer)
+  Score::Score(GameData &data, ILayerStack &layer, core::HUD *hud)
+      : ALayer(data, layer, hud)
   {
   }
 

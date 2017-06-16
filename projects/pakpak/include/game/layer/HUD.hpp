@@ -7,6 +7,8 @@
 
 #include <CEGUI/RendererModules/Ogre/Renderer.h>
 #include <OIS/OISPrereqs.h>
+#include <map>
+#include <OIS/OIS.h>
 
 namespace core
 {
@@ -28,13 +30,19 @@ namespace core
     void           grabMouse();
     void           showCursor(bool);
     void           hideCursor(bool);
-    CEGUI::Window &getChild(const std::string &);
+    CEGUI::Window *getChild(const std::string &);
+    CEGUI::Window *operator[](CEGUI::Vector2f &);
+    CEGUI::Window *getRoot();
+    void           setQuit(bool);
+    bool           getQuit() const;
 
   private:
     CEGUI::OgreRenderer *m_renderer;
     CEGUI::Window *      m_rootWindow;
     CEGUI::GUIContext *  m_context;
     OIS::ParamList       m_param;
+    std::map<std::string, CEGUI::Window *> m_windows;
+    bool m_quit;
   };
 }
 

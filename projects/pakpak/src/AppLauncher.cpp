@@ -160,6 +160,12 @@ namespace core
 	if (m_window->isClosed())
 	  return false;
 
+	// Update Window Size
+	CEGUI::Size<float> sizef;
+	sizef.d_height = m_window->getHeight();
+	sizef.d_width = m_window->getWidth();
+	CEGUI::System::getSingleton().notifyDisplaySizeChanged(sizef);
+
 	// Update game logic
 	state = m_currentContext->update();
 

@@ -3,8 +3,8 @@
 
 namespace game
 {
-  InGame::InGame(GameData &data, LocalPlayer &player)
-      : ALayer(data, player), m_player(player)
+  InGame::InGame(GameData &data, LocalPlayer &player, core::HUD *hud)
+      : ALayer(data, player, hud), m_player(player)
   {
   }
 
@@ -14,6 +14,9 @@ namespace game
 
   void InGame::enable()
   {
+    nope::log::Log(Debug) << "Enabling InGame";
+    if (m_gui)
+      m_gui->loadLayout("gui_ingame.layout");
   }
 
   void InGame::disable()
@@ -37,34 +40,13 @@ namespace game
       {
 	return false;
       }
-    std::cout << "DOING ACTION" << std::endl;
     void (LocalPlayer::*ptr)() = m_player.actions(action).first;
     (m_player.*ptr)();
     return true;
-
-    //     switch (ke.key)
-    //       {
-    //       case OIS::KC_UP:
-    // 	m_player.car().move(-1);
-    // 	break;
-    //       case OIS::KC_S:
-    // 	m_player.car().move(1);
-    // 	break;
-    //       case OIS::KC_A:
-    // 	m_player.car().turn(2);
-    // 	break;
-    //       case OIS::KC_D:
-    // 	m_player.car().turn(-2);
-    // 	break;
-    //       default:
-    // 	return false;
-    //       }
-    //     return (true);
   }
 
   bool InGame::keyReleased(OIS::KeyEvent const &ke)
   {
-
     std::string action =
         m_player.settings().actionForKey(m_player.order(), ke.key);
 
@@ -72,32 +54,14 @@ namespace game
       {
 	return false;
       }
-    std::cout << "DOING ACTION" << std::endl;
     void (LocalPlayer::*ptr)() = m_player.actions(action).second;
     (m_player.*ptr)();
     return true;
-    //     switch (ke.key)
-    //       {
-    //       case OIS::KC_UP:
-    // 	m_player.car().move(0);
-    // 	break;
-    //       case OIS::KC_S:
-    // 	m_player.car().move(0);
-    // 	break;
-    //       case OIS::KC_A:
-    // 	m_player.car().turn(0);
-    // 	break;
-    //       case OIS::KC_D:
-    // 	m_player.car().turn(0);
-    // 	break;
-    //       default:
-    // 	return false;
-    //       }
-    //     return (true);
   }
 
   bool InGame::mouseMoved(OIS::MouseEvent const &)
   {
+
     return (false);
   }
 

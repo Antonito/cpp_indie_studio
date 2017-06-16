@@ -2,8 +2,8 @@
 
 namespace game
 {
-  Spectator::Spectator(GameData &data, ILayerStack &layer)
-      : ALayer(data, layer)
+  Spectator::Spectator(GameData &data, ILayerStack &layer, core::HUD *hud)
+      : ALayer(data, layer, hud)
   {
   }
 

@@ -9,7 +9,7 @@ namespace game
   {
   public:
     PostGame() = delete;
-    PostGame(GameData &data, ILayerStack &layer);
+    PostGame(GameData &data, ILayerStack &layer, core::HUD *hud);
     PostGame(PostGame const &) = delete;
     PostGame(PostGame &&) = delete;
     virtual ~PostGame();

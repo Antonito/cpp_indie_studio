@@ -85,26 +85,6 @@ namespace core
   GUI::GUI()
       : m_renderer(nullptr), m_root(nullptr), m_context(nullptr), m_param()
   {
-#if defined(_WIN32)
-    m_param.insert(std::make_pair(std::string("w32_mouse"),
-                                  std::string("DISCL_FOREGROUND")));
-    m_param.insert(std::make_pair(std::string("w32_mouse"),
-                                  std::string("DISCL_NONEXCLUSIVE")));
-    m_param.insert(std::make_pair(std::string("w32_keyboard"),
-                                  std::string("DISCL_FOREGROUND")));
-    m_param.insert(std::make_pair(std::string("w32_keyboard"),
-                                  std::string("DISCL_NONEXCLUSIVE")));
-#else
-    m_param.insert(
-        std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
-    m_param.insert(
-        std::make_pair(std::string("x11_mouse_hide"), std::string("true")));
-    m_param.insert(std::make_pair(std::string("x11_keyboard_grab"),
-                                  std::string("false")));
-    m_param.insert(
-        std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
-#endif
-
     init();
   }
 
