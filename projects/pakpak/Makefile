@@ -125,8 +125,9 @@ SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 
 INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)		\
 		$(ROOT_DIR)/libs/serializer/include/			\
-<<<<<<< HEAD
 		$(ROOT_DIR)/libs/logger/include/			\
+		$(ROOT_DIR)/libs/exceptions/include/			\
+		$(ROOT_DIR)/libs/crypto/include/			\
 		/usr/include/OgreBullet/Dynamics 			\
 		/usr/include/OgreBullet/Collisions 			\
 		/usr/local/include/OgreBullet/Dynamics 			\
@@ -137,15 +138,6 @@ INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)		\
 		/usr/local/include/OGRE					\
 		/usr/local/include/OGRE/RenderSystems/GL/		\
 		/usr/local/include/OGRE/RenderSystems/GL/OSX
-=======
-		$(ROOT_DIR)/libs/logger/include/                \
-		$(ROOT_DIR)/libs/exceptions/include/            \
-		$(ROOT_DIR)/libs/crypto/include/                \
-		/usr/local/include/OgreBullet/Dynamics 			\
-		/usr/local/include/OgreBullet/Collisions 		\
-		/usr/include/bullet         					\
-		/usr/include/OGRE
->>>>>>> master
 
 PRECOMPILED_HEADER= $(addprefix $(INCLUDE_DIR),$(HEADER))
 
