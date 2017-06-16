@@ -15,7 +15,9 @@ namespace core
   {
   public:
     MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui);
-    virtual ~MenuMultiplayer(){};
+    virtual ~MenuMultiplayer()
+    {
+    }
     void      draw();
     void      entry();
     void      exit();

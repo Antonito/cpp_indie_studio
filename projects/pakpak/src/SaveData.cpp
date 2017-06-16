@@ -8,7 +8,7 @@
 #include "SaveData.hpp"
 #include "Logger.hpp"
 
-SaveData::SaveData() : m_key(""), m_crypto(), m_data(), m_xor(42)
+SaveData::SaveData() : m_key(""), m_data(), m_xor(42), m_crypto()
 {
 }
 
@@ -17,8 +17,7 @@ SaveData::~SaveData()
 }
 
 SaveData::SaveData(SaveData const &cpy)
-    : m_key(cpy.m_key), m_crypto(cpy.m_crypto), m_data(cpy.m_data),
-      m_xor(cpy.m_xor)
+    : m_key(cpy.m_key), m_data(cpy.m_data), m_xor(cpy.m_xor)
 {
 }
 
@@ -51,7 +50,8 @@ void SaveData::saveInFile(std::string const &file)
       ofs.open(file, std::ios::trunc);
       if (ofs.is_open())
 	{
-	  ofs.write(toXor(m_key).c_str(), m_key.length());
+	  ofs.write(toXor(m_key).c_str(),
+	            static_cast<std::streamsize>(m_key.length()));
 	  char *structToXor =
 	      toXor(reinterpret_cast<char *>(&m_data), sizeof(m_data));
 	  ofs.write(structToXor, sizeof(m_data));
@@ -96,8 +96,8 @@ void SaveData::recupDataFromFile(std::string const &file)
       buf = ss.str().substr(32);
       key = toXor(key);
       char *xorToStruct = toXor(buf.c_str(), sizeof(m_data));
-      nope::log::Log(Debug) << "Recup from file : " << file
-                            << " Key : " << key;
+      nope::log::Log(Debug)
+          << "Recup from file : " << file << " Key : " << key;
       std::memcpy(reinterpret_cast<char *>(&m_data), xorToStruct,
                   sizeof(m_data));
       delete xorToStruct;
@@ -124,12 +124,12 @@ std::string SaveData::toXor(std::string const &elem)
   return xorStr;
 }
 
-char *SaveData::toXor(char const *elem, std::int32_t length)
+char *SaveData::toXor(char const *elem, std::size_t const length)
 {
   char *xorStr = new char[length];
 
-  std::memcpy(xorStr, elem, static_cast<std::size_t>(length));
-  for (std::int32_t i = 0; i < length; ++i)
+  std::memcpy(xorStr, elem, length);
+  for (std::size_t i = 0; i < length; ++i)
     {
       xorStr[i] ^= static_cast<char>(m_xor);
     }

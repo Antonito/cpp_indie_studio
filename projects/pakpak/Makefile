@@ -6,13 +6,6 @@ MK_COMMON_DIR=	./../../mk/
 NAME=		$(ROOT_DIR)/pakpak
 
 LOCAL_COMP_FLAGS=
-ifeq ($(CXX), clang++)
-LOCAL_COMP_FLAGS+=	-Wno-global-constructors	\
-			-Wno-exit-time-destructors	\
-			-Wno-weak-vtables		\
-			-Wno-padded			\
-			-Wno-switch-enum
-endif
 
 LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
 			-L $(ROOT_DIR)/build/ -l indie_logger 	\
@@ -34,6 +27,14 @@ endif
 LOCAL_DEBUG_FLAGS=
 
 include $(MK_COMMON_DIR)colors.mk $(MK_COMMON_DIR)defs.mk
+
+ifeq ($(CXX), clang++)
+CXXFLAGS+=		-Wno-global-constructors	\
+			-Wno-exit-time-destructors	\
+			-Wno-weak-vtables		\
+			-Wno-padded			\
+			-Wno-switch-enum
+endif
 
 # Project's directories
 

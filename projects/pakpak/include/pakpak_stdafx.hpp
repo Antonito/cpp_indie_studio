@@ -30,7 +30,11 @@
 //
 // OIS
 //
+#if defined __APPLE__
+#include <ois/OIS.h>
+#else
 #include <OIS/OIS.h>
+#endif
 
 //
 // Windows

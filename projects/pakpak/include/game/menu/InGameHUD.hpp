@@ -15,7 +15,9 @@ namespace core
   {
   public:
     InGameHUD(menu::MenuManager &menuManager, GUI &gui);
-    virtual ~InGameHUD(){};
+    virtual ~InGameHUD()
+    {
+    }
     void      draw();
     void      entry();
     void      exit();

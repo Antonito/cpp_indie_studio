@@ -4,6 +4,12 @@
 #include <vector>
 #include <cstdint>
 
+// Disable clang warning for vtable
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wweak-vtables"
+#endif
+
 namespace core
 {
   // Forward declaration for faster compilation
@@ -23,5 +29,9 @@ namespace core
     virtual void      display() = 0;
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !ICONTEXT_HPP_

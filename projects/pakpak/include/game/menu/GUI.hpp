@@ -7,7 +7,11 @@
 
 #include <iostream>
 #include <OGRE/Ogre.h>
+#if defined __APPLE__
+#include <ois/OIS.h>
+#else
 #include <OIS/OIS.h>
+#endif
 #include <glm/glm.hpp>
 #include <CEGUI/CEGUI.h>
 #include <CEGUI/RendererModules/Ogre/Renderer.h>

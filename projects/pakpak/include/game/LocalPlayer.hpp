@@ -18,6 +18,12 @@
 #include "ILayer.hpp"
 #include "SettingsPlayer.hpp"
 
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 namespace game
 {
   class LocalPlayer final : public IEventHandler, public ILayerStack
@@ -107,5 +113,9 @@ namespace game
     int                 m_order;
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !LOCALPLAYER_HPP_

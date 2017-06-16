@@ -15,6 +15,12 @@
 #include <sndfile.h>
 #include <iostream>
 
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 class SoundManager
 {
 public:
@@ -47,5 +53,9 @@ private:
   ALuint      m_source;
   ALint       m_state;
 };
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // CPP_INDIE_STUDIO_SOUNDMANAGER_HPP

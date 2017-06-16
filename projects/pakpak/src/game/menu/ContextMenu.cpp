@@ -6,6 +6,7 @@ namespace menu
                            core::SettingsPlayer &settings)
       : core::AContext(win, input), m_menu(win, settings), m_settings(settings)
   {
+    static_cast<void>(m_settings); // TODO: rm
   }
 
   ContextMenu::~ContextMenu()
