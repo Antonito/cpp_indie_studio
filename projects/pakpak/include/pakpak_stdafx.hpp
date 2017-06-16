@@ -105,6 +105,7 @@
 // Logger
 //
 #include "Logger.hpp"
+#include "IOError.hpp"
 
 //
 // Physic

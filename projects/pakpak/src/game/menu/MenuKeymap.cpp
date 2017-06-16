@@ -119,7 +119,7 @@ namespace core
 	m_gui.getRoot()
 	    ->getChild(m_curButton)
 	    ->setProperty("Text", m_settings.getTextForKey(arg.key));
-
+	loadLayout(m_playerSelected);
 	Log(nope::log::Debug) << m_settings.getTextForKey(arg.key);
       }
     else

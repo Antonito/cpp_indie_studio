@@ -3,10 +3,10 @@
 namespace core
 {
   static std::map<int, std::string const> playerFile = {
-      {0, "player0_settings"},
-      {1, "player1_settings"},
-      {2, "player2_settings"},
-      {3, "player3_settings"},
+      {0, "settings/player0_settings"},
+      {1, "settings/player1_settings"},
+      {2, "settings/player2_settings"},
+      {3, "settings/player3_settings"},
   };
 
   static std::map<OIS::KeyCode, std::string const> textForKey = {
@@ -329,15 +329,62 @@ namespace core
       return true;
     else if (m_used[newKey])
       {
-	// swicth
-	return false;
+	int         oldPlayer = switchKey(old, newKey);
+	std::string oldAction = m_keycodes[oldPlayer][newKey];
+	std::string newAction = m_keycodes[playerIndex][old];
+	m_keycodes[oldPlayer].erase(newKey);
+	m_keycodes[playerIndex].erase(old);
+	m_keycodes[oldPlayer][old] = oldAction;
+	m_keycodes[playerIndex][newKey] = newAction;
       }
-    m_used[old] = false;
-    m_used[newKey] = true;
-    std::string action = m_keycodes[playerIndex][old];
-    m_keycodes[playerIndex].erase(old);
-    m_keycodes[playerIndex][newKey] = action;
+    else
+      {
+	m_used[old] = false;
+	m_used[newKey] = true;
+	std::string action = m_keycodes[playerIndex][old];
+	m_keycodes[playerIndex].erase(old);
+	m_keycodes[playerIndex][newKey] = action;
+      }
     return true;
+  }
+
+  int SettingsPlayer::switchKey(OIS::KeyCode old, OIS::KeyCode newKey)
+  {
+
+    for (int i = 0; i < 4; ++i)
+      {
+	if (m_players[i].key.speedUp == newKey)
+	  {
+	    m_players[i].key.speedUp = old;
+	    return (i);
+	  }
+	if (m_players[i].key.slowDown == newKey)
+	  {
+	    m_players[i].key.slowDown = old;
+	    return (i);
+	  }
+	if (m_players[i].key.turnRight == newKey)
+	  {
+	    m_players[i].key.turnRight = old;
+	    return (i);
+	  }
+	if (m_players[i].key.turnLeft == newKey)
+	  {
+	    m_players[i].key.turnLeft = old;
+	    return (i);
+	  }
+	if (m_players[i].key.useObject == newKey)
+	  {
+	    m_players[i].key.useObject = old;
+	    return (i);
+	  }
+	if (m_players[i].key.openMenu == newKey)
+	  {
+	    m_players[i].key.openMenu = old;
+	    return (i);
+	  }
+      }
+    return (0);
   }
 
   SettingsPlayer::GameSettings &SettingsPlayer::getPlayer(int playerIndex)

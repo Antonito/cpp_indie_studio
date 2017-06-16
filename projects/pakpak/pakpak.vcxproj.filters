@@ -46,6 +46,12 @@
     <Filter Include="Source Files\game\tools">
       <UniqueIdentifier>{94d3db9e-e476-4f73-baa3-8479bcfaa0d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game\menu">
+      <UniqueIdentifier>{132be8f4-2523-437e-9e32-0d7201b665f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\menu">
+      <UniqueIdentifier>{47670d33-48f1-43a9-a6e6-2b3fd6d3992c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">
@@ -64,9 +70,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ContextSplash.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ContextMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ContextGame.cpp">
@@ -128,6 +131,45 @@
     </ClCompile>
     <ClCompile Include="src\game\tools\Tools.cpp">
       <Filter>Source Files\game\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\AssetSetter.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\ContextMenu.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\GUI.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\InGameHUD.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\InGamePause.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MainMenu.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuKeymap.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuManager.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuMultiplayer.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuOptions.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuScores.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuSolo.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SettingsPlayer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +280,48 @@
     </ClInclude>
     <ClInclude Include="include\game\tools\Tools.hpp">
       <Filter>Header Files\game\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\AssetSetter.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\ContextMenu.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\GUI.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\IMenuLayer.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\InGameHUD.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\InGamePause.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\MainMenu.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\MenuKeymap.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\MenuManager.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\MenuMultiplayer.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\MenuOptions.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\MenuScores.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\MenuSolo.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SettingsPlayer.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

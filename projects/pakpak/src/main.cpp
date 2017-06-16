@@ -45,6 +45,5 @@ int main(int, char **)
 
 #endif
     }
-
   return 0;
 }

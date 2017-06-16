@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\game\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)include\game\menu\;$(SolutionDir)libs\exceptions\include\;$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\game\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
@@ -90,7 +90,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\game\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(ProjectDir)include\game\menu\;$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\game\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
@@ -102,12 +102,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>DEBUG;_DEBUG;_WINDOWS;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(BULLET_HOME)\src;$(OGRE_HOME)\include\OGRE\Overlay;$(BOOST_HOME)\;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(CEGUI_DEPS_HOME)\include\;$(CEGUI_INCLUDE)\;$(OGRE_HOME)\include\OGRE\Overlay;$(BOOST_HOME)\;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(BULLET_ROOT)\lib\Debug\;$(OGRE_BULLET_ROOT)\lib\Debug\;$(BOOST_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OgreOverlay_d.lib;OgreMain_d.lib;OIS_d.lib;OgreBulletCollisions_d.lib;OgreBulletDynamics_d.lib;bulletcollision_Debug.lib;bulletdynamics_Debug.lib;LinearMath_Debug.lib;GIMPACTutils_Debug.lib;ConvexDecomposition_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(CEGUI_LIB)\;$(BULLET_ROOT)\lib\Debug\;$(OGRE_BULLET_ROOT)\lib\Debug\;$(BOOST_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OgreOverlay_d.lib;OgreMain_d.lib;OIS_d.lib;OgreBulletCollisions_d.lib;OgreBulletDynamics_d.lib;bulletcollision_Debug.lib;bulletdynamics_Debug.lib;LinearMath_Debug.lib;GIMPACTutils_Debug.lib;ConvexDecomposition_Debug.lib;%(AdditionalDependencies);CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -174,7 +174,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(BULLET_HOME)\src;$(OGRE_HOME)\include\OGRE\Overlay;$(BOOST_HOME)\;$(OGRE_HOME)\include\OGRE\Overlay;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(CEGUI_DEPS_HOME)\include\;$(BULLET_HOME)\src;$(OGRE_HOME)\include\OGRE\Overlay;$(BOOST_HOME)\;$(OGRE_HOME)\include\OGRE\Overlay;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -214,16 +214,6 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="src\ContextGame.cpp">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="src\ContextMenu.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
@@ -413,6 +403,78 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\game\menu\AssetSetter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\ContextMenu.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\GUI.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\InGameHUD.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\InGamePause.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MainMenu.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuKeymap.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuMultiplayer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuOptions.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuScores.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuSolo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="src\game\PlayerData.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -441,6 +503,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\SettingsPlayer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
@@ -485,12 +553,26 @@
     <ClInclude Include="include\game\LocalPlayer.hpp" />
     <ClInclude Include="include\game\map\Map.hpp" />
     <ClInclude Include="include\game\map\PathPoint.hpp" />
+    <ClInclude Include="include\game\menu\AssetSetter.hpp" />
+    <ClInclude Include="include\game\menu\ContextMenu.hpp" />
+    <ClInclude Include="include\game\menu\GUI.hpp" />
+    <ClInclude Include="include\game\menu\IMenuLayer.hpp" />
+    <ClInclude Include="include\game\menu\InGameHUD.hpp" />
+    <ClInclude Include="include\game\menu\InGamePause.hpp" />
+    <ClInclude Include="include\game\menu\MainMenu.hpp" />
+    <ClInclude Include="include\game\menu\MenuKeymap.hpp" />
+    <ClInclude Include="include\game\menu\MenuManager.hpp" />
+    <ClInclude Include="include\game\menu\MenuMultiplayer.hpp" />
+    <ClInclude Include="include\game\menu\MenuOptions.hpp" />
+    <ClInclude Include="include\game\menu\MenuScores.hpp" />
+    <ClInclude Include="include\game\menu\MenuSolo.hpp" />
     <ClInclude Include="include\game\PlayerData.hpp" />
     <ClInclude Include="include\game\tools\Tools.hpp" />
     <ClInclude Include="include\IEventHandler.hpp" />
     <ClInclude Include="include\IContext.hpp" />
     <ClInclude Include="include\InputListener.hpp" />
     <ClInclude Include="include\pakpak_stdafx.hpp" />
+    <ClInclude Include="include\SettingsPlayer.hpp" />
     <ClInclude Include="include\targetver.h" />
   </ItemGroup>
   <ItemGroup>
