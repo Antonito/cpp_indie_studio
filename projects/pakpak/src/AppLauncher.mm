@@ -150,7 +150,7 @@ namespace core
 
     // Render Loop
     while (true)
-      {
+      { 
 	GameState state;
 
 #if defined(_WIN32) || defined(__linux__)

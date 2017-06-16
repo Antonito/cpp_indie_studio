@@ -20,7 +20,7 @@ LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
 			-l BulletDynamics -l BulletCollision	\
 			-l OgreBulletDynamics			\
 			-l OgreBulletCollisions			\
-			-l LinearMath -ObjC++ -framework Cocoa
+			-l LinearMath -ObjC++ -framework Cocoa -framework Carbon
 
 LOCAL_DEBUG_FLAGS=
 
@@ -59,7 +59,7 @@ HEADER=
 
 SRC_FILES=		main.cpp			\
 			AppLauncher.mm			\
-			InputListener.cpp		\
+			InputListener.mm		\
 			AContext.cpp			\
 			ContextGame.cpp			\
 			SettingsPlayer.cpp		\
@@ -118,7 +118,9 @@ INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)			\
 		/usr/include/bullet					\
 		/usr/local/include/bullet				\
 		/usr/include/OGRE					\
-		/usr/local/include/OGRE
+		/usr/local/include/OGRE					\
+		/usr/local/include/OGRE/RenderSystems/GL/		\
+		/usr/local/include/OGRE/RenderSystems/GL/OSX
 
 PRECOMPILED_HEADER= $(addprefix $(INCLUDE_DIR),$(HEADER))
 
