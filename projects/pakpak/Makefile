@@ -17,7 +17,7 @@ endif
 LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
 			-L $(ROOT_DIR)/build/ -l indie_logger 	\
 			-l CEGUIBase-0 -l CEGUIOgreRenderer-0 	\
-			-lopenal -l indie_exceptions		\
+			-l indie_exceptions			\
 			-l indie_crypto -l sndfile		\
 			-l BulletDynamics -l BulletCollision	\
 			-l OgreBulletDynamics			\
@@ -25,8 +25,10 @@ LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
 			-l LinearMath
 
 ifeq ($(shell uname -s),Darwin)
-LOCAL_COMP_FLAGS+=		-x objective-c++
-LOCAL_LINK_FLAGS+=	-ObjC++ -framework Cocoa -framework Carbon
+LOCAL_COMP_FLAGS+=	-x objective-c++
+LOCAL_LINK_FLAGS+=	-ObjC++ -framework Cocoa -framework Carbon -framework OpenAL
+else 
+LOCAL_LINK_FLAGS+=	-lopenal
 endif
 
 LOCAL_DEBUG_FLAGS=
