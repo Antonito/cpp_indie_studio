@@ -36,7 +36,7 @@ namespace core
 
     if (m_sock.send(data, sizeToWrite) == false)
       {
-	nope::log::Log(Debug) << "Failed to write data";
+	nope::log::Log(Debug) << "Failed to write data [NetworkAuth]";
 	ret = network::IClient::ClientAction::FAILURE;
       }
     return (ret);
@@ -59,12 +59,14 @@ namespace core
 	assert(headerLen >= 0);
 	if (headerLen == 0)
 	  {
-	    nope::log::Log(Debug) << "Read failed, shall disconnect";
+	    nope::log::Log(Debug)
+	        << "Read failed, shall disconnect [NetworkAuth]";
 	    ret = network::IClient::ClientAction::DISCONNECT;
 	  }
 	else
 	  {
-	    nope::log::Log(Debug) << "Received header, checking it";
+	    nope::log::Log(Debug)
+	        << "Received header, checking it [NetworkAuth]";
 	    // Check header
 	    PacketHeader *header =
 	        reinterpret_cast<PacketHeader *>(buff.get());
@@ -78,7 +80,8 @@ namespace core
 		// Get size to read
 		std::uint16_t sizeToRead = ntohs(header->size);
 
-		nope::log::Log(Debug) << "Should read " << sizeToRead;
+		nope::log::Log(Debug)
+		    << "Should read " << sizeToRead << " [NetworkAuth]";
 		// Read rest of the packet
 		if (m_sock.rec(buff.get() + headerLen, sizeToRead, &buffLen))
 		  {
@@ -86,7 +89,7 @@ namespace core
 		    if (buffLen == 0)
 		      {
 			nope::log::Log(Debug)
-			    << "Read failed, shall disconnect";
+			    << "Read failed, shall disconnect [NetworkAuth]";
 			ret = network::IClient::ClientAction::DISCONNECT;
 		      }
 		    else
