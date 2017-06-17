@@ -32,6 +32,9 @@ namespace core
 
     nope::log::Log(Debug) << "Server list OKAY";
 
+      static_cast<CEGUI::ItemListbox *>(
+              m_gui.getRoot()->getChild("servers_list"))
+              ->setAutoResizeEnabled(1);
     std::int32_t i(0);
     nope::log::Log(Debug) << "Entry on MultiMenu";
     CEGUI::WindowManager *winManager = CEGUI::WindowManager::getSingletonPtr();
@@ -44,7 +47,8 @@ namespace core
 	nope::log::Log(Info) << "Server: " << game.address << ":" << game.port
 	                     << " [ " << game.clients << " / "
 	                     << game.maxClients << " ]";
-	CEGUI::ItemEntry *itm = static_cast<CEGUI::ItemEntry *>(winManager->createWindow("TaharezLook/ListboxItem"));
+	CEGUI::ItemEntry *itm = static_cast<CEGUI::ItemEntry *>(
+	    winManager->createWindow("TaharezLook/ListboxItem"));
 	itm->setText("Server #" + std::to_string(i + 1) + " : " +
 	             game.address + ":" + std::to_string(game.port));
 	static_cast<CEGUI::ItemListbox *>(
