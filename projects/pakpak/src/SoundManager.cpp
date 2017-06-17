@@ -233,7 +233,9 @@ namespace core
   void SoundManager::downVolume(float volume)
   {
     nope::log::Log(Debug) << "Downgrade volume : " << volume;
-    alSourcef(m_source, AL_GAIN, -volume);
+    alSourcef(m_source, AL_GAIN, 0.5f);
+
+    // alSourcef(m_source, AL_GAIN, -volume);
   }
 
   // Set the orientation of the sound to a specific direction

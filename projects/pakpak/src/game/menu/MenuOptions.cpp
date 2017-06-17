@@ -230,7 +230,7 @@ namespace core
   bool MenuOptions::onVolumeLevel0(CEGUI::EventArgs const &)
   {
     soundClick();
-    m_sound.downVolume(100.0f);
+    m_sound.setVolume(0.0f);
     swapButtons(m_volumeButtons, m_volumeSelected, 0, AssetSetter::greyButton,
                 AssetSetter::redButton);
     return true;
@@ -239,7 +239,7 @@ namespace core
   bool MenuOptions::onVolumeLevel25(CEGUI::EventArgs const &)
   {
     soundClick();
-    m_sound.downVolume(75.0f);
+    m_sound.setVolume(0.25f);
     swapButtons(m_volumeButtons, m_volumeSelected, 1, AssetSetter::greyButton,
                 AssetSetter::redButton);
     return true;
@@ -248,7 +248,7 @@ namespace core
   bool MenuOptions::onVolumeLevel50(CEGUI::EventArgs const &)
   {
     soundClick();
-    m_sound.downVolume(50.0f);
+    m_sound.setVolume(0.50f);
     swapButtons(m_volumeButtons, m_volumeSelected, 2, AssetSetter::greyButton,
                 AssetSetter::redButton);
     return true;
@@ -257,7 +257,7 @@ namespace core
   bool MenuOptions::onVolumeLevel75(CEGUI::EventArgs const &)
   {
     soundClick();
-    m_sound.downVolume(25.0f);
+    m_sound.setVolume(0.50f);
     swapButtons(m_volumeButtons, m_volumeSelected, 3, AssetSetter::greyButton,
                 AssetSetter::redButton);
     return true;
@@ -266,7 +266,7 @@ namespace core
   bool MenuOptions::onVolumeLevel100(CEGUI::EventArgs const &)
   {
     soundClick();
-    m_sound.downVolume(0.0f);
+    m_sound.downVolume(1.0f);
     swapButtons(m_volumeButtons, m_volumeSelected, 4, AssetSetter::greyButton,
                 AssetSetter::redButton);
     return true;
