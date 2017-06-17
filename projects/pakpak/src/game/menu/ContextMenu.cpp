@@ -4,11 +4,11 @@ namespace menu
 {
   ContextMenu::ContextMenu(Ogre::RenderWindow *win, core::InputListener *input,
                            core::SettingsPlayer &settings,
-                           core::SoundManager &  sound)
-      : core::AContext(win, input), m_menu(win, settings, sound),
-        m_settings(settings), m_sound(sound)
+                           core::SoundManager &  sound,
+                           core::NetworkManager &net)
+      : core::AContext(win, input), m_menu(win, settings, sound, net),
+        m_sound(sound)
   {
-    static_cast<void>(m_settings); // TODO: rm
   }
 
   ContextMenu::~ContextMenu()

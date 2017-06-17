@@ -111,6 +111,9 @@
 #include "Logger.hpp"
 #include "IOError.hpp"
 
+// Network
+#include "NetworkManager.hpp"
+
 //
 // Physic
 //

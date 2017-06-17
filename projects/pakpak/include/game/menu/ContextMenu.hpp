@@ -27,7 +27,9 @@ namespace menu
   {
   public:
     ContextMenu(Ogre::RenderWindow *win, core::InputListener *input,
-                core::SettingsPlayer &settings, core::SoundManager &sound);
+                core::SettingsPlayer &settings, core::SoundManager &sound,
+                core::NetworkManager &net);
+
     ContextMenu(ContextMenu const &) = delete;
     ContextMenu(ContextMenu &&) = delete;
     virtual ~ContextMenu();
@@ -45,9 +47,8 @@ namespace menu
     bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
   private:
-    MenuManager           m_menu;
-    core::SettingsPlayer &m_settings;
-    core::SoundManager  &m_sound;
+    MenuManager         m_menu;
+    core::SoundManager &m_sound;
   };
 }
 

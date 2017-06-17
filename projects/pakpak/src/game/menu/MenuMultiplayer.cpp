@@ -7,11 +7,12 @@
 namespace core
 {
   MenuMultiplayer::MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui,
-                                   SoundManager &sound)
+                                   SoundManager &sound, NetworkManager &net)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
-        m_sound(sound)
+        m_sound(sound), m_network(net)
 
   {
+    nope::log::Log(Debug) << "Building MenuMultiplayer";
   }
 
   void MenuMultiplayer::draw()
@@ -20,6 +21,21 @@ namespace core
 
   void MenuMultiplayer::entry()
   {
+    nope::log::Log(Debug) << "Entering MenuMultiplayer";
+
+    m_network.authenticate();
+    std::vector<GameServer> gameServerList = m_network.getServerList();
+
+    for (GameServer &game : gameServerList)
+      {
+	nope::log::Log(Info)
+	    << "Server: " << game.address << ":" << game.port << " [ "
+	    << game.clients << " / " << game.maxClients << " ]";
+      }
+    // TODO Benjamin
+    // TODO Arthur
+    // -> Display game server list, using informations from gameServerList
+
     m_gui.loadLayout("multiplayer.layout");
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
 
@@ -50,10 +66,15 @@ namespace core
 
   void MenuMultiplayer::exit()
   {
+    m_network.deauthenticate();
+    // GameServer if connected
+    nope::log::Log(Debug) << "Exit MenuMultiplayer";
   }
 
   void MenuMultiplayer::destroy()
   {
+    exit();
+    nope::log::Log(Debug) << "Destroying MenuMultiplayer";
   }
 
   GameState MenuMultiplayer::update() const
@@ -63,6 +84,7 @@ namespace core
 
   void MenuMultiplayer::build()
   {
+    nope::log::Log(Debug) << "Building MenuMultiplayer";
   }
 
   bool MenuMultiplayer::keyPressed(const OIS::KeyEvent &arg)
@@ -129,6 +151,7 @@ namespace core
   bool MenuMultiplayer::onBackClick(CEGUI::EventArgs const &)
   {
     soundClick();
+    exit();
     m_menuManager.popLayer();
     m_menuManager.begin();
     return false;

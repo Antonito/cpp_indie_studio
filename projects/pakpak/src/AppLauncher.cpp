@@ -16,7 +16,7 @@ namespace core
   AppLauncher::AppLauncher()
       : m_root(nullptr), m_window(nullptr), m_inputListener(nullptr),
         m_contexts(), m_currentContext(nullptr), m_gameState(GameState::None),
-        m_settings(), m_soundManager()
+        m_settings(), m_soundManager(), m_network()
   {
   }
 
@@ -104,7 +104,7 @@ namespace core
 
     m_window->removeAllViewports();
 
-      initOpenAl(NULL);
+    initOpenAl(NULL);
     //// Create the Scene Manager
     // m_sceneMgr =
     //    m_root->createSceneManager("DefaultSceneManager", "Mon Scene
@@ -143,8 +143,8 @@ namespace core
 
     // Menu context
     m_contexts[static_cast<std::size_t>(GameState::Menu)] =
-        std::make_unique<menu::ContextMenu>(m_window, m_inputListener,
-                                            m_settings, m_soundManager);
+        std::make_unique<menu::ContextMenu>(
+            m_window, m_inputListener, m_settings, m_soundManager, m_network);
 
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
@@ -198,7 +198,7 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
-	}
+      }
     return true;
   }
 
