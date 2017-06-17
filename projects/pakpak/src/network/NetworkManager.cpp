@@ -22,7 +22,6 @@ namespace core
 
   void NetworkManager::authenticate()
   {
-    // TODO: Deconnect clients already connected
     nope::log::Log(Info) << "Starting connection to server.";
     deauthenticate();
     m_auth = std::make_unique<NetworkAuth>(m_connectManagerAddr,
@@ -45,6 +44,13 @@ namespace core
     return (m_auth->getServerList());
   }
 
+  std::string const &NetworkManager::getToken(GameServer const &srv)
+  {
+    nope::log::Log(Debug) << "Getting Game Server Token";
+    assert(m_auth != nullptr);
+    return (m_auth->getToken(srv));
+  }
+
   bool NetworkManager::isAuthenticated() const
   {
     if (!m_auth)
@@ -56,14 +62,13 @@ namespace core
 
   void NetworkManager::disconnect()
   {
-    // TODO
     if (m_auth)
       {
 	m_auth.reset(nullptr);
       }
   }
 
-  void NetworkManager::connect()
+  void NetworkManager::connect(GameServer const &srv, std::stirng const &token)
   {
     // TODO: Connect to a gameServer
   }

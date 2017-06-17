@@ -146,6 +146,9 @@ namespace core
 
   bool MenuMultiplayer::onPlayClick(CEGUI::EventArgs const &)
   {
+    // TODO: Connnect to selected game server
+    // m_network.getToken();
+
     m_curState = GameState::InGame;
     m_gui.hideCursor();
     return true;

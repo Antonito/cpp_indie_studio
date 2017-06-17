@@ -28,13 +28,15 @@ namespace core
     bool isAuthenticated() const;
 
     std::vector<GameServer> getServerList();
+    std::string const &     getToken(GameServer const &);
 
   private:
     std::string const & m_ip;
     std::uint16_t const m_port;
     bool                m_auth;
     network::TCPSocket  m_sock;
+    std::string         m_token;
   };
-};
+}
 
 #endif // !NETWORK_AUTH_HPP_

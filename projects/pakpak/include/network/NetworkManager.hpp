@@ -23,12 +23,11 @@ namespace core
     void                    deauthenticate();
     bool                    isAuthenticated() const;
     std::vector<GameServer> getServerList();
-
-    // Disconnect from any connectManager / gameServer
-    void disconnect();
+    std::string const &getToken(GameServer const &srv);
 
     // Connect to a gameServer
-    void connect();
+    void connect(GameServer const &srv, std::stirng const &token);
+    void disconnect();
     bool isConnected() const;
 
   private:
