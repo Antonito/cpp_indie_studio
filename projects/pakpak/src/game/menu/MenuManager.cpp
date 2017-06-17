@@ -8,6 +8,7 @@ namespace menu
 {
   MenuManager::MenuManager(Ogre::RenderWindow *  win,
                            core::SettingsPlayer &settings,
+                           core::SoundManager &  sound,
                            core::NetworkManager &net)
       : m_sceneMan(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Menu scene manager")),
@@ -15,17 +16,17 @@ namespace menu
         m_gui(), m_menuLayer({}), m_layers({})
   {
     m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)] =
-        std::make_unique<core::MainMenu>(*this, m_gui);
+        std::make_unique<core::MainMenu>(*this, m_gui, sound);
     m_menuLayer[static_cast<size_t>(core::MenuState::Option)] =
-        std::make_unique<core::MenuOptions>(*this, m_gui);
+        std::make_unique<core::MenuOptions>(*this, m_gui, sound);
     m_menuLayer[static_cast<size_t>(core::MenuState::Keymap)] =
-        std::make_unique<core::MenuKeymap>(*this, m_gui, settings);
+        std::make_unique<core::MenuKeymap>(*this, m_gui, settings, sound);
     m_menuLayer[static_cast<size_t>(core::MenuState::SoloPlayerGame)] =
-        std::make_unique<core::MenuSolo>(*this, m_gui);
+        std::make_unique<core::MenuSolo>(*this, m_gui, sound);
     m_menuLayer[static_cast<size_t>(core::MenuState::MultiPlayerGame)] =
-        std::make_unique<core::MenuMultiplayer>(*this, m_gui, net);
+        std::make_unique<core::MenuMultiplayer>(*this, m_gui, sound, net);
     m_menuLayer[static_cast<size_t>(core::MenuState::Score)] =
-        std::make_unique<core::MenuScores>(*this, m_gui, settings);
+        std::make_unique<core::MenuScores>(*this, m_gui, settings, sound);
 
     m_layers.push(
         m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)].get());

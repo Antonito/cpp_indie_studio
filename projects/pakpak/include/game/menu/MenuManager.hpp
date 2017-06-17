@@ -11,9 +11,12 @@
 #else
 #include <OIS/OIS.h>
 #endif
+#include "SoundManager.hpp"
 #include "FastStack.hpp"
 #include "IMenuLayer.hpp"
 #include "IEventHandler.hpp"
+#include "SettingsPlayer.hpp"
+#include "GUI.hpp"
 #include "ILayerStack.hpp"
 #include "InputListener.hpp"
 
@@ -24,7 +27,8 @@ namespace menu
   public:
     explicit MenuManager(Ogre::RenderWindow *  win,
                          core::SettingsPlayer &settings,
-                         core::NetworkManager &net);
+                         core::SoundManager &sound, core::NetworkManager &net);
+
     MenuManager(MenuManager const &) = delete;
     MenuManager(MenuManager &&) = delete;
     virtual ~MenuManager()

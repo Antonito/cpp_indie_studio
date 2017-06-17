@@ -31,7 +31,7 @@ namespace core
     // Create the Root
 
     std::string ogreLog = "Ogre.log";
-    std::string confFolder = "../indie_resource/conf/";
+    std::string confFolder = "./deps/indie_resource/conf/";
 #ifdef DEBUG
     std::string plugin = "plugins_d.cfg";
     std::string ogreFile = "ogre_d.cfg";
@@ -56,9 +56,9 @@ namespace core
     // Load Ressource config file
     Ogre::ConfigFile configFile;
 #ifdef DEBUG
-    configFile.load("../indie_resource/conf/resources_d.cfg");
+    configFile.load("./deps/indie_resource/conf/resources_d.cfg");
 #else
-    configFile.load("../indie_resource/conf/resources.cfg");
+    configFile.load("./deps/indie_resource/conf/resources.cfg");
 #endif // !DEBUG
 
     // Load all the Ressources
@@ -105,7 +105,6 @@ namespace core
     m_window->removeAllViewports();
 
     initOpenAl(NULL);
-
     //// Create the Scene Manager
     // m_sceneMgr =
     //    m_root->createSceneManager("DefaultSceneManager", "Mon Scene
@@ -139,12 +138,13 @@ namespace core
 
     // Splash context
     m_contexts[static_cast<std::size_t>(GameState::Splash)] =
-        std::make_unique<splash::ContextSplash>(m_window, m_inputListener);
+        std::make_unique<splash::ContextSplash>(m_window, m_inputListener,
+                                                m_soundManager);
 
     // Menu context
     m_contexts[static_cast<std::size_t>(GameState::Menu)] =
-        std::make_unique<menu::ContextMenu>(m_window, m_inputListener,
-                                            m_settings, m_network);
+        std::make_unique<menu::ContextMenu>(
+            m_window, m_inputListener, m_settings, m_soundManager, m_network);
 
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
@@ -155,10 +155,7 @@ namespace core
         m_contexts[static_cast<std::size_t>(GameState::Splash)].get();
 
     m_currentContext->enable();
-
-    m_soundManager.loadSound("deps/indie_resource/songs/theme.wav");
-    m_soundManager.playSound();
-    m_soundManager.loopSound();
+    m_gameState = m_currentContext->update();
     while (true)
       {
 	GameState state;
@@ -201,9 +198,6 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
-	m_soundManager.state();
-	if (m_soundManager.getState() != AL_PLAYING)
-	  m_soundManager.clear();
       }
     return true;
   }

@@ -6,6 +6,7 @@
 #define MENUMULTIPLAYER_HPP
 
 #include <memory>
+#include <network/NetworkGameServer.hpp>
 #include "GUI.hpp"
 #include "MenuManager.hpp"
 #include "IMenuLayer.hpp"
@@ -17,7 +18,7 @@ namespace core
   {
   public:
     MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui,
-                    NetworkManager &net);
+                    SoundManager &sound, NetworkManager &net);
     virtual ~MenuMultiplayer()
     {
     }
@@ -43,10 +44,21 @@ namespace core
     GUI &              m_gui;
     GameState          m_curState;
     menu::MenuManager &m_menuManager;
+    SoundManager &     m_sound;
+    GameServer         m_selectGameServer;
     NetworkManager &   m_network;
+    bool               m_select;
 
     bool onBackClick(CEGUI::EventArgs const &);
-    bool onPlayClick(CEGUI::EventArgs const &e);
+    bool onPlayClick(CEGUI::EventArgs const &);
+
+    bool onBackArea(CEGUI::EventArgs const &);
+    bool onPlayArea(CEGUI::EventArgs const &);
+
+    bool getServerPos(CEGUI::EventArgs const &);
+
+    void soundPass();
+    void soundClick();
   };
 }
 

@@ -14,10 +14,11 @@ namespace core
   class MenuSolo : public IMenuLayer
   {
   public:
-    MenuSolo(menu::MenuManager &menuManager, GUI &gui);
+    MenuSolo(menu::MenuManager &menuManager, GUI &gui, SoundManager &sound);
     virtual ~MenuSolo()
     {
     }
+
     void      draw();
     void      entry();
     void      exit();
@@ -40,11 +41,20 @@ namespace core
     GUI &              m_gui;
     GameState          m_curState;
     menu::MenuManager &m_menuManager;
+    SoundManager &     m_sound;
 
     bool onBackClick(CEGUI::EventArgs const &);
     bool onPlayClick(CEGUI::EventArgs const &e);
     bool onEasyClick(CEGUI::EventArgs const &e);
     bool onHardClick(CEGUI::EventArgs const &e);
+
+    void soundPass();
+    void soundClick();
+
+    bool onBackArea(CEGUI::EventArgs const &);
+    bool onPlayArea(CEGUI::EventArgs const &e);
+    bool onEasyArea(CEGUI::EventArgs const &e);
+    bool onHardArea(CEGUI::EventArgs const &e);
   };
 }
 

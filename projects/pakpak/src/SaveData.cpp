@@ -19,7 +19,8 @@ namespace core
   }
 
   SaveData::SaveData(SaveData const &cpy)
-      : m_key(cpy.m_key), m_data(cpy.m_data), m_xor(cpy.m_xor)
+      : m_key(cpy.m_key), m_data(cpy.m_data), m_xor(cpy.m_xor),
+        m_crypto(cpy.m_crypto)
   {
   }
 
@@ -102,12 +103,13 @@ namespace core
 	generate();
 	if (!compareKey(key))
 	  {
-	    throw IOError("File is corrupted");
+	    m_data.reset();
+	    saveInFile(file);
 	  }
       }
     else
       {
-	throw IOError("Cannot open file");
+	saveInFile(file);
       }
   }
 

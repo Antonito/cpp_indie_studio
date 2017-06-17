@@ -65,8 +65,7 @@ namespace core
   {
     nope::log::Log(Debug) << "Connecting client";
     disconnect();
-    m_conn = std::make_unique<NetworkConnect>(m_connectManagerAddr,
-                                              m_connectManagerPort);
+    m_conn = std::make_unique<NetworkConnect>(srv.address, srv.port, token);
   }
 
   void NetworkManager::disconnect()

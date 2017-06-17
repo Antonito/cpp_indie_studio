@@ -18,49 +18,30 @@ struct Data
 
   Data()
   {
-      for (std::int32_t i = 0; i < 10; ++i)
-      {
-          s_bestTime[i] = 0.0f;
-      }
-      for (std::int32_t i = 0; i < 10; ++i)
-      {
-          s_maxSpeed[i] = 0;
-      }
-      for (std::int32_t i = 0; i < 10; ++i)
-      {
-          s_trackFinished[i] = 0;
-      }
-      for (std::int32_t i = 0; i < 10; ++i)
-      {
-          s_totalKm[i] = 0;
-      }
-      for (std::int32_t i = 0; i < 10; ++i)
-      {
-          s_collisionCount[i] = 0;
-      }
+    reset();
   }
 
   Data(Data const &cpy)
   {
-      for (std::int32_t i = 0; i < 10; ++i)
+    for (std::int32_t i = 0; i < 10; ++i)
       {
-          s_bestTime[i] = cpy.s_bestTime[i];
+	s_bestTime[i] = cpy.s_bestTime[i];
       }
-      for (std::int32_t i = 0; i < 10; ++i)
+    for (std::int32_t i = 0; i < 10; ++i)
       {
-          s_maxSpeed[i] = cpy.s_maxSpeed[i];
+	s_maxSpeed[i] = cpy.s_maxSpeed[i];
       }
-      for (std::int32_t i = 0; i < 10; ++i)
+    for (std::int32_t i = 0; i < 10; ++i)
       {
-          s_trackFinished[i] = cpy.s_trackFinished[i];
+	s_trackFinished[i] = cpy.s_trackFinished[i];
       }
-      for (std::int32_t i = 0; i < 10; ++i)
+    for (std::int32_t i = 0; i < 10; ++i)
       {
-          s_totalKm[i] = s_totalKm[i];
+	s_totalKm[i] = s_totalKm[i];
       }
-      for (std::int32_t i = 0; i < 10; ++i)
+    for (std::int32_t i = 0; i < 10; ++i)
       {
-          s_collisionCount[i] = s_collisionCount[i];
+	s_collisionCount[i] = s_collisionCount[i];
       }
   }
 
@@ -90,6 +71,30 @@ struct Data
 	  }
       }
     return *this;
+  }
+
+  void reset()
+  {
+    for (std::int32_t i = 0; i < 10; ++i)
+      {
+	s_bestTime[i] = 0.0f;
+      }
+    for (std::int32_t i = 0; i < 10; ++i)
+      {
+	s_maxSpeed[i] = 0;
+      }
+    for (std::int32_t i = 0; i < 10; ++i)
+      {
+	s_trackFinished[i] = 0;
+      }
+    for (std::int32_t i = 0; i < 10; ++i)
+      {
+	s_totalKm[i] = 0;
+      }
+    for (std::int32_t i = 0; i < 10; ++i)
+      {
+	s_collisionCount[i] = 0;
+      }
   }
 };
 
