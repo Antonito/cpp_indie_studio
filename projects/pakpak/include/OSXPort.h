@@ -1,6 +1,11 @@
 #ifndef OSX_PORT_H_
 #define OSX_PORT_H_
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang system_header
+#endif
+
 #include "OgrePlatform.h"
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE
@@ -156,6 +161,10 @@ MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now,
 
 @end
 
+#endif
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
 #endif
 
 #endif

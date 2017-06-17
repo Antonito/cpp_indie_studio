@@ -17,6 +17,7 @@ namespace core
     MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui,
                     SoundManager &sound);
     virtual ~MenuMultiplayer(){};
+
     void      draw();
     void      entry();
     void      exit();

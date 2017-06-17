@@ -9,9 +9,13 @@ namespace core
   MenuOptions::MenuOptions(menu::MenuManager &menuManager, GUI &gui,
                            SoundManager &sound)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
-        m_volumeButtons(), m_graphicButtons(), m_graphicSelected(0), m_sound(sound), m_volumeSelected(static_cast<std::size_t>(m_sound.getVolume() * 4.0f))
+        m_volumeButtons(), m_graphicButtons(), m_graphicSelected(0),
+        m_sound(sound),
+        m_volumeSelected(static_cast<std::size_t>(m_sound.getVolume() * 4.0f))
   {
-    nope::log::Log(Debug) << "Initialization Current Volume : " << static_cast<std::size_t>(m_sound.getVolume() * 4.0f);
+    nope::log::Log(Debug) << "Initialization Current Volume : "
+                          << static_cast<std::size_t>(m_sound.getVolume() *
+                                                      4.0f);
   }
 
   void MenuOptions::draw()
@@ -129,8 +133,8 @@ namespace core
   {
     CEGUI::GUIContext &context =
         CEGUI::System::getSingleton().getDefaultGUIContext();
-    context.injectKeyDown((CEGUI::Key::Scan)arg.key);
-    context.injectChar((CEGUI::Key::Scan)arg.text);
+    context.injectKeyDown(static_cast<CEGUI::Key::Scan>(arg.key));
+    context.injectChar(static_cast<CEGUI::Key::Scan>(arg.text));
     return true;
   }
 
@@ -163,7 +167,7 @@ namespace core
   bool MenuOptions::keyReleased(const OIS::KeyEvent &arg)
   {
     CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(
-        (CEGUI::Key::Scan)arg.key);
+        static_cast<CEGUI::Key::Scan>(arg.key));
     return true;
   }
 

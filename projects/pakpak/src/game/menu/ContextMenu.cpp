@@ -8,6 +8,7 @@ namespace menu
       : core::AContext(win, input), m_menu(win, settings, sound),
         m_settings(settings), m_sound(sound)
   {
+    static_cast<void>(m_settings); // TODO: rm
   }
 
   ContextMenu::~ContextMenu()

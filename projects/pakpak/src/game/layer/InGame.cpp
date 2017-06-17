@@ -30,8 +30,8 @@ namespace game
 
   bool InGame::keyPressed(OIS::KeyEvent const &ke)
   {
-    std::string action =
-        m_player.settings().actionForKey(m_player.order(), ke.key);
+    std::string action = m_player.settings().actionForKey(
+        static_cast<std::size_t>(m_player.order()), ke.key);
 
     if (action == "NO_ACTION")
       {
@@ -46,8 +46,8 @@ namespace game
   bool InGame::keyReleased(OIS::KeyEvent const &ke)
   {
 
-    std::string action =
-        m_player.settings().actionForKey(m_player.order(), ke.key);
+    std::string action = m_player.settings().actionForKey(
+        static_cast<std::size_t>(m_player.order()), ke.key);
 
     if (action == "NO_ACTION")
       {

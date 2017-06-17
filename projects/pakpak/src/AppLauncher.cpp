@@ -4,6 +4,12 @@
 #include "pakpak_stdafx.hpp"
 #include "AppLauncher.hpp"
 
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 namespace core
 {
 
@@ -208,3 +214,7 @@ namespace core
     m_soundManager.initOpenAl(deviceName);
   }
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif

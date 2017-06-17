@@ -94,8 +94,8 @@ namespace core
   {
     CEGUI::GUIContext &context =
         CEGUI::System::getSingleton().getDefaultGUIContext();
-    context.injectKeyDown((CEGUI::Key::Scan)arg.key);
-    context.injectChar((CEGUI::Key::Scan)arg.text);
+    context.injectKeyDown(static_cast<CEGUI::Key::Scan>(arg.key));
+    context.injectChar(static_cast<CEGUI::Key::Scan>(arg.text));
     return true;
   }
 
@@ -128,7 +128,7 @@ namespace core
   bool MenuSolo::keyReleased(const OIS::KeyEvent &arg)
   {
     CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(
-        (CEGUI::Key::Scan)arg.key);
+        static_cast<CEGUI::Key::Scan>(arg.key));
     return true;
   }
 
@@ -193,7 +193,6 @@ namespace core
     AssetSetter::setTextColor(easyButton, AssetSetter::TEXT_COLOR::TBLACK);
     return true;
   }
-
   bool MenuSolo::onBackArea(const CEGUI::EventArgs &)
   {
     soundPass();

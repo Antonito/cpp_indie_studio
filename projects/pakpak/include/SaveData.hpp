@@ -27,7 +27,7 @@ namespace core
 
     std::string toXor(std::string const &);
 
-    char *toXor(char const *elem, std::int32_t length);
+    char *toXor(char const *elem, std::size_t const length);
 
     void saveInFile(std::string const &);
 
@@ -41,9 +41,9 @@ namespace core
 
   private:
     std::string                      m_key;
-    crypto::Hash<crypto::AHash::MD5> m_crypto;
     Data                             m_data;
     std::int32_t                     m_xor;
+    crypto::Hash<crypto::AHash::MD5> m_crypto;
   };
 }
 #endif // CPP_INDIE_STUDIO_SaveData_HPP

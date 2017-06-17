@@ -18,6 +18,7 @@ namespace core
     MenuKeymap(menu::MenuManager &menuManager, GUI &gui,
                SettingsPlayer &settings, SoundManager &sound);
     virtual ~MenuKeymap(){};
+
     void      draw();
     void      entry();
     void      exit();
@@ -41,30 +42,30 @@ namespace core
     bool onPlayer3Click(CEGUI::EventArgs const &);
     bool onPlayer4Click(CEGUI::EventArgs const &);
 
-      bool onPlayer1Area(CEGUI::EventArgs const &);
-      bool onPlayer2Area(CEGUI::EventArgs const &);
-      bool onPlayer3Area(CEGUI::EventArgs const &);
-      bool onPlayer4Area(CEGUI::EventArgs const &);
+    bool onPlayer1Area(CEGUI::EventArgs const &);
+    bool onPlayer2Area(CEGUI::EventArgs const &);
+    bool onPlayer3Area(CEGUI::EventArgs const &);
+    bool onPlayer4Area(CEGUI::EventArgs const &);
 
-      bool onBackClick(CEGUI::EventArgs const &);
-      bool onUpClick(CEGUI::EventArgs const &);
-      bool onDownClick(CEGUI::EventArgs const &);
-      bool onLeftClick(CEGUI::EventArgs const &);
-      bool onRightClick(CEGUI::EventArgs const &);
-      bool onUseClick(CEGUI::EventArgs const &);
-      bool onPauseClick(CEGUI::EventArgs const &);
+    bool onBackClick(CEGUI::EventArgs const &);
+    bool onUpClick(CEGUI::EventArgs const &);
+    bool onDownClick(CEGUI::EventArgs const &);
+    bool onLeftClick(CEGUI::EventArgs const &);
+    bool onRightClick(CEGUI::EventArgs const &);
+    bool onUseClick(CEGUI::EventArgs const &);
+    bool onPauseClick(CEGUI::EventArgs const &);
 
-      bool onBackArea(CEGUI::EventArgs const &);
-      bool onUpArea(CEGUI::EventArgs const &);
-      bool onDownArea(CEGUI::EventArgs const &);
-      bool onLeftArea(CEGUI::EventArgs const &);
-      bool onRightArea(CEGUI::EventArgs const &);
-      bool onUseArea(CEGUI::EventArgs const &);
-      bool onPauseArea(CEGUI::EventArgs const &);
+    bool onBackArea(CEGUI::EventArgs const &);
+    bool onUpArea(CEGUI::EventArgs const &);
+    bool onDownArea(CEGUI::EventArgs const &);
+    bool onLeftArea(CEGUI::EventArgs const &);
+    bool onRightArea(CEGUI::EventArgs const &);
+    bool onUseArea(CEGUI::EventArgs const &);
+    bool onPauseArea(CEGUI::EventArgs const &);
 
-      void soundPass();
-      void soundClick();
-      void swapButtons(size_t newSelected);
+    void soundPass();
+    void soundClick();
+    void swapButtons(size_t newSelected);
     void loadLayout(size_t playerIndex);
 
     GUI &              m_gui;

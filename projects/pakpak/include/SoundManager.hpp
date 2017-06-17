@@ -17,6 +17,12 @@
 #include <sndfile.h>
 #include <iostream>
 
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 namespace core
 {
   class SoundManager
@@ -71,4 +77,8 @@ namespace core
     ALfloat             m_volume;
   };
 }
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+
 #endif // CPP_INDIE_STUDIO_SOUNDMANAGER_HPP

@@ -8,6 +8,12 @@
 #include "SettingsPlayer.hpp"
 #include "SoundManager.hpp"
 
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 // Forward declaration for faster compilation
 namespace Ogre
 {
@@ -52,5 +58,9 @@ namespace core
     void initOpenAl(char const *);
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !APPLAUNCHER_HPP_
