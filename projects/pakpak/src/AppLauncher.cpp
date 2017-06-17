@@ -191,10 +191,7 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
-	m_soundManager.state();
-	if (m_soundManager.getState() != AL_PLAYING)
-	  m_soundManager.clear();
-      }
+	}
     return true;
   }
 

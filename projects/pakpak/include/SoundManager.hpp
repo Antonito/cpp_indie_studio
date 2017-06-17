@@ -54,6 +54,8 @@ namespace core
 
     void setOrientation(float, float, float);
 
+    ALfloat getVolume() const;
+
     void loadSound(std::string const &);
 
     void clear();
@@ -66,6 +68,7 @@ namespace core
     std::vector<ALuint> m_buffer;
     std::vector<ALuint> m_source;
     ALint               m_state;
+    ALfloat             m_volume;
   };
 }
 #endif // CPP_INDIE_STUDIO_SOUNDMANAGER_HPP

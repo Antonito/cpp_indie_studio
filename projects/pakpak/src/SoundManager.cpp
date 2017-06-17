@@ -14,14 +14,15 @@ namespace core
 {
   SoundManager::SoundManager()
       : m_device(nullptr), m_context(nullptr), m_buffer(), m_source(),
-        m_state(AL_INITIAL)
+        m_state(AL_INITIAL), m_volume(1.0f)
   {
     nope::log::Log(Debug) << "**Initialization SoundManager**";
   }
 
   SoundManager::SoundManager(SoundManager const &cpy)
       : m_device(cpy.m_device), m_context(cpy.m_context),
-        m_buffer(cpy.m_buffer), m_source(cpy.m_source), m_state(cpy.m_state)
+        m_buffer(cpy.m_buffer), m_source(cpy.m_source), m_state(cpy.m_state),
+        m_volume(cpy.m_volume)
   {
   }
 
@@ -40,6 +41,7 @@ namespace core
 	m_buffer = that.m_buffer;
 	m_source = that.m_source;
 	m_state = that.m_state;
+	m_volume = that.m_volume;
       }
     return *this;
   }
@@ -167,42 +169,43 @@ namespace core
   {
     nope::log::Log(Debug) << "Setting sound to position {" << x << ", " << y
                           << ", " << z << "}.";
-    alSourcei(m_source[0], AL_SOURCE_RELATIVE, AL_TRUE);
-    alSource3f(m_source[0], AL_POSITION, x, y, z);
+    alSourcei(m_source[m_source.size() - 1], AL_SOURCE_RELATIVE, AL_TRUE);
+    alSource3f(m_source[m_source.size() - 1], AL_POSITION, x, y, z);
   }
 
   // Put the current sound in looping
   void SoundManager::loopSound()
   {
     nope::log::Log(Debug) << "Looping sound";
-    alSourcei(m_source[0], AL_LOOPING, AL_TRUE);
+    alSourcei(m_source[m_source.size() - 1], AL_LOOPING, AL_TRUE);
   }
 
   // Stop the sound
   void SoundManager::stopSound()
   {
     nope::log::Log(Debug) << "Stopping sound";
-    alSourceStop(m_source[0]);
+    alSourceStop(m_source[m_source.size() - 1]);
   }
 
   // Put sound in pause
   void SoundManager::pauseSound()
   {
     nope::log::Log(Debug) << "Pause sound";
-    alSourcePause(m_source[0]);
+    alSourcePause(m_source[m_source.size() - 1]);
   }
 
   // Play the sound
   void SoundManager::playSound()
   {
     nope::log::Log(Debug) << "Play sound";
-    alSourcePlay(m_source[0]);
+    alSourcef(m_source[m_source.size() - 1], AL_GAIN, m_volume);
+    alSourcePlay(m_source[m_source.size() - 1]);
   }
 
   // Set the current state of the volume
   void SoundManager::state()
   {
-    alGetSourcei(m_source[0], AL_SOURCE_STATE, &m_state);
+    alGetSourcei(m_source[m_source.size() - 1], AL_SOURCE_STATE, &m_state);
   }
 
   // Get the actual sound state
@@ -216,19 +219,23 @@ namespace core
   {
     nope::log::Log(Debug) << "Clear sound";
 
-    for (std::vector<ALuint>::iterator it = m_buffer.begin(); it != m_buffer.end(); ++it)
+    for (std::vector<ALuint>::iterator it = m_buffer.begin();
+         it != m_buffer.end(); ++it)
       alDeleteBuffers(1, &(*it));
-    for (std::vector<ALuint>::iterator it = m_source.begin(); it != m_source.end(); ++it)
-    {
-      alSourcei(*it, AL_BUFFER, 0);
-      alDeleteSources(1, &(*it));
-    }
+    for (std::vector<ALuint>::iterator it = m_source.begin();
+         it != m_source.end(); ++it)
+      {
+	alSourcei(*it, AL_BUFFER, 0);
+	alDeleteSources(1, &(*it));
+      }
   }
 
   void SoundManager::setVolume(float volume)
   {
     nope::log::Log(Debug) << "Setting volume : " << volume;
-    for (std::vector<ALuint>::iterator it = m_source.begin(); it != m_source.end(); ++it)
+    m_volume = volume;
+    for (std::vector<ALuint>::iterator it = m_source.begin();
+         it != m_source.end(); ++it)
       alSourcef(*it, AL_GAIN, volume);
   }
 
@@ -237,7 +244,7 @@ namespace core
   {
     nope::log::Log(Debug) << "Set sound to direction ; {" << x << ", " << y
                           << ", " << z << "}.";
-    alSource3f(m_source[0], AL_ORIENTATION, x, y, z);
+    alSource3f(m_source[m_source.size() - 1], AL_ORIENTATION, x, y, z);
   }
 
   // Get the Source of the sound
@@ -255,5 +262,10 @@ namespace core
     alGetSourcef(m_source[idx], AL_SEC_OFFSET, &Seconds);
     nope::log::Log(Debug) << "\rLecture en cours... " << std::fixed
                           << std::setprecision(2) << Seconds << " sec";
+  }
+
+  ALfloat SoundManager::getVolume() const
+  {
+    return m_volume;
   }
 }
