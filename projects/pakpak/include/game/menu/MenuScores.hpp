@@ -41,7 +41,12 @@ namespace core
     menu::MenuManager &m_menuManager;
     SettingsPlayer &   m_settings;
     SoundManager &     m_sound;
-    bool               onBackClick(CEGUI::EventArgs const &);
+
+    bool onBackClick(CEGUI::EventArgs const &);
+    bool onBackArea(CEGUI::EventArgs const &);
+
+    void soundPass();
+    void soundClick();
   };
 }
 

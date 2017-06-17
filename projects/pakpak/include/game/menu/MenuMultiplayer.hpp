@@ -43,6 +43,12 @@ namespace core
 
     bool onBackClick(CEGUI::EventArgs const &);
     bool onPlayClick(CEGUI::EventArgs const &e);
+
+    bool onBackArea(CEGUI::EventArgs const &);
+    bool onPlayArea(CEGUI::EventArgs const &e);
+
+    void soundPass();
+    void soundClick();
   };
 }
 

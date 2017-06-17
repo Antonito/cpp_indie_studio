@@ -40,6 +40,8 @@ namespace core
 
     void loopSound();
 
+    void setVolume(float);
+
     void upVolume(float);
 
     void downVolume(float);
@@ -66,6 +68,7 @@ namespace core
     ALuint      m_buffer;
     ALuint      m_source;
     ALint       m_state;
+    ALsizei     m_nbSamples;
   };
 }
 #endif // CPP_INDIE_STUDIO_SOUNDMANAGER_HPP

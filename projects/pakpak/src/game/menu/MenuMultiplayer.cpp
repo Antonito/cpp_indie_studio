@@ -30,10 +30,22 @@ namespace core
             CEGUI::Event::Subscriber(&MenuMultiplayer::onBackClick, this));
 
     m_gui.getRoot()
+        ->getChild("back_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MenuMultiplayer::onBackArea, this));
+
+    m_gui.getRoot()
         ->getChild("launch_button")
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MenuMultiplayer::onPlayClick, this));
+
+    m_gui.getRoot()
+        ->getChild("launch_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MenuMultiplayer::onPlayArea, this));
   }
 
   void MenuMultiplayer::exit()
@@ -116,6 +128,7 @@ namespace core
 
   bool MenuMultiplayer::onBackClick(CEGUI::EventArgs const &)
   {
+    soundClick();
     m_menuManager.popLayer();
     m_menuManager.begin();
     return false;
@@ -123,8 +136,33 @@ namespace core
 
   bool MenuMultiplayer::onPlayClick(CEGUI::EventArgs const &)
   {
+    soundClick();
     m_curState = GameState::InGame;
     m_gui.hideCursor();
+    return true;
+  }
+
+  void MenuMultiplayer::soundPass()
+  {
+    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
+    m_sound.playSound();
+  }
+
+  void MenuMultiplayer::soundClick()
+  {
+    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
+    m_sound.playSound();
+  }
+
+  bool MenuMultiplayer::onBackArea(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MenuMultiplayer::onPlayArea(CEGUI::EventArgs const &)
+  {
+    soundPass();
     return true;
   }
 }

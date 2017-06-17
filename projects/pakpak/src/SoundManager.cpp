@@ -63,6 +63,7 @@ namespace core
         static_cast<ALsizei>(FileInfos.channels * FileInfos.frames);
     ALsizei SampleRate = static_cast<ALsizei>(FileInfos.samplerate);
 
+    m_nbSamples = NbSamples;
     nope::log::Log(Debug) << "Reading samples of " << Filename;
     // Reading the samples with 16 bit signed format (More common)
     std::vector<ALshort> Samples(NbSamples);
@@ -197,14 +198,12 @@ namespace core
   // Set the current state of the volume
   void SoundManager::state()
   {
-    nope::log::Log(Debug) << "Setting state";
     alGetSourcei(m_source, AL_SOURCE_STATE, &m_state);
   }
 
   // Get the actual sound state
   ALint SoundManager::getState() const
   {
-    nope::log::Log(Debug) << "Getting state";
     return m_state;
   }
 
@@ -217,17 +216,23 @@ namespace core
     alDeleteSources(1, &m_source);
   }
 
+  void SoundManager::setVolume(float volume)
+  {
+    nope::log::Log(Debug) << "Setting volume : " << volume;
+    alSourcef(m_source, AL_PITCH, volume);
+  }
+
   // Upgrade the current volume of a specific value
   void SoundManager::upVolume(float volume)
   {
-    nope::log::Log(Debug) << "Upgrade volume";
+    nope::log::Log(Debug) << "Upgrade volume : " << volume;
     alSourcef(m_source, AL_GAIN, volume);
   }
 
   // Downgrade the current volume of a specific value
   void SoundManager::downVolume(float volume)
   {
-    nope::log::Log(Debug) << "Downgrade volume";
+    nope::log::Log(Debug) << "Downgrade volume : " << volume;
     alSourcef(m_source, AL_GAIN, -volume);
   }
 
