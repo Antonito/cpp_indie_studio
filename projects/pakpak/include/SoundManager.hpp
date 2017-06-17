@@ -5,12 +5,23 @@
 #ifndef CPP_INDIE_STUDIO_SOUNDMANAGER_HPP
 #define CPP_INDIE_STUDIO_SOUNDMANAGER_HPP
 
+#if defined __APPLE__
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#else
 #include <AL/al.h>
 #include <AL/alc.h>
+#endif
 #include <sndfile.h>
 #include <iostream>
 #include <vector>
 #include <iomanip>
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
 
 class SoundManager
 {
@@ -44,5 +55,9 @@ private:
   ALuint      m_source;
   ALint       m_state;
 };
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // CPP_INDIE_STUDIO_SOUNDMANAGER_HPP

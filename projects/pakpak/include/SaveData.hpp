@@ -10,38 +10,40 @@
 #include "Hash.hpp"
 #include "Data.hpp"
 
-class SaveData
+namespace core
 {
-public:
-  SaveData();
-  ~SaveData();
-  SaveData(SaveData const &);
-  SaveData &operator=(SaveData &);
-  SaveData(SaveData &&) = delete;
+  class SaveData
+  {
+  public:
+    SaveData();
+    ~SaveData();
+    SaveData(SaveData const &);
+    SaveData &operator=(SaveData &) = delete;
+    SaveData(SaveData &&) = delete;
 
-  void generate();
+    void generate();
 
-  void setData(Data &);
+    void setData(Data &);
 
-  std::string toXor(std::string const &);
+    std::string toXor(std::string const &);
 
-  char *toXor(char const *elem, std::int32_t length);
+    char *toXor(char const *elem, std::size_t const length);
 
-  void saveInFile(std::string const &);
+    void saveInFile(std::string const &);
 
-  void recupDataFromFile(std::string const &);
+    void recupDataFromFile(std::string const &);
 
-  bool compareKey(std::string const &);
+    bool compareKey(std::string const &);
 
-  bool isKeyGenerate() const;
+    bool isKeyGenerate() const;
 
-  Data &getData();
+    Data &getData();
 
-private:
-  std::string                      m_key;
-  crypto::Hash<crypto::AHash::MD5> m_crypto;
-  Data                             m_data;
-  std::int32_t                     m_xor;
-};
-
+  private:
+    std::string                      m_key;
+    Data                             m_data;
+    std::int32_t                     m_xor;
+    crypto::Hash<crypto::AHash::MD5> m_crypto;
+  };
+}
 #endif // CPP_INDIE_STUDIO_SaveData_HPP

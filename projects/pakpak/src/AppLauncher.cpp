@@ -1,6 +1,14 @@
-#include <AL/al.h>
+#if defined __APPLE__
+#import <Cocoa/Cocoa.h>
+#endif
 #include "pakpak_stdafx.hpp"
 #include "AppLauncher.hpp"
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 namespace core
 {
@@ -148,14 +156,23 @@ namespace core
 
     m_currentContext->enable();
 
-    //     m_soundManager.loadSound("Pew_Pew.wav");
-    //     m_soundManager.playSound();
-    //     m_soundManager.loopSound();
-    // Render Loop
+    m_soundManager.loadSound("deps/indie_resource/songs/theme.wav");
+    m_soundManager.playSound();
+    m_soundManager.loopSound();
     while (true)
       {
 	GameState state;
+
+#if defined(_WIN32) || defined(__linux__)
 	Ogre::WindowEventUtilities::messagePump();
+#elif defined(__APPLE__)
+	NSEvent *event = [NSApp nextEventMatchingMask:NSAnyEventMask
+	                                    untilDate:nil
+	                                       inMode:NSDefaultRunLoopMode
+	                                      dequeue:YES];
+	[NSApp sendEvent:event];
+	[event release];
+#endif
 
 	if (m_window->isClosed())
 	  return false;
@@ -184,9 +201,9 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
-	// m_soundManager.state();
-	// if (m_soundManager.getState() != AL_PLAYING)
-	//   m_soundManager.clear();
+	m_soundManager.state();
+	if (m_soundManager.getState() != AL_PLAYING)
+	  m_soundManager.clear();
       }
     return true;
   }
@@ -203,3 +220,7 @@ namespace core
     m_soundManager.initOpenAl(deviceName);
   }
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif

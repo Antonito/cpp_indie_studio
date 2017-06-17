@@ -2,8 +2,19 @@
 #define SETTINGSPLAYER_HPP_
 
 #include <string>
+#if defined __APPLE__
+#include <ois/OIS.h>
+#else
 #include <OIS/OIS.h>
+#endif
 #include "Metadata.hpp"
+#include "SaveData.hpp"
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
 
 namespace core
 {
@@ -72,21 +83,25 @@ namespace core
     SettingsPlayer &operator=(SettingsPlayer const &) = delete;
     SettingsPlayer &operator=(SettingsPlayer &&) = delete;
 
-    void loadFromFile(int playerIndex);
-    void unload(int playerIndex);
-    void save(int playerIndex) const;
+    void loadFromFile(std::size_t playerIndex);
+    void unload(std::size_t const playerIndex);
+    void save(std::size_t const playerIndex) const;
 
-    bool check_used(int playerIndex) const;
+    bool check_used(std::size_t const playerIndex) const;
     std::string const getTextForKey(OIS::KeyCode keycode) const;
-    std::string const actionForKey(int          playerIndex,
-                                   OIS::KeyCode keyCode) const;
-    GameSettings::Graphic &graphics(int playerIndex);
+    std::string const actionForKey(std::size_t const playerIndex,
+                                   OIS::KeyCode      keyCode) const;
+    GameSettings::Graphic &graphics(std::size_t const playerIndex);
 
-    bool updateKey(int playerIndex, OIS::KeyCode old, OIS::KeyCode newKey);
-    void fillKey(int playerIndex);
-    void setUsed(int playerIndex, bool used);
+    bool updateKey(std::size_t const playerIndex, OIS::KeyCode old,
+                   OIS::KeyCode newKey);
+    void fillKey(std::size_t const playerIndex);
+    void setUsed(std::size_t const playerIndex, bool used);
     int switchKey(OIS::KeyCode old, OIS::KeyCode newKey);
-    GameSettings &getPlayer(int playerIndex);
+
+    GameSettings &getPlayer(std::size_t const playerIndex);
+
+    std::vector<SaveData> m_data;
 
   private:
     std::vector<GameSettings> m_players;
@@ -95,5 +110,9 @@ namespace core
     std::vector<bool> m_loaded;
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !SETTINGSPLAYER_HPP_

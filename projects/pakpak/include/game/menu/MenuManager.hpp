@@ -6,7 +6,11 @@
 #define CPP_INDIE_STUDIO_MENUMANAGER_HPP
 
 #include <OGRE/Ogre.h>
+#if defined __APPLE__
+#include <ois/OIS.h>
+#else
 #include <OIS/OIS.h>
+#endif
 #include "FastStack.hpp"
 #include "IMenuLayer.hpp"
 #include "IEventHandler.hpp"

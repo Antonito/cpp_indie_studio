@@ -9,6 +9,12 @@ namespace core
       {3, "settings/player3_settings"},
   };
 
+  static std::map<int, std::string const> scoreFile = {
+      {0, "settings/player0_scores"},
+      {1, "settings/player1_scores"},
+      {2, "settings/player2_scores"},
+      {3, "settings/player3_scores"},
+  };
   static std::map<OIS::KeyCode, std::string const> textForKey = {
       {OIS::KeyCode::KC_ESCAPE, "ESC"},
       {OIS::KeyCode::KC_1, "1"},
@@ -164,21 +170,26 @@ namespace core
   };
 
   SettingsPlayer::SettingsPlayer()
-      : m_players(), m_keycodes(), m_used(), m_loaded()
+      : m_data(), m_players(), m_keycodes(), m_used(), m_loaded()
   {
     m_players.resize(5);
+    m_data.resize(5);
     m_keycodes.resize(5);
     m_used.resize(256);
-    for (int i = 0; i < 4; ++i)
+    for (std::size_t i = 0; i < 4; ++i)
       {
 	m_loaded.push_back(false);
 	loadFromFile(i);
+	m_data[i].generate();
+	Log(nope::log::Debug) << "SaveData::recupFile";
+	m_data[i].recupDataFromFile(scoreFile[static_cast<int>(i)]);
       }
   }
 
   SettingsPlayer::SettingsPlayer(SettingsPlayer const &that)
-      : m_players(that.m_players), m_keycodes(that.m_keycodes),
-        m_used(that.m_used), m_loaded(that.m_loaded)
+      : m_data(that.m_data), m_players(that.m_players),
+        m_keycodes(that.m_keycodes), m_used(that.m_used),
+        m_loaded(that.m_loaded)
   {
   }
 
@@ -186,10 +197,11 @@ namespace core
   {
   }
 
-  void SettingsPlayer::loadFromFile(int playerIndex)
+  void SettingsPlayer::loadFromFile(std::size_t playerIndex)
   {
     Log(nope::log::Debug) << "SettingsPlayer::LoadFromFile -> " << playerIndex
-                          << " : " << playerFile[playerIndex];
+                          << " : "
+                          << playerFile[static_cast<int>(playerIndex)];
     std::stringstream ss;
 
     if (m_loaded[playerIndex])
@@ -204,7 +216,7 @@ namespace core
 
     // This allow to throw in case of fail to open
     fs.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    fs.open(playerFile[playerIndex].c_str());
+    fs.open(playerFile[static_cast<int>(playerIndex)].c_str());
     ss << fs.rdbuf();
     std::string content = ss.str();
 
@@ -223,7 +235,7 @@ namespace core
     fs.close();
   }
 
-  void SettingsPlayer::fillKey(int playerIndex)
+  void SettingsPlayer::fillKey(std::size_t const playerIndex)
   {
     m_keycodes[playerIndex][m_players[playerIndex].key.speedUp] = "speedUp";
     m_keycodes[playerIndex][m_players[playerIndex].key.slowDown] = "slowDown";
@@ -240,35 +252,46 @@ namespace core
     m_keycodes[playerIndex][m_players[playerIndex].key.openMenu] = "openMenu";
   }
 
-  void SettingsPlayer::setUsed(int playerIndex, bool used)
+  void SettingsPlayer::setUsed(std::size_t const playerIndex, bool used)
   {
-    m_used[m_players[playerIndex].key.speedUp] = used;
-    m_used[m_players[playerIndex].key.slowDown] = used;
-    m_used[m_players[playerIndex].key.turnLeft] = used;
-    m_used[m_players[playerIndex].key.turnRight] = used;
-    m_used[m_players[playerIndex].key.useObject] = used;
-    m_used[m_players[playerIndex].key.changeView] = used;
-    m_used[m_players[playerIndex].key.displayMap] = used;
-    m_used[m_players[playerIndex].key.openChat] = used;
-    m_used[m_players[playerIndex].key.openMenu] = used;
+    m_used[static_cast<std::size_t>(m_players[playerIndex].key.speedUp)] =
+        used;
+    m_used[static_cast<std::size_t>(m_players[playerIndex].key.slowDown)] =
+        used;
+    m_used[static_cast<std::size_t>(m_players[playerIndex].key.turnLeft)] =
+        used;
+    m_used[static_cast<std::size_t>(m_players[playerIndex].key.turnRight)] =
+        used;
+    m_used[static_cast<std::size_t>(m_players[playerIndex].key.useObject)] =
+        used;
+    m_used[static_cast<std::size_t>(m_players[playerIndex].key.changeView)] =
+        used;
+    m_used[static_cast<std::size_t>(m_players[playerIndex].key.displayMap)] =
+        used;
+    m_used[static_cast<std::size_t>(m_players[playerIndex].key.openChat)] =
+        used;
+    m_used[static_cast<std::size_t>(m_players[playerIndex].key.openMenu)] =
+        used;
   }
 
-  void SettingsPlayer::unload(int playerIndex)
+  void SettingsPlayer::unload(std::size_t const playerIndex)
   {
     Log(nope::log::Debug) << "SettingsPlayer::unload -> " << playerIndex
-                          << " : " << playerFile[playerIndex];
+                          << " : "
+                          << playerFile[static_cast<int>(playerIndex)];
     // save(playerIndex);
     setUsed(playerIndex, false);
-    m_players.erase(m_players.begin() + playerIndex);
+    m_players.erase(m_players.begin() +
+                    static_cast<CEGUI::String::difference_type>(playerIndex));
     m_players.resize(5);
   }
 
-  void SettingsPlayer::save(int playerIndex) const
+  void SettingsPlayer::save(std::size_t const playerIndex) const
   {
     Log(nope::log::Debug) << "SettingsPlayer::save -> " << playerIndex << " : "
-                          << playerFile[playerIndex];
+                          << playerFile[static_cast<int>(playerIndex)];
     std::stringstream ss;
-    std::ofstream     fs(playerFile[playerIndex].c_str(),
+    std::ofstream     fs(playerFile[static_cast<int>(playerIndex)].c_str(),
                      std::ofstream::out | std::ofstream::trunc);
 
     if (fs.is_open() == false)
@@ -279,17 +302,26 @@ namespace core
     fs.close();
   }
 
-  bool SettingsPlayer::check_used(int playerIndex) const
+  bool SettingsPlayer::check_used(std::size_t const playerIndex) const
   {
-    if (m_used[m_players[playerIndex].key.speedUp] == true ||
-        m_used[m_players[playerIndex].key.slowDown] == true ||
-        m_used[m_players[playerIndex].key.turnLeft] == true ||
-        m_used[m_players[playerIndex].key.turnRight] == true ||
-        m_used[m_players[playerIndex].key.useObject] == true ||
-        m_used[m_players[playerIndex].key.changeView] == true ||
-        m_used[m_players[playerIndex].key.displayMap] == true ||
-        m_used[m_players[playerIndex].key.openChat] == true ||
-        m_used[m_players[playerIndex].key.openMenu] == true)
+    if (m_used[static_cast<std::size_t const>(
+            m_players[playerIndex].key.speedUp)] == true ||
+        m_used[static_cast<std::size_t const>(
+            m_players[playerIndex].key.slowDown)] == true ||
+        m_used[static_cast<std::size_t const>(
+            m_players[playerIndex].key.turnLeft)] == true ||
+        m_used[static_cast<std::size_t const>(
+            m_players[playerIndex].key.turnRight)] == true ||
+        m_used[static_cast<std::size_t const>(
+            m_players[playerIndex].key.useObject)] == true ||
+        m_used[static_cast<std::size_t const>(
+            m_players[playerIndex].key.changeView)] == true ||
+        m_used[static_cast<std::size_t const>(
+            m_players[playerIndex].key.displayMap)] == true ||
+        m_used[static_cast<std::size_t const>(
+            m_players[playerIndex].key.openChat)] == true ||
+        m_used[static_cast<std::size_t const>(
+            m_players[playerIndex].key.openMenu)] == true)
       {
 	return true;
       }
@@ -301,7 +333,7 @@ namespace core
     return (textForKey[keycode]);
   }
 
-  std::string const SettingsPlayer::actionForKey(int          playerIndex,
+  std::string const SettingsPlayer::actionForKey(std::size_t const playerIndex,
                                                  OIS::KeyCode keyCode) const
   {
     if (m_keycodes[playerIndex].find(keyCode) == m_keycodes[playerIndex].end())
@@ -312,13 +344,13 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Graphic &
-      SettingsPlayer::graphics(int playerIndex)
+      SettingsPlayer::graphics(std::size_t const playerIndex)
   {
     return (m_players[playerIndex].graphic);
   }
 
-  bool SettingsPlayer::updateKey(int playerIndex, OIS::KeyCode old,
-                                 OIS::KeyCode newKey)
+  bool SettingsPlayer::updateKey(std::size_t const playerIndex,
+                                 OIS::KeyCode old, OIS::KeyCode newKey)
   {
     Log(nope::log::Debug) << "SettingsPlayer::updateKey -> "
                           << "oldKey = " << old << " : "
@@ -327,9 +359,12 @@ namespace core
       return true;
     else if (m_used[newKey])
       {
-	int         oldPlayer = switchKey(old, newKey);
-	std::string oldAction = m_keycodes[oldPlayer][newKey];
-	std::string newAction = m_keycodes[playerIndex][old];
+	std::size_t oldPlayer =
+	    static_cast<std::size_t>(switchKey(old, newKey));
+	std::string oldAction =
+	    m_keycodes[static_cast<std::size_t>(oldPlayer)][newKey];
+	std::string newAction =
+	    m_keycodes[static_cast<std::size_t>(playerIndex)][old];
 	m_keycodes[oldPlayer].erase(newKey);
 	m_keycodes[playerIndex].erase(old);
 	m_keycodes[oldPlayer][old] = oldAction;
@@ -349,43 +384,44 @@ namespace core
   int SettingsPlayer::switchKey(OIS::KeyCode old, OIS::KeyCode newKey)
   {
 
-    for (int i = 0; i < 4; ++i)
+    for (std::size_t i = 0; i < 4; ++i)
       {
 	if (m_players[i].key.speedUp == newKey)
 	  {
 	    m_players[i].key.speedUp = old;
-	    return (i);
+	    return (static_cast<int>(i));
 	  }
 	if (m_players[i].key.slowDown == newKey)
 	  {
 	    m_players[i].key.slowDown = old;
-	    return (i);
+	    return (static_cast<int>(i));
 	  }
 	if (m_players[i].key.turnRight == newKey)
 	  {
 	    m_players[i].key.turnRight = old;
-	    return (i);
+	    return (static_cast<int>(i));
 	  }
 	if (m_players[i].key.turnLeft == newKey)
 	  {
 	    m_players[i].key.turnLeft = old;
-	    return (i);
+	    return (static_cast<int>(i));
 	  }
 	if (m_players[i].key.useObject == newKey)
 	  {
 	    m_players[i].key.useObject = old;
-	    return (i);
+	    return (static_cast<int>(i));
 	  }
 	if (m_players[i].key.openMenu == newKey)
 	  {
 	    m_players[i].key.openMenu = old;
-	    return (i);
+	    return (static_cast<int>(i));
 	  }
       }
     return (0);
   }
 
-  SettingsPlayer::GameSettings &SettingsPlayer::getPlayer(int playerIndex)
+  SettingsPlayer::GameSettings &
+      SettingsPlayer::getPlayer(std::size_t const playerIndex)
   {
     return (m_players[playerIndex]);
   }

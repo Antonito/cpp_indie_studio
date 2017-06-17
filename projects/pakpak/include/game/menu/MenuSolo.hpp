@@ -15,7 +15,9 @@ namespace core
   {
   public:
     MenuSolo(menu::MenuManager &menuManager, GUI &gui);
-    virtual ~MenuSolo(){};
+    virtual ~MenuSolo()
+    {
+    }
     void      draw();
     void      entry();
     void      exit();

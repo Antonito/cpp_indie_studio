@@ -3,9 +3,15 @@
 
 #include <memory>
 #include <OGRE/Ogre.h>
-#include <OIS/OISInputManager.h>
+#if defined __APPLE__
+#include <ois/OISMouse.h>
+#include <ois/OISKeyboard.h>
+#include <ois/OISInputManager.h>
+#else
 #include <OIS/OISMouse.h>
 #include <OIS/OISKeyboard.h>
+#include <OIS/OISInputManager.h>
+#endif
 
 // Disable clang warning for templated class padding
 #if defined(__clang__)

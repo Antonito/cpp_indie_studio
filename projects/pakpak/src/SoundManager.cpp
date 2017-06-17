@@ -57,7 +57,7 @@ void SoundManager::loadSound(const std::string &Filename)
 
   nope::log::Log(Debug) << "Reading samples of " << Filename;
   // Reading the samples with 16 bit signed format (More common)
-  std::vector<ALshort> Samples(NbSamples);
+  std::vector<ALshort> Samples(static_cast<std::size_t>(NbSamples));
   if (sf_read_short(File, &Samples[0], NbSamples) < NbSamples)
     {
       throw IOError("Unable to read samples stored in audio file.");
@@ -99,7 +99,7 @@ void SoundManager::loadSound(const std::string &Filename)
   nope::log::Log(Debug) << "No error while loading " << Filename << " sound";
   // set Source
   alGenSources(1, &m_source);
-  alSourcei(m_source, AL_BUFFER, m_buffer);
+  alSourcei(m_source, AL_BUFFER, static_cast<int>(m_buffer));
 }
 
 // Init device and context of OpenAl

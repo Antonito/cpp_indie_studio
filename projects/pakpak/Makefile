@@ -6,20 +6,35 @@ MK_COMMON_DIR=	./../../mk/
 NAME=		$(ROOT_DIR)/pakpak
 
 LOCAL_COMP_FLAGS=
-ifeq ($(CXX), clang++)
-LOCAL_COMP_FLAGS+=	-Wno-global-constructors	\
-			-Wno-exit-time-destructors		    \
-			-Wno-weak-vtables			        \
-			-Wno-padded				            \
-			-Wno-switch-enum
-endif
 
-LOCAL_LINK_FLAGS= -l OIS -l OgreMain -l boost_system -L $(ROOT_DIR)/build/ -l indie_logger -l CEGUIBase-0 -l CEGUIOgreRenderer-0 -lopenal \
-                  -l indie_exceptions -l indie_crypto -l sndfile -l BulletDynamics -l BulletCollision -l OgreBulletDynamics -l OgreBulletCollisions -l LinearMath
+LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
+			-L $(ROOT_DIR)/build/ -l indie_logger 	\
+			-l CEGUIBase-0 -l CEGUIOgreRenderer-0 	\
+			-l indie_exceptions			\
+			-l indie_crypto -l sndfile		\
+			-l BulletDynamics -l BulletCollision	\
+			-l OgreBulletDynamics			\
+			-l OgreBulletCollisions			\
+			-l LinearMath
+
+ifeq ($(shell uname -s),Darwin)
+LOCAL_COMP_FLAGS+=	-x objective-c++
+LOCAL_LINK_FLAGS+=	-ObjC++ -framework Cocoa -framework Carbon -framework OpenAL
+else 
+LOCAL_LINK_FLAGS+=	-lopenal
+endif
 
 LOCAL_DEBUG_FLAGS=
 
 include $(MK_COMMON_DIR)colors.mk $(MK_COMMON_DIR)defs.mk
+
+ifeq ($(CXX), clang++)
+CXXFLAGS+=		-Wno-global-constructors	\
+			-Wno-exit-time-destructors	\
+			-Wno-weak-vtables		\
+			-Wno-padded			\
+			-Wno-switch-enum
+endif
 
 # Project's directories
 
@@ -47,7 +62,11 @@ DIR_LIST=	$(SRC_DIR)		\
 		$(GAME_MAP_DIR)     	\
 	        $(GAME_MENU_DIR)
 
+ifeq ($(shell uname -s),Darwin)
+HEADER=
+else
 HEADER=		pakpak_stdafx.hpp
+endif
 
 # Project's files
 
@@ -87,7 +106,7 @@ GAME_MAP_FILES=		Map.cpp				\
 GAME_TOOLS_FILES=	Tools.cpp
 
 GAME_MENU_FILES=    	GUI.cpp				\
-                    	MainMenu.cpp			\
+			MainMenu.cpp			\
 			ContextMenu.cpp			\
 			MenuManager.cpp     		\
 			MenuOptions.cpp 		\
@@ -109,13 +128,19 @@ SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 
 INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)		\
 		$(ROOT_DIR)/libs/serializer/include/			\
-		$(ROOT_DIR)/libs/logger/include/                \
-		$(ROOT_DIR)/libs/exceptions/include/            \
-		$(ROOT_DIR)/libs/crypto/include/                \
+		$(ROOT_DIR)/libs/logger/include/			\
+		$(ROOT_DIR)/libs/exceptions/include/			\
+		$(ROOT_DIR)/libs/crypto/include/			\
+		/usr/include/OgreBullet/Dynamics 			\
+		/usr/include/OgreBullet/Collisions 			\
 		/usr/local/include/OgreBullet/Dynamics 			\
 		/usr/local/include/OgreBullet/Collisions 		\
-		/usr/include/bullet         					\
-		/usr/include/OGRE
+		/usr/include/bullet					\
+		/usr/local/include/bullet				\
+		/usr/include/OGRE					\
+		/usr/local/include/OGRE					\
+		/usr/local/include/OGRE/RenderSystems/GL/		\
+		/usr/local/include/OGRE/RenderSystems/GL/OSX
 
 PRECOMPILED_HEADER= $(addprefix $(INCLUDE_DIR),$(HEADER))
 

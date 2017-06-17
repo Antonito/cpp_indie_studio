@@ -6,7 +6,9 @@ PRECOMPILED_OBJ=$(PRECOMPILED_HEADER:%.hpp=%.hpp.pch)
 else
 PRECOMPILED_OBJ=$(PRECOMPILED_HEADER:%.hpp=%.hpp.gch)
 endif
-OBJ=		$(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
+OBJ_CPP=	$(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
+OBJ_MM=		$(SRC:$(SRC_DIR)%.mm=$(OBJ_DIR)%.o)
+OBJ=		$(filter %.o, $(OBJ_CPP) $(OBJ_MM))
 OBJ_DIR_LIST=	$(DIR_LIST:$(SRC_DIR)%=$(OBJ_DIR)%)
 
 NAME_EXTENSION=	$(suffix $(NAME))
@@ -20,6 +22,17 @@ else
 		@$(CXX) $(OBJ) -o $(NAME) $(LDFLAGS) && \
 		$(ECHO) "$(WHITE)[$(GREEN)OK$(WHITE)] Linked $(CYAN)"$(NAME)"\n$(CLEAR)" || \
 		$(ECHO) "$(WHITE)[$(RED)KO$(WHITE)] Linked $(CYAN)"$(NAME)"\n$(CLEAR)"
+endif
+
+$(OBJ_DIR)%.o:	$(SRC_DIR)%.mm
+ifeq ($(CXX),clang++)
+		@$(CXX) $(CXXFLAGS) -c -o $@ $< $(addprefix -include ,$(PRECOMPILED_HEADER)) && \
+		$(ECHO) "$(WHITE)[$(GREEN)OK$(WHITE)] Compiled "$<"\n$(CLEAR)" || \
+		$(ECHO) "$(WHITE)[$(RED)KO$(WHITE)] Compiled "$<"\n$(CLEAR)"
+else
+		@$(CXX) $(CXXFLAGS) -c -o $@ $< && \
+		$(ECHO) "$(WHITE)[$(GREEN)OK$(WHITE)] Compiled "$<"\n$(CLEAR)" || \
+		$(ECHO) "$(WHITE)[$(RED)KO$(WHITE)] Compiled "$<"\n$(CLEAR)"
 endif
 
 $(OBJ_DIR)%.o:	$(SRC_DIR)%.cpp

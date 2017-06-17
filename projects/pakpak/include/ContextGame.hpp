@@ -4,10 +4,21 @@
 #include <vector>
 #include <memory>
 #include <OGRE/OgreRenderWindow.h>
+#if defined __APPLE__
+#include <ois/OISMouse.h>
+#include <ois/OISKeyboard.h>
+#else
 #include <OIS/OISMouse.h>
 #include <OIS/OISKeyboard.h>
+#endif
 #include "AContext.hpp"
 #include "LocalPlayer.hpp"
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
 
 namespace game
 {
@@ -49,5 +60,9 @@ namespace game
     bool                                      m_quit;
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !CONTEXTGAME_HPP_
