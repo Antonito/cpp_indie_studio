@@ -60,6 +60,9 @@ namespace game
 
     // This is now the path to our file
     filename.resize(static_cast<size_t>(pathLen));
+
+    std::string hitbox = filename + "/map_box.mesh";
+
     filename += "/map.mesh";
 
     // Load the actual mesh
@@ -94,6 +97,36 @@ namespace game
     meshSerializer.importMesh(stream, meshptr.getPointer());
 
     m_map = m_gamedata.sceneMgr()->createEntity(ss.str() + "_ent", ss.str());
+
+    // Load the actual mesh
+    meshFile = std::fopen(hitbox.c_str(), "rb");
+
+    if (meshFile == nullptr)
+      {
+	throw std::exception(); // TODO: change exception
+      }
+
+    stat(hitbox.c_str(), &fileStat);
+
+    size = static_cast<std::size_t>(fileStat.st_size);
+
+    memstream = new Ogre::MemoryDataStream(hitbox, size, true);
+
+    std::fread(memstream->getPtr(), size, 1, meshFile);
+    std::fclose(meshFile);
+
+    ss.str("");
+    ss << "MapBoxMesh" << id;
+
+    meshptr = Ogre::MeshManager::getSingleton().createManual(
+        ss.str(), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+
+    Ogre::DataStreamPtr stream2(memstream);
+
+    meshSerializer.importMesh(stream2, meshptr.getPointer());
+
+    m_mapbox =
+        m_gamedata.sceneMgr()->createEntity(ss.str() + "_ent", ss.str());
 
     ss.str("");
     ss << "MapNode" << id;
@@ -134,6 +167,18 @@ namespace game
 #endif
     m_body->setStaticShape(_shape, 0.0f, 0.6f, Ogre::Vector3(0, 0, 0));
     // m_body->setKinematicObject(true);
+
+    m_gamedata.sceneMgr()->setAmbientLight(
+        Ogre::ColourValue(0.5f, 0.5f, 0.5f));
+
+    Ogre::Light *l = m_gamedata.sceneMgr()->createLight("MainLight");
+    l->setType(Ogre::Light::LightTypes::LT_DIRECTIONAL);
+    l->setDirection(Ogre::Vector3(1.0, -1.0, 0.5));
+
+    Ogre::Light *l2 = m_gamedata.sceneMgr()->createLight("MainLight2");
+    l2->setPosition(200, 150, -150);
+
+    l2->setCastShadows(false);
 
     ++id;
   }

@@ -108,6 +108,11 @@
 #include "IOError.hpp"
 
 //
+// Sound
+//
+#include "SoundManager.hpp"
+
+//
 // Physic
 //
 

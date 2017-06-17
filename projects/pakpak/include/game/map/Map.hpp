@@ -74,6 +74,7 @@ namespace game
     game::GameData &               m_gamedata;
     std::vector<PathPoint>         m_points;
     Ogre::Entity *                 m_map;
+    Ogre::Entity *                 m_mapbox;
     Ogre::SceneNode *              m_node;
     OgreBulletDynamics::RigidBody *m_body;
     // std::vector<MapElement> m_elements;

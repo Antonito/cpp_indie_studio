@@ -9,6 +9,8 @@
 #include <AL/alc.h>
 #include <sndfile.h>
 #include <iostream>
+#include <vector>
+#include <iomanip>
 
 class SoundManager
 {

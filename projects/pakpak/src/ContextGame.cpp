@@ -28,8 +28,9 @@ namespace game
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
-	m_game[i].setCar(std::make_unique<EmptyCar>(
-	    m_game, Ogre::Vector3::ZERO, Ogre::Quaternion::IDENTITY));
+	m_game[i].setCar(
+	    std::make_unique<EmptyCar>(m_game, Ogre::Vector3(0, 10, 100 * i),
+	                               Ogre::Quaternion::IDENTITY));
       }
 
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)

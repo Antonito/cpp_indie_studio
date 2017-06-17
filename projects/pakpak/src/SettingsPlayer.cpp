@@ -200,13 +200,11 @@ namespace core
       {
 	m_loaded[playerIndex] = true;
       }
-    std::ifstream fs(playerFile[playerIndex].c_str());
+    std::ifstream fs;
 
-    if (fs.is_open() == false)
-      {
-	Log(nope::log::Error) << "Can't open the file";
-	throw std::exception();
-      }
+    // This allow to throw in case of fail to open
+    fs.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    fs.open(playerFile[playerIndex].c_str());
     ss << fs.rdbuf();
     std::string content = ss.str();
 
@@ -407,7 +405,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings &SettingsPlayer::GameSettings::
-      operator=(GameSettings const &that)
+                                operator=(GameSettings const &that)
   {
     this->key = that.key;
     this->graphic = that.graphic;
@@ -415,7 +413,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings &SettingsPlayer::GameSettings::
-      operator=(GameSettings &&that)
+                                operator=(GameSettings &&that)
   {
     this->key = std::move(that.key);
     this->graphic = std::move(that.graphic);
@@ -423,7 +421,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Key &SettingsPlayer::GameSettings::Key::
-      operator=(GameSettings::Key const &that)
+                                     operator=(GameSettings::Key const &that)
   {
     this->speedUp = that.speedUp;
     this->slowDown = that.slowDown;
@@ -438,7 +436,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Key &SettingsPlayer::GameSettings::Key::
-      operator=(GameSettings::Key &&that)
+                                     operator=(GameSettings::Key &&that)
   {
     this->speedUp = that.speedUp;
     this->slowDown = that.slowDown;
@@ -471,7 +469,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Graphic &
-      SettingsPlayer::GameSettings::Graphic::
+          SettingsPlayer::GameSettings::Graphic::
           operator=(GameSettings::Graphic const &that)
   {
     this->sensibility = that.sensibility;
@@ -480,7 +478,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Graphic &
-      SettingsPlayer::GameSettings::Graphic::
+          SettingsPlayer::GameSettings::Graphic::
           operator=(GameSettings::Graphic &&that)
   {
     this->sensibility = that.sensibility;
