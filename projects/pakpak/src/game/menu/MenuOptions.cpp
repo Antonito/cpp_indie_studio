@@ -9,9 +9,9 @@ namespace core
   MenuOptions::MenuOptions(menu::MenuManager &menuManager, GUI &gui,
                            SoundManager &sound)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
-        m_volumeButtons(), m_volumeSelected(4), m_graphicButtons(),
-        m_graphicSelected(0), m_sound(sound)
+        m_volumeButtons(), m_graphicButtons(), m_graphicSelected(0), m_sound(sound), m_volumeSelected(static_cast<std::size_t>(m_sound.getVolume() * 4.0f))
   {
+    nope::log::Log(Debug) << "Initialization Current Volume : " << static_cast<std::size_t>(m_sound.getVolume() * 4.0f);
   }
 
   void MenuOptions::draw()
@@ -24,7 +24,8 @@ namespace core
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
 
     m_graphicSelected = 0;
-    m_volumeSelected = 4;
+    nope::log::Log(Debug) << "Current Volume : " << m_sound.getVolume();
+    m_volumeSelected = static_cast<std::size_t>(m_sound.getVolume() * 4.0f);
     m_volumeButtons[0] = m_gui.getRoot()->getChild("volume/level_0");
     m_volumeButtons[1] = m_gui.getRoot()->getChild("volume/level_25");
     m_volumeButtons[2] = m_gui.getRoot()->getChild("volume/level_50");
@@ -266,7 +267,7 @@ namespace core
   bool MenuOptions::onVolumeLevel100(CEGUI::EventArgs const &)
   {
     soundClick();
-    m_sound.downVolume(1.0f);
+    m_sound.setVolume(1.0f);
     swapButtons(m_volumeButtons, m_volumeSelected, 4, AssetSetter::greyButton,
                 AssetSetter::redButton);
     return true;

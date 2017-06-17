@@ -102,12 +102,13 @@ namespace core
 	generate();
 	if (!compareKey(key))
 	  {
-	    throw IOError("File is corrupted");
+	    m_data.reset();
+            saveInFile(file);
 	  }
       }
     else
       {
-	throw IOError("Cannot open file");
+	saveInFile(file);
       }
   }
 
