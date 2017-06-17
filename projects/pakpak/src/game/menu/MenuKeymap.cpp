@@ -196,7 +196,7 @@ namespace core
 	m_listening = true;
       }
     m_curKey = reinterpret_cast<OIS::KeyCode *>(
-        &m_settings.getPlayer(static_cast<int>(m_playerSelected)).key.speedUp);
+        &m_settings.getPlayer(m_playerSelected).key.speedUp);
     m_curButton = "up_button";
     return true;
   }
@@ -208,8 +208,7 @@ namespace core
 	m_listening = true;
       }
     m_curKey = reinterpret_cast<OIS::KeyCode *>(
-        &m_settings.getPlayer(static_cast<int>(m_playerSelected))
-             .key.slowDown);
+        &m_settings.getPlayer(m_playerSelected).key.slowDown);
     m_curButton = "down_button";
     return true;
   }
@@ -221,8 +220,7 @@ namespace core
 	m_listening = true;
       }
     m_curKey = reinterpret_cast<OIS::KeyCode *>(
-        &m_settings.getPlayer(static_cast<int>(m_playerSelected))
-             .key.turnLeft);
+        &m_settings.getPlayer(m_playerSelected).key.turnLeft);
     m_curButton = "left_button";
     return true;
   }
@@ -234,8 +232,7 @@ namespace core
 	m_listening = true;
       }
     m_curKey = reinterpret_cast<OIS::KeyCode *>(
-        &m_settings.getPlayer(static_cast<int>(m_playerSelected))
-             .key.turnRight);
+        &m_settings.getPlayer(m_playerSelected).key.turnRight);
     m_curButton = "right_button";
     return true;
   }
@@ -247,8 +244,7 @@ namespace core
 	m_listening = true;
       }
     m_curKey = reinterpret_cast<OIS::KeyCode *>(
-        &m_settings.getPlayer(static_cast<int>(m_playerSelected))
-             .key.openMenu);
+        &m_settings.getPlayer(m_playerSelected).key.openMenu);
     m_curButton = "pause_button";
     return true;
   }
@@ -260,8 +256,7 @@ namespace core
 	m_listening = true;
       }
     m_curKey = reinterpret_cast<OIS::KeyCode *>(
-        &m_settings.getPlayer(static_cast<int>(m_playerSelected))
-             .key.useObject);
+        &m_settings.getPlayer(m_playerSelected).key.useObject);
     m_curButton = "use_button";
     return true;
   }

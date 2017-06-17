@@ -188,14 +188,12 @@ void SoundManager::playSound()
 // Set the current state of the volume
 void SoundManager::state()
 {
-  nope::log::Log(Debug) << "Setting state";
   alGetSourcei(m_source, AL_SOURCE_STATE, &m_state);
 }
 
 // Get the actual sound state
 ALint SoundManager::getState() const
 {
-  nope::log::Log(Debug) << "Getting state";
   return m_state;
 }
 

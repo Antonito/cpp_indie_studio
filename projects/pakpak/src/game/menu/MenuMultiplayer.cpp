@@ -10,6 +10,7 @@ namespace core
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager)
 
   {
+    nope::log::Log(Debug) << "Building MenuMultiplayer";
   }
 
   void MenuMultiplayer::draw()
@@ -18,6 +19,9 @@ namespace core
 
   void MenuMultiplayer::entry()
   {
+    nope::log::Log(Debug) << "Entering MenuMultiplayer";
+
+    // TODO Antoine: Connect to ConnectManager and get ServerList
     m_gui.loadLayout("multiplayer.layout");
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
 
@@ -36,10 +40,14 @@ namespace core
 
   void MenuMultiplayer::exit()
   {
+    // TODO Antoine: Disconnect ConnectManager if connected, discomnnect
+    // GameServer if connected
+    nope::log::Log(Debug) << "Exit MenuMultiplayer";
   }
 
   void MenuMultiplayer::destroy()
   {
+    nope::log::Log(Debug) << "Destroying MenuMultiplayer";
   }
 
   GameState MenuMultiplayer::update() const
@@ -49,6 +57,7 @@ namespace core
 
   void MenuMultiplayer::build()
   {
+    nope::log::Log(Debug) << "Building MenuMultiplayer";
   }
 
   bool MenuMultiplayer::keyPressed(const OIS::KeyEvent &arg)
@@ -114,6 +123,7 @@ namespace core
 
   bool MenuMultiplayer::onBackClick(CEGUI::EventArgs const &)
   {
+    exit();
     m_menuManager.popLayer();
     m_menuManager.begin();
     return false;

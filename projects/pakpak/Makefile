@@ -52,6 +52,8 @@ GAME_TOOLS_DIR=	$(GAME_DIR)tools/
 
 GAME_MENU_DIR=  $(GAME_DIR)menu/
 
+NETWORK_DIR=	$(SRC_DIR)network/
+
 INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)		\
@@ -60,7 +62,8 @@ DIR_LIST=	$(SRC_DIR)		\
 		$(GAME_CAR_DIR)		\
 		$(GAME_TOOLS_DIR)	\
 		$(GAME_MAP_DIR)     	\
-	        $(GAME_MENU_DIR)
+	        $(GAME_MENU_DIR)	\
+		$(NETWORK_DIR)
 
 ifeq ($(shell uname -s),Darwin)
 HEADER=
@@ -118,13 +121,17 @@ GAME_MENU_FILES=    	GUI.cpp				\
 			InGameHUD.cpp			\
 			InGamePause.cpp
 
+NETWORK_FILES=		NetworkManager.cpp
+
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 		$(addprefix $(GAME_DIR), $(GAME_FILES))			\
 		$(addprefix $(GAME_LAYER_DIR), $(GAME_LAYER_FILES))	\
 		$(addprefix $(GAME_CAR_DIR), $(GAME_CAR_FILES))		\
 		$(addprefix $(GAME_TOOLS_DIR), $(GAME_TOOLS_FILES))	\
 		$(addprefix $(GAME_MAP_DIR), $(GAME_MAP_FILES))     	\
-		$(addprefix $(GAME_MENU_DIR), $(GAME_MENU_FILES))
+		$(addprefix $(GAME_MENU_DIR), $(GAME_MENU_FILES))	\
+		$(addprefix $(NETWORK_DIR), $(NETWORK_FILES))
+
 
 INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)		\
 		$(ROOT_DIR)/libs/serializer/include/			\
