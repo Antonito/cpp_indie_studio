@@ -32,9 +32,9 @@ namespace core
 
     nope::log::Log(Debug) << "Server list OKAY";
 
-      static_cast<CEGUI::ItemListbox *>(
-              m_gui.getRoot()->getChild("servers_list"))
-              ->setAutoResizeEnabled(1);
+    static_cast<CEGUI::ItemListbox *>(
+        m_gui.getRoot()->getChild("servers_list"))
+        ->setAutoResizeEnabled(1);
     std::int32_t i(0);
     nope::log::Log(Debug) << "Entry on MultiMenu";
     CEGUI::WindowManager *winManager = CEGUI::WindowManager::getSingletonPtr();
@@ -187,6 +187,12 @@ namespace core
   bool MenuMultiplayer::onPlayClick(CEGUI::EventArgs const &)
   {
     soundClick();
+
+    // Get token from gameServer
+    std::string const &token = m_network.getToken(m_selectGameServer);
+    // Connect to game server
+    m_network.connect(m_selectGameServer, token);
+
     nope::log::Log(Debug) << "CONNECT TO GAME_SERVER CLEAN";
     m_curState = GameState::InGame;
     m_gui.hideCursor();

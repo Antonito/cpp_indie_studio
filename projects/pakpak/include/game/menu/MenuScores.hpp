@@ -16,7 +16,9 @@ namespace core
   public:
     MenuScores(menu::MenuManager &menuManager, GUI &gui,
                SettingsPlayer &settings, SoundManager &sound);
-    virtual ~MenuScores(){};
+    virtual ~MenuScores()
+    {
+    }
     void      draw();
     void      entry();
     void      exit();

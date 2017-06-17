@@ -16,7 +16,9 @@ namespace core
   {
   public:
     MenuOptions(menu::MenuManager &menuManager, GUI &gui, SoundManager &sound);
-    virtual ~MenuOptions(){};
+    virtual ~MenuOptions()
+    {
+    }
 
     void      draw();
     void      entry();

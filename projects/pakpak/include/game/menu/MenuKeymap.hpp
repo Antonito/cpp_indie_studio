@@ -17,7 +17,9 @@ namespace core
   public:
     MenuKeymap(menu::MenuManager &menuManager, GUI &gui,
                SettingsPlayer &settings, SoundManager &sound);
-    virtual ~MenuKeymap(){};
+    virtual ~MenuKeymap()
+    {
+    }
 
     void      draw();
     void      entry();
