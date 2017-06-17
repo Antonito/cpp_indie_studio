@@ -133,12 +133,12 @@ namespace core
 
     // Splash context
     m_contexts[static_cast<std::size_t>(GameState::Splash)] =
-        std::make_unique<splash::ContextSplash>(m_window, m_inputListener);
+        std::make_unique<splash::ContextSplash>(m_window, m_inputListener, m_soundManager);
 
     // Menu context
     m_contexts[static_cast<std::size_t>(GameState::Menu)] =
         std::make_unique<menu::ContextMenu>(m_window, m_inputListener,
-                                            m_settings);
+                                            m_settings, m_soundManager);
 
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
@@ -149,10 +149,7 @@ namespace core
         m_contexts[static_cast<std::size_t>(GameState::Splash)].get();
 
     m_currentContext->enable();
-
-    m_soundManager.loadSound("deps/indie_resource/songs/theme.wav");
-    m_soundManager.playSound();
-    m_soundManager.loopSound();
+    m_gameState = m_currentContext->update();
     while (true)
       {
 	GameState state;

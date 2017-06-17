@@ -6,10 +6,10 @@
 
 namespace core
 {
-  MenuOptions::MenuOptions(menu::MenuManager &menuManager, GUI &gui)
+  MenuOptions::MenuOptions(menu::MenuManager &menuManager, GUI &gui, SoundManager &sound)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
         m_volumeButtons(), m_volumeSelected(4), m_graphicButtons(),
-        m_graphicSelected(0)
+        m_graphicSelected(0), m_sound(sound)
   {
   }
 

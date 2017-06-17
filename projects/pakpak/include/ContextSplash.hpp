@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include "AContext.hpp"
+#include "SoundManager.hpp"
 
 // Forward declaration for faster compilation
 namespace Ogre
@@ -22,7 +23,8 @@ namespace splash
   {
   public:
     explicit ContextSplash(Ogre::RenderWindow * win,
-                           core::InputListener *input);
+                           core::InputListener *input,
+                            core::SoundManager &sound);
     ContextSplash(ContextSplash const &) = delete;
     ContextSplash(ContextSplash &&) = delete;
     virtual ~ContextSplash();
@@ -43,7 +45,7 @@ namespace splash
     Ogre::Light *       m_light;
     Ogre::Camera *      m_camera;
     Ogre::Viewport *    m_viewport;
-
+    core::SoundManager  &m_sound;
     using clock_t = std::chrono::high_resolution_clock;
     using timepoint_t = std::chrono::time_point<clock_t>;
 

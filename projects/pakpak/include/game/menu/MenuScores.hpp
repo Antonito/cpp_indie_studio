@@ -15,7 +15,7 @@ namespace core
   {
   public:
     MenuScores(menu::MenuManager &menuManager, GUI &gui,
-               SettingsPlayer &settings);
+               SettingsPlayer &settings, SoundManager &sound);
     virtual ~MenuScores(){};
     void      draw();
     void      entry();
@@ -40,6 +40,7 @@ namespace core
     GameState          m_curState;
     menu::MenuManager &m_menuManager;
     SettingsPlayer &   m_settings;
+    SoundManager &     m_sound;
     bool               onBackClick(CEGUI::EventArgs const &);
   };
 }

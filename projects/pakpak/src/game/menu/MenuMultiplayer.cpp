@@ -6,8 +6,10 @@
 
 namespace core
 {
-  MenuMultiplayer::MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui)
-      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager)
+  MenuMultiplayer::MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui,
+                                   SoundManager &sound)
+      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
+        m_sound(sound)
 
   {
   }

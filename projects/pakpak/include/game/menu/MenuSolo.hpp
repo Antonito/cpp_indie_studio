@@ -14,7 +14,7 @@ namespace core
   class MenuSolo : public IMenuLayer
   {
   public:
-    MenuSolo(menu::MenuManager &menuManager, GUI &gui);
+    MenuSolo(menu::MenuManager &menuManager, GUI &gui, SoundManager &sound);
     virtual ~MenuSolo(){};
     void      draw();
     void      entry();
@@ -38,6 +38,7 @@ namespace core
     GUI &              m_gui;
     GameState          m_curState;
     menu::MenuManager &m_menuManager;
+    SoundManager      &m_sound;
 
     bool onBackClick(CEGUI::EventArgs const &);
     bool onPlayClick(CEGUI::EventArgs const &e);

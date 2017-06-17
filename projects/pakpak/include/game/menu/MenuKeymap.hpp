@@ -16,7 +16,7 @@ namespace core
   {
   public:
     MenuKeymap(menu::MenuManager &menuManager, GUI &gui,
-               SettingsPlayer &settings);
+               SettingsPlayer &settings, SoundManager &sound);
     virtual ~MenuKeymap(){};
     void      draw();
     void      entry();
@@ -59,6 +59,7 @@ namespace core
     bool               m_listening;
     OIS::KeyCode *     m_curKey;
     std::string        m_curButton;
+    SoundManager &     m_sound;
   };
 }
 

@@ -14,7 +14,7 @@ namespace core
   class MainMenu : public IMenuLayer
   {
   public:
-    MainMenu(menu::MenuManager &menuManager, GUI &gui);
+    MainMenu(menu::MenuManager &menuManager, GUI &gui, SoundManager &sound);
     virtual ~MainMenu()
     {
     }
@@ -42,9 +42,12 @@ namespace core
     bool      onOptionClick(CEGUI::EventArgs const &);
     bool      onScoreClick(CEGUI::EventArgs const &);
 
+    bool      onScoreArea(CEGUI::EventArgs const &);
+
     GUI &              m_gui;
     GameState          m_curState;
     menu::MenuManager &m_menuManager;
+    core::SoundManager &m_sound;
   };
 }
 

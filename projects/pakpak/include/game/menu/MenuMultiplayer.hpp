@@ -14,7 +14,8 @@ namespace core
   class MenuMultiplayer : public IMenuLayer
   {
   public:
-    MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui);
+    MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui,
+                    SoundManager &sound);
     virtual ~MenuMultiplayer(){};
     void      draw();
     void      entry();
@@ -38,6 +39,7 @@ namespace core
     GUI &              m_gui;
     GameState          m_curState;
     menu::MenuManager &m_menuManager;
+    SoundManager &     m_sound;
 
     bool onBackClick(CEGUI::EventArgs const &);
     bool onPlayClick(CEGUI::EventArgs const &e);

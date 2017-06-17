@@ -2,8 +2,8 @@
 
 namespace core
 {
-  MainMenu::MainMenu(menu::MenuManager &menuManager, GUI &gui)
-      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager)
+  MainMenu::MainMenu(menu::MenuManager &menuManager, GUI &gui, SoundManager &sound)
+      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager), m_sound(sound)
   {
   }
 
@@ -41,6 +41,12 @@ namespace core
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MainMenu::onScoreClick, this));
+
+    m_gui.getRoot()
+            ->getChild("stats_button")
+            ->subscribeEvent(
+                    CEGUI::PushButton::EventMouseEntersArea,
+                    CEGUI::Event::Subscriber(&MainMenu::onScoreArea, this));
 
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
   }
@@ -160,4 +166,11 @@ namespace core
     m_menuManager.begin();
     return true;
   }
+
+    bool MainMenu::onScoreArea(CEGUI::EventArgs const &)
+    {
+      m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
+      m_sound.playSound();
+      return true;
+    }
 }

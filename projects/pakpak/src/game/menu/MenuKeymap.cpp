@@ -7,10 +7,10 @@
 namespace core
 {
   MenuKeymap::MenuKeymap(menu::MenuManager &menuManager, GUI &gui,
-                         SettingsPlayer &settings)
+                         SettingsPlayer &settings, SoundManager &sound)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
         m_playerSelected(0), m_buttons(), m_settings(settings),
-        m_listening(false), m_curKey(nullptr), m_curButton("")
+        m_listening(false), m_curKey(nullptr), m_curButton(""), m_sound(sound)
 
   {
   }

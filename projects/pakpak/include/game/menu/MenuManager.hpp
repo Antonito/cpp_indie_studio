@@ -7,9 +7,12 @@
 
 #include <OGRE/Ogre.h>
 #include <OIS/OIS.h>
+#include "SoundManager.hpp"
 #include "FastStack.hpp"
 #include "IMenuLayer.hpp"
 #include "IEventHandler.hpp"
+#include "SettingsPlayer.hpp"
+#include "GUI.hpp"
 #include "ILayerStack.hpp"
 #include "InputListener.hpp"
 
@@ -19,7 +22,8 @@ namespace menu
   {
   public:
     explicit MenuManager(Ogre::RenderWindow *  win,
-                         core::SettingsPlayer &settings);
+                         core::SettingsPlayer &settings,
+                         core::SoundManager &sound);
     MenuManager(MenuManager const &) = delete;
     MenuManager(MenuManager &&) = delete;
     virtual ~MenuManager()

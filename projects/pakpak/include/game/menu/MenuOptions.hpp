@@ -15,7 +15,7 @@ namespace core
   class MenuOptions : public IMenuLayer
   {
   public:
-    MenuOptions(menu::MenuManager &menuManager, GUI &gui);
+    MenuOptions(menu::MenuManager &menuManager, GUI &gui, SoundManager &sound);
     virtual ~MenuOptions(){};
     void      draw();
     void      entry();
@@ -55,6 +55,7 @@ namespace core
     size_t             m_volumeSelected;
     CEGUI::Window *    m_graphicButtons[2];
     size_t             m_graphicSelected;
+    SoundManager &     m_sound;
   };
 }
 

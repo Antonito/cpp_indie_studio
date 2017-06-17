@@ -2,6 +2,8 @@
 #define CONTEXTMENU_HPP_
 
 #include <array>
+#include "SoundManager.hpp"
+#include "SettingsPlayer.hpp"
 #include "AContext.hpp"
 #include "GUI.hpp"
 #include "IMenuLayer.hpp"
@@ -25,7 +27,7 @@ namespace menu
   {
   public:
     ContextMenu(Ogre::RenderWindow *win, core::InputListener *input,
-                core::SettingsPlayer &settings);
+                core::SettingsPlayer &settings, core::SoundManager &sound);
     ContextMenu(ContextMenu const &) = delete;
     ContextMenu(ContextMenu &&) = delete;
     virtual ~ContextMenu();
@@ -45,6 +47,7 @@ namespace menu
   private:
     MenuManager           m_menu;
     core::SettingsPlayer &m_settings;
+    core::SoundManager  &m_sound;
   };
 }
 
