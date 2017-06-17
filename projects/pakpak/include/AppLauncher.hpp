@@ -7,6 +7,7 @@
 #include "GameState.hpp"
 #include "SettingsPlayer.hpp"
 #include "SoundManager.hpp"
+#include "NetworkManager.hpp"
 
 // Disable clang warning for templated class padding
 #if defined(__clang__)
@@ -54,6 +55,7 @@ namespace core
     GameState      m_gameState;
     SettingsPlayer m_settings;
     SoundManager   m_soundManager;
+    NetworkManager m_network;
 
     void initOpenAl(char const *);
   };

@@ -3,12 +3,11 @@
 namespace core
 {
   NetworkManager::NetworkManager()
-      : m_auth(false), m_connected(false), m_connectManagerAddr(),
-        m_connectManagerPort(), m_connectManagerSocket(nullptr),
-        m_gameServerToken("")
+      : m_auth(nullptr), m_connected(false), m_connectManagerAddr(),
+        m_connectManagerPort(), m_gameServerToken("")
   {
-    // TODO: Implement configuration
-    // Load configuration here
+    nope::log::Log(Debug) << "Creating NetworkManager";
+    // Load configuration
     m_connectManagerAddr = Config::getInstance().getConnectManagerIp();
     m_connectManagerPort = Config::getInstance().getConnectManagerPort();
     nope::log::Log(Debug) << "NetworkManager started";
@@ -18,19 +17,32 @@ namespace core
 
   NetworkManager::~NetworkManager()
   {
+    nope::log::Log(Debug) << "Destroying NetworkManager";
   }
 
   void NetworkManager::authenticate()
   {
     // TODO: Deconnect clients already connected
+    nope::log::Log(Info) << "Starting connection to server.";
+    deauthenticate();
+    m_auth = std::make_unique<NetworkAuth>(m_connectManagerAddr,
+                                           m_connectManagerPort);
+  }
+
+  void NetworkManager::deauthenticate()
+  {
+    nope::log::Log(Debug) << "De-authenticating client";
     if (m_auth)
       {
-	nope::log::Log(Debug) << "Connection already exists, deleting it";
 	m_auth.reset(nullptr);
       }
+  }
 
-    m_auth = std::make_unique<NetworkAuth>(
-        m_connectManagerPort, m_connectManagerAddr;
+  std::vector<GameServer> NetworkManager::getServerList()
+  {
+    nope::log::Log(Debug) << "Getting Game Server List";
+    assert(m_auth != nullptr);
+    return (m_auth->getServerList());
   }
 
   bool NetworkManager::isAuthenticated() const
@@ -47,7 +59,7 @@ namespace core
     // TODO
     if (m_auth)
       {
-	m_auth->reset(nullptr);
+	m_auth.reset(nullptr);
       }
   }
 

@@ -5,16 +5,19 @@
 #ifndef MENUMULTIPLAYER_HPP
 #define MENUMULTIPLAYER_HPP
 
+#include <memory>
 #include "GUI.hpp"
 #include "MenuManager.hpp"
 #include "IMenuLayer.hpp"
+#include "NetworkManager.hpp"
 
 namespace core
 {
   class MenuMultiplayer : public IMenuLayer
   {
   public:
-    MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui);
+    MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui,
+                    NetworkManager &net);
     virtual ~MenuMultiplayer()
     {
     }
@@ -40,6 +43,7 @@ namespace core
     GUI &              m_gui;
     GameState          m_curState;
     menu::MenuManager &m_menuManager;
+    NetworkManager &   m_network;
 
     bool onBackClick(CEGUI::EventArgs const &);
     bool onPlayClick(CEGUI::EventArgs const &e);

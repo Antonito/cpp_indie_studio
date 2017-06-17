@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <memory>
 #include "NetworkAuth.hpp"
+#include "Config.hpp"
 
 namespace core
 {
@@ -18,8 +19,10 @@ namespace core
     NetworkManager &operator=(NetworkManager const &) = delete;
 
     // Authenticate on a connectManager
-    void authenticate();
-    bool isAuthenticated() const;
+    void                    authenticate();
+    void                    deauthenticate();
+    bool                    isAuthenticated() const;
+    std::vector<GameServer> getServerList();
 
     // Disconnect from any connectManager / gameServer
     void disconnect();

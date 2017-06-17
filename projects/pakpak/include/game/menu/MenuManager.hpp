@@ -23,7 +23,8 @@ namespace menu
   {
   public:
     explicit MenuManager(Ogre::RenderWindow *  win,
-                         core::SettingsPlayer &settings);
+                         core::SettingsPlayer &settings,
+                         core::NetworkManager &net);
     MenuManager(MenuManager const &) = delete;
     MenuManager(MenuManager &&) = delete;
     virtual ~MenuManager()

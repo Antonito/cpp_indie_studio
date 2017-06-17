@@ -10,8 +10,10 @@ LOCAL_COMP_FLAGS=
 LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
 			-L $(ROOT_DIR)/build/ -l indie_logger 	\
 			-l CEGUIBase-0 -l CEGUIOgreRenderer-0 	\
-			-l indie_exceptions			\
+			-l indie_network -lindie_ini		\
+			-l indie_packet				\
 			-l indie_crypto -l sndfile		\
+			-l indie_exceptions			\
 			-l BulletDynamics -l BulletCollision	\
 			-l OgreBulletDynamics			\
 			-l OgreBulletCollisions			\
@@ -80,9 +82,10 @@ SRC_FILES=		main.cpp			\
 			AContext.cpp			\
 			ContextGame.cpp			\
 			SettingsPlayer.cpp		\
-			SoundManager.cpp        \
-			SaveData.cpp            \
-			ContextSplash.cpp
+			SoundManager.cpp		\
+			SaveData.cpp			\
+			ContextSplash.cpp		\
+			Config.cpp
 
 GAME_FILES=		GameData.cpp			\
 			LocalPlayer.cpp			\
@@ -121,7 +124,9 @@ GAME_MENU_FILES=    	GUI.cpp				\
 			InGameHUD.cpp			\
 			InGamePause.cpp
 
-NETWORK_FILES=		NetworkManager.cpp
+NETWORK_FILES=		NetworkManager.cpp		\
+			NetworkAuth.cpp			\
+			NetworkGameServer.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 		$(addprefix $(GAME_DIR), $(GAME_FILES))			\
@@ -133,11 +138,14 @@ SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 		$(addprefix $(NETWORK_DIR), $(NETWORK_FILES))
 
 
-INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)		\
+INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)			\
 		$(ROOT_DIR)/libs/serializer/include/			\
 		$(ROOT_DIR)/libs/logger/include/			\
 		$(ROOT_DIR)/libs/exceptions/include/			\
 		$(ROOT_DIR)/libs/crypto/include/			\
+		$(ROOT_DIR)/libs/network/include/			\
+		$(ROOT_DIR)/libs/packet/include/			\
+		$(ROOT_DIR)/libs/ini/include/				\
 		/usr/include/OgreBullet/Dynamics 			\
 		/usr/include/OgreBullet/Collisions 			\
 		/usr/local/include/OgreBullet/Dynamics 			\

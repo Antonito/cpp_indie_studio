@@ -3,10 +3,10 @@
 namespace menu
 {
   ContextMenu::ContextMenu(Ogre::RenderWindow *win, core::InputListener *input,
-                           core::SettingsPlayer &settings)
-      : core::AContext(win, input), m_menu(win, settings), m_settings(settings)
+                           core::SettingsPlayer &settings,
+                           core::NetworkManager &net)
+      : core::AContext(win, input), m_menu(win, settings, net)
   {
-    static_cast<void>(m_settings); // TODO: rm
   }
 
   ContextMenu::~ContextMenu()

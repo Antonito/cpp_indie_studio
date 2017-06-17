@@ -3,39 +3,31 @@
 
 #include <string>
 #include <cstdint>
+#include <vector>
+#include "IClient.hpp"
+#include "TCPSocket.hpp"
+#include "NetworkGameServer.hpp"
+#include "Packet.hpp"
+#include "GameClientCMPacket.hpp"
 
-// TODO Antoine : implement in cpp file
-// TODO: Inherit from IClient ?
 namespace core
 {
-  class NetworkAuth
+  class NetworkAuth : public network::IClient
   {
   public:
-    NetworkAuth(std::string const &ip, std::uint16_t const port)
-        : m_ip(ip), m_port(port), m_auth(false),
-          m_sock(port, ip, true, network::ASocket::SocketType::BLOCKING)
-    {
-      nope::log::Log(Debug) << "Creating connection [NetworkAuth]";
-      nope::log::Log(Info) << "Opening connection";
-      if (!m_connectManagerSocket->openConnection())
-	{
-	  nope::log::Log(Error) << "Cannot connect to " << ip << ":" << port;
-	  throw std::exception(); // TODO
-	}
-    }
-
-    ~NetworkAuth()
-    {
-      nope::log::Log(Debug) << "Destroying connection [NetworkAuth]";
-    }
+    explicit NetworkAuth(std::string const &ip, std::uint16_t const port);
+    virtual bool                           disconnect();
+    virtual network::IClient::ClientAction write(IPacket const &pck);
+    virtual network::IClient::ClientAction read(IPacket &pck);
+    virtual bool hasTimedOut() const;
+    virtual ~NetworkAuth();
 
     NetworkAuth(NetworkAuth const &) = delete;
     NetworkAuth &operator=(NetworkAuth const &) = delete;
 
-    bool isAuthenticated() const
-    {
-      return (m_auth);
-    }
+    bool isAuthenticated() const;
+
+    std::vector<GameServer> getServerList();
 
   private:
     std::string const & m_ip;
