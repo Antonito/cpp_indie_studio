@@ -2,6 +2,7 @@
 // Created by brout_m on 09/06/17.
 //
 
+#include <network/NetworkGameServer.hpp>
 #include "pakpak_stdafx.hpp"
 
 namespace core
@@ -9,7 +10,7 @@ namespace core
   MenuMultiplayer::MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui,
                                    SoundManager &sound, NetworkManager &net)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
-        m_sound(sound), m_network(net)
+        m_sound(sound), m_selectGameServer(), m_network(net), m_select(false)
 
   {
     nope::log::Log(Debug) << "Building MenuMultiplayer";
@@ -23,21 +24,37 @@ namespace core
   {
     nope::log::Log(Debug) << "Entering MenuMultiplayer";
 
+    m_gui.loadLayout("multiplayer.layout");
+    m_gui.setCursorArrow("TaharezLook/MouseArrow");
+
     m_network.authenticate();
     std::vector<GameServer> gameServerList = m_network.getServerList();
 
+    nope::log::Log(Debug) << "Server list OKAY";
+
+    std::int32_t i(0);
+    nope::log::Log(Debug) << "Entry on MultiMenu";
+    CEGUI::WindowManager *winManager = CEGUI::WindowManager::getSingletonPtr();
     for (GameServer &game : gameServerList)
       {
-	nope::log::Log(Info)
-	    << "Server: " << game.address << ":" << game.port << " [ "
-	    << game.clients << " / " << game.maxClients << " ]";
+	nope::log::Log(Debug)
+	    << "List server : "
+	    << "Server #" + std::to_string(i + 1) + " : " + game.address +
+	           ":" + std::to_string(game.port);
+	nope::log::Log(Info) << "Server: " << game.address << ":" << game.port
+	                     << " [ " << game.clients << " / "
+	                     << game.maxClients << " ]";
+	CEGUI::ItemEntry *itm = static_cast<CEGUI::ItemEntry *>(winManager->createWindow("TaharezLook/ListboxItem"));
+	itm->setText("Server #" + std::to_string(i + 1) + " : " +
+	             game.address + ":" + std::to_string(game.port));
+	static_cast<CEGUI::ItemListbox *>(
+	    m_gui.getRoot()->getChild("servers_list"))
+	    ->addItem(itm);
+	i++;
       }
     // TODO Benjamin
     // TODO Arthur
     // -> Display game server list, using informations from gameServerList
-
-    m_gui.loadLayout("multiplayer.layout");
-    m_gui.setCursorArrow("TaharezLook/MouseArrow");
 
     m_gui.getRoot()
         ->getChild("back_button")
@@ -62,6 +79,12 @@ namespace core
         ->subscribeEvent(
             CEGUI::PushButton::EventMouseEntersArea,
             CEGUI::Event::Subscriber(&MenuMultiplayer::onPlayArea, this));
+
+    m_gui.getRoot()
+        ->getChild("servers_list")
+        ->subscribeEvent(
+            CEGUI::ItemListbox::EventSelectionChanged,
+            CEGUI::Event::Subscriber(&MenuMultiplayer::getServerPos, this));
   }
 
   void MenuMultiplayer::exit()
@@ -160,6 +183,7 @@ namespace core
   bool MenuMultiplayer::onPlayClick(CEGUI::EventArgs const &)
   {
     soundClick();
+    nope::log::Log(Debug) << "CONNECT TO GAME_SERVER CLEAN";
     m_curState = GameState::InGame;
     m_gui.hideCursor();
     return true;
@@ -186,6 +210,24 @@ namespace core
   bool MenuMultiplayer::onPlayArea(CEGUI::EventArgs const &)
   {
     soundPass();
+    return true;
+  }
+
+  bool MenuMultiplayer::getServerPos(CEGUI::EventArgs const &)
+  {
+
+    if (static_cast<CEGUI::ItemListbox *>(
+            m_gui.getRoot()->getChild("servers_list"))
+            ->getFirstSelectedItem() != NULL)
+      {
+	nope::log::Log(Debug) << "Select a specific server network";
+	m_selectGameServer =
+	    m_network
+	        .getServerList()[static_cast<CEGUI::ItemListbox *>(
+	                             m_gui.getRoot()->getChild("servers_list"))
+	                             ->getFirstSelectedItem()
+	                             ->getZIndex()];
+      }
     return true;
   }
 }

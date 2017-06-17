@@ -11,6 +11,10 @@ namespace core
     GameServer(std::string const &_addr, std::uint16_t const _port,
                std::uint16_t const _clients, std::uint16_t const _maxClients);
 
+    GameServer();
+
+    GameServer &operator=(GameServer &);
+
     std::string   address;
     std::uint16_t port;
     std::uint16_t clients;
