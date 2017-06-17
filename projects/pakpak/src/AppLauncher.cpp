@@ -25,7 +25,7 @@ namespace core
     // Create the Root
 
     std::string ogreLog = "Ogre.log";
-    std::string confFolder = "../indie_resource/conf/";
+    std::string confFolder = "./deps/indie_resource/conf/";
 #ifdef DEBUG
     std::string plugin = "plugins_d.cfg";
     std::string ogreFile = "ogre_d.cfg";
@@ -50,9 +50,9 @@ namespace core
     // Load Ressource config file
     Ogre::ConfigFile configFile;
 #ifdef DEBUG
-    configFile.load("../indie_resource/conf/resources_d.cfg");
+    configFile.load("./deps/indie_resource/conf/resources_d.cfg");
 #else
-    configFile.load("../indie_resource/conf/resources.cfg");
+    configFile.load("./deps/indie_resource/conf/resources.cfg");
 #endif // !DEBUG
 
     // Load all the Ressources
@@ -133,7 +133,8 @@ namespace core
 
     // Splash context
     m_contexts[static_cast<std::size_t>(GameState::Splash)] =
-        std::make_unique<splash::ContextSplash>(m_window, m_inputListener, m_soundManager);
+        std::make_unique<splash::ContextSplash>(m_window, m_inputListener,
+                                                m_soundManager);
 
     // Menu context
     m_contexts[static_cast<std::size_t>(GameState::Menu)] =

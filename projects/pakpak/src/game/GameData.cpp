@@ -15,7 +15,7 @@ namespace game
         m_debugDrawer(nullptr),
 #endif
         m_bodies(), m_shapes(),
-        m_map(*this, "../indie_resource/maps/test/map.dat"), m_startTime()
+        m_map(*this, "./deps/indie_resource/maps/test/map.dat"), m_startTime()
   {
     // todo: move in Map
     m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
