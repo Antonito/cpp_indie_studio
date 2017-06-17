@@ -39,7 +39,7 @@ namespace splash
   void ContextSplash::enable()
   {
 
-      m_sound.loadSound("deps/indie_resource/songs/splash.wav");
+    m_sound.loadSound("deps/indie_resource/songs/splash.wav");
       m_sound.playSound();
       m_viewport = m_win->addViewport(m_camera);
 

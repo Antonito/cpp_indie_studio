@@ -12,6 +12,8 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 #endif
+
+#include <vector>
 #include <sndfile.h>
 #include <iostream>
 
@@ -42,15 +44,11 @@ namespace core
 
     void setVolume(float);
 
-    void upVolume(float);
-
-    void downVolume(float);
-
     void state();
 
     ALint getState() const;
 
-    ALuint getSource() const;
+    ALuint getSource(std::int32_t) const;
 
     void setPosition(float, float, float);
 
@@ -60,15 +58,14 @@ namespace core
 
     void clear();
 
-    void getInfoLectureSound() const;
+    void getInfoLectureSound(std::int32_t) const;
 
   private:
-    ALCdevice * m_device;
-    ALCcontext *m_context;
-    ALuint      m_buffer;
-    ALuint      m_source;
-    ALint       m_state;
-    ALsizei     m_nbSamples;
+    ALCdevice *         m_device;
+    ALCcontext *        m_context;
+    std::vector<ALuint> m_buffer;
+    std::vector<ALuint> m_source;
+    ALint               m_state;
   };
 }
 #endif // CPP_INDIE_STUDIO_SOUNDMANAGER_HPP

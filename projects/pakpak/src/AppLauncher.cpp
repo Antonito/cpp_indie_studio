@@ -98,8 +98,7 @@ namespace core
 
     m_window->removeAllViewports();
 
-    initOpenAl(NULL);
-
+      initOpenAl(NULL);
     //// Create the Scene Manager
     // m_sceneMgr =
     //    m_root->createSceneManager("DefaultSceneManager", "Mon Scene

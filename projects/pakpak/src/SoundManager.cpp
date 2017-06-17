@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
+#include <cmath>
 #include "SoundManager.hpp"
 #include "Logger.hpp"
 #include "IOError.hpp"
@@ -12,7 +13,7 @@
 namespace core
 {
   SoundManager::SoundManager()
-      : m_device(nullptr), m_context(nullptr), m_buffer(0), m_source(0),
+      : m_device(nullptr), m_context(nullptr), m_buffer(), m_source(),
         m_state(AL_INITIAL)
   {
     nope::log::Log(Debug) << "**Initialization SoundManager**";
@@ -63,7 +64,6 @@ namespace core
         static_cast<ALsizei>(FileInfos.channels * FileInfos.frames);
     ALsizei SampleRate = static_cast<ALsizei>(FileInfos.samplerate);
 
-    m_nbSamples = NbSamples;
     nope::log::Log(Debug) << "Reading samples of " << Filename;
     // Reading the samples with 16 bit signed format (More common)
     std::vector<ALshort> Samples(NbSamples);
@@ -94,10 +94,11 @@ namespace core
 
     nope::log::Log(Debug) << "Format has been chosen";
     // Create the OpenAl buffer
-    alGenBuffers(1, &m_buffer);
+    ALuint buffer;
+    alGenBuffers(1, &buffer);
 
     // Filling of samples read
-    alBufferData(m_buffer, Format, &Samples[0],
+    alBufferData(buffer, Format, &Samples[0],
                  NbSamples * static_cast<ALsizei>(sizeof(ALushort)),
                  SampleRate);
 
@@ -113,8 +114,11 @@ namespace core
       }
     nope::log::Log(Debug) << "No error while loading " << Filename << " sound";
     // set Source
-    alGenSources(1, &m_source);
-    alSourcei(m_source, AL_BUFFER, m_buffer);
+    ALuint source;
+    alGenSources(1, &source);
+    alSourcei(source, AL_BUFFER, buffer);
+    m_buffer.push_back(buffer);
+    m_source.push_back(source);
   }
 
   // Init device and context of OpenAl
@@ -163,42 +167,42 @@ namespace core
   {
     nope::log::Log(Debug) << "Setting sound to position {" << x << ", " << y
                           << ", " << z << "}.";
-    alSourcei(m_source, AL_SOURCE_RELATIVE, AL_TRUE);
-    alSource3f(m_source, AL_POSITION, x, y, z);
+    alSourcei(m_source[0], AL_SOURCE_RELATIVE, AL_TRUE);
+    alSource3f(m_source[0], AL_POSITION, x, y, z);
   }
 
   // Put the current sound in looping
   void SoundManager::loopSound()
   {
     nope::log::Log(Debug) << "Looping sound";
-    alSourcei(m_source, AL_LOOPING, AL_TRUE);
+    alSourcei(m_source[0], AL_LOOPING, AL_TRUE);
   }
 
   // Stop the sound
   void SoundManager::stopSound()
   {
     nope::log::Log(Debug) << "Stopping sound";
-    alSourcei(m_source, AL_STOPPED, AL_TRUE);
+    alSourceStop(m_source[0]);
   }
 
   // Put sound in pause
   void SoundManager::pauseSound()
   {
     nope::log::Log(Debug) << "Pause sound";
-    alSourcei(m_source, AL_PAUSED, AL_TRUE);
+    alSourcePause(m_source[0]);
   }
 
   // Play the sound
   void SoundManager::playSound()
   {
     nope::log::Log(Debug) << "Play sound";
-    alSourcePlay(m_source);
+    alSourcePlay(m_source[0]);
   }
 
   // Set the current state of the volume
   void SoundManager::state()
   {
-    alGetSourcei(m_source, AL_SOURCE_STATE, &m_state);
+    alGetSourcei(m_source[0], AL_SOURCE_STATE, &m_state);
   }
 
   // Get the actual sound state
@@ -211,29 +215,21 @@ namespace core
   void SoundManager::clear()
   {
     nope::log::Log(Debug) << "Clear sound";
-    alDeleteBuffers(1, &m_buffer);
-    alSourcei(m_source, AL_BUFFER, 0);
-    alDeleteSources(1, &m_source);
+
+    for (std::vector<ALuint>::iterator it = m_buffer.begin(); it != m_buffer.end(); ++it)
+      alDeleteBuffers(1, &(*it));
+    for (std::vector<ALuint>::iterator it = m_source.begin(); it != m_source.end(); ++it)
+    {
+      alSourcei(*it, AL_BUFFER, 0);
+      alDeleteSources(1, &(*it));
+    }
   }
 
   void SoundManager::setVolume(float volume)
   {
     nope::log::Log(Debug) << "Setting volume : " << volume;
-    alSourcef(m_source, AL_PITCH, volume);
-  }
-
-  // Upgrade the current volume of a specific value
-  void SoundManager::upVolume(float volume)
-  {
-    nope::log::Log(Debug) << "Upgrade volume : " << volume;
-    alSourcef(m_source, AL_GAIN, volume);
-  }
-
-  // Downgrade the current volume of a specific value
-  void SoundManager::downVolume(float volume)
-  {
-    nope::log::Log(Debug) << "Downgrade volume : " << volume;
-    alSourcef(m_source, AL_GAIN, -volume);
+    for (std::vector<ALuint>::iterator it = m_source.begin(); it != m_source.end(); ++it)
+      alSourcef(*it, AL_GAIN, volume);
   }
 
   // Set the orientation of the sound to a specific direction
@@ -241,22 +237,22 @@ namespace core
   {
     nope::log::Log(Debug) << "Set sound to direction ; {" << x << ", " << y
                           << ", " << z << "}.";
-    alSource3f(m_source, AL_ORIENTATION, x, y, z);
+    alSource3f(m_source[0], AL_ORIENTATION, x, y, z);
   }
 
   // Get the Source of the sound
-  ALuint SoundManager::getSource() const
+  ALuint SoundManager::getSource(std::int32_t idx) const
   {
     nope::log::Log(Debug) << "Getting Source";
-    return m_source;
+    return m_source[idx];
   }
 
   // Get info on the lecture sound.
-  void SoundManager::getInfoLectureSound() const
+  void SoundManager::getInfoLectureSound(std::int32_t idx) const
   {
     ALfloat Seconds = 0.f;
 
-    alGetSourcef(m_source, AL_SEC_OFFSET, &Seconds);
+    alGetSourcef(m_source[idx], AL_SEC_OFFSET, &Seconds);
     nope::log::Log(Debug) << "\rLecture en cours... " << std::fixed
                           << std::setprecision(2) << Seconds << " sec";
   }
