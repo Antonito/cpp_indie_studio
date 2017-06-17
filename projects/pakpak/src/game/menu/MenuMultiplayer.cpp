@@ -32,6 +32,9 @@ namespace core
 	    << "Server: " << game.address << ":" << game.port << " [ "
 	    << game.clients << " / " << game.maxClients << " ]";
       }
+    // TODO Benjamin
+    // TODO Arthur
+    // -> Display game server list, using informations from gameServerList
 
     m_gui.loadLayout("multiplayer.layout");
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
