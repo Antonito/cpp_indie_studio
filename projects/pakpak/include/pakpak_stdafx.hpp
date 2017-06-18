@@ -46,7 +46,14 @@
 //
 // Utils
 //
+#include <functional>
 #include <cassert>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <fstream>
+#include <cstring>
 
 //
 // Project headers
@@ -60,6 +67,8 @@
 #include "GameState.hpp"
 #include "InputListener.hpp"
 #include "SettingsPlayer.hpp"
+#include "SoundManager.hpp"
+#include "SaveData.hpp"
 
 // Menu
 
@@ -113,7 +122,7 @@
 
 // Network
 #include "NetworkManager.hpp"
-
+#include "NetworkGameServer.hpp"
 //
 // Physic
 //

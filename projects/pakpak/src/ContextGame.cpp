@@ -92,12 +92,11 @@ namespace game
     std::size_t i = 0;
     for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
-	std::cout << "		Pressed for player " << i << std::endl;
-
+        nope::log::Log(Debug) << "\t\tPressed for player " << i;
 	p->keyPressed(ke);
 	++i;
       }
-    std::cout << std::endl;
+    nope::log::Log(Debug) << "\n";
     return (true);
   }
 

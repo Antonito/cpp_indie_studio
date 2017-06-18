@@ -1,5 +1,4 @@
 #include "pakpak_stdafx.hpp"
-#include "Logger.hpp"
 
 namespace game
 {
@@ -68,8 +67,8 @@ namespace game
   void LocalPlayer::setViewPort(Ogre::Real left, Ogre::Real top,
                                 Ogre::Real width, Ogre::Real height)
   {
-    std::cout << "left : " << left << ", top : " << top
-              << ", width : " << width << ", height : " << height << std::endl;
+    nope::log::Log(Debug) << "left : " << left << ", top : " << top
+                          << ", width : " << width << ", height : " << height;
     m_viewport->setDimensions(left, top, width, height);
     m_cam->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
                           Ogre::Real(m_viewport->getActualHeight()));
@@ -92,13 +91,13 @@ namespace game
   {
     for (std::size_t i = m_currentLayers.size(); i > 0; --i)
       {
-	std::cout << "		Pressed for layer " << i << std::endl;
+        nope::log::Log(Debug) << "		Pressed for layer " << i;
 	if (m_currentLayers[i - 1]->keyPressed(ke))
 	  {
 	    return (true);
 	  }
       }
-    std::cout << std::endl;
+    nope::log::Log(Debug) << "\n";
     return (false);
   }
 
@@ -211,7 +210,7 @@ namespace game
   std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()> &
       LocalPlayer::actions(std::string const &action)
   {
-    std::cout << action << std::endl;
+    nope::log::Log(Debug) << action;
     return (m_actions[action]);
   }
 

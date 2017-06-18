@@ -2,11 +2,7 @@
 // Created by duhieu_b on 14/06/17.
 //
 
-#include <fstream>
-#include <IOError.hpp>
-#include <cstring>
-#include "SaveData.hpp"
-#include "Logger.hpp"
+#include "pakpak_stdafx.hpp"
 
 namespace core
 {
@@ -52,11 +48,11 @@ namespace core
 	    char *structToXor =
 	        toXor(reinterpret_cast<char *>(&m_data), sizeof(m_data));
 	    ofs.write(structToXor, sizeof(m_data));
-	    delete structToXor;
+	    delete[] structToXor;
 	  }
 	else
 	  {
-	    throw IOError("Failed to open file.");
+	    nope::log::Log(Error) << "**Warning cannot save in " << file << "**";
 	  }
 	ofs.close();
       }
@@ -97,11 +93,14 @@ namespace core
 	    << "Recup from file : " << file << " Key : " << key;
 	std::memcpy(reinterpret_cast<char *>(&m_data), xorToStruct,
 	            sizeof(m_data));
-	delete xorToStruct;
+	delete[] xorToStruct;
 	ifs.close();
 	generate();
-	if (!compareKey(key))
+          nope::log::Log(Debug) << "END GENERATE KEY";
+
+          if (!compareKey(key))
 	  {
+            nope::log::Log(Debug) << "File Corrupt, reset data file";
 	    m_data.reset();
 	    saveInFile(file);
 	  }

@@ -1,5 +1,4 @@
 #include "pakpak_stdafx.hpp"
-#include <functional>
 
 namespace game
 {
@@ -37,7 +36,7 @@ namespace game
       {
 	return false;
       }
-    std::cout << "DOING ACTION" << std::endl;
+    nope::log::Log(Info) << "DOING ACTION";
     void (LocalPlayer::*ptr)() = m_player.actions(action).first;
     (m_player.*ptr)();
     return true;
@@ -53,7 +52,7 @@ namespace game
       {
 	return false;
       }
-    std::cout << "DOING ACTION" << std::endl;
+    nope::log::Log(Info) << "DOING ACTION";
     void (LocalPlayer::*ptr)() = m_player.actions(action).second;
     (m_player.*ptr)();
     return true;

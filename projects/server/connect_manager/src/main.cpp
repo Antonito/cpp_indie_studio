@@ -73,11 +73,11 @@ int main(int, char **)
     }
   catch (std::exception const &e)
     {
-      std::cerr << e.what() << std::endl;
+      nope::log::Log(Error) << e.what();
       return (1);
     }
 
-  std::cout << "Server stopped" << std::endl;
+  nope::log::Log(Info) << "Server stopped";
 #if defined(_WIN32) && !defined(__on__linux__)
   system("pause");
 #endif

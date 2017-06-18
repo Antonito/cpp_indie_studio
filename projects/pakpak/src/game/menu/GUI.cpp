@@ -3,7 +3,6 @@
 //
 
 #include "pakpak_stdafx.hpp"
-#include "Logger.hpp"
 
 namespace core
 {

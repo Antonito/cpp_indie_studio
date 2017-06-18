@@ -100,7 +100,6 @@ MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now,
   mTimer = nil;
 
   try {
-    std::cout << "BIIIITE" << std::endl;
     Ogre::Root::getSingleton().getRenderSystem()->_initRenderTargets();
 
     // Clear event times
@@ -145,7 +144,6 @@ MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now,
 
   mLastFrameTime = 1;
   mTimer = nil;
-  std::cout << "Application Did Finish Launching" << std::endl;
   [self go];
 }
 
@@ -156,7 +154,6 @@ MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now,
 
 - (void)renderOneFrame:(id)sender {
   // TODO
-  std::cout << "RENDERING ONE FRAME" << std::endl;
 }
 
 @end

@@ -2,7 +2,6 @@
 // Created by brout_m on 09/06/17.
 //
 
-#include <network/NetworkGameServer.hpp>
 #include "pakpak_stdafx.hpp"
 
 namespace core
@@ -186,13 +185,25 @@ namespace core
 
   bool MenuMultiplayer::onPlayClick(CEGUI::EventArgs const &)
   {
-    soundClick();
+      soundClick();
 
-    // Get token from gameServer
-    std::string const &token = m_network.getToken(m_selectGameServer);
-    // Connect to game server
-    m_network.connect(m_selectGameServer, token);
+      // Get token from gameServer
+      try
+      {
+          std::string const &token = m_network.getToken(m_selectGameServer);
+          // Connect to game server
+          m_network.connect(m_selectGameServer, token);
+      }
+      catch (...)
+      {
+          nope::log::Log(Debug)
+                  << "\n======================================================\n=="
+                          "Error cannot connect to the ConnectServerManager "
+                          "!==\n======================================================";
+          //TODO: Remplace by a Error popUp
 
+          return true;
+      }
     nope::log::Log(Debug) << "CONNECT TO GAME_SERVER CLEAN";
     m_curState = GameState::InGame;
     m_gui.hideCursor();

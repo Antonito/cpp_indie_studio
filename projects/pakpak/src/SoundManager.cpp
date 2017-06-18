@@ -2,13 +2,7 @@
 // Created by duhieu_b on 15/06/17.
 //
 
-#include <iostream>
-#include <vector>
-#include <iomanip>
-#include <cmath>
-#include "SoundManager.hpp"
-#include "Logger.hpp"
-#include "IOError.hpp"
+#include "pakpak_stdafx.hpp"
 
 namespace core
 {

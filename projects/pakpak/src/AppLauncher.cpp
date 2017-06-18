@@ -2,7 +2,6 @@
 #import <Cocoa/Cocoa.h>
 #endif
 #include "pakpak_stdafx.hpp"
-#include "AppLauncher.hpp"
 
 // Disable clang warning for templated class padding
 #if defined(__clang__)

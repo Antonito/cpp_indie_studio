@@ -196,10 +196,10 @@ namespace core
 	    << "\n======================================================\n=="
 	       "Error cannot connect to the ConnectServerManager "
 	       "!==\n======================================================";
-        //TODO: Remplace by a Error popUp
-        m_menuManager.popLayer();
-        m_menuManager.begin();
-        return true;
+      //TODO: Remplace by a Error popUp
+          m_menuManager.popLayer();
+          m_menuManager.begin();
+          return true;
       }
     return true;
   }
