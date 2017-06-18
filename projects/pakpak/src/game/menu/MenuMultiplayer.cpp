@@ -139,19 +139,17 @@ namespace core
                          static_cast<float>(arg.state.Y.rel));
   }
 
-  bool MenuMultiplayer::mousePressed(const OIS::MouseEvent &arg,
+  bool MenuMultiplayer::mousePressed(const OIS::MouseEvent &,
                                      OIS::MouseButtonID     id)
   {
-    (void)arg;
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
         .injectMouseButtonDown(convertButton(id));
   }
 
-  bool MenuMultiplayer::mouseReleased(const OIS::MouseEvent &arg,
+  bool MenuMultiplayer::mouseReleased(const OIS::MouseEvent &,
                                       OIS::MouseButtonID     id)
   {
-    (void)arg;
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
         .injectMouseButtonUp(convertButton(id));
