@@ -9,7 +9,7 @@ namespace game
   {
   public:
     PreGame() = delete;
-    PreGame(GameData &data, ILayerStack &layer);
+    PreGame(GameData &data, ILayerStack &layer, core::HUD *hud);
     PreGame(PreGame const &) = delete;
     PreGame(PreGame &&) = delete;
     virtual ~PreGame();

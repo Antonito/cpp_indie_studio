@@ -13,7 +13,7 @@ namespace menu
       : m_sceneMan(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Menu scene manager")),
         m_camera(m_sceneMan->createCamera("MenuCamera")), m_viewport(nullptr),
-        m_gui(), m_menuLayer({}), m_layers({})
+        m_gui(win), m_menuLayer({}), m_layers({})
   {
     m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)] =
         std::make_unique<core::MainMenu>(*this, m_gui, sound);
@@ -64,6 +64,7 @@ namespace menu
   {
     return m_layers[m_layers.size() - 1];
   }
+
   bool MenuManager::keyPressed(OIS::KeyEvent const &ke)
   {
     for (std::size_t l_i = m_layers.size(); l_i > 0; --l_i)
@@ -124,5 +125,14 @@ namespace menu
   void MenuManager::popLayer()
   {
     m_layers.pop();
+  }
+
+  void MenuManager::update()
+  {
+    m_gui.update();
+  }
+
+  MenuManager::~MenuManager()
+  {
   }
 }

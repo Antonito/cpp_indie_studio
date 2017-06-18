@@ -222,9 +222,9 @@ namespace core
     ss << fs.rdbuf();
     std::string content = ss.str();
 
-    std::cout << "Index " << playerIndex << ' ' << m_players.size()
-              << std::endl;
-    m_players[playerIndex] =
+    nope::log::Log(Debug) << "Index " << playerIndex << ' ' << m_players.size();
+
+      m_players[playerIndex] =
         nope::serialization::from_json<SettingsPlayer::GameSettings>(content);
     if (check_used(playerIndex))
       {

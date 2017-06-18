@@ -46,7 +46,14 @@
 //
 // Utils
 //
+#include <functional>
 #include <cassert>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <fstream>
+#include <cstring>
 
 //
 // Project headers
@@ -60,9 +67,10 @@
 #include "GameState.hpp"
 #include "InputListener.hpp"
 #include "SettingsPlayer.hpp"
+#include "SoundManager.hpp"
+#include "SaveData.hpp"
 
 // Menu
-
 #include "AssetSetter.hpp"
 #include "ContextMenu.hpp"
 #include "GUI.hpp"
@@ -76,8 +84,11 @@
 #include "MenuOptions.hpp"
 #include "MenuScores.hpp"
 #include "MenuSolo.hpp"
+#include "game/menu/AssetResizer.hpp"
+#include "game/menu/Dim.hpp"
 
 // Game
+#include "Pauser.hpp"
 #include "AContext.hpp"
 #include "CameraMode.hpp"
 #include "GameData.hpp"
@@ -113,7 +124,7 @@
 
 // Network
 #include "NetworkManager.hpp"
-
+#include "NetworkGameServer.hpp"
 //
 // Physic
 //

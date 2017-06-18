@@ -1,10 +1,9 @@
 #include "pakpak_stdafx.hpp"
-#include <functional>
 
 namespace game
 {
-  InGame::InGame(GameData &data, LocalPlayer &player)
-      : ALayer(data, player), m_player(player)
+  InGame::InGame(GameData &data, LocalPlayer &player, core::HUD *hud)
+      : ALayer(data, player, hud), m_player(player)
   {
   }
 
@@ -14,6 +13,9 @@ namespace game
 
   void InGame::enable()
   {
+    nope::log::Log(Debug) << "Enabling InGame";
+    if (m_gui)
+      m_gui->loadLayout("gui_ingame.layout");
   }
 
   void InGame::disable()
@@ -37,7 +39,7 @@ namespace game
       {
 	return false;
       }
-    std::cout << "DOING ACTION" << std::endl;
+    nope::log::Log(Info) << "DOING ACTION";
     void (LocalPlayer::*ptr)() = m_player.actions(action).first;
     (m_player.*ptr)();
     return true;
@@ -45,15 +47,13 @@ namespace game
 
   bool InGame::keyReleased(OIS::KeyEvent const &ke)
   {
-
     std::string action = m_player.settings().actionForKey(
         static_cast<std::size_t>(m_player.order()), ke.key);
-
     if (action == "NO_ACTION")
       {
 	return false;
       }
-    std::cout << "DOING ACTION" << std::endl;
+    nope::log::Log(Info) << "DOING ACTION";
     void (LocalPlayer::*ptr)() = m_player.actions(action).second;
     (m_player.*ptr)();
     return true;
@@ -61,6 +61,7 @@ namespace game
 
   bool InGame::mouseMoved(OIS::MouseEvent const &)
   {
+
     return (false);
   }
 

@@ -26,12 +26,14 @@
 
 namespace game
 {
+  class ContextGame;
+
   class LocalPlayer final : public IEventHandler, public ILayerStack
   {
   public:
     LocalPlayer() = delete;
-    LocalPlayer(Ogre::RenderWindow *win, GameData &, PlayerData *, int,
-                core::SettingsPlayer &);
+    LocalPlayer(Ogre::RenderWindow *, GameData &, PlayerData *, int,
+                core::SettingsPlayer &, core::HUD *, game::ContextGame &);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&);
     virtual ~LocalPlayer();
@@ -91,18 +93,14 @@ namespace game
     void openChatReleased();
     void openMenuReleased();
 
-    PlayerData *m_data;
-    CameraMode  m_cameraMode;
-
+    PlayerData *                 m_data;
+    CameraMode                   m_cameraMode;
     static constexpr std::size_t nbLayer =
         static_cast<std::size_t>(GameLayer::NbLayer);
-
     std::array<std::unique_ptr<ILayer>, nbLayer> m_layers;
-
     core::FastStack<ILayer *> m_currentLayers;
-
-    Ogre::Camera *  m_cam;
-    Ogre::Viewport *m_viewport;
+    Ogre::Camera *            m_cam;
+    Ogre::Viewport *          m_viewport;
     std::vector<std::chrono::time_point<std::chrono::high_resolution_clock>>
                           m_rounds;
     core::SettingsPlayer &m_settings;
@@ -111,6 +109,8 @@ namespace game
                         m_actions;
     Ogre::RenderWindow *m_win;
     int                 m_order;
+    core::HUD *         m_hud;
+    game::ContextGame & m_contextGame;
   };
 }
 

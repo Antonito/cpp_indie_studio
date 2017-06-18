@@ -185,8 +185,22 @@ namespace core
   bool MainMenu::onMultiClick(CEGUI::EventArgs const &)
   {
     soundClick();
-    m_menuManager.push(MenuState::MultiPlayerGame);
-    m_menuManager.begin();
+    try
+      {
+	m_menuManager.push(MenuState::MultiPlayerGame);
+	m_menuManager.begin();
+      }
+    catch (...)
+      {
+	nope::log::Log(Debug)
+	    << "\n======================================================\n=="
+	       "Error cannot connect to the ConnectServerManager "
+	       "!==\n======================================================";
+      //TODO: Remplace by a Error popUp
+          m_menuManager.popLayer();
+          m_menuManager.begin();
+          return true;
+      }
     return true;
   }
 

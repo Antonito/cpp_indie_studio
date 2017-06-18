@@ -2,7 +2,8 @@
 
 namespace game
 {
-  PostGame::PostGame(GameData &data, ILayerStack &layer) : ALayer(data, layer)
+  PostGame::PostGame(GameData &data, ILayerStack &layer, core::HUD *hud)
+      : ALayer(data, layer, hud)
   {
   }
 

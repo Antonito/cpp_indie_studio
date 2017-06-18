@@ -1,4 +1,3 @@
-#include <OGRE/OgreRenderWindow.h>
 #include "pakpak_stdafx.hpp"
 
 namespace splash

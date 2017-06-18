@@ -10,7 +10,7 @@ namespace game
   {
   public:
     Loading() = delete;
-    Loading(GameData &data, ILayerStack &layerStack);
+    Loading(GameData &data, ILayerStack &layerStack, core::HUD *hud);
     Loading(Loading const &) = delete;
     Loading(Loading &&) = delete;
     virtual ~Loading();

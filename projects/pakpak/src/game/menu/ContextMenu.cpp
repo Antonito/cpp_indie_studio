@@ -41,6 +41,7 @@ namespace menu
 
   core::GameState ContextMenu::update()
   {
+    m_menu.update();
     m_input->capture();
     return m_menu.getMenuLayer()->update();
   }
