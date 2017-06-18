@@ -42,19 +42,18 @@ namespace core
     GameState          m_curState;
     menu::MenuManager &m_menuManager;
     SoundManager &     m_sound;
+    size_t             m_playerCount;
 
     bool onBackClick(CEGUI::EventArgs const &);
-    bool onPlayClick(CEGUI::EventArgs const &e);
-    bool onEasyClick(CEGUI::EventArgs const &e);
-    bool onHardClick(CEGUI::EventArgs const &e);
+    bool onPlayClick(CEGUI::EventArgs const &);
+    bool onEasyClick(CEGUI::EventArgs const &);
+    bool onHardClick(CEGUI::EventArgs const &);
+    bool onPlayersClick(CEGUI::EventArgs const &);
+    bool onArea(CEGUI::EventArgs const &);
 
     void soundPass();
     void soundClick();
-
-    bool onBackArea(CEGUI::EventArgs const &);
-    bool onPlayArea(CEGUI::EventArgs const &e);
-    bool onEasyArea(CEGUI::EventArgs const &e);
-    bool onHardArea(CEGUI::EventArgs const &e);
+    void setButtonText(std::string const &buttonName);
   };
 }
 
