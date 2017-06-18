@@ -9,7 +9,7 @@ namespace core
   {
   }
 
-  GameServer &GameServer::operator=(GameServer &that)
+  GameServer &GameServer::operator=(GameServer const &that)
   {
     if (this != &that)
       {

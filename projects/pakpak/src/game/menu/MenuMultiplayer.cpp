@@ -10,7 +10,7 @@ namespace core
   MenuMultiplayer::MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui,
                                    SoundManager &sound, NetworkManager &net)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
-        m_sound(sound), m_selectGameServer(), m_network(net), m_select(false)
+        m_sound(sound), m_selectGameServer(), m_network(net)
 
   {
     nope::log::Log(Debug) << "Building MenuMultiplayer";
@@ -44,9 +44,9 @@ namespace core
 	    << "List server : "
 	    << "Server #" + std::to_string(i + 1) + " : " + game.address +
 	           ":" + std::to_string(game.port);
-	nope::log::Log(Info) << "Server: " << game.address << ":" << game.port
-	                     << " [ " << game.clients << " / "
-	                     << game.maxClients << " ]";
+	nope::log::Log(Info)
+	    << "Server: " << game.address << ":" << game.port << " [ "
+	    << game.clients << " / " << game.maxClients << " ]";
 	CEGUI::ItemEntry *itm = static_cast<CEGUI::ItemEntry *>(
 	    winManager->createWindow("TaharezLook/ListboxItem"));
 	itm->setText("Server #" + std::to_string(i + 1) + " : " +

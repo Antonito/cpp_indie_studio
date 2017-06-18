@@ -13,7 +13,7 @@ namespace core
 
     GameServer();
 
-    GameServer &operator=(GameServer &);
+    GameServer &operator=(GameServer const &);
 
     std::string   address;
     std::uint16_t port;

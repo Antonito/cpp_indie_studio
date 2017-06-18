@@ -47,7 +47,6 @@ namespace core
     SoundManager &     m_sound;
     GameServer         m_selectGameServer;
     NetworkManager &   m_network;
-    bool               m_select;
 
     bool onBackClick(CEGUI::EventArgs const &);
     bool onPlayClick(CEGUI::EventArgs const &);
