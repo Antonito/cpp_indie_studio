@@ -6,9 +6,14 @@
 #define CPP_INDIE_STUDIO_HUD_HPP
 
 #include <CEGUI/RendererModules/Ogre/Renderer.h>
-#include <OIS/OISPrereqs.h>
 #include <map>
+#if defined __APPLE__
+#include <ois/OIS.h>
+#include <ois/OISPrereqs.h>
+#else
 #include <OIS/OIS.h>
+#include <OIS/OISPrereqs.h>
+#endif
 
 namespace core
 {

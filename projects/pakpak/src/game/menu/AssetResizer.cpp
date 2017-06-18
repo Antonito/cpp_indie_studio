@@ -35,8 +35,8 @@ namespace resizer
 	if (!wChild)
 	  throw(std::runtime_error("Layout '" + layoutPath +
 	                           "' doesn't have a child '" + child + "'"));
-	nope::log::Log(Debug) << "Child '" << child << "' loaded of layout '"
-	                      << layoutPath;
+	nope::log::Log(Debug)
+	    << "Child '" << child << "' loaded of layout '" << layoutPath;
 	Dimension dim(
 	    wChild->getXPosition().d_offset, wChild->getYPosition().d_offset,
 	    wChild->getWidth().d_offset, wChild->getHeight().d_offset,
@@ -78,10 +78,10 @@ namespace resizer
 	    for (auto &childs : layout.second.second)
 	      {
 		Dimension &dim = childs.second;
-		nope::log::Log(Debug) << "'" << childs.first
-		                      << "' new X : " << dim.m_x << " * "
-		                      << static_cast<float>(m_width) << " = "
-		                      << dim.m_x * static_cast<float>(m_width);
+		nope::log::Log(Debug)
+		    << "'" << childs.first << "' new X : " << dim.m_x << " * "
+		    << static_cast<float>(m_width) << " = "
+		    << dim.m_x * static_cast<float>(m_width);
 		nope::log::Log(Debug)
 		    << "'" << childs.first << "' new Y : " << dim.m_y << " * "
 		    << static_cast<float>(m_height) << " = "

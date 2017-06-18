@@ -18,8 +18,8 @@ namespace resizer
   {
   }
 
-  Dim::Dim(Dim const &d) :
-    m_x(d.m_x), m_y(d.m_y), m_width(d.m_width), m_height(d.m_height)
+  Dim::Dim(Dim const &d)
+      : m_x(d.m_x), m_y(d.m_y), m_width(d.m_width), m_height(d.m_height)
   {
   }
 
