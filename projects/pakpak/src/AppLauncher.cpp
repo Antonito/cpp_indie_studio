@@ -160,7 +160,7 @@ namespace core
                                        m_window->getHeight());
 
     // Render Loop
-    m_gameState = m_currentContext->update();
+    m_currentContext->update();
     while (true)
       {
 	GameState state;
