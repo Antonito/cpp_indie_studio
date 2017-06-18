@@ -2,7 +2,8 @@
 
 Config::Config()
     : m_config(), m_connectManagerIp(), m_connectManagerPort(),
-      m_gameServerPort(), m_gameServerMaxClients(), m_mapConfig(), m_mapMD5()
+      m_gameServerPort(), m_UDPGameServerPort(), m_gameServerMaxClients(),
+      m_mapConfig(), m_mapMD5()
 {
   loadConfig("game_server.ini");
 }
@@ -72,6 +73,8 @@ void Config::loadConfig(std::string const &file)
       std::stoi(m_config["Network"]["connectManagerPort"]));
   m_gameServerPort = static_cast<std::uint16_t>(
       std::stoi(m_config["Network"]["gameServerPort"]));
+  m_UDPGameServerPort = static_cast<std::uint16_t>(
+      std::stoi(m_config["Network"]["gameServerPortUDP"]));
   m_gameServerMaxClients = static_cast<std::uint16_t>(
       std::stoi(m_config["Network"]["maxNumberClients"]));
 
@@ -138,6 +141,11 @@ std::uint16_t Config::getConnectManagerPort() const
 std::uint16_t Config::getGameServerPort() const
 {
   return (m_gameServerPort);
+}
+
+std::uint16_t Config::getUDPGameServerPort() const
+{
+  return (m_UDPGameServerPort);
 }
 
 std::int32_t Config::getGameServerMaxClients() const

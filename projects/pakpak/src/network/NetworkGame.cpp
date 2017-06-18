@@ -10,7 +10,7 @@ namespace core
   {
   }
 
-  void NetworkGame::init()
+  void NetworkGame::init(std::uint16_t const port)
   {
     nope::log::Log(Debug) << "Initializing UDP connection.";
   }

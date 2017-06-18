@@ -20,7 +20,14 @@ enum class GameClientToGSEvent : std::uint16_t
   VALIDATION_EVENT,
   MD5_REQUEST,
   MD5_RESPONSE,
-  FILE_EVENT
+  FILE_EVENT,
+  UDP_REQU,
+  UDP_SRV
+};
+
+struct GameClientToGSPacketUDP
+{
+  std::uint16_t port;
 };
 
 // Expected with FILE_EVENT packets
@@ -63,6 +70,7 @@ struct GameClientToGSPacketRaw
     GameClientToGSPacketMD5Requ md5requ;
     GameClientToGSPacketMD5Resp md5resp;
     GameClientToGSPacketFile    file;
+    GameClientToGSPacketUDP     udp;
   } eventData;
 };
 

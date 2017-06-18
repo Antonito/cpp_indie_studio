@@ -1,6 +1,8 @@
 #ifndef NETWORK_GAME_HPP_
 #define NETWORK_GAME_HPP_
 
+#include <cstdint>
+
 namespace core
 {
   class NetworkGame
@@ -12,7 +14,7 @@ namespace core
     NetworkGame(NetworkGame const &) = delete;
     NetworkGame &operator=(NetworkGame const &) = delete;
 
-    void init();
+    void init(std::uint16_t const port);
     void run();
 
   private:

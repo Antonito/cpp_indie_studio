@@ -405,9 +405,20 @@ namespace core
     GameClientToGSPacket           pckContent = {};
     Packet<GameClientToGSPacket>   pck = {};
 
-// Get UDP server informations -> Port
+    // Ask for UDP informations
+    nope::log::Log(Debug) << "Asking UDP server informations";
+    pckContent.pck.eventType = GameClientToGSEvent::UDP_REQU;
+    pck << pckContent;
+    ret = write(pck);
+    if (ret != network::IClient::ClientAction::SUCCESS)
+      {
+	nope::log::Log(Error) << "Write failed ! [NetworkConnect]";
+	return;
+      }
+    nope::log::Log(Debug) << "Packet sent [NetworkConnect]";
 
-#if 0
+    // Get UDP server informations -> Port
+    nope::log::Log(Debug) << "Getting UDP server informations";
     // Read validation
     ret = read(pck);
     if (ret != network::IClient::ClientAction::SUCCESS)
@@ -416,18 +427,19 @@ namespace core
 	throw std::exception(); // TODO
       }
     pck >> pckContent;
-    if (pckContent.pck.eventType != GameClientToGSEvent::VALIDATION_EVENT)
+    if (pckContent.pck.eventType != GameClientToGSEvent::UDP_SRV)
       {
 	nope::log::Log(Error) << "Invalid event type [NetworkConnect]";
 	throw std::exception(); // TODO
       }
-#endif
+    std::uint16_t const port = pckContent.pck.eventData.udp.port;
+    nope::log::Log(Debug) << "Going to connect to UDP port : " << port;
 
     // Start UDP thread
     m_game = std::make_unique<NetworkGame>();
     m_udp = std::thread([&]() {
       nope::log::Log(Debug) << "Starting UDP thread";
-      m_game->init();
+      m_game->init(port);
       m_game->run();
       nope::log::Log(Debug) << "Stopping UDP thread";
     });
