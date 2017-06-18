@@ -412,14 +412,12 @@ namespace core
 
   void MenuKeymap::soundPass()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::PASS_BUTTON);
   }
 
   void MenuKeymap::soundClick()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::CLICK_BUTTON);
   }
 
   bool MenuKeymap::onPlayer1Area(const CEGUI::EventArgs &)

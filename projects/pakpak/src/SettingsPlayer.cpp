@@ -294,7 +294,6 @@ namespace core
   {
     Log(nope::log::Debug) << "SettingsPlayer::save -> " << playerIndex << " : "
                           << playerFile[static_cast<int>(playerIndex)];
-    std::stringstream ss;
     std::ofstream     fs(playerFile[static_cast<int>(playerIndex)].c_str(),
                      std::ofstream::out | std::ofstream::trunc);
 
