@@ -33,7 +33,7 @@ void GameLogic::setUp()
   if (mapConfig.size() < 1)
     {
       nope::log::Log(Error) << "Incorrect number of maps [GameLogic]";
-      throw std::exception(); // TODO
+      throw MapError("Incorrect number of maps [GameLogic]");
     }
   m_maps = mapConfig;
   m_currentMap = m_maps.begin();
