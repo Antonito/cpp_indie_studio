@@ -113,14 +113,15 @@ GAME_MAP_FILES=		Map.cpp				\
 
 GAME_TOOLS_FILES=	Tools.cpp
 
-GAME_MENU_FILES=    	GUI.cpp				\
+GAME_MENU_FILES=    	GUI.cpp		\
 			MainMenu.cpp			\
 			ContextMenu.cpp			\
-			MenuManager.cpp     		\
+			MenuManager.cpp     	\
 			MenuOptions.cpp 		\
 			MenuKeymap.cpp 			\
 			MenuSolo.cpp 			\
-			MenuMultiplayer.cpp 		\
+			MenuMultiplayer.cpp 	\
+			MenuPopError.cpp        \
 			AssetSetter.cpp			\
 			MenuScores.cpp			\
 			InGameHUD.cpp			\

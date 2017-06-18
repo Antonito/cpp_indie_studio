@@ -27,7 +27,8 @@ namespace menu
         std::make_unique<core::MenuMultiplayer>(*this, m_gui, sound, net);
     m_menuLayer[static_cast<size_t>(core::MenuState::Score)] =
         std::make_unique<core::MenuScores>(*this, m_gui, settings, sound);
-
+    m_menuLayer[static_cast<size_t>(core::MenuState::PopError)] =
+        std::make_unique<core::MenuPopError>(*this, m_gui, sound);
     m_layers.push(
         m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)].get());
 

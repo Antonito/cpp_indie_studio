@@ -58,9 +58,6 @@ namespace core
 	    ->addItem(itm);
 	i++;
       }
-    // TODO Benjamin
-    // TODO Arthur
-    // -> Display game server list, using informations from gameServerList
 
     m_gui.getRoot()
         ->getChild("back_button")
@@ -203,8 +200,8 @@ namespace core
 	    << "\n======================================================\n=="
 	       "Error cannot connect to the ConnectServerManager "
 	       "!==\n======================================================";
-	// TODO: Remplace by a Error popUp
-
+	m_menuManager.push(MenuState::PopError);
+	m_menuManager.begin();
 	return true;
       }
     nope::log::Log(Debug) << "CONNECT TO GAME_SERVER CLEAN";
