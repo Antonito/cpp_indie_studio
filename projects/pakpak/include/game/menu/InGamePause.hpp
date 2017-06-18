@@ -15,7 +15,9 @@ namespace core
   {
   public:
     InGamePause(menu::MenuManager &menuManager, GUI &gui);
-    virtual ~InGamePause(){};
+    virtual ~InGamePause()
+    {
+    }
     void      draw();
     void      entry();
     void      exit();

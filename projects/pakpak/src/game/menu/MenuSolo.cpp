@@ -6,8 +6,10 @@
 
 namespace core
 {
-  MenuSolo::MenuSolo(menu::MenuManager &menuManager, GUI &gui)
-      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager)
+  MenuSolo::MenuSolo(menu::MenuManager &menuManager, GUI &gui,
+                     SoundManager &sound)
+      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
+        m_sound(sound)
 
   {
   }
@@ -29,10 +31,22 @@ namespace core
             CEGUI::Event::Subscriber(&MenuSolo::onBackClick, this));
 
     m_gui.getRoot()
+        ->getChild("back_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MenuSolo::onBackArea, this));
+
+    m_gui.getRoot()
         ->getChild("play_button")
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MenuSolo::onPlayClick, this));
+
+    m_gui.getRoot()
+        ->getChild("play_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MenuSolo::onPlayArea, this));
 
     m_gui.getRoot()
         ->getChild("easy_button")
@@ -41,10 +55,22 @@ namespace core
             CEGUI::Event::Subscriber(&MenuSolo::onEasyClick, this));
 
     m_gui.getRoot()
+        ->getChild("easy_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MenuSolo::onEasyArea, this));
+
+    m_gui.getRoot()
         ->getChild("hard_button")
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MenuSolo::onHardClick, this));
+
+    m_gui.getRoot()
+        ->getChild("hard_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MenuSolo::onHardArea, this));
   }
 
   void MenuSolo::exit()
@@ -68,8 +94,8 @@ namespace core
   {
     CEGUI::GUIContext &context =
         CEGUI::System::getSingleton().getDefaultGUIContext();
-    context.injectKeyDown((CEGUI::Key::Scan)arg.key);
-    context.injectChar((CEGUI::Key::Scan)arg.text);
+    context.injectKeyDown(static_cast<CEGUI::Key::Scan>(arg.key));
+    context.injectChar(static_cast<CEGUI::Key::Scan>(arg.text));
     return true;
   }
 
@@ -102,7 +128,7 @@ namespace core
   bool MenuSolo::keyReleased(const OIS::KeyEvent &arg)
   {
     CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(
-        (CEGUI::Key::Scan)arg.key);
+        static_cast<CEGUI::Key::Scan>(arg.key));
     return true;
   }
 
@@ -126,14 +152,15 @@ namespace core
 
   bool MenuSolo::onBackClick(CEGUI::EventArgs const &)
   {
+    soundClick();
     m_menuManager.popLayer();
     m_menuManager.begin();
     return false;
   }
 
-  bool MenuSolo::onPlayClick(CEGUI::EventArgs const &e)
+  bool MenuSolo::onPlayClick(CEGUI::EventArgs const &)
   {
-    (void)e;
+    soundClick();
     m_curState = GameState::InGame;
     m_gui.hideCursor();
     return true;
@@ -144,6 +171,7 @@ namespace core
     CEGUI::Window &easyButton = *m_gui.getRoot()->getChild("easy_button");
     CEGUI::Window &hardButton = *m_gui.getRoot()->getChild("hard_button");
 
+    soundClick();
     AssetSetter::setButtonBack(easyButton, AssetSetter::BUTTON_COLOR::BYELLOW);
     AssetSetter::setTextColor(easyButton, AssetSetter::TEXT_COLOR::TRED);
 
@@ -157,11 +185,47 @@ namespace core
     CEGUI::Window &easyButton = *m_gui.getRoot()->getChild("easy_button");
     CEGUI::Window &hardButton = *m_gui.getRoot()->getChild("hard_button");
 
+    soundClick();
     AssetSetter::setButtonBack(hardButton, AssetSetter::BUTTON_COLOR::BYELLOW);
     AssetSetter::setTextColor(hardButton, AssetSetter::TEXT_COLOR::TRED);
 
     AssetSetter::setButtonBack(easyButton, AssetSetter::BUTTON_COLOR::BGREY);
     AssetSetter::setTextColor(easyButton, AssetSetter::TEXT_COLOR::TBLACK);
     return true;
+  }
+  bool MenuSolo::onBackArea(const CEGUI::EventArgs &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MenuSolo::onPlayArea(const CEGUI::EventArgs &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MenuSolo::onEasyArea(const CEGUI::EventArgs &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MenuSolo::onHardArea(const CEGUI::EventArgs &)
+  {
+    soundPass();
+    return true;
+  }
+
+  void MenuSolo::soundPass()
+  {
+    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
+    m_sound.playSound();
+  }
+
+  void MenuSolo::soundClick()
+  {
+    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
+    m_sound.playSound();
   }
 }

@@ -8,7 +8,11 @@ namespace core
 {
   void GUI::init()
   {
+    nope::log::Log(Debug) << "Ogre::Root::singletonPtr : "
+                          << Ogre::Root::getSingletonPtr();
     m_renderer = &CEGUI::OgreRenderer::bootstrapSystem();
+    nope::log::Log(Debug) << "Ogre::Root::singletonPtr : "
+                          << Ogre::Root::getSingletonPtr();
     CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
     CEGUI::Font::setDefaultResourceGroup("Fonts");
     CEGUI::Scheme::setDefaultResourceGroup("Schemes");

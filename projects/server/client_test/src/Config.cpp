@@ -24,9 +24,8 @@ void Config::checkMD5(std::string const &filePath,
   dir = opendir(filePath.c_str());
   if (!dir)
     {
-      // TODO do correct one
       nope::log::Log(Error) << "Cannot open " + filePath;
-      throw std::exception();
+      throw IOError("Cannot open " + filePath);
     }
 
   // Loop over each file
@@ -44,7 +43,7 @@ void Config::checkMD5(std::string const &filePath,
       fileReader.open(fileName.c_str());
       if (!fileReader.good())
 	{
-	  throw std::exception();
+	  throw IOError("Cannot open " + fileName);
 	}
       buffer << fileReader.rdbuf();
       finalBuff = buffer.str();
@@ -81,8 +80,8 @@ void Config::updateMD5()
   dir = opendir("./maps/");
   if (!dir)
     {
-      // TODO do correct one
-      throw std::exception();
+      nope::log::Log(Error) << "Cannot open ./maps/";
+      throw IOError("Cannot open folder ./maps/");
     }
   // Loop over each file
   while ((ent = readdir(dir)))

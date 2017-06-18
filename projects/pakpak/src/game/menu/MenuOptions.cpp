@@ -6,11 +6,16 @@
 
 namespace core
 {
-  MenuOptions::MenuOptions(menu::MenuManager &menuManager, GUI &gui)
+  MenuOptions::MenuOptions(menu::MenuManager &menuManager, GUI &gui,
+                           SoundManager &sound)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
-        m_volumeButtons(), m_volumeSelected(4), m_graphicButtons(),
-        m_graphicSelected(0)
+        m_volumeButtons(), m_graphicButtons(), m_graphicSelected(0),
+        m_sound(sound),
+        m_volumeSelected(static_cast<std::size_t>(m_sound.getVolume() * 4.0f))
   {
+    nope::log::Log(Debug) << "Initialization Current Volume : "
+                          << static_cast<std::size_t>(m_sound.getVolume() *
+                                                      4.0f);
   }
 
   void MenuOptions::draw()
@@ -23,7 +28,8 @@ namespace core
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
 
     m_graphicSelected = 0;
-    m_volumeSelected = 4;
+    nope::log::Log(Debug) << "Current Volume : " << m_sound.getVolume();
+    m_volumeSelected = static_cast<std::size_t>(m_sound.getVolume() * 4.0f);
     m_volumeButtons[0] = m_gui.getRoot()->getChild("volume/level_0");
     m_volumeButtons[1] = m_gui.getRoot()->getChild("volume/level_25");
     m_volumeButtons[2] = m_gui.getRoot()->getChild("volume/level_50");
@@ -37,33 +43,73 @@ namespace core
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MenuOptions::onBackClick, this));
+
+    m_gui.getRoot()
+        ->getChild("back_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MenuOptions::onBackArea, this));
+
     m_gui.getRoot()
         ->getChild("edit_button")
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MenuOptions::onKeymapEdit, this));
 
+    m_gui.getRoot()
+        ->getChild("edit_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MenuOptions::onKeymapEditArea, this));
+
     m_volumeButtons[0]->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MenuOptions::onVolumeLevel0, this));
+    m_volumeButtons[0]->subscribeEvent(
+        CEGUI::PushButton::EventMouseEntersArea,
+        CEGUI::Event::Subscriber(&MenuOptions::onVolumeLevel0Pass, this));
+
     m_volumeButtons[1]->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MenuOptions::onVolumeLevel25, this));
+    m_volumeButtons[1]->subscribeEvent(
+        CEGUI::PushButton::EventMouseEntersArea,
+        CEGUI::Event::Subscriber(&MenuOptions::onVolumeLevel25Pass, this));
+
     m_volumeButtons[2]->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MenuOptions::onVolumeLevel50, this));
+    m_volumeButtons[2]->subscribeEvent(
+        CEGUI::PushButton::EventMouseEntersArea,
+        CEGUI::Event::Subscriber(&MenuOptions::onVolumeLevel50Pass, this));
+
     m_volumeButtons[3]->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MenuOptions::onVolumeLevel75, this));
+    m_volumeButtons[3]->subscribeEvent(
+        CEGUI::PushButton::EventMouseEntersArea,
+        CEGUI::Event::Subscriber(&MenuOptions::onVolumeLevel75Pass, this));
+
     m_volumeButtons[4]->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MenuOptions::onVolumeLevel100, this));
+    m_volumeButtons[4]->subscribeEvent(
+        CEGUI::PushButton::EventMouseEntersArea,
+        CEGUI::Event::Subscriber(&MenuOptions::onVolumeLevel100Pass, this));
+
     m_graphicButtons[0]->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MenuOptions::onLowClick, this));
+    m_volumeButtons[0]->subscribeEvent(
+        CEGUI::PushButton::EventMouseEntersArea,
+        CEGUI::Event::Subscriber(&MenuOptions::onLowPass, this));
+
     m_graphicButtons[1]->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MenuOptions::onHighClick, this));
+    m_volumeButtons[1]->subscribeEvent(
+        CEGUI::PushButton::EventMouseEntersArea,
+        CEGUI::Event::Subscriber(&MenuOptions::onHighPass, this));
   }
 
   void MenuOptions::exit()
@@ -87,8 +133,8 @@ namespace core
   {
     CEGUI::GUIContext &context =
         CEGUI::System::getSingleton().getDefaultGUIContext();
-    context.injectKeyDown((CEGUI::Key::Scan)arg.key);
-    context.injectChar((CEGUI::Key::Scan)arg.text);
+    context.injectKeyDown(static_cast<CEGUI::Key::Scan>(arg.key));
+    context.injectChar(static_cast<CEGUI::Key::Scan>(arg.text));
     return true;
   }
 
@@ -121,7 +167,7 @@ namespace core
   bool MenuOptions::keyReleased(const OIS::KeyEvent &arg)
   {
     CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(
-        (CEGUI::Key::Scan)arg.key);
+        static_cast<CEGUI::Key::Scan>(arg.key));
     return true;
   }
 
@@ -145,15 +191,29 @@ namespace core
 
   bool MenuOptions::onBackClick(CEGUI::EventArgs const &)
   {
+    soundClick();
     m_menuManager.popLayer();
     m_menuManager.begin();
     return false;
   }
 
+  bool MenuOptions::onBackArea(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return false;
+  }
+
   bool MenuOptions::onKeymapEdit(CEGUI::EventArgs const &)
   {
+    soundClick();
     m_menuManager.push(MenuState::Keymap);
     m_menuManager.begin();
+    return true;
+  }
+
+  bool MenuOptions::onKeymapEditArea(CEGUI::EventArgs const &)
+  {
+    soundPass();
     return true;
   }
 
@@ -174,6 +234,8 @@ namespace core
 
   bool MenuOptions::onVolumeLevel0(CEGUI::EventArgs const &)
   {
+    soundClick();
+    m_sound.setVolume(0.0f);
     swapButtons(m_volumeButtons, m_volumeSelected, 0, AssetSetter::greyButton,
                 AssetSetter::redButton);
     return true;
@@ -181,6 +243,8 @@ namespace core
 
   bool MenuOptions::onVolumeLevel25(CEGUI::EventArgs const &)
   {
+    soundClick();
+    m_sound.setVolume(0.25f);
     swapButtons(m_volumeButtons, m_volumeSelected, 1, AssetSetter::greyButton,
                 AssetSetter::redButton);
     return true;
@@ -188,6 +252,8 @@ namespace core
 
   bool MenuOptions::onVolumeLevel50(CEGUI::EventArgs const &)
   {
+    soundClick();
+    m_sound.setVolume(0.50f);
     swapButtons(m_volumeButtons, m_volumeSelected, 2, AssetSetter::greyButton,
                 AssetSetter::redButton);
     return true;
@@ -195,6 +261,8 @@ namespace core
 
   bool MenuOptions::onVolumeLevel75(CEGUI::EventArgs const &)
   {
+    soundClick();
+    m_sound.setVolume(0.50f);
     swapButtons(m_volumeButtons, m_volumeSelected, 3, AssetSetter::greyButton,
                 AssetSetter::redButton);
     return true;
@@ -202,22 +270,80 @@ namespace core
 
   bool MenuOptions::onVolumeLevel100(CEGUI::EventArgs const &)
   {
+    soundClick();
+    m_sound.setVolume(1.0f);
     swapButtons(m_volumeButtons, m_volumeSelected, 4, AssetSetter::greyButton,
                 AssetSetter::redButton);
     return true;
   }
 
+  bool MenuOptions::onVolumeLevel0Pass(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MenuOptions::onVolumeLevel25Pass(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MenuOptions::onVolumeLevel50Pass(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MenuOptions::onVolumeLevel75Pass(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MenuOptions::onVolumeLevel100Pass(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
   bool MenuOptions::onLowClick(CEGUI::EventArgs const &)
   {
+    soundClick();
     swapButtons(m_graphicButtons, m_graphicSelected, 0,
                 AssetSetter::greyButton, AssetSetter::yellowButton);
     return true;
   }
 
+  bool MenuOptions::onLowPass(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
   bool MenuOptions::onHighClick(CEGUI::EventArgs const &)
   {
+    soundClick();
     swapButtons(m_graphicButtons, m_graphicSelected, 1,
                 AssetSetter::greyButton, AssetSetter::yellowButton);
     return true;
+  }
+
+  bool MenuOptions::onHighPass(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  void MenuOptions::soundClick()
+  {
+    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
+    m_sound.playSound();
+  }
+
+  void MenuOptions::soundPass()
+  {
+    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
+    m_sound.playSound();
   }
 }

@@ -14,8 +14,11 @@ namespace core
   class MenuScores : public IMenuLayer
   {
   public:
-    MenuScores(menu::MenuManager &menuManager, GUI &gui);
-    virtual ~MenuScores(){};
+    MenuScores(menu::MenuManager &menuManager, GUI &gui,
+               SettingsPlayer &settings, SoundManager &sound);
+    virtual ~MenuScores()
+    {
+    }
     void      draw();
     void      entry();
     void      exit();
@@ -38,8 +41,14 @@ namespace core
     GUI &              m_gui;
     GameState          m_curState;
     menu::MenuManager &m_menuManager;
+    SettingsPlayer &   m_settings;
+    SoundManager &     m_sound;
 
     bool onBackClick(CEGUI::EventArgs const &);
+    bool onBackArea(CEGUI::EventArgs const &);
+
+    void soundPass();
+    void soundClick();
   };
 }
 

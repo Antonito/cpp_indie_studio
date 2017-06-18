@@ -152,6 +152,26 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\IOError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\PyFunctionArgError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\PyFunctionInitializationError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\PyFunctionReturnError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\PyInitializationError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="src\SockError.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
@@ -173,6 +193,11 @@
     <ClInclude Include="include\AException.hpp" />
     <ClInclude Include="include\exceptions_stdafx.hpp" />
     <ClInclude Include="include\exceptions_targetver.h" />
+    <ClInclude Include="include\IOError.hpp" />
+    <ClInclude Include="include\PyFunctionArgError.hpp" />
+    <ClInclude Include="include\PyFunctionInitializationError.hpp" />
+    <ClInclude Include="include\PyFunctionReturnError.hpp" />
+    <ClInclude Include="include\PyInitializationError.hpp" />
     <ClInclude Include="include\SockError.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

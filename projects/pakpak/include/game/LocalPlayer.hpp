@@ -18,6 +18,12 @@
 #include "ILayer.hpp"
 #include "SettingsPlayer.hpp"
 
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 namespace game
 {
   class ContextGame;
@@ -107,5 +113,9 @@ namespace game
     game::ContextGame & m_contextGame;
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !LOCALPLAYER_HPP_

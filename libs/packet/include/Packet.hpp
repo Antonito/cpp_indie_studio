@@ -89,8 +89,8 @@ public:
     header->magic.magic =
         static_cast<std::uint16_t>(htons(header->magic.magic));
 
-    header->size =
-        static_cast<std::uint16_t>(htons(m_size - sizeof(m_header)));
+    header->size = static_cast<std::uint16_t>(
+        htons(static_cast<std::uint16_t>(m_size - sizeof(m_header))));
 
     header->checkSum = calculateChecksum(m_size - sizeof(m_header),
                                          m_data.get() + sizeof(m_header));

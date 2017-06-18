@@ -30,7 +30,11 @@
 //
 // OIS
 //
+#if defined __APPLE__
+#include <ois/OIS.h>
+#else
 #include <OIS/OIS.h>
+#endif
 
 //
 // Windows
@@ -42,7 +46,14 @@
 //
 // Utils
 //
+#include <functional>
 #include <cassert>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <fstream>
+#include <cstring>
 
 //
 // Project headers
@@ -56,6 +67,8 @@
 #include "GameState.hpp"
 #include "InputListener.hpp"
 #include "SettingsPlayer.hpp"
+#include "SoundManager.hpp"
+#include "SaveData.hpp"
 
 // Menu
 #include "AssetSetter.hpp"
@@ -107,5 +120,35 @@
 // Logger
 //
 #include "Logger.hpp"
+#include "IOError.hpp"
+
+// Network
+#include "NetworkManager.hpp"
+#include "NetworkGameServer.hpp"
+//
+// Physic
+//
+
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang            system_header
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+
+#include <Shapes/OgreBulletCollisionsBoxShape.h>
+#include <Shapes/OgreBulletCollisionsSphereShape.h>
+#include <Shapes/OgreBulletCollisionsTrimeshShape.h>
+#include <Shapes/OgreBulletCollisionsConvexHullShape.h>
+#include "Tools.hpp"
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 #endif // !PAKPAK_STDAFX_HPP_

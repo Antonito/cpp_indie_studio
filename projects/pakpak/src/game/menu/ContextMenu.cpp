@@ -3,8 +3,11 @@
 namespace menu
 {
   ContextMenu::ContextMenu(Ogre::RenderWindow *win, core::InputListener *input,
-                           core::SettingsPlayer &settings)
-      : core::AContext(win, input), m_menu(win, settings), m_settings(settings)
+                           core::SettingsPlayer &settings,
+                           core::SoundManager &  sound,
+                           core::NetworkManager &net)
+      : core::AContext(win, input), m_menu(win, settings, sound, net),
+        m_sound(sound)
   {
   }
 
@@ -14,6 +17,12 @@ namespace menu
 
   void ContextMenu::enable()
   {
+    nope::log::Log(Debug) << "\n***********************\n"
+                          << "**Enable context menu**\n"
+                          << "***********************\n";
+    m_sound.loadSound("deps/indie_resource/songs/theme.wav");
+    m_sound.playSound();
+    m_sound.loopSound();
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
 
@@ -22,6 +31,11 @@ namespace menu
 
   void ContextMenu::disable()
   {
+    nope::log::Log(Debug) << "\n***********************\n"
+                          << "**Disable context menu**\n"
+                          << "***********************\n";
+    m_sound.stopSound();
+    m_sound.clear();
     m_menu.end();
   }
 

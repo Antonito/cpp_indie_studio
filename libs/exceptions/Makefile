@@ -26,6 +26,7 @@ HEADER=		exceptions_stdafx.hpp
 # Project's files
 
 SRC_FILES=	AException.cpp				\
+		IOError.cpp				\
 		SockError.cpp 				\
 		PyInitializationError.cpp 		\
 		PyFunctionArgError.cpp			\

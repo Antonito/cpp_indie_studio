@@ -32,13 +32,14 @@ namespace game
 
   bool InGame::keyPressed(OIS::KeyEvent const &ke)
   {
-    std::string action =
-        m_player.settings().actionForKey(m_player.order(), ke.key);
+    std::string action = m_player.settings().actionForKey(
+        static_cast<std::size_t>(m_player.order()), ke.key);
 
     if (action == "NO_ACTION")
       {
 	return false;
       }
+    nope::log::Log(Info) << "DOING ACTION";
     void (LocalPlayer::*ptr)() = m_player.actions(action).first;
     (m_player.*ptr)();
     return true;
@@ -46,13 +47,13 @@ namespace game
 
   bool InGame::keyReleased(OIS::KeyEvent const &ke)
   {
-    std::string action =
-        m_player.settings().actionForKey(m_player.order(), ke.key);
-
+    std::string action = m_player.settings().actionForKey(
+        static_cast<std::size_t>(m_player.order()), ke.key);
     if (action == "NO_ACTION")
       {
 	return false;
       }
+    nope::log::Log(Info) << "DOING ACTION";
     void (LocalPlayer::*ptr)() = m_player.actions(action).second;
     (m_player.*ptr)();
     return true;

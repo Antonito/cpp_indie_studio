@@ -4,7 +4,7 @@ namespace core
 {
   InputListener::InputListener(Ogre::RenderWindow *wnd)
       : m_window(wnd), m_inputManager(nullptr), m_mouse(nullptr),
-        m_keyboard(nullptr), m_shutdown(false)
+        m_keyboard(nullptr), m_physicWorld(nullptr), m_shutdown(false)
   {
     startOIS();
   }
@@ -12,7 +12,7 @@ namespace core
   InputListener::InputListener(InputListener const &that)
       : m_window(that.m_window), m_inputManager(that.m_inputManager),
         m_mouse(that.m_mouse), m_keyboard(that.m_keyboard),
-        m_shutdown(that.m_shutdown)
+        m_physicWorld(that.m_physicWorld), m_shutdown(that.m_shutdown)
   {
   }
 
@@ -21,6 +21,7 @@ namespace core
         m_inputManager(std::move(that.m_inputManager)),
         m_mouse(std::move(that.m_mouse)),
         m_keyboard(std::move(that.m_keyboard)),
+        m_physicWorld(std::move(that.m_physicWorld)),
         m_shutdown(std::move(that.m_shutdown))
   {
   }
@@ -39,6 +40,7 @@ namespace core
     m_inputManager = that.m_inputManager;
     m_mouse = that.m_mouse;
     m_keyboard = that.m_keyboard;
+    m_physicWorld = that.m_physicWorld;
     m_shutdown = that.m_shutdown;
     return (*this);
   }
@@ -51,6 +53,7 @@ namespace core
     m_inputManager = std::move(that.m_inputManager);
     m_mouse = std::move(that.m_mouse);
     m_keyboard = std::move(that.m_keyboard);
+    m_physicWorld = std::move(that.m_physicWorld);
     m_shutdown = std::move(that.m_shutdown);
     return (*this);
   }
@@ -100,13 +103,11 @@ namespace core
 
   void InputListener::setMouseEventCallback(OIS::MouseListener *listener)
   {
-    std::cout << "CLICKKK" << std::endl;
     m_mouse->setEventCallback(listener);
   }
 
   void InputListener::setKeyboardEventCallback(OIS::KeyListener *listener)
   {
-    std::cout << "CLICKKK" << std::endl;
     m_keyboard->setEventCallback(listener);
   }
 
@@ -119,6 +120,29 @@ namespace core
   void InputListener::shutdown()
   {
     m_shutdown = true;
+  }
+
+  bool InputListener::frameStarted(Ogre::FrameEvent const &evt)
+  {
+    if (m_physicWorld)
+      {
+	m_physicWorld->stepSimulation(evt.timeSinceLastFrame);
+      }
+    return (true);
+  }
+
+  bool InputListener::frameEnd(Ogre::FrameEvent const &evt)
+  {
+    if (m_physicWorld)
+      {
+	m_physicWorld->stepSimulation(evt.timeSinceLastFrame);
+      }
+    return (true);
+  }
+
+  void InputListener::setPhysicWorld(OgreBulletDynamics::DynamicsWorld *world)
+  {
+    m_physicWorld = world;
   }
 
   void InputListener::windowResized(Ogre::RenderWindow *wnd)

@@ -5,6 +5,7 @@ namespace game
   GameGUI::GameGUI(GameData &data, LocalPlayer &player, core::HUD *hud)
       : ALayer(data, player, hud), m_player(player)
   {
+    static_cast<void>(m_player); // TODO: rm
   }
 
   GameGUI::~GameGUI()

@@ -6,9 +6,19 @@
 #define CPP_INDIE_STUDIO_IMENULAYER_HPP_
 
 #include <CEGUI/CEGUI.h>
+#if defined __APPLE__
+#include <ois/OIS.h>
+#else
 #include <OIS/OIS.h>
+#endif
 #include <iostream>
 #include "GameState.hpp"
+
+// Disable clang warning for vtable
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wweak-vtables"
+#endif
 
 namespace core
 {
@@ -34,5 +44,9 @@ namespace core
     virtual bool keyReleased(const OIS::KeyEvent &arg) = 0;
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // CPP_INDIE_STUDIO_IMENULAYER_HPP_
