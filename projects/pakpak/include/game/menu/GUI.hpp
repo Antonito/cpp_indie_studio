@@ -23,7 +23,7 @@ namespace core
   {
   public:
     ~GUI();
-    GUI(Ogre::RenderWindow *win);
+    explicit GUI(Ogre::RenderWindow *win);
     void           init();
     void           destroy();
     void           draw();

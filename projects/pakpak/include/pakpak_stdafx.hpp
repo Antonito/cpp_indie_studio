@@ -123,6 +123,13 @@
 //
 #include "Logger.hpp"
 #include "IOError.hpp"
+#include "NetworkConnectionError.hpp"
+#include "NetworkInvalidAddressError.hpp"
+#include "NetworkInvalidPacketError.hpp"
+#include "NetworkReadPacketError.hpp"
+#include "NetworkWritePacketError.hpp"
+#include "NetworkInvalidMapError.hpp"
+#include "MapError.hpp"
 
 // Network
 #include "NetworkManager.hpp"

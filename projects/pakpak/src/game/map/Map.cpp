@@ -27,7 +27,7 @@ namespace game
 
     if (fs.is_open() == false)
       {
-	throw std::exception();
+	throw IOError("Can't open file -> " + filename);
       }
 
     ss << fs.rdbuf();
@@ -67,7 +67,7 @@ namespace game
 
     if (meshFile == nullptr)
       {
-	throw std::exception(); // TODO: change exception
+	throw MapError("Invalid Mesh Data");
       }
 
     struct stat fileStat;

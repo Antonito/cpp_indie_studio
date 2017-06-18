@@ -20,9 +20,8 @@ namespace menu
     nope::log::Log(Debug) << "\n***********************\n"
                           << "**Enable context menu**\n"
                           << "***********************\n";
-    m_sound.loadSound("deps/indie_resource/songs/theme.wav");
-    m_sound.playSound();
-    m_sound.loopSound();
+    m_sound.playSound(core::ESound::THEME_SONG);
+    m_sound.loopSound(core::ESound::THEME_SONG);
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
 
@@ -34,8 +33,7 @@ namespace menu
     nope::log::Log(Debug) << "\n***********************\n"
                           << "**Disable context menu**\n"
                           << "***********************\n";
-    m_sound.stopSound();
-    m_sound.clear();
+    m_sound.stopSound(core::ESound::THEME_SONG);
     m_menu.end();
   }
 

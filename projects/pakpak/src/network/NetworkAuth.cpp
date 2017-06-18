@@ -17,7 +17,8 @@ namespace core
     if (!m_sock.openConnection())
       {
 	nope::log::Log(Error) << "Cannot connect to " << ip << ":" << port;
-	throw std::exception(); // TODO
+	throw NetworkConnectionError("Cannot connect to " + ip + ":" +
+	                             std::to_string(port));
       }
   }
 
@@ -138,7 +139,7 @@ namespace core
     if (ret != network::IClient::ClientAction::SUCCESS)
       {
 	nope::log::Log(Error) << "Cannot write packet to server.";
-	throw std::exception(); // TODO
+	throw NetworkWritePacketError("Cannot write packet to server.");
       }
 
     // Read response
@@ -147,7 +148,7 @@ namespace core
     if (ret != network::IClient::ClientAction::SUCCESS)
       {
 	nope::log::Log(Error) << "Cannot read packet from server.";
-	throw std::exception(); // TODO
+	throw NetworkReadPacketError("Cannot read packet from server.");
       }
     pck >> pckContent;
     nope::log::Log(Debug) << "Read successful !";
@@ -157,7 +158,8 @@ namespace core
       {
 	nope::log::Log(Error) << "Received invalid packet from server.";
 	nope::log::Log(Debug) << "Invalid Packet: invalid event";
-	throw std::exception(); // TODO
+	throw NetworkInvalidPacketError(
+	    "Received invalid packet from server.");
       }
 
     // Process response
@@ -200,7 +202,7 @@ namespace core
     if (srv.address.length() >= INET6_ADDRSTRLEN_INDIE)
       {
 	nope::log::Log(Error) << "Invalid address length";
-	throw std::exception(); // TODO
+	throw NetworkInvalidAddressError("Invalid address length");
       }
     std::memcpy(pckContent.pck.eventData.tokenRequ.ip.data.data(),
                 srv.address.c_str(), srv.address.length() + 1);
@@ -211,7 +213,7 @@ namespace core
     if (ret != network::IClient::ClientAction::SUCCESS)
       {
 	nope::log::Log(Error) << "Cannot send packet to server.";
-	throw std::exception(); // TODO
+	throw NetworkConnectionError("Cannot send packet to server.");
       }
     nope::log::Log(Debug) << "Packet sent";
 
@@ -221,7 +223,7 @@ namespace core
     if (ret != network::IClient::ClientAction::SUCCESS)
       {
 	nope::log::Log(Error) << "Cannot read packet from server.";
-	throw std::exception(); // TODO
+	throw NetworkReadPacketError("Cannot read packet from server.");
       }
     pck >> pckContent;
     nope::log::Log(Debug) << "Read successful !";
@@ -229,7 +231,8 @@ namespace core
       {
 	nope::log::Log(Error) << "Received invalid packet from server.";
 	nope::log::Log(Debug) << "Invalid Packet: invalid event";
-	throw std::exception(); // TODO
+	throw NetworkInvalidPacketError(
+	    "Received invalid packet from server.");
       }
 
     nope::log::Log(Debug) << "TokenValid: "
@@ -241,7 +244,8 @@ namespace core
 	nope::log::Log(Error) << "Received invalid packet from server.";
 	nope::log::Log(Debug) << "Invalid Packet: invalid token";
 	m_token = "";
-	throw std::exception(); // TODO
+	throw NetworkInvalidPacketError(
+	    "Received invalid packet from server.");
       }
     nope::log::Log(Debug) << "Successfuly got token.";
     return (m_token);

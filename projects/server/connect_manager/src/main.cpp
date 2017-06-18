@@ -40,7 +40,8 @@ int main(int, char **)
       nope::log::Log(Error)
           << "Configuration error: allowInternet should be [yes / 1] or [no / "
              "0]";
-      throw std::exception(); // TODO
+      throw NetworkConnectionError("Configuration error: allowInternet should "
+                                   "be [yes / 1] or [no / 0]");
     }
 
   nope::log::Log(Debug) << "Starting license manager";

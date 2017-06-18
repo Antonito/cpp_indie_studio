@@ -10,7 +10,6 @@ namespace core
                                    SoundManager &sound, NetworkManager &net)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
         m_sound(sound), m_selectGameServer(), m_network(net)
-
   {
     nope::log::Log(Debug) << "Building MenuMultiplayer";
   }
@@ -25,6 +24,7 @@ namespace core
 
     m_gui.loadLayout("multiplayer.layout");
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
+    m_curState = GameState::Menu;
 
     m_network.authenticate();
     std::vector<GameServer> gameServerList = m_network.getServerList();
@@ -59,6 +59,15 @@ namespace core
 	i++;
       }
 
+    for (std::int32_t j(0); j < (20 - i); ++j)
+      {
+	CEGUI::ItemEntry *itm = static_cast<CEGUI::ItemEntry *>(
+	    winManager->createWindow("TaharezLook/ListboxItem"));
+	itm->disable();
+	static_cast<CEGUI::ItemListbox *>(
+	    m_gui.getRoot()->getChild("servers_list"))
+	    ->addItem(itm);
+      }
     m_gui.getRoot()
         ->getChild("back_button")
         ->subscribeEvent(
@@ -130,19 +139,17 @@ namespace core
                          static_cast<float>(arg.state.Y.rel));
   }
 
-  bool MenuMultiplayer::mousePressed(const OIS::MouseEvent &arg,
+  bool MenuMultiplayer::mousePressed(const OIS::MouseEvent &,
                                      OIS::MouseButtonID     id)
   {
-    (void)arg;
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
         .injectMouseButtonDown(convertButton(id));
   }
 
-  bool MenuMultiplayer::mouseReleased(const OIS::MouseEvent &arg,
+  bool MenuMultiplayer::mouseReleased(const OIS::MouseEvent &,
                                       OIS::MouseButtonID     id)
   {
-    (void)arg;
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
         .injectMouseButtonUp(convertButton(id));
@@ -212,14 +219,12 @@ namespace core
 
   void MenuMultiplayer::soundPass()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::PASS_BUTTON);
   }
 
   void MenuMultiplayer::soundClick()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::CLICK_BUTTON);
   }
 
   bool MenuMultiplayer::onBackArea(CEGUI::EventArgs const &)
@@ -236,18 +241,28 @@ namespace core
 
   bool MenuMultiplayer::getServerPos(CEGUI::EventArgs const &)
   {
-
+    nope::log::Log(Debug) << "Selecting SERVVVVV";
     if (static_cast<CEGUI::ItemListbox *>(
             m_gui.getRoot()->getChild("servers_list"))
             ->getFirstSelectedItem() != NULL)
       {
-	nope::log::Log(Debug) << "Select a specific server network";
+	nope::log::Log(Debug)
+	    << "Select a specific server network : "
+	    << static_cast<CEGUI::ItemListbox *>(
+	           m_gui.getRoot()->getChild("servers_list"))
+	           ->getItemIndex(
+	               static_cast<CEGUI::ItemListbox *>(
+	                   m_gui.getRoot()->getChild("servers_list"))
+	                   ->getFirstSelectedItem());
 	m_selectGameServer =
 	    m_network
 	        .getServerList()[static_cast<CEGUI::ItemListbox *>(
 	                             m_gui.getRoot()->getChild("servers_list"))
-	                             ->getFirstSelectedItem()
-	                             ->getZIndex()];
+	                             ->getItemIndex(
+	                                 static_cast<CEGUI::ItemListbox *>(
+	                                     m_gui.getRoot()->getChild(
+	                                         "servers_list"))
+	                                     ->getFirstSelectedItem())];
       }
     return true;
   }

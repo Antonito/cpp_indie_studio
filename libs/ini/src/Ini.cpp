@@ -207,14 +207,14 @@ namespace ini
 	      {
 		if (i == line.size())
 		  {
-		    throw std::exception();
+		    throw IOError("Invalid line (mising equal sign)");
 		  }
 		++i;
 	      }
 
 	    if (i == start)
 	      {
-		throw std::exception();
+		throw IOError("Invalid line (missing property)");
 	      }
 
 	    if (m_sections.size() == 0)

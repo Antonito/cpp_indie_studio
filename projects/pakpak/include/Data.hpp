@@ -37,11 +37,11 @@ struct Data
       }
     for (std::int32_t i = 0; i < 10; ++i)
       {
-	s_totalKm[i] = s_totalKm[i];
+	s_totalKm[i] = cpy.s_totalKm[i];
       }
     for (std::int32_t i = 0; i < 10; ++i)
       {
-	s_collisionCount[i] = s_collisionCount[i];
+	s_collisionCount[i] = cpy.s_collisionCount[i];
       }
   }
 
