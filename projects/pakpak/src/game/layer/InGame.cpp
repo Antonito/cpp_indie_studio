@@ -11,7 +11,7 @@ namespace game
       "pakpak_pack/ST", "pakpak_pack/ND", "pakpak_pack/RD", "pakpak_pack/TH"};
 
   InGame::InGame(GameData &data, LocalPlayer &player, core::HUD *hud)
-      : ALayer(data, player, hud), m_player(player), m_speed({}),
+      : ALayer(data, player, hud), m_player(player), m_speed(),
         m_positionSuffix(nullptr), m_positionPrefix(nullptr)
   {
   }
