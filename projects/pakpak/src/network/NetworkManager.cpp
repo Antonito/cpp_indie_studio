@@ -3,8 +3,8 @@
 namespace core
 {
   NetworkManager::NetworkManager()
-      : m_auth(nullptr), m_conn(nullptr), m_connectManagerAddr(),
-        m_connectManagerPort(), m_gameServerToken("")
+      : m_auth(nullptr), m_conn(nullptr), m_game(nullptr),
+        m_connectManagerAddr(), m_connectManagerPort(), m_gameServerToken("")
   {
     nope::log::Log(Debug) << "Creating NetworkManager";
 
@@ -65,7 +65,8 @@ namespace core
   {
     nope::log::Log(Debug) << "Connecting client";
     disconnect();
-    m_conn = std::make_unique<NetworkConnect>(srv.address, srv.port, token);
+    m_conn =
+        std::make_unique<NetworkConnect>(srv.address, srv.port, token, m_game);
   }
 
   void NetworkManager::disconnect()

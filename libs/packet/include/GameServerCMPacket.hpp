@@ -7,6 +7,12 @@
 #include "ISerializable.hpp"
 #include "PacketHeader.hpp"
 
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 enum class GameServerToCMEvent : std::uint16_t
 {
   STRINGIFIED_EVENT = 0,
@@ -26,6 +32,7 @@ struct GameServerToCMPacketLicence
 {
   GameServerToCMPacketSimple licence;
   std::uint16_t              port;
+  std::uint16_t              maxClients;
 };
 
 struct GameServerToCMPacketToken
@@ -66,5 +73,10 @@ namespace packetSize
   constexpr std::size_t GameServerToCMPacketSize =
       sizeof(PacketHeader) + sizeof(GameServerToCMPacket);
 }
+
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !GAMESERVER_CM_PACKET_HPP_

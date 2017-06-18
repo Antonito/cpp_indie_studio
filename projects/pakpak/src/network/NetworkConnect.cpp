@@ -7,12 +7,13 @@
 
 namespace core
 {
-  NetworkConnect::NetworkConnect(std::string const & ip,
-                                 std::uint16_t const port,
-                                 std::string const & token)
+  NetworkConnect::NetworkConnect(std::string const &           ip,
+                                 std::uint16_t const           port,
+                                 std::string const &           token,
+                                 std::unique_ptr<NetworkGame> &net)
       : m_ip(ip), m_port(port), m_conn(false),
         m_sock(m_port, m_ip, true, network::ASocket::SocketType::BLOCKING),
-        m_token(token)
+        m_token(token), m_game(net), m_udp()
   {
     nope::log::Log(Debug) << "Creating connection [NetworkConnect]";
     nope::log::Log(Info) << "Opening connection";
@@ -23,6 +24,7 @@ namespace core
       }
     authenticate();
     checkFiles();
+    setup();
   }
 
   NetworkConnect::~NetworkConnect()
@@ -188,14 +190,14 @@ namespace core
       {
 	if (read(pck) != network::IClient::ClientAction::SUCCESS)
 	  {
-	    nope::log::Log(Error) << "Cannot read";
+	    nope::log::Log(Error) << "Cannot read [NetworkConnect]";
 	    throw std::exception(); // TODO
 	  }
 	pck >> pckContent;
 
 	if (pckContent.pck.eventType == GameClientToGSEvent::MD5_REQUEST)
 	  {
-	    nope::log::Log(Debug) << "Received MD5 Request";
+	    nope::log::Log(Debug) << "Received MD5 Request [NetworkConnect]";
 	    std::string payload(pckContent.pck.eventData.md5requ.file.data());
 	    std::string const gen = "~GENERAL~";
 
@@ -203,13 +205,14 @@ namespace core
 	    if (payload.compare(0, gen.length(), gen) == 0)
 	      {
 		// Treat global MD5
-		nope::log::Log(Debug) << "Treating Global MD5";
+		nope::log::Log(Debug)
+		    << "Treating Global MD5 [NetworkConnect]";
 		std::memcpy(pckContent.pck.eventData.md5resp.md5.data(),
 		            Config::getInstance().getMapMD5().c_str(), 32);
 		pck << pckContent;
 		if (write(pck) != network::IClient::ClientAction::SUCCESS)
 		  {
-		    nope::log::Log(Error) << "Cannot write";
+		    nope::log::Log(Error) << "Cannot write [NetworkConnect]";
 		    throw std::exception(); // TODO
 		  }
 	      }
@@ -218,14 +221,16 @@ namespace core
 		// Load file
 		std::vector<std::string> filePath;
 		std::string              md5Found;
-		nope::log::Log(Debug) << "Requested MD5 of " << payload;
+		nope::log::Log(Debug)
+		    << "Requested MD5 of " << payload << " [NetworkConnect]";
 
 		// Split according to /
 		Tokenize(payload, filePath, "/");
 
 		if (filePath.size() < 2)
 		  {
-		    nope::log::Log(Error) << "Invalid map requested";
+		    nope::log::Log(Error)
+		        << "Invalid map requested [NetworkConnect]";
 		    throw std::exception(); // TODO
 		  }
 		bool found = false;
@@ -234,7 +239,8 @@ namespace core
 		    if (filePath[1] == m.name)
 		      {
 			found = true;
-			nope::log::Log(Debug) << "Found requested map";
+			nope::log::Log(Debug)
+			    << "Found requested map [NetworkConnect]";
 
 			if (filePath.size() > 2)
 			  {
@@ -244,12 +250,14 @@ namespace core
 			    // Check if key exist
 			    if (it != m.md5.end())
 			      {
-				nope::log::Log(Debug) << "File is knowned.";
+				nope::log::Log(Debug)
+				    << "File is knowned. [NetworkConnect]";
 				md5Found = m.md5.at(filePath[2]);
 			      }
 			    else
 			      {
-				nope::log::Log(Debug) << "Uknown file !";
+				nope::log::Log(Debug)
+				    << "Uknown file ! [NetworkConnect]";
 				md5Found = "";
 			      }
 			  }
@@ -262,7 +270,8 @@ namespace core
 		if (!found)
 		  {
 		    // TODO: Check if folder exists
-		    nope::log::Log(Debug) << "Didn't find map";
+		    nope::log::Log(Debug)
+		        << "Didn't find map [NetworkConnect]";
 
 		    // Create folder
 		    std::string  folderPath = filePath[0] + "/" + filePath[1];
@@ -294,31 +303,33 @@ namespace core
 		pck << pckContent;
 		if (write(pck) != network::IClient::ClientAction::SUCCESS)
 		  {
-		    nope::log::Log(Error) << "Cannot write";
+		    nope::log::Log(Error) << "Cannot write [NetworkConnect]";
 		    throw std::exception(); // TODO
 		  }
-		nope::log::Log(Debug) << "Sent MD5 response";
+		nope::log::Log(Debug) << "Sent MD5 response [NetworkConnect]";
 	      }
 	  }
 	else if (pckContent.pck.eventType ==
 	         GameClientToGSEvent::VALIDATION_EVENT)
 	  {
-	    nope::log::Log(Debug) << "Received validation event";
+	    nope::log::Log(Debug)
+	        << "Received validation event [NetworkConnect]";
 
 	    if (pckContent.pck.eventData.valid == 1)
 	      {
 		nope::log::Log(Info) << "Files validated.";
 		break;
 	      }
-	    nope::log::Log(Warning) << "Invalid validation event";
+	    nope::log::Log(Warning)
+	        << "Invalid validation event [NetworkConnect]";
 	  }
 	else if (pckContent.pck.eventType == GameClientToGSEvent::FILE_EVENT)
 	  {
-	    nope::log::Log(Debug) << "Received file event";
+	    nope::log::Log(Debug) << "Received file event [NetworkConnect]";
 	    std::uint32_t len = pckContent.pck.eventData.file.len;
 	    std::string   filename(pckContent.pck.eventData.file.name.data());
-	    nope::log::Log(Debug)
-	        << "FileName: " << filename << " | Len: " << len;
+	    nope::log::Log(Debug) << "FileName: " << filename
+	                          << " | Len: " << len << " [NetworkConnect]";
 
 	    // Read file
 	    {
@@ -342,7 +353,7 @@ namespace core
 		  off += static_cast<std::uint32_t>(rc);
 		}
 	      while (off != len);
-	      nope::log::Log(Debug) << "Received file.";
+	      nope::log::Log(Debug) << "Received file. [NetworkConnect]";
 	      std::ofstream outputFile(filename,
 	                               std::ios::binary | std::ios::out |
 	                                   std::ios::trunc);
@@ -351,14 +362,17 @@ namespace core
 		  nope::log::Log(Error) << "Cannot open file " << filename;
 		  throw IOError("Cannot open file " + filename);
 		}
-	      nope::log::Log(Debug) << "Writing to file " << filename;
+	      nope::log::Log(Debug)
+	          << "Writing to file " << filename << " [NetworkConnect]";
 	      outputFile.write(buff.get(), len);
 	      outputFile.close();
-	      nope::log::Log(Debug) << "Closing file" << filename;
+	      nope::log::Log(Debug)
+	          << "Closing file" << filename << " [NetworkConnect]";
 	    }
 
 	    // Notify server it's OK
-	    nope::log::Log(Debug) << "Notifying server.." << filename;
+	    nope::log::Log(Debug)
+	        << "Notifying server.." << filename << " [NetworkConnect]";
 	    pckContent.pck.eventType = GameClientToGSEvent::VALIDATION_EVENT;
 	    nope::log::Log(Debug)
 	        << "Event Type: "
@@ -370,10 +384,12 @@ namespace core
 		nope::log::Log(Error) << "Cannot write";
 		throw std::exception(); // TODO
 	      }
-	    nope::log::Log(Debug) << "Send response to server." << filename;
+	    nope::log::Log(Debug) << "Send response to server." << filename
+	                          << " [NetworkConnect]";
 	    nope::log::Log(Info) << "Updating MD5 informations";
 	    Config::getInstance().updateMD5();
-	    nope::log::Log(Debug) << "MD5 informations updated.";
+	    nope::log::Log(Debug)
+	        << "MD5 informations updated. [NetworkConnect]";
 	  }
 	else
 	  {
@@ -382,11 +398,48 @@ namespace core
       }
   }
 
+  void NetworkConnect::setup()
+  {
+    // Start UDP connection
+    network::IClient::ClientAction ret;
+    GameClientToGSPacket           pckContent = {};
+    Packet<GameClientToGSPacket>   pck = {};
+
+// Get UDP server informations -> Port
+
+#if 0
+    // Read validation
+    ret = read(pck);
+    if (ret != network::IClient::ClientAction::SUCCESS)
+      {
+	nope::log::Log(Error) << "Read failed ! [NetworkConnect]";
+	throw std::exception(); // TODO
+      }
+    pck >> pckContent;
+    if (pckContent.pck.eventType != GameClientToGSEvent::VALIDATION_EVENT)
+      {
+	nope::log::Log(Error) << "Invalid event type [NetworkConnect]";
+	throw std::exception(); // TODO
+      }
+#endif
+
+    // Start UDP thread
+    m_game = std::make_unique<NetworkGame>();
+    m_udp = std::thread([&]() {
+      nope::log::Log(Debug) << "Starting UDP thread";
+      m_game->init();
+      m_game->run();
+      nope::log::Log(Debug) << "Stopping UDP thread";
+    });
+
+    // Send information connection
+  }
+
   void NetworkConnect::Tokenize(std::string const &       str,
                                 std::vector<std::string> &tokens,
                                 std::string const &       delimiters)
   {
-
+    // Tokenize a string
     std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
     std::string::size_type pos = str.find_first_of(delimiters, lastPos);
 

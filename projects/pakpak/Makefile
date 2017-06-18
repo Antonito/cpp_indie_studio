@@ -127,7 +127,8 @@ GAME_MENU_FILES=    	GUI.cpp				\
 NETWORK_FILES=		NetworkManager.cpp		\
 			NetworkAuth.cpp			\
 			NetworkGameServer.cpp		\
-			NetworkConnect.cpp
+			NetworkConnect.cpp		\
+			NetworkGame.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 		$(addprefix $(GAME_DIR), $(GAME_FILES))			\
