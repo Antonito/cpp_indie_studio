@@ -16,7 +16,8 @@ namespace game
     };
 
     Menu() = delete;
-    Menu(GameData &data, ILayerStack &layer, core::HUD *hud);
+    Menu(GameData &data, ILayerStack &layer, core::HUD *hud,
+         std::vector<std::unique_ptr<LocalPlayer>> &players);
     Menu(Menu const &) = delete;
     Menu(Menu &&) = delete;
     virtual ~Menu();
@@ -38,11 +39,11 @@ namespace game
                               OIS::MouseButtonID     id);
     virtual bool mouseReleased(OIS::MouseEvent const &me,
                                OIS::MouseButtonID     id);
-  private:
-    bool onResumeClick(CEGUI::EventArgs const &);
-    bool onQuitClick(CEGUI::EventArgs const &);
-    CEGUI::MouseButton convertButton(OIS::MouseButtonID);
 
+  private:
+    bool               onResumeClick(CEGUI::EventArgs const &);
+    bool               onQuitClick(CEGUI::EventArgs const &);
+    CEGUI::MouseButton convertButton(OIS::MouseButtonID);
   };
 }
 

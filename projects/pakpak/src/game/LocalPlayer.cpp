@@ -4,32 +4,50 @@ namespace game
 {
   LocalPlayer::LocalPlayer(Ogre::RenderWindow *win, GameData &g, PlayerData *p,
                            int order, core::SettingsPlayer &settings,
-                           core::HUD *hud, game::ContextGame &contextGame)
+                           core::HUD *hud, game::ContextGame &contextGame,
+                           std::vector<std::unique_ptr<LocalPlayer>> &players,
+                           std::uint8_t nbplayers)
       : m_data(p), m_cameraMode(CameraMode::Top), m_layers(),
         m_currentLayers(), m_cam(nullptr), m_viewport(nullptr), m_rounds(),
         m_settings(settings), m_actions(), m_win(win), m_order(order),
         m_hud(hud), m_contextGame(contextGame)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
-        std::make_unique<Loading>(g, *this, hud);
+        std::make_unique<Loading>(g, *this, hud, players);
     m_layers[static_cast<std::size_t>(GameLayer::PreGame)] =
-        std::make_unique<PreGame>(g, *this, hud);
-    m_layers[static_cast<std::size_t>(GameLayer::InGame)] =
-        std::make_unique<InGame>(g, *this, hud);
+        std::make_unique<PreGame>(g, *this, hud, players);
+    switch (nbplayers)
+      {
+      case (2):
+	m_layers[static_cast<std::size_t>(GameLayer::InGame)] =
+	    std::make_unique<InGame<2>>(g, *this, hud, players);
+	break;
+      case (3):
+	m_layers[static_cast<std::size_t>(GameLayer::InGame)] =
+	    std::make_unique<InGame<3>>(g, *this, hud, players);
+	break;
+      case (4):
+	m_layers[static_cast<std::size_t>(GameLayer::InGame)] =
+	    std::make_unique<InGame<4>>(g, *this, hud, players);
+	break;
+      default:
+	m_layers[static_cast<std::size_t>(GameLayer::InGame)] =
+	    std::make_unique<InGame<1>>(g, *this, hud, players);
+      }
     m_layers[static_cast<std::size_t>(GameLayer::GameGUI)] =
-        std::make_unique<GameGUI>(g, *this, hud);
+        std::make_unique<GameGUI>(g, *this, hud, players);
     m_layers[static_cast<std::size_t>(GameLayer::Spectator)] =
-        std::make_unique<Spectator>(g, *this, hud);
+        std::make_unique<Spectator>(g, *this, hud, players);
     m_layers[static_cast<std::size_t>(GameLayer::SpecGUI)] =
-        std::make_unique<SpecGUI>(g, *this, hud);
+        std::make_unique<SpecGUI>(g, *this, hud, players);
     m_layers[static_cast<std::size_t>(GameLayer::PostGame)] =
-        std::make_unique<PostGame>(g, *this, hud);
+        std::make_unique<PostGame>(g, *this, hud, players);
     m_layers[static_cast<std::size_t>(GameLayer::Score)] =
-        std::make_unique<Score>(g, *this, hud);
+        std::make_unique<Score>(g, *this, hud, players);
     m_layers[static_cast<std::size_t>(GameLayer::Chat)] =
-        std::make_unique<Chat>(g, *this, hud);
+        std::make_unique<Chat>(g, *this, hud, players);
     m_layers[static_cast<std::size_t>(GameLayer::Menu)] =
-        std::make_unique<Menu>(g, *this, hud);
+        std::make_unique<Menu>(g, *this, hud, players);
 
     m_currentLayers.push(m_layers[static_cast<std::size_t>(GameLayer::InGame)]
                              .get()); // TODO: insert LOADING instead
@@ -261,17 +279,17 @@ namespace game
     if (m_layers[static_cast<std::size_t>(GameLayer::Menu)].get() !=
         m_currentLayers.top())
       {
-        if (!Pauser::isPaused())
-        {
-          nope::log::Log(Debug) << "Opening Pause Menu";
-          m_currentLayers.push(
-              m_layers[static_cast<std::size_t>(GameLayer::Menu)].get());
-          m_currentLayers.top()->enable();
-        }
-        else
-        {
-          Pauser::unpause();
-        }
+	if (!Pauser::isPaused())
+	  {
+	    nope::log::Log(Debug) << "Opening Pause Menu";
+	    m_currentLayers.push(
+	        m_layers[static_cast<std::size_t>(GameLayer::Menu)].get());
+	    m_currentLayers.top()->enable();
+	  }
+	else
+	  {
+	    Pauser::unpause();
+	  }
       }
   }
 
@@ -323,5 +341,17 @@ namespace game
   void LocalPlayer::order(int order)
   {
     m_order = order;
+  }
+
+  std::uint32_t LocalPlayer::getSpeed() const
+  {
+    // TODO return car speed
+    return 20;
+  }
+
+  std::uint32_t LocalPlayer::getPosition() const
+  {
+    // TODO return car position
+    return 1;
   }
 }

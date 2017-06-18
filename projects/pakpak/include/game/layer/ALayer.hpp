@@ -11,7 +11,8 @@ namespace game
   {
   public:
     ALayer() = delete;
-    ALayer(GameData &gameData, ILayerStack &layerStack, core::HUD *hud);
+    ALayer(GameData &gameData, ILayerStack &layerStack, core::HUD *hud,
+           std::vector<std::unique_ptr<LocalPlayer>> &players);
     ALayer(ALayer const &) = delete;
     ALayer(ALayer &&) = delete;
     virtual ~ALayer();
@@ -20,9 +21,10 @@ namespace game
     ALayer &operator=(ALayer &&) = delete;
 
   protected:
-    GameData &   m_gameData;
-    ILayerStack &m_layerStack;
-    core::HUD *  m_gui;
+    GameData &                                 m_gameData;
+    ILayerStack &                              m_layerStack;
+    core::HUD *                                m_gui;
+    std::vector<std::unique_ptr<LocalPlayer>> &m_players;
   };
 }
 

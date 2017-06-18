@@ -9,7 +9,8 @@ namespace game
   {
   public:
     Spectator() = delete;
-    Spectator(GameData &data, ILayerStack &layer, core::HUD *hud);
+    Spectator(GameData &data, ILayerStack &layer, core::HUD *hud,
+              std::vector<std::unique_ptr<LocalPlayer>> &players);
     Spectator(Spectator const &) = delete;
     Spectator(Spectator &&) = delete;
     virtual ~Spectator();

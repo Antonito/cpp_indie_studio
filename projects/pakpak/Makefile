@@ -94,7 +94,6 @@ GAME_FILES=		GameData.cpp			\
 GAME_LAYER_FILES=	ALayer.cpp			\
 			Chat.cpp			\
 			GameGUI.cpp			\
-			InGame.cpp			\
 			Loading.cpp			\
 			Menu.cpp			\
 			PostGame.cpp			\

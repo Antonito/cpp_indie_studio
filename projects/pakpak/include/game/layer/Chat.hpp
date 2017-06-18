@@ -9,7 +9,8 @@ namespace game
   {
   public:
     Chat() = delete;
-    Chat(GameData &data, ILayerStack &layer, core::HUD *hud);
+    Chat(GameData &data, ILayerStack &layer, core::HUD *hud,
+         std::vector<std::unique_ptr<LocalPlayer>> &players);
     Chat(Chat const &) = delete;
     Chat(Chat &&) = delete;
     virtual ~Chat();
