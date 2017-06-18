@@ -7,9 +7,9 @@
 namespace core
 {
   MenuScores::MenuScores(menu::MenuManager &menuManager, GUI &gui,
-                         SettingsPlayer &settings)
+                         SettingsPlayer &settings, SoundManager &sound)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
-        m_settings(settings)
+        m_settings(settings), m_sound(sound)
 
   {
   }
@@ -28,40 +28,57 @@ namespace core
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MenuScores::onBackClick, this));
-    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_best_times"))
+
+    m_gui.getRoot()
+        ->getChild("back_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MenuScores::onBackArea, this));
+
+    static_cast<CEGUI::ItemListbox *>(
+        m_gui.getRoot()->getChild("list_best_times"))
         ->setAutoResizeEnabled(1);
-    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_finished_tracks"))
+    static_cast<CEGUI::ItemListbox *>(
+        m_gui.getRoot()->getChild("list_finished_tracks"))
         ->setAutoResizeEnabled(1);
-    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_max_speed"))
+    static_cast<CEGUI::ItemListbox *>(
+        m_gui.getRoot()->getChild("list_max_speed"))
         ->setAutoResizeEnabled(1);
-    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_collision_count"))
+    static_cast<CEGUI::ItemListbox *>(
+        m_gui.getRoot()->getChild("list_collision_count"))
         ->setAutoResizeEnabled(1);
-    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_total_km"))
+    static_cast<CEGUI::ItemListbox *>(
+        m_gui.getRoot()->getChild("list_total_km"))
         ->setAutoResizeEnabled(1);
-    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_best_times"))
+    static_cast<CEGUI::ItemListbox *>(
+        m_gui.getRoot()->getChild("list_best_times"))
         ->disable();
-    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_finished_tracks"))
+    static_cast<CEGUI::ItemListbox *>(
+        m_gui.getRoot()->getChild("list_finished_tracks"))
         ->disable();
-    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_max_speed"))
+    static_cast<CEGUI::ItemListbox *>(
+        m_gui.getRoot()->getChild("list_max_speed"))
         ->disable();
-    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_collision_count"))
+    static_cast<CEGUI::ItemListbox *>(
+        m_gui.getRoot()->getChild("list_collision_count"))
         ->disable();
-    ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_total_km"))
+    static_cast<CEGUI::ItemListbox *>(
+        m_gui.getRoot()->getChild("list_total_km"))
         ->disable();
     CEGUI::WindowManager *winManager = CEGUI::WindowManager::getSingletonPtr();
 
     for (std::int32_t i = 0; i < 10; ++i)
       {
-	CEGUI::ItemEntry *itm = (CEGUI::ItemEntry *)winManager->createWindow(
-	    "TaharezLook/ListboxItem");
-	CEGUI::ItemEntry *itm2 = (CEGUI::ItemEntry *)winManager->createWindow(
-	    "TaharezLook/ListboxItem");
-	CEGUI::ItemEntry *itm3 = (CEGUI::ItemEntry *)winManager->createWindow(
-	    "TaharezLook/ListboxItem");
-	CEGUI::ItemEntry *itm4 = (CEGUI::ItemEntry *)winManager->createWindow(
-	    "TaharezLook/ListboxItem");
-	CEGUI::ItemEntry *itm5 = (CEGUI::ItemEntry *)winManager->createWindow(
-	    "TaharezLook/ListboxItem");
+	CEGUI::ItemEntry *itm = static_cast<CEGUI::ItemEntry *>(
+	    winManager->createWindow("TaharezLook/ListboxItem"));
+	CEGUI::ItemEntry *itm2 = static_cast<CEGUI::ItemEntry *>(
+	    winManager->createWindow("TaharezLook/ListboxItem"));
+	CEGUI::ItemEntry *itm3 = static_cast<CEGUI::ItemEntry *>(
+	    winManager->createWindow("TaharezLook/ListboxItem"));
+	CEGUI::ItemEntry *itm4 = static_cast<CEGUI::ItemEntry *>(
+	    winManager->createWindow("TaharezLook/ListboxItem"));
+	CEGUI::ItemEntry *itm5 = static_cast<CEGUI::ItemEntry *>(
+	    winManager->createWindow("TaharezLook/ListboxItem"));
 
 	itm->setText(
 	    "Place " + std::to_string(i + 1) + " : " +
@@ -84,38 +101,43 @@ namespace core
 	    std::to_string(m_settings.m_data[0].getData().s_trackFinished[i]) +
 	    " track finished");
 
-	((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_best_times"))
+	static_cast<CEGUI::ItemListbox *>(
+	    m_gui.getRoot()->getChild("list_best_times"))
 	    ->addItem(itm);
-	((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
-	     "list_collision_count"))
+	static_cast<CEGUI::ItemListbox *>(
+	    m_gui.getRoot()->getChild("list_collision_count"))
 	    ->addItem(itm2);
-	((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_max_speed"))
+	static_cast<CEGUI::ItemListbox *>(
+	    m_gui.getRoot()->getChild("list_max_speed"))
 	    ->addItem(itm3);
-	((CEGUI::ItemListbox *)m_gui.getRoot()->getChild("list_total_km"))
+	static_cast<CEGUI::ItemListbox *>(
+	    m_gui.getRoot()->getChild("list_total_km"))
 	    ->addItem(itm4);
-	((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
-	     "list_finished_tracks"))
+	static_cast<CEGUI::ItemListbox *>(
+	    m_gui.getRoot()->getChild("list_finished_tracks"))
 	    ->addItem(itm5);
       }
     nope::log::Log(Debug) << "Nb Item of best_times : "
-                          << ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
-                                  "list_best_times"))
+                          << static_cast<CEGUI::ItemListbox *>(
+                                 m_gui.getRoot()->getChild("list_best_times"))
                                  ->getItemCount();
     nope::log::Log(Debug) << "Nb Item of best_times : "
-                          << ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
-                                  "list_finished_tracks"))
+                          << static_cast<CEGUI::ItemListbox *>(
+                                 m_gui.getRoot()->getChild(
+                                     "list_finished_tracks"))
                                  ->getItemCount();
     nope::log::Log(Debug) << "Nb Item of best_times : "
-                          << ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
-                                  "list_max_speed"))
+                          << static_cast<CEGUI::ItemListbox *>(
+                                 m_gui.getRoot()->getChild("list_max_speed"))
                                  ->getItemCount();
     nope::log::Log(Debug) << "Nb Item of best_times : "
-                          << ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
-                                  "list_collision_count"))
+                          << static_cast<CEGUI::ItemListbox *>(
+                                 m_gui.getRoot()->getChild(
+                                     "list_collision_count"))
                                  ->getItemCount();
     nope::log::Log(Debug) << "Nb Item of best_times : "
-                          << ((CEGUI::ItemListbox *)m_gui.getRoot()->getChild(
-                                  "list_total_km"))
+                          << static_cast<CEGUI::ItemListbox *>(
+                                 m_gui.getRoot()->getChild("list_total_km"))
                                  ->getItemCount();
   }
 
@@ -198,8 +220,27 @@ namespace core
 
   bool MenuScores::onBackClick(CEGUI::EventArgs const &)
   {
+    soundClick();
     m_menuManager.popLayer();
     m_menuManager.begin();
     return false;
+  }
+
+  bool MenuScores::onBackArea(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return false;
+  }
+
+  void MenuScores::soundPass()
+  {
+    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
+    m_sound.playSound();
+  }
+
+  void MenuScores::soundClick()
+  {
+    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
+    m_sound.playSound();
   }
 }

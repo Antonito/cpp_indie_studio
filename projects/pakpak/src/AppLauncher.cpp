@@ -2,7 +2,6 @@
 #import <Cocoa/Cocoa.h>
 #endif
 #include "pakpak_stdafx.hpp"
-#include "AppLauncher.hpp"
 
 // Disable clang warning for templated class padding
 #if defined(__clang__)
@@ -16,7 +15,7 @@ namespace core
   AppLauncher::AppLauncher()
       : m_root(nullptr), m_window(nullptr), m_inputListener(nullptr),
         m_contexts(), m_currentContext(nullptr), m_gameState(GameState::None),
-        m_settings(), m_soundManager()
+        m_settings(), m_soundManager(), m_network()
   {
   }
 
@@ -31,7 +30,7 @@ namespace core
     // Create the Root
 
     std::string ogreLog = "Ogre.log";
-    std::string confFolder = "../indie_resource/conf/";
+    std::string confFolder = "./deps/indie_resource/conf/";
 #ifdef DEBUG
     std::string plugin = "plugins_d.cfg";
     std::string ogreFile = "ogre_d.cfg";
@@ -56,9 +55,9 @@ namespace core
     // Load Ressource config file
     Ogre::ConfigFile configFile;
 #ifdef DEBUG
-    configFile.load("../indie_resource/conf/resources_d.cfg");
+    configFile.load("./deps/indie_resource/conf/resources_d.cfg");
 #else
-    configFile.load("../indie_resource/conf/resources.cfg");
+    configFile.load("./deps/indie_resource/conf/resources.cfg");
 #endif // !DEBUG
 
     // Load all the Ressources
@@ -105,7 +104,6 @@ namespace core
     m_window->removeAllViewports();
 
     initOpenAl(NULL);
-
     //// Create the Scene Manager
     // m_sceneMgr =
     //    m_root->createSceneManager("DefaultSceneManager", "Mon Scene
@@ -139,12 +137,13 @@ namespace core
 
     // Splash context
     m_contexts[static_cast<std::size_t>(GameState::Splash)] =
-        std::make_unique<splash::ContextSplash>(m_window, m_inputListener);
+        std::make_unique<splash::ContextSplash>(m_window, m_inputListener,
+                                                m_soundManager);
 
     // Menu context
     m_contexts[static_cast<std::size_t>(GameState::Menu)] =
-        std::make_unique<menu::ContextMenu>(m_window, m_inputListener,
-                                            m_settings);
+        std::make_unique<menu::ContextMenu>(
+            m_window, m_inputListener, m_settings, m_soundManager, m_network);
 
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
@@ -155,10 +154,11 @@ namespace core
         m_contexts[static_cast<std::size_t>(GameState::Splash)].get();
 
     m_currentContext->enable();
+    resizer::AssetResizer::initResizer(m_window->getWidth(),
+                                       m_window->getHeight());
 
-    m_soundManager.loadSound("deps/indie_resource/songs/theme.wav");
-    m_soundManager.playSound();
-    m_soundManager.loopSound();
+    // Render Loop
+    m_gameState = m_currentContext->update();
     while (true)
       {
 	GameState state;
@@ -176,6 +176,18 @@ namespace core
 
 	if (m_window->isClosed())
 	  return false;
+
+	// Update Window Size
+
+	CEGUI::Size<float> sizef;
+	sizef.d_height = static_cast<float>(m_window->getHeight());
+	sizef.d_width = static_cast<float>(m_window->getWidth());
+	if (resizer::AssetResizer::hasWindowResized(*m_window))
+	  {
+	    nope::log::Log(Debug) << "Resizing W: " << sizef.d_width
+	                          << " H: " << sizef.d_height;
+	    CEGUI::System::getSingleton().notifyDisplaySizeChanged(sizef);
+	  }
 
 	// Update game logic
 	state = m_currentContext->update();
@@ -201,9 +213,6 @@ namespace core
 
 	if (!m_root->renderOneFrame())
 	  return false;
-	m_soundManager.state();
-	if (m_soundManager.getState() != AL_PLAYING)
-	  m_soundManager.clear();
       }
     return true;
   }

@@ -11,9 +11,12 @@
 #else
 #include <OIS/OIS.h>
 #endif
+#include "SoundManager.hpp"
 #include "FastStack.hpp"
 #include "IMenuLayer.hpp"
 #include "IEventHandler.hpp"
+#include "SettingsPlayer.hpp"
+#include "GUI.hpp"
 #include "ILayerStack.hpp"
 #include "InputListener.hpp"
 
@@ -23,13 +26,12 @@ namespace menu
   {
   public:
     explicit MenuManager(Ogre::RenderWindow *  win,
-                         core::SettingsPlayer &settings);
+                         core::SettingsPlayer &settings,
+                         core::SoundManager &sound, core::NetworkManager &net);
+
     MenuManager(MenuManager const &) = delete;
     MenuManager(MenuManager &&) = delete;
-    virtual ~MenuManager()
-    {
-    }
-
+    virtual ~MenuManager();
     MenuManager &operator=(MenuManager &) = delete;
     MenuManager &operator=(MenuManager &&) = delete;
     bool keyPressed(OIS::KeyEvent const &ke);
@@ -37,6 +39,7 @@ namespace menu
     bool mouseMoved(OIS::MouseEvent const &me);
     bool mousePressed(OIS::MouseEvent const &me, OIS::MouseButtonID id);
     bool mouseReleased(OIS::MouseEvent const &me, OIS::MouseButtonID id);
+    void              update();
     void              push(core::MenuState);
     void              popLayer();
     void              begin();

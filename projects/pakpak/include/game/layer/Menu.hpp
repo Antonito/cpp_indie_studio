@@ -8,8 +8,15 @@ namespace game
   class Menu final : public ALayer
   {
   public:
+    enum BUTTONS
+    {
+      PAUSE_SETTINGS,
+      PAUSE_RESUME,
+      PAUSE_QUIT
+    };
+
     Menu() = delete;
-    Menu(GameData &data, ILayerStack &layer);
+    Menu(GameData &data, ILayerStack &layer, core::HUD *hud);
     Menu(Menu const &) = delete;
     Menu(Menu &&) = delete;
     virtual ~Menu();
@@ -31,8 +38,11 @@ namespace game
                               OIS::MouseButtonID     id);
     virtual bool mouseReleased(OIS::MouseEvent const &me,
                                OIS::MouseButtonID     id);
-
   private:
+    bool onResumeClick(CEGUI::EventArgs const &);
+    bool onQuitClick(CEGUI::EventArgs const &);
+    CEGUI::MouseButton convertButton(OIS::MouseButtonID);
+
   };
 }
 

@@ -6,10 +6,13 @@
 
 namespace core
 {
-  MenuMultiplayer::MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui)
-      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager)
+  MenuMultiplayer::MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui,
+                                   SoundManager &sound, NetworkManager &net)
+      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
+        m_sound(sound), m_selectGameServer(), m_network(net)
 
   {
+    nope::log::Log(Debug) << "Building MenuMultiplayer";
   }
 
   void MenuMultiplayer::draw()
@@ -18,8 +21,46 @@ namespace core
 
   void MenuMultiplayer::entry()
   {
+    nope::log::Log(Debug) << "Entering MenuMultiplayer";
+
     m_gui.loadLayout("multiplayer.layout");
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
+
+    m_network.authenticate();
+    std::vector<GameServer> gameServerList = m_network.getServerList();
+
+    nope::log::Log(Debug) << "Server list OKAY";
+
+    static_cast<CEGUI::ItemListbox *>(
+        m_gui.getRoot()->getChild("servers_list"))
+        ->setAutoResizeEnabled(1);
+    std::int32_t i(0);
+    nope::log::Log(Debug) << "Entry on MultiMenu";
+    CEGUI::WindowManager *winManager = CEGUI::WindowManager::getSingletonPtr();
+    for (GameServer &game : gameServerList)
+      {
+	nope::log::Log(Debug)
+	    << "List server : "
+	    << "Server #" + std::to_string(i + 1) + " : " + game.address +
+	           " Player : (" + std::to_string(game.clients) + "/" +
+	           std::to_string(game.maxClients) + ").";
+	nope::log::Log(Info) << "Server: " << game.address << ":" << game.port
+	                     << " [ " << game.clients << " / "
+	                     << game.maxClients << " ]";
+	CEGUI::ItemEntry *itm = static_cast<CEGUI::ItemEntry *>(
+	    winManager->createWindow("TaharezLook/ListboxItem"));
+	itm->setText("Server #" + std::to_string(i + 1) + " : " +
+	             game.address + " Player : (" +
+	             std::to_string(game.clients) + "/" +
+	             std::to_string(game.maxClients) + ").");
+	static_cast<CEGUI::ItemListbox *>(
+	    m_gui.getRoot()->getChild("servers_list"))
+	    ->addItem(itm);
+	i++;
+      }
+    // TODO Benjamin
+    // TODO Arthur
+    // -> Display game server list, using informations from gameServerList
 
     m_gui.getRoot()
         ->getChild("back_button")
@@ -28,18 +69,41 @@ namespace core
             CEGUI::Event::Subscriber(&MenuMultiplayer::onBackClick, this));
 
     m_gui.getRoot()
+        ->getChild("back_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MenuMultiplayer::onBackArea, this));
+
+    m_gui.getRoot()
         ->getChild("launch_button")
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MenuMultiplayer::onPlayClick, this));
+
+    m_gui.getRoot()
+        ->getChild("launch_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MenuMultiplayer::onPlayArea, this));
+
+    m_gui.getRoot()
+        ->getChild("servers_list")
+        ->subscribeEvent(
+            CEGUI::ItemListbox::EventSelectionChanged,
+            CEGUI::Event::Subscriber(&MenuMultiplayer::getServerPos, this));
   }
 
   void MenuMultiplayer::exit()
   {
+    m_network.deauthenticate();
+    // GameServer if connected
+    nope::log::Log(Debug) << "Exit MenuMultiplayer";
   }
 
   void MenuMultiplayer::destroy()
   {
+    exit();
+    nope::log::Log(Debug) << "Destroying MenuMultiplayer";
   }
 
   GameState MenuMultiplayer::update() const
@@ -49,6 +113,7 @@ namespace core
 
   void MenuMultiplayer::build()
   {
+    nope::log::Log(Debug) << "Building MenuMultiplayer";
   }
 
   bool MenuMultiplayer::keyPressed(const OIS::KeyEvent &arg)
@@ -114,6 +179,8 @@ namespace core
 
   bool MenuMultiplayer::onBackClick(CEGUI::EventArgs const &)
   {
+    soundClick();
+    exit();
     m_menuManager.popLayer();
     m_menuManager.begin();
     return false;
@@ -121,8 +188,70 @@ namespace core
 
   bool MenuMultiplayer::onPlayClick(CEGUI::EventArgs const &)
   {
+    soundClick();
+
+    // Get token from gameServer
+    try
+      {
+	std::string const &token = m_network.getToken(m_selectGameServer);
+	// Connect to game server
+	m_network.connect(m_selectGameServer, token);
+      }
+    catch (...)
+      {
+	nope::log::Log(Debug)
+	    << "\n======================================================\n=="
+	       "Error cannot connect to the ConnectServerManager "
+	       "!==\n======================================================";
+	// TODO: Remplace by a Error popUp
+
+	return true;
+      }
+    nope::log::Log(Debug) << "CONNECT TO GAME_SERVER CLEAN";
     m_curState = GameState::InGame;
     m_gui.hideCursor();
+    return true;
+  }
+
+  void MenuMultiplayer::soundPass()
+  {
+    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
+    m_sound.playSound();
+  }
+
+  void MenuMultiplayer::soundClick()
+  {
+    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
+    m_sound.playSound();
+  }
+
+  bool MenuMultiplayer::onBackArea(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MenuMultiplayer::onPlayArea(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MenuMultiplayer::getServerPos(CEGUI::EventArgs const &)
+  {
+
+    if (static_cast<CEGUI::ItemListbox *>(
+            m_gui.getRoot()->getChild("servers_list"))
+            ->getFirstSelectedItem() != NULL)
+      {
+	nope::log::Log(Debug) << "Select a specific server network";
+	m_selectGameServer =
+	    m_network
+	        .getServerList()[static_cast<CEGUI::ItemListbox *>(
+	                             m_gui.getRoot()->getChild("servers_list"))
+	                             ->getFirstSelectedItem()
+	                             ->getZIndex()];
+      }
     return true;
   }
 }

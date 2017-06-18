@@ -10,8 +10,10 @@ LOCAL_COMP_FLAGS=
 LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
 			-L $(ROOT_DIR)/build/ -l indie_logger 	\
 			-l CEGUIBase-0 -l CEGUIOgreRenderer-0 	\
-			-l indie_exceptions			\
+			-l indie_network -lindie_ini		\
+			-l indie_packet				\
 			-l indie_crypto -l sndfile		\
+			-l indie_exceptions			\
 			-l BulletDynamics -l BulletCollision	\
 			-l OgreBulletDynamics			\
 			-l OgreBulletCollisions			\
@@ -20,7 +22,7 @@ LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
 ifeq ($(shell uname -s),Darwin)
 LOCAL_COMP_FLAGS+=	-x objective-c++
 LOCAL_LINK_FLAGS+=	-ObjC++ -framework Cocoa -framework Carbon -framework OpenAL
-else 
+else
 LOCAL_LINK_FLAGS+=	-lopenal
 endif
 
@@ -52,6 +54,8 @@ GAME_TOOLS_DIR=	$(GAME_DIR)tools/
 
 GAME_MENU_DIR=  $(GAME_DIR)menu/
 
+NETWORK_DIR=	$(SRC_DIR)network/
+
 INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)		\
@@ -60,7 +64,8 @@ DIR_LIST=	$(SRC_DIR)		\
 		$(GAME_CAR_DIR)		\
 		$(GAME_TOOLS_DIR)	\
 		$(GAME_MAP_DIR)     	\
-	        $(GAME_MENU_DIR)
+	        $(GAME_MENU_DIR)	\
+		$(NETWORK_DIR)
 
 ifeq ($(shell uname -s),Darwin)
 HEADER=
@@ -77,9 +82,10 @@ SRC_FILES=		main.cpp			\
 			AContext.cpp			\
 			ContextGame.cpp			\
 			SettingsPlayer.cpp		\
-			SoundManager.cpp        \
-			SaveData.cpp            \
-			ContextSplash.cpp
+			SoundManager.cpp		\
+			SaveData.cpp			\
+			ContextSplash.cpp		\
+			Config.cpp
 
 GAME_FILES=		GameData.cpp			\
 			LocalPlayer.cpp			\
@@ -95,7 +101,9 @@ GAME_LAYER_FILES=	ALayer.cpp			\
 			PreGame.cpp			\
 			Score.cpp			\
 			SpecGUI.cpp			\
-			Spectator.cpp
+			Spectator.cpp			\
+			HUD.cpp				\
+			Pauser.cpp
 
 GAME_CAR_FILES=		ACar.cpp			\
 			EmptyCar.cpp
@@ -116,7 +124,14 @@ GAME_MENU_FILES=    	GUI.cpp				\
 			AssetSetter.cpp			\
 			MenuScores.cpp			\
 			InGameHUD.cpp			\
-			InGamePause.cpp
+			InGamePause.cpp			\
+			AssetResizer.cpp		\
+			Dim.cpp
+
+NETWORK_FILES=		NetworkManager.cpp		\
+			NetworkAuth.cpp			\
+			NetworkGameServer.cpp		\
+			NetworkConnect.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 		$(addprefix $(GAME_DIR), $(GAME_FILES))			\
@@ -124,13 +139,18 @@ SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 		$(addprefix $(GAME_CAR_DIR), $(GAME_CAR_FILES))		\
 		$(addprefix $(GAME_TOOLS_DIR), $(GAME_TOOLS_FILES))	\
 		$(addprefix $(GAME_MAP_DIR), $(GAME_MAP_FILES))     	\
-		$(addprefix $(GAME_MENU_DIR), $(GAME_MENU_FILES))
+		$(addprefix $(GAME_MENU_DIR), $(GAME_MENU_FILES))	\
+		$(addprefix $(NETWORK_DIR), $(NETWORK_FILES))
 
-INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)		\
+
+INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)			\
 		$(ROOT_DIR)/libs/serializer/include/			\
 		$(ROOT_DIR)/libs/logger/include/			\
 		$(ROOT_DIR)/libs/exceptions/include/			\
 		$(ROOT_DIR)/libs/crypto/include/			\
+		$(ROOT_DIR)/libs/network/include/			\
+		$(ROOT_DIR)/libs/packet/include/			\
+		$(ROOT_DIR)/libs/ini/include/				\
 		/usr/include/OgreBullet/Dynamics 			\
 		/usr/include/OgreBullet/Collisions 			\
 		/usr/local/include/OgreBullet/Dynamics 			\

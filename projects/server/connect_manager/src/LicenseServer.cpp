@@ -248,7 +248,7 @@ void LicenseServer::_loop()
 		      break;
 		    }
 		  arr[static_cast<std::size_t>(readVal)] = '\0';
-		  std::cout << std::string(arr.data()) << std::endl;
+                  nope::log::Log(Debug) << "std::string(arr.data())";
 		  loadLicenses();
 		}
 	      else

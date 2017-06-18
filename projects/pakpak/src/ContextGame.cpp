@@ -5,7 +5,7 @@ namespace game
   ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
                            core::SettingsPlayer &settings)
       : core::AContext(win, input), m_game(), m_players(),
-        m_settings(settings), m_quit(false)
+        m_settings(settings), m_quit(false), m_hud(nullptr)
   {
   }
 
@@ -15,6 +15,7 @@ namespace game
 
   void ContextGame::enable()
   {
+    Pauser::unpause();
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
     m_quit = false;
@@ -24,7 +25,7 @@ namespace game
     m_game.setPlayerNb(0);
     m_game.setPlayerNb(nbPlayer);
 
-    std::size_t nbLocalPlayer = 2;
+    std::size_t nbLocalPlayer = 1;
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
@@ -32,13 +33,18 @@ namespace game
 	    std::make_unique<EmptyCar>(m_game, Ogre::Vector3(0, 10, 100 * i),
 	                               Ogre::Quaternion::IDENTITY));
       }
+    if (m_players.size() < 2)
+      {
+	nope::log::Log(Debug) << "Creating HUD";
+	m_hud = std::make_unique<core::HUD>();
+      }
 
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
 	m_players.emplace_back(std::make_unique<LocalPlayer>(
-	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings));
+	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
+	    m_hud.get(), *this));
       }
-
     updateViewPort();
 
     m_input->setPhysicWorld(m_game.physicWorld());
@@ -76,6 +82,7 @@ namespace game
   {
     m_input->capture();
     m_game.update();
+    m_quit = m_hud->getQuit();
     return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }
 
@@ -85,20 +92,14 @@ namespace game
 
   bool ContextGame::keyPressed(OIS::KeyEvent const &ke)
   {
-    if (ke.key == OIS::KC_ESCAPE)
-      {
-	m_quit = true;
-      }
-
     std::size_t i = 0;
     for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
-	std::cout << "		Pressed for player " << i << std::endl;
-
+	nope::log::Log(Debug) << "\t\tPressed for player " << i;
 	p->keyPressed(ke);
 	++i;
       }
-    std::cout << std::endl;
+    nope::log::Log(Debug) << "\n";
     return (true);
   }
 
@@ -138,5 +139,10 @@ namespace game
 	p->mouseReleased(me, id);
       }
     return (true);
+  }
+
+  void ContextGame::setQuit(bool quit)
+  {
+    m_quit = quit;
   }
 }

@@ -9,7 +9,7 @@ namespace game
   {
   public:
     Chat() = delete;
-    Chat(GameData &data, ILayerStack &layer);
+    Chat(GameData &data, ILayerStack &layer, core::HUD *hud);
     Chat(Chat const &) = delete;
     Chat(Chat &&) = delete;
     virtual ~Chat();

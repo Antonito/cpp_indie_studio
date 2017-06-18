@@ -6,6 +6,65 @@
 
 namespace menu
 {
+  MenuManager::MenuManager(Ogre::RenderWindow *  win,
+                           core::SettingsPlayer &settings,
+                           core::SoundManager &  sound,
+                           core::NetworkManager &net)
+      : m_sceneMan(Ogre::Root::getSingleton().createSceneManager(
+            "DefaultSceneManager", "Menu scene manager")),
+        m_camera(m_sceneMan->createCamera("MenuCamera")), m_viewport(nullptr),
+        m_gui(win), m_menuLayer({}), m_layers({})
+  {
+    m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)] =
+        std::make_unique<core::MainMenu>(*this, m_gui, sound);
+    m_menuLayer[static_cast<size_t>(core::MenuState::Option)] =
+        std::make_unique<core::MenuOptions>(*this, m_gui, sound);
+    m_menuLayer[static_cast<size_t>(core::MenuState::Keymap)] =
+        std::make_unique<core::MenuKeymap>(*this, m_gui, settings, sound);
+    m_menuLayer[static_cast<size_t>(core::MenuState::SoloPlayerGame)] =
+        std::make_unique<core::MenuSolo>(*this, m_gui, sound);
+    m_menuLayer[static_cast<size_t>(core::MenuState::MultiPlayerGame)] =
+        std::make_unique<core::MenuMultiplayer>(*this, m_gui, sound, net);
+    m_menuLayer[static_cast<size_t>(core::MenuState::Score)] =
+        std::make_unique<core::MenuScores>(*this, m_gui, settings, sound);
+
+    m_layers.push(
+        m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)].get());
+
+    // TODO: rm
+    static_cast<void>(win);
+    static_cast<void>(m_viewport);
+  }
+
+  void MenuManager::begin()
+  {
+    if (!m_layers.size())
+      {
+	m_gui.setCursorArrow("TaharezLook/MouseArrow");
+	m_gui.hideCursor(false);
+	m_layers.push(
+	    m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)].get());
+      }
+    m_layers[m_layers.size() - 1]->entry();
+  }
+
+  void MenuManager::end()
+  {
+    std::size_t size = m_layers.size();
+
+    while (size > 0)
+      {
+	m_layers[size - 1]->destroy();
+	m_layers.pop();
+	--size;
+      }
+  }
+
+  core::IMenuLayer *MenuManager::getMenuLayer()
+  {
+    return m_layers[m_layers.size() - 1];
+  }
+
   bool MenuManager::keyPressed(OIS::KeyEvent const &ke)
   {
     for (std::size_t l_i = m_layers.size(); l_i > 0; --l_i)
@@ -68,60 +127,12 @@ namespace menu
     m_layers.pop();
   }
 
-  MenuManager::MenuManager(Ogre::RenderWindow *  win,
-                           core::SettingsPlayer &settings)
-      : m_sceneMan(Ogre::Root::getSingleton().createSceneManager(
-            "DefaultSceneManager", "Menu scene manager")),
-        m_camera(m_sceneMan->createCamera("MenuCamera")), m_viewport(nullptr),
-        m_gui(), m_menuLayer({}), m_layers({})
+  void MenuManager::update()
   {
-    m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)] =
-        std::make_unique<core::MainMenu>(*this, m_gui);
-    m_menuLayer[static_cast<size_t>(core::MenuState::Option)] =
-        std::make_unique<core::MenuOptions>(*this, m_gui);
-    m_menuLayer[static_cast<size_t>(core::MenuState::Keymap)] =
-        std::make_unique<core::MenuKeymap>(*this, m_gui, settings);
-    m_menuLayer[static_cast<size_t>(core::MenuState::SoloPlayerGame)] =
-        std::make_unique<core::MenuSolo>(*this, m_gui);
-    m_menuLayer[static_cast<size_t>(core::MenuState::MultiPlayerGame)] =
-        std::make_unique<core::MenuMultiplayer>(*this, m_gui);
-    m_menuLayer[static_cast<size_t>(core::MenuState::Score)] =
-        std::make_unique<core::MenuScores>(*this, m_gui, settings);
-
-    m_layers.push(
-        m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)].get());
-
-    // TODO: rm
-    static_cast<void>(win);
-    static_cast<void>(m_viewport);
+    m_gui.update();
   }
 
-  void MenuManager::begin()
+  MenuManager::~MenuManager()
   {
-    if (!m_layers.size())
-      {
-	m_gui.setCursorArrow("TaharezLook/MouseArrow");
-	m_gui.hideCursor(false);
-	m_layers.push(
-	    m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)].get());
-      }
-    m_layers[m_layers.size() - 1]->entry();
-  }
-
-  void MenuManager::end()
-  {
-    std::size_t size = m_layers.size();
-
-    while (size > 0)
-      {
-	m_layers[size - 1]->destroy();
-	m_layers.pop();
-	--size;
-      }
-  }
-
-  core::IMenuLayer *MenuManager::getMenuLayer()
-  {
-    return m_layers[m_layers.size() - 1];
   }
 }

@@ -12,6 +12,8 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 #endif
+
+#include <vector>
 #include <sndfile.h>
 #include <iostream>
 #include <vector>
@@ -23,39 +25,60 @@
 #pragma clang diagnostic ignored "-Wpadded"
 #endif
 
-class SoundManager
+namespace core
 {
-public:
-  SoundManager();
-  SoundManager(SoundManager const &);
-  ~SoundManager();
-  SoundManager &operator=(SoundManager &);
-  void          initOpenAl(char const *);
-  void          shutdownOpenAl();
+  class SoundManager
+  {
+  public:
+    SoundManager();
 
-  void   playSound();
-  void   pauseSound();
-  void   stopSound();
-  void   loopSound();
-  void   upVolume(float);
-  void   downVolume(float);
-  void   state();
-  ALint  getState() const;
-  ALuint getSource() const;
-  void   setPosition(float, float, float);
-  void   setOrientation(float, float, float);
-  void   loadSound(std::string const &);
-  void   clear();
-  void   getInfoLectureSound() const;
+    SoundManager(SoundManager const &);
 
-private:
-  ALCdevice * m_device;
-  ALCcontext *m_context;
-  ALuint      m_buffer;
-  ALuint      m_source;
-  ALint       m_state;
-};
+    ~SoundManager();
 
+    SoundManager &operator=(SoundManager &);
+
+    void initOpenAl(char const *);
+
+    void shutdownOpenAl();
+
+    void playSound();
+
+    void pauseSound();
+
+    void stopSound();
+
+    void loopSound();
+
+    void setVolume(float);
+
+    void state();
+
+    ALint getState() const;
+
+    ALuint getSource(std::size_t const idx) const;
+
+    void setPosition(float, float, float);
+
+    void setOrientation(float, float, float);
+
+    ALfloat getVolume() const;
+
+    void loadSound(std::string const &);
+
+    void clear();
+
+    void getInfoLectureSound(std::size_t const idx) const;
+
+  private:
+    ALCdevice *         m_device;
+    ALCcontext *        m_context;
+    std::vector<ALuint> m_buffer;
+    std::vector<ALuint> m_source;
+    ALint               m_state;
+    ALfloat             m_volume;
+  };
+}
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif

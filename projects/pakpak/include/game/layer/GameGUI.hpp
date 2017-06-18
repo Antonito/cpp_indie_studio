@@ -10,7 +10,7 @@ namespace game
   {
   public:
     GameGUI() = delete;
-    GameGUI(GameData &data, LocalPlayer &layer);
+    GameGUI(GameData &data, LocalPlayer &layer, core::HUD *hud);
     GameGUI(GameGUI const &) = delete;
     GameGUI(GameGUI &&) = delete;
     virtual ~GameGUI();

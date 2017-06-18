@@ -2,8 +2,10 @@
 
 namespace core
 {
-  MainMenu::MainMenu(menu::MenuManager &menuManager, GUI &gui)
-      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager)
+  MainMenu::MainMenu(menu::MenuManager &menuManager, GUI &gui,
+                     SoundManager &sound)
+      : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
+        m_sound(sound)
   {
   }
 
@@ -21,26 +23,56 @@ namespace core
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MainMenu::onExitClick, this));
+
+    m_gui.getRoot()
+        ->getChild("quit_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MainMenu::onExitArea, this));
+
     m_gui.getRoot()
         ->getChild("play_button")
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MainMenu::onSoloClick, this));
+
+    m_gui.getRoot()
+        ->getChild("play_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MainMenu::onSoloArea, this));
+
     m_gui.getRoot()
         ->getChild("options_button")
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MainMenu::onOptionClick, this));
 
+    m_gui.getRoot()
+        ->getChild("options_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MainMenu::onOptionArea, this));
+
     m_gui.getRoot()->getChild("multi")->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MainMenu::onMultiClick, this));
+
+    m_gui.getRoot()->getChild("multi")->subscribeEvent(
+        CEGUI::PushButton::EventMouseEntersArea,
+        CEGUI::Event::Subscriber(&MainMenu::onMultiArea, this));
 
     m_gui.getRoot()
         ->getChild("stats_button")
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
             CEGUI::Event::Subscriber(&MainMenu::onScoreClick, this));
+
+    m_gui.getRoot()
+        ->getChild("stats_button")
+        ->subscribeEvent(
+            CEGUI::PushButton::EventMouseEntersArea,
+            CEGUI::Event::Subscriber(&MainMenu::onScoreArea, this));
 
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
   }
@@ -129,6 +161,7 @@ namespace core
 
   bool MainMenu::onOptionClick(CEGUI::EventArgs const &)
   {
+    soundClick();
     m_menuManager.push(MenuState::Option);
     m_menuManager.begin();
     return true;
@@ -136,12 +169,14 @@ namespace core
 
   bool MainMenu::onExitClick(CEGUI::EventArgs const &)
   {
+    soundClick();
     m_curState = GameState::Quit;
     return true;
   }
 
   bool MainMenu::onSoloClick(CEGUI::EventArgs const &)
   {
+    soundClick();
     m_menuManager.push(MenuState::SoloPlayerGame);
     m_menuManager.begin();
     return true;
@@ -149,15 +184,73 @@ namespace core
 
   bool MainMenu::onMultiClick(CEGUI::EventArgs const &)
   {
-    m_menuManager.push(MenuState::MultiPlayerGame);
-    m_menuManager.begin();
+    soundClick();
+    try
+      {
+	m_menuManager.push(MenuState::MultiPlayerGame);
+	m_menuManager.begin();
+      }
+    catch (...)
+      {
+	nope::log::Log(Debug)
+	    << "\n======================================================\n=="
+	       "Error cannot connect to the ConnectServerManager "
+	       "!==\n======================================================";
+      //TODO: Remplace by a Error popUp
+          m_menuManager.popLayer();
+          m_menuManager.begin();
+          return true;
+      }
     return true;
   }
 
   bool MainMenu::onScoreClick(CEGUI::EventArgs const &)
   {
+    soundClick();
     m_menuManager.push(MenuState::Score);
     m_menuManager.begin();
     return true;
+  }
+
+  bool MainMenu::onScoreArea(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MainMenu::onExitArea(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MainMenu::onOptionArea(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MainMenu::onSoloArea(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  bool MainMenu::onMultiArea(CEGUI::EventArgs const &)
+  {
+    soundPass();
+    return true;
+  }
+
+  void MainMenu::soundClick()
+  {
+    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
+    m_sound.playSound();
+  }
+
+  void MainMenu::soundPass()
+  {
+    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
+    m_sound.playSound();
   }
 }
