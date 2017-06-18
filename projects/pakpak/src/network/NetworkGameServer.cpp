@@ -9,6 +9,12 @@ namespace core
   {
   }
 
+  GameServer::GameServer(GameServer const &other)
+      : address(other.address), port(other.port), clients(other.clients),
+        maxClients(other.maxClients)
+  {
+  }
+
   GameServer &GameServer::operator=(GameServer const &that)
   {
     if (this != &that)

@@ -68,7 +68,7 @@ namespace core
 
     nope::log::Log(Debug) << "Reading samples of " << Filename;
     // Reading the samples with 16 bit signed format (More common)
-    std::vector<ALshort> Samples(NbSamples);
+    std::vector<ALshort> Samples(static_cast<std::size_t>(NbSamples));
     if (sf_read_short(File, &Samples[0], NbSamples) < NbSamples)
       {
 	throw IOError("Unable to read samples stored in audio file.");
@@ -118,7 +118,7 @@ namespace core
     // set Source
     ALuint source;
     alGenSources(1, &source);
-    alSourcei(source, AL_BUFFER, buffer);
+    alSourcei(source, AL_BUFFER, static_cast<ALint>(buffer));
     m_buffer.push_back(buffer);
     m_source.push_back(source);
   }
@@ -248,14 +248,14 @@ namespace core
   }
 
   // Get the Source of the sound
-  ALuint SoundManager::getSource(std::int32_t idx) const
+  ALuint SoundManager::getSource(std::size_t const idx) const
   {
     nope::log::Log(Debug) << "Getting Source";
     return m_source[idx];
   }
 
   // Get info on the lecture sound.
-  void SoundManager::getInfoLectureSound(std::int32_t idx) const
+  void SoundManager::getInfoLectureSound(std::size_t const idx) const
   {
     ALfloat Seconds = 0.f;
 

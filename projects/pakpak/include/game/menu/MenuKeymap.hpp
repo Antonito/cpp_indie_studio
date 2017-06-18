@@ -67,8 +67,8 @@ namespace core
 
     void soundPass();
     void soundClick();
-    void swapButtons(size_t newSelected);
-    void loadLayout(size_t playerIndex);
+    void swapButtons(std::size_t newSelected);
+    void loadLayout(std::size_t playerIndex);
 
     GUI &              m_gui;
     GameState          m_curState;
