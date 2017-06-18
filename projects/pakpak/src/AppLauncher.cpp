@@ -135,6 +135,8 @@ namespace core
 
     createFrameListener();
 
+    //load all sound resource
+    m_soundManager.loadAllSound();
     // Splash context
     m_contexts[static_cast<std::size_t>(GameState::Splash)] =
         std::make_unique<splash::ContextSplash>(m_window, m_inputListener,
