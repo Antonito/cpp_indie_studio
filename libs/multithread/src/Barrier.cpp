@@ -11,7 +11,7 @@ namespace multithread
   {
   }
 
-  void wait()
+  void Barrier::wait()
   {
     std::unique_lock<std::mutex> lock(m_mut);
     unsigned int                 gen = m_count;
@@ -19,7 +19,7 @@ namespace multithread
     if (--m_curCount == 0)
       {
 	m_count++;
-	m_curCount = m_count_reset_value;
+	m_curCount = m_condInit;
 	m_cond.notify_all();
 	return;
       }

@@ -24,7 +24,7 @@ namespace multithread
     void wait();
 
   private:
-    std::mutex_t            m_mut;
+    std::mutex              m_mut;
     std::condition_variable m_cond;
     std::uint32_t const     m_condInit;
     std::uint32_t           m_count;
