@@ -94,19 +94,17 @@ namespace core
                          static_cast<float>(arg.state.Y.rel));
   }
 
-  bool MainMenu::mousePressed(OIS::MouseEvent const &arg,
+  bool MainMenu::mousePressed(OIS::MouseEvent const &,
                               OIS::MouseButtonID     id)
   {
-    (void)arg;
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
         .injectMouseButtonDown(convertButton(id));
   }
 
-  bool MainMenu::mouseReleased(OIS::MouseEvent const &arg,
+  bool MainMenu::mouseReleased(OIS::MouseEvent const &,
                                OIS::MouseButtonID     id)
   {
-    (void)arg;
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
         .injectMouseButtonUp(convertButton(id));
@@ -197,9 +195,10 @@ namespace core
 	       "Error cannot connect to the ConnectServerManager "
 	       "!==\n======================================================";
       //TODO: Remplace by a Error popUp
-          m_menuManager.popLayer();
-          m_menuManager.begin();
-          return true;
+        m_menuManager.popLayer();
+        m_menuManager.push(MenuState::PopError);
+        m_menuManager.begin();
+        return true;
       }
     return true;
   }
