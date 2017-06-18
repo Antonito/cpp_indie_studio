@@ -216,20 +216,22 @@ namespace core
 
     if (fs.is_open() == false)
       {
-	Log(nope::log::Error) << "Can't open the file";
-	throw std::exception();
+	Log(nope::log::Debug) << "Can't open the file";
+	throw IOError("Cannot open " +
+	              playerFile[static_cast<int>(playerIndex)]);
       }
     ss << fs.rdbuf();
     std::string content = ss.str();
 
-    nope::log::Log(Debug) << "Index " << playerIndex << ' ' << m_players.size();
+    nope::log::Log(Debug) << "Index " << playerIndex << ' '
+                          << m_players.size();
 
-      m_players[playerIndex] =
+    m_players[playerIndex] =
         nope::serialization::from_json<SettingsPlayer::GameSettings>(content);
     if (check_used(playerIndex))
       {
-	Log(nope::log::Error) << "Config File : key already used";
-	throw std::exception();
+	Log(nope::log::Debug) << "Config File : key already used";
+	throw IOError("Settings File Error: Key already used");
       }
 
     setUsed(playerIndex, true);
@@ -298,7 +300,8 @@ namespace core
 
     if (fs.is_open() == false)
       {
-	throw std::exception();
+	throw IOError("Cannot open " +
+	              playerFile[static_cast<int>(playerIndex)]);
       }
     fs << nope::serialization::to_json(m_players[playerIndex]);
     fs.close();

@@ -84,6 +84,7 @@
 #include "MenuOptions.hpp"
 #include "MenuScores.hpp"
 #include "MenuSolo.hpp"
+#include "MenuPopError.hpp"
 #include "game/menu/AssetResizer.hpp"
 #include "game/menu/Dim.hpp"
 
