@@ -307,10 +307,6 @@ namespace network
 	  }
 	m_port = ntohs(newAddr.sin_port);
       }
-    if (listen(m_socket, static_cast<std::int32_t>(m_maxClients)) == -1)
-      {
-	throw network::SockError("Cannot listen on socket");
-      }
   }
 
   // Set the socket to blocking or non-blocking state
