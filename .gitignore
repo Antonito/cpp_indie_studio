@@ -345,5 +345,4 @@ build/.license_keys
 
 #confiug file
 *.ini
-CMakeLists.txt
 cmake-build-debug/*

@@ -6,6 +6,28 @@
 
 namespace game
 {
+  enum SPEED_UNITS : public std::uint8_t
+  {
+    U0 = 0,
+    U1,
+    U2,
+    U3,
+    U4,
+    U5,
+    U6,
+    U7,
+    U8,
+    U9
+  };
+
+  enum POSITIONS : public std::uint8_t
+  {
+    ST = 0,
+    ND,
+    RD,
+    TH
+  };
+
   class InGame final : public ALayer
   {
   public:
@@ -32,9 +54,14 @@ namespace game
                               OIS::MouseButtonID     id);
     virtual bool mouseReleased(OIS::MouseEvent const &me,
                                OIS::MouseButtonID     id);
+    void setSpeed(std::uint32_t speed);
+    void setPosition(std::uint32_t position);
 
   private:
     LocalPlayer &m_player;
+    CEGUI::Window *m_speed[3];
+    CEGUI::Window *m_positionSuffix;
+    CEGUI::Window *m_positionPrefix;
   };
 }
 
