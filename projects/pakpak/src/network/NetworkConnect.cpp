@@ -436,13 +436,36 @@ namespace core
     nope::log::Log(Debug) << "Going to connect to UDP port : " << port;
 
     // Start UDP thread
+    multithread::Barrier barr(2);
+    std::atomic<bool>    err(false);
     m_game = std::make_unique<NetworkGame>();
     m_udp = std::thread([&]() {
       nope::log::Log(Debug) << "Starting UDP thread";
-      m_game->init(port);
-      m_game->run();
+      try
+	{
+	  m_game->init(port, m_ip, m_sock);
+	}
+      catch (...)
+	{
+	  err = true;
+	}
+      barr.wait();
+      if (!err)
+	{
+	  m_game->run();
+	}
       nope::log::Log(Debug) << "Stopping UDP thread";
     });
+    nope::log::Log(Debug)
+        << "Waiting for UDP server to start. [NetworkConnect]";
+    barr.wait();
+    if (err)
+      {
+	// Couldn't start UDP thread
+	nope::log::Log(Error) << "Couldn't start UDP thread.";
+	throw std::exception(); // TODO
+      }
+    nope::log::Log(Debug) << "Waited for UDP server. [NetworkConnect]";
 
     // Send information connection
   }

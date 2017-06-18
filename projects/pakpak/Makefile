@@ -11,7 +11,7 @@ LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
 			-L $(ROOT_DIR)/build/ -l indie_logger 	\
 			-l CEGUIBase-0 -l CEGUIOgreRenderer-0 	\
 			-l indie_network -lindie_ini		\
-			-l indie_packet				\
+			-l indie_packet	-l indie_multithread	\
 			-l indie_crypto -l sndfile		\
 			-l indie_exceptions			\
 			-l BulletDynamics -l BulletCollision	\
@@ -150,6 +150,7 @@ INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)			\
 		$(ROOT_DIR)/libs/logger/include/			\
 		$(ROOT_DIR)/libs/exceptions/include/			\
 		$(ROOT_DIR)/libs/crypto/include/			\
+		$(ROOT_DIR)/libs/multithread/include/			\
 		$(ROOT_DIR)/libs/network/include/			\
 		$(ROOT_DIR)/libs/packet/include/			\
 		$(ROOT_DIR)/libs/ini/include/				\

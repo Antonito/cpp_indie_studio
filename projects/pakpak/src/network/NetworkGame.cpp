@@ -2,7 +2,7 @@
 
 namespace core
 {
-  NetworkGame::NetworkGame()
+  NetworkGame::NetworkGame() : m_sock(nullptr)
   {
   }
 
@@ -10,9 +10,17 @@ namespace core
   {
   }
 
-  void NetworkGame::init(std::uint16_t const port)
+  void NetworkGame::init(std::uint16_t const port, std::string const &addr,
+                         network::TCPSocket &tcpSock)
   {
     nope::log::Log(Debug) << "Initializing UDP connection.";
+    m_sock = std::make_shared<network::UDPSocket>(
+        port, addr, true, network::ASocket::SocketType::BLOCKING);
+    if (!m_sock->openConnection())
+      {
+	nope::log::Log(Error) << "Cannot create UDP connection.";
+	throw std::exception();
+      }
   }
 
   void NetworkGame::run()
