@@ -19,7 +19,8 @@ namespace core
     if (!m_sock.openConnection())
       {
 	nope::log::Log(Error) << "Cannot connect to " << ip << ":" << port;
-	throw std::exception(); // TODO
+	throw NetworkConnectionError("Cannot connect to " + ip + ":" +
+	                             std::to_string(port));
       }
     authenticate();
     checkFiles();
@@ -149,13 +150,13 @@ namespace core
     if (ret != network::IClient::ClientAction::SUCCESS)
       {
 	nope::log::Log(Error) << "Read failed ! [NetworkConnect]";
-	throw std::exception(); // TODO
+	throw NetworkReadPacketError("Read failed ! [NetworkConnect]");
       }
     pck >> pckContent;
     if (pckContent.pck.eventType != GameClientToGSEvent::VALIDATION_EVENT)
       {
 	nope::log::Log(Error) << "Invalid event type [NetworkConnect]";
-	throw std::exception(); // TODO
+	throw NetworkInvalidPacketError("Invalid event type [NetworkConnect]");
       }
     nope::log::Log(Debug) << "Read successful ! [NetworkConnect]";
     nope::log::Log(Debug) << "Validation: " << pckContent.pck.eventData.valid
@@ -180,7 +181,7 @@ namespace core
     if (ret != network::IClient::ClientAction::SUCCESS)
       {
 	nope::log::Log(Error) << "Write failed ! [NetworkConnect]";
-	throw std::exception(); // TODO
+	throw NetworkWritePacketError("Write failed ! [NetworkConnect]");
       }
 
     nope::log::Log(Info) << "Starting to check files";
@@ -189,7 +190,7 @@ namespace core
 	if (read(pck) != network::IClient::ClientAction::SUCCESS)
 	  {
 	    nope::log::Log(Error) << "Cannot read";
-	    throw std::exception(); // TODO
+	    throw NetworkReadPacketError("Cannot read");
 	  }
 	pck >> pckContent;
 
@@ -210,7 +211,7 @@ namespace core
 		if (write(pck) != network::IClient::ClientAction::SUCCESS)
 		  {
 		    nope::log::Log(Error) << "Cannot write";
-		    throw std::exception(); // TODO
+		    throw NetworkWritePacketError("Cannot write");
 		  }
 	      }
 	    else
@@ -226,7 +227,7 @@ namespace core
 		if (filePath.size() < 2)
 		  {
 		    nope::log::Log(Error) << "Invalid map requested";
-		    throw std::exception(); // TODO
+		    throw NetworkInvalidMapError("Invalid map requested");
 		  }
 		bool found = false;
 		for (MapConfig const &m : mapConf)
@@ -295,7 +296,7 @@ namespace core
 		if (write(pck) != network::IClient::ClientAction::SUCCESS)
 		  {
 		    nope::log::Log(Error) << "Cannot write";
-		    throw std::exception(); // TODO
+		    throw NetworkWritePacketError("Cannot write"); // TODO
 		  }
 		nope::log::Log(Debug) << "Sent MD5 response";
 	      }
@@ -337,7 +338,7 @@ namespace core
 		  if (rc == -1 && rc != EINTR)
 		    {
 		      nope::log::Log(Error) << "Cannot read file";
-		      throw std::exception(); // TODO
+		      throw NetworkReadPacketError("Cannot read file");
 		    }
 		  off += static_cast<std::uint32_t>(rc);
 		}
@@ -368,7 +369,7 @@ namespace core
 	    if (write(pck) != network::IClient::ClientAction::SUCCESS)
 	      {
 		nope::log::Log(Error) << "Cannot write";
-		throw std::exception(); // TODO
+		throw NetworkWritePacketError("Cannot write");
 	      }
 	    nope::log::Log(Debug) << "Send response to server." << filename;
 	    nope::log::Log(Info) << "Updating MD5 informations";
