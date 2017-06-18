@@ -9,7 +9,7 @@ namespace game
   {
   public:
     Score() = delete;
-    Score(GameData &data, ILayerStack &layer);
+    Score(GameData &data, ILayerStack &layer, core::HUD *hud);
     Score(Score const &) = delete;
     Score(Score &&) = delete;
     virtual ~Score();

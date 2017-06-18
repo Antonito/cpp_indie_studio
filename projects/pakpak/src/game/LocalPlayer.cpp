@@ -3,35 +3,37 @@
 namespace game
 {
   LocalPlayer::LocalPlayer(Ogre::RenderWindow *win, GameData &g, PlayerData *p,
-                           int order, core::SettingsPlayer &settings)
+                           int order, core::SettingsPlayer &settings,
+                           core::HUD *hud, game::ContextGame &contextGame)
       : m_data(p), m_cameraMode(CameraMode::Top), m_layers(),
         m_currentLayers(), m_cam(nullptr), m_viewport(nullptr), m_rounds(),
-        m_settings(settings), m_actions(), m_win(win), m_order(order)
+        m_settings(settings), m_actions(), m_win(win), m_order(order),
+        m_hud(hud), m_contextGame(contextGame)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
-        std::make_unique<Loading>(g, *this);
+        std::make_unique<Loading>(g, *this, hud);
     m_layers[static_cast<std::size_t>(GameLayer::PreGame)] =
-        std::make_unique<PreGame>(g, *this);
+        std::make_unique<PreGame>(g, *this, hud);
     m_layers[static_cast<std::size_t>(GameLayer::InGame)] =
-        std::make_unique<InGame>(g, *this);
+        std::make_unique<InGame>(g, *this, hud);
     m_layers[static_cast<std::size_t>(GameLayer::GameGUI)] =
-        std::make_unique<GameGUI>(g, *this);
+        std::make_unique<GameGUI>(g, *this, hud);
     m_layers[static_cast<std::size_t>(GameLayer::Spectator)] =
-        std::make_unique<Spectator>(g, *this);
+        std::make_unique<Spectator>(g, *this, hud);
     m_layers[static_cast<std::size_t>(GameLayer::SpecGUI)] =
-        std::make_unique<SpecGUI>(g, *this);
+        std::make_unique<SpecGUI>(g, *this, hud);
     m_layers[static_cast<std::size_t>(GameLayer::PostGame)] =
-        std::make_unique<PostGame>(g, *this);
+        std::make_unique<PostGame>(g, *this, hud);
     m_layers[static_cast<std::size_t>(GameLayer::Score)] =
-        std::make_unique<Score>(g, *this);
+        std::make_unique<Score>(g, *this, hud);
     m_layers[static_cast<std::size_t>(GameLayer::Chat)] =
-        std::make_unique<Chat>(g, *this);
+        std::make_unique<Chat>(g, *this, hud);
     m_layers[static_cast<std::size_t>(GameLayer::Menu)] =
-        std::make_unique<Menu>(g, *this);
+        std::make_unique<Menu>(g, *this, hud);
 
     m_currentLayers.push(m_layers[static_cast<std::size_t>(GameLayer::InGame)]
                              .get()); // TODO: insert LOADING instead
-
+    m_currentLayers.top()->enable();
     m_cam = m_data->car().getCamera();
     m_cam->setNearClipDistance(3);
 
@@ -49,11 +51,13 @@ namespace game
         m_currentLayers(std::move(that.m_currentLayers)), m_cam(that.m_cam),
         m_viewport(that.m_viewport), m_rounds(that.m_rounds),
         m_settings(that.m_settings), m_actions(that.m_actions),
-        m_win(that.m_win), m_order(that.m_order)
+        m_win(that.m_win), m_order(that.m_order), m_hud(that.m_hud),
+        m_contextGame(that.m_contextGame)
   {
     that.m_cam = nullptr;
     that.m_viewport = nullptr;
     that.m_win = nullptr;
+    that.m_hud = nullptr;
     that.m_order = 0;
   }
 
@@ -67,8 +71,6 @@ namespace game
   void LocalPlayer::setViewPort(Ogre::Real left, Ogre::Real top,
                                 Ogre::Real width, Ogre::Real height)
   {
-    nope::log::Log(Debug) << "left : " << left << ", top : " << top
-                          << ", width : " << width << ", height : " << height;
     m_viewport->setDimensions(left, top, width, height);
     m_cam->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
                           Ogre::Real(m_viewport->getActualHeight()));
@@ -91,13 +93,11 @@ namespace game
   {
     for (std::size_t i = m_currentLayers.size(); i > 0; --i)
       {
-        nope::log::Log(Debug) << "		Pressed for layer " << i;
 	if (m_currentLayers[i - 1]->keyPressed(ke))
 	  {
 	    return (true);
 	  }
       }
-    nope::log::Log(Debug) << "\n";
     return (false);
   }
 
@@ -158,6 +158,7 @@ namespace game
 
   void LocalPlayer::popLayer()
   {
+    m_currentLayers.top()->disable();
     m_currentLayers.pop();
   }
 
@@ -210,7 +211,8 @@ namespace game
   std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()> &
       LocalPlayer::actions(std::string const &action)
   {
-    nope::log::Log(Debug) << action;
+    nope::log::Log(Debug) << "Player '" << m_order << "' action '" << action
+                          << "'";
     return (m_actions[action]);
   }
 
@@ -256,8 +258,21 @@ namespace game
 
   void LocalPlayer::openMenu()
   {
-    m_currentLayers.push(
-        m_layers[static_cast<std::size_t>(GameLayer::Menu)].get());
+    if (m_layers[static_cast<std::size_t>(GameLayer::Menu)].get() !=
+        m_currentLayers.top())
+      {
+        if (!Pauser::isPaused())
+        {
+          nope::log::Log(Debug) << "Opening Pause Menu";
+          m_currentLayers.push(
+              m_layers[static_cast<std::size_t>(GameLayer::Menu)].get());
+          m_currentLayers.top()->enable();
+        }
+        else
+        {
+          Pauser::unpause();
+        }
+      }
   }
 
   void LocalPlayer::speedUpReleased()

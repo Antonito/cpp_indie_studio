@@ -50,6 +50,8 @@ namespace core
     virtual void windowClosed(Ogre::RenderWindow *rw);
     bool frameRenderingQueued(const Ogre::FrameEvent &evt);
     void startOIS();
+    void setNormalstate();
+    void setPausedState();
 
     void setMouseEventCallback(OIS::MouseListener *listener);
     void setKeyboardEventCallback(OIS::KeyListener *listener);

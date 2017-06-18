@@ -172,4 +172,12 @@ namespace core
 	  }
       }
   }
+
+  void InputListener::setNormalstate()
+  {
+  }
+
+  void InputListener::setPausedState()
+  {
+  }
 }

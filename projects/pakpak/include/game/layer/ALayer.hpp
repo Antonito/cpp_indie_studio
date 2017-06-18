@@ -11,7 +11,7 @@ namespace game
   {
   public:
     ALayer() = delete;
-    ALayer(GameData &gameData, ILayerStack &layerStack);
+    ALayer(GameData &gameData, ILayerStack &layerStack, core::HUD *hud);
     ALayer(ALayer const &) = delete;
     ALayer(ALayer &&) = delete;
     virtual ~ALayer();
@@ -22,6 +22,7 @@ namespace game
   protected:
     GameData &   m_gameData;
     ILayerStack &m_layerStack;
+    core::HUD *  m_gui;
   };
 }
 

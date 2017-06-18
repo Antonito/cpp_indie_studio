@@ -10,7 +10,7 @@ namespace game
   {
   public:
     InGame() = delete;
-    InGame(GameData &data, LocalPlayer &layer);
+    InGame(GameData &data, LocalPlayer &layer, core::HUD *hud);
     InGame(InGame const &) = delete;
     InGame(InGame &&) = delete;
     virtual ~InGame();

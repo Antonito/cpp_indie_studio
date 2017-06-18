@@ -154,6 +154,10 @@ namespace core
         m_contexts[static_cast<std::size_t>(GameState::Splash)].get();
 
     m_currentContext->enable();
+    resizer::AssetResizer::initResizer(m_window->getWidth(),
+                                       m_window->getHeight());
+
+    // Render Loop
     m_gameState = m_currentContext->update();
     while (true)
       {
@@ -172,6 +176,18 @@ namespace core
 
 	if (m_window->isClosed())
 	  return false;
+
+	// Update Window Size
+
+	CEGUI::Size<float> sizef;
+	sizef.d_height = static_cast<float>(m_window->getHeight());
+	sizef.d_width = static_cast<float>(m_window->getWidth());
+	if (resizer::AssetResizer::hasWindowResized(*m_window))
+	  {
+	    nope::log::Log(Debug) << "Resizing W: " << sizef.d_width
+	                          << " H: " << sizef.d_height;
+	    CEGUI::System::getSingleton().notifyDisplaySizeChanged(sizef);
+	  }
 
 	// Update game logic
 	state = m_currentContext->update();

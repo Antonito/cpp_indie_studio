@@ -22,7 +22,7 @@ LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
 ifeq ($(shell uname -s),Darwin)
 LOCAL_COMP_FLAGS+=	-x objective-c++
 LOCAL_LINK_FLAGS+=	-ObjC++ -framework Cocoa -framework Carbon -framework OpenAL
-else 
+else
 LOCAL_LINK_FLAGS+=	-lopenal
 endif
 
@@ -101,7 +101,9 @@ GAME_LAYER_FILES=	ALayer.cpp			\
 			PreGame.cpp			\
 			Score.cpp			\
 			SpecGUI.cpp			\
-			Spectator.cpp
+			Spectator.cpp			\
+			HUD.cpp				\
+			Pauser.cpp
 
 GAME_CAR_FILES=		ACar.cpp			\
 			EmptyCar.cpp
@@ -122,7 +124,9 @@ GAME_MENU_FILES=    	GUI.cpp				\
 			AssetSetter.cpp			\
 			MenuScores.cpp			\
 			InGameHUD.cpp			\
-			InGamePause.cpp
+			InGamePause.cpp			\
+			AssetResizer.cpp		\
+			Dim.cpp
 
 NETWORK_FILES=		NetworkManager.cpp		\
 			NetworkAuth.cpp			\

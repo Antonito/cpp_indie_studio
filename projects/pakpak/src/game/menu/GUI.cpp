@@ -82,33 +82,23 @@ namespace core
   {
   }
 
+  void GUI::update()
+  {
+    CEGUI::Size<float> sizef;
+    sizef.d_height = static_cast<float>(m_win->getHeight());
+    sizef.d_width = static_cast<float>(m_win->getWidth());
+
+    m_renderer->setDisplaySize(sizef);
+  }
+
   void GUI::draw()
   {
   }
 
-  GUI::GUI()
-      : m_renderer(nullptr), m_root(nullptr), m_context(nullptr), m_param()
+  GUI::GUI(Ogre::RenderWindow *win)
+      : m_renderer(nullptr), m_root(nullptr), m_context(nullptr), m_param(),
+        m_win(win)
   {
-#if defined(_WIN32)
-    m_param.insert(std::make_pair(std::string("w32_mouse"),
-                                  std::string("DISCL_FOREGROUND")));
-    m_param.insert(std::make_pair(std::string("w32_mouse"),
-                                  std::string("DISCL_NONEXCLUSIVE")));
-    m_param.insert(std::make_pair(std::string("w32_keyboard"),
-                                  std::string("DISCL_FOREGROUND")));
-    m_param.insert(std::make_pair(std::string("w32_keyboard"),
-                                  std::string("DISCL_NONEXCLUSIVE")));
-#else
-    m_param.insert(
-        std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
-    m_param.insert(
-        std::make_pair(std::string("x11_mouse_hide"), std::string("true")));
-    m_param.insert(std::make_pair(std::string("x11_keyboard_grab"),
-                                  std::string("false")));
-    m_param.insert(
-        std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
-#endif
-
     init();
   }
 
@@ -148,6 +138,7 @@ namespace core
   {
     if (m_root)
       destroy();
+
     m_root = CEGUI::WindowManager::getSingleton().loadLayoutFromFile(p_path);
     m_context->setRootWindow(m_root);
   }

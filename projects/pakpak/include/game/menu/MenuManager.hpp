@@ -31,10 +31,7 @@ namespace menu
 
     MenuManager(MenuManager const &) = delete;
     MenuManager(MenuManager &&) = delete;
-    virtual ~MenuManager()
-    {
-    }
-
+    virtual ~MenuManager();
     MenuManager &operator=(MenuManager &) = delete;
     MenuManager &operator=(MenuManager &&) = delete;
     bool keyPressed(OIS::KeyEvent const &ke);
@@ -42,6 +39,7 @@ namespace menu
     bool mouseMoved(OIS::MouseEvent const &me);
     bool mousePressed(OIS::MouseEvent const &me, OIS::MouseButtonID id);
     bool mouseReleased(OIS::MouseEvent const &me, OIS::MouseButtonID id);
+    void              update();
     void              push(core::MenuState);
     void              popLayer();
     void              begin();
