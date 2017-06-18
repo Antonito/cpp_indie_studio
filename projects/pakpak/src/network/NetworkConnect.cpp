@@ -1,5 +1,10 @@
 #include "pakpak_stdafx.hpp"
 
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+#endif
+
 namespace core
 {
   NetworkConnect::NetworkConnect(std::string const & ip,
@@ -393,3 +398,7 @@ namespace core
       }
   }
 }
+
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic pop
+#endif

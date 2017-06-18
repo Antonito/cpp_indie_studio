@@ -54,7 +54,7 @@ namespace core
 
     ALint getState() const;
 
-    ALuint getSource(std::int32_t) const;
+    ALuint getSource(std::size_t const idx) const;
 
     void setPosition(float, float, float);
 
@@ -66,7 +66,7 @@ namespace core
 
     void clear();
 
-    void getInfoLectureSound(std::int32_t) const;
+    void getInfoLectureSound(std::size_t const idx) const;
 
   private:
     ALCdevice *         m_device;

@@ -322,7 +322,7 @@ namespace core
     return true;
   }
 
-  void MenuKeymap::swapButtons(size_t newSelected)
+  void MenuKeymap::swapButtons(std::size_t newSelected)
   {
     if (newSelected != m_playerSelected)
       {
@@ -339,49 +339,43 @@ namespace core
       }
   }
 
-  void MenuKeymap::loadLayout(size_t playerIndex)
+  void MenuKeymap::loadLayout(std::size_t playerIndex)
   {
     m_gui.getRoot()
         ->getChild("up_button")
         ->setProperty("Text",
                       m_settings.getTextForKey(static_cast<OIS::KeyCode>(
-                          m_settings.getPlayer(static_cast<int>(playerIndex))
-                              .key.speedUp)));
+                          m_settings.getPlayer(playerIndex).key.speedUp)));
 
     m_gui.getRoot()
         ->getChild("down_button")
         ->setProperty("Text",
                       m_settings.getTextForKey(static_cast<OIS::KeyCode>(
-                          m_settings.getPlayer(static_cast<int>(playerIndex))
-                              .key.slowDown)));
+                          m_settings.getPlayer(playerIndex).key.slowDown)));
 
     m_gui.getRoot()
         ->getChild("left_button")
         ->setProperty("Text",
                       m_settings.getTextForKey(static_cast<OIS::KeyCode>(
-                          m_settings.getPlayer(static_cast<int>(playerIndex))
-                              .key.turnLeft)));
+                          m_settings.getPlayer(playerIndex).key.turnLeft)));
 
     m_gui.getRoot()
         ->getChild("right_button")
         ->setProperty("Text",
                       m_settings.getTextForKey(static_cast<OIS::KeyCode>(
-                          m_settings.getPlayer(static_cast<int>(playerIndex))
-                              .key.turnRight)));
+                          m_settings.getPlayer(playerIndex).key.turnRight)));
 
     m_gui.getRoot()
         ->getChild("pause_button")
         ->setProperty("Text",
                       m_settings.getTextForKey(static_cast<OIS::KeyCode>(
-                          m_settings.getPlayer(static_cast<int>(playerIndex))
-                              .key.openMenu)));
+                          m_settings.getPlayer(playerIndex).key.openMenu)));
 
     m_gui.getRoot()
         ->getChild("use_button")
         ->setProperty("Text",
                       m_settings.getTextForKey(static_cast<OIS::KeyCode>(
-                          m_settings.getPlayer(static_cast<int>(playerIndex))
-                              .key.useObject)));
+                          m_settings.getPlayer(playerIndex).key.useObject)));
   }
 
   bool MenuKeymap::onPlayer1Click(CEGUI::EventArgs const &)

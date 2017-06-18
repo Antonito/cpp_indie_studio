@@ -1,5 +1,10 @@
 #include "pakpak_stdafx.hpp"
 
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+#endif
+
 namespace core
 {
   NetworkAuth::NetworkAuth(std::string const &ip, std::uint16_t const port)
@@ -242,3 +247,7 @@ namespace core
     return (m_token);
   }
 }
+
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
