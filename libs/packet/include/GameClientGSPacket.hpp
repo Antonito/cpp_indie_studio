@@ -22,7 +22,19 @@ enum class GameClientToGSEvent : std::uint16_t
   MD5_RESPONSE,
   FILE_EVENT,
   UDP_REQU,
-  UDP_SRV
+  UDP_SRV,
+  LOBBY_TYPE
+};
+
+enum class GameClientToGSLobbyType : std::uint16_t
+{
+  SPECTATOR = 0xDEAD,
+  PLAYING
+};
+
+struct GameClientToGSPAcketLobbyType
+{
+  std::uint16_t type;
 };
 
 struct GameClientToGSPacketUDP
@@ -65,12 +77,13 @@ struct GameClientToGSPacketRaw
   GameClientToGSEvent eventType;
   union
   {
-    std::uint16_t               valid;
-    GameClientToGSPacketToken   token;
-    GameClientToGSPacketMD5Requ md5requ;
-    GameClientToGSPacketMD5Resp md5resp;
-    GameClientToGSPacketFile    file;
-    GameClientToGSPacketUDP     udp;
+    std::uint16_t                 valid;
+    GameClientToGSPacketToken     token;
+    GameClientToGSPacketMD5Requ   md5requ;
+    GameClientToGSPacketMD5Resp   md5resp;
+    GameClientToGSPacketFile      file;
+    GameClientToGSPacketUDP       udp;
+    GameClientToGSPAcketLobbyType lobbyType;
   } eventData;
 };
 

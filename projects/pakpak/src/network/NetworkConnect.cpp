@@ -488,6 +488,25 @@ namespace core
 	throw std::exception(); // TODO
       }
     nope::log::Log(Debug) << "Packet sent [NetworkConnect]";
+
+    nope::log::Log(Info) << "Getting Lobby type";
+    ret = read(pck);
+    if (ret != network::IClient::ClientAction::SUCCESS)
+      {
+	nope::log::Log(Error) << "Read failed ! [NetworkConnect]";
+	throw std::exception(); // TODO
+      }
+    pck >> pckContent;
+    if (pckContent.pck.eventType != GameClientToGSEvent::LOBBY_TYPE)
+      {
+	nope::log::Log(Error) << "Invalid event type [NetworkConnect]";
+	throw std::exception(); // TODO
+      }
+    std::string const lobbyType[] = {"SPECTATOR", "PLAYING"};
+    nope::log::Log(Info)
+        << "Lobby: " << lobbyType[pckContent.pck.eventData.lobbyType.type ==
+                                  static_cast<std::uint16_t>(
+                                      GameClientToGSLobbyType::PLAYING)];
   }
 
   void NetworkConnect::Tokenize(std::string const &       str,

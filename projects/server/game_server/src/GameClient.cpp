@@ -313,11 +313,19 @@ network::IClient::ClientAction GameClient::treatOutgoingData()
 
       m_packet << rep;
       ret = write(m_packet);
-      m_state = State::WAITING;
+      m_state = State::UDP_CONFIRM;
       break;
 
     // Send information on lobby
     case State::UDP_CONFIRM:
+      rep.pck.eventType = GameClientToGSEvent::LOBBY_TYPE;
+      // TODO: Detect if PLAYING or SPECTATOR
+      rep.pck.eventData.lobbyType.type =
+          static_cast<std::uint16_t>(GameClientToGSLobbyType::PLAYING);
+      m_packet << rep;
+      ret = write(m_packet);
+      m_state = State::WAITING;
+      nope::log::Log(Debug) << "Sent Lobby Type, switching to State::WAITING";
       break;
 
     // Lobby
