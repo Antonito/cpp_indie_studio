@@ -243,13 +243,11 @@ namespace core
 
   void MainMenu::soundClick()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::CLICK_BUTTON);
   }
 
   void MainMenu::soundPass()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::PASS_BUTTON);
   }
 }

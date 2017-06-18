@@ -210,14 +210,12 @@ namespace core
 
   void MenuMultiplayer::soundPass()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::PASS_BUTTON);
   }
 
   void MenuMultiplayer::soundClick()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::CLICK_BUTTON);
   }
 
   bool MenuMultiplayer::onBackArea(CEGUI::EventArgs const &)

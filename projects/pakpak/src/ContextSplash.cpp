@@ -3,7 +3,7 @@
 namespace splash
 {
   ContextSplash::ContextSplash(Ogre::RenderWindow * win,
-                               core::InputListener * input,
+                               core::InputListener *input,
                                core::SoundManager & sound)
       : core::AContext(win, input),
         // Create the scene manager
@@ -37,10 +37,8 @@ namespace splash
 
   void ContextSplash::enable()
   {
-
-    m_sound.loadSound("deps/indie_resource/songs/splash.wav");
-      m_sound.playSound();
-      m_viewport = m_win->addViewport(m_camera);
+    m_sound.playSound(core::ESound::SPLASH_SONG);
+    m_viewport = m_win->addViewport(m_camera);
 
     m_viewport->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
 
@@ -50,8 +48,7 @@ namespace splash
 
   void ContextSplash::disable()
   {
-      m_sound.stopSound();
-      m_sound.clear();
+    m_sound.stopSound(core::ESound::SPLASH_SONG);
     m_win->removeAllViewports();
   }
 
