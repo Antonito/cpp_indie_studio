@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 #include <CEGUI/CEGUI.h>
 #include <CEGUI/RendererModules/Ogre/Renderer.h>
+#include "menu/AssetResizer.hpp"
 
 namespace core
 {
@@ -18,7 +19,7 @@ namespace core
   {
   public:
     ~GUI();
-    GUI();
+    GUI(Ogre::RenderWindow *win);
     void           init();
     void           destroy();
     void           draw();
@@ -31,6 +32,7 @@ namespace core
     void setPos(CEGUI::Window *, glm::vec4 const &, glm::vec4 const &);
     void loadSheme(std::string const &);
     void loadLayout(std::string const &);
+    void update();
     CEGUI::OgreRenderer *getRender() const;
     CEGUI::GUIContext *  getContext() const;
     CEGUI::Window *      getRoot() const;
@@ -42,6 +44,7 @@ namespace core
     CEGUI::Window *      m_root;
     CEGUI::GUIContext *  m_context;
     OIS::ParamList       m_param;
+    Ogre::RenderWindow * m_win;
 
     GUI(GUI const &) = delete;
     GUI &operator=(GUI const &) = delete;

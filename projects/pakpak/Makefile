@@ -91,7 +91,9 @@ GAME_MENU_FILES=    	GUI.cpp				\
 			AssetSetter.cpp			\
 			MenuScores.cpp			\
 			InGameHUD.cpp			\
-			InGamePause.cpp
+			InGamePause.cpp			\
+			AssetResizer.cpp	\
+			Dim.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 		$(addprefix $(GAME_DIR), $(GAME_FILES))			\

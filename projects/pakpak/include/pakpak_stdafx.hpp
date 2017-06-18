@@ -71,6 +71,8 @@
 #include "MenuOptions.hpp"
 #include "MenuScores.hpp"
 #include "MenuSolo.hpp"
+#include "game/menu/AssetResizer.hpp"
+#include "game/menu/Dim.hpp"
 
 // Game
 #include "Pauser.hpp"

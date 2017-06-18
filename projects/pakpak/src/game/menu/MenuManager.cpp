@@ -73,7 +73,7 @@ namespace menu
       : m_sceneMan(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Menu scene manager")),
         m_camera(m_sceneMan->createCamera("MenuCamera")), m_viewport(nullptr),
-        m_gui(), m_menuLayer({}), m_layers({})
+        m_gui(win), m_menuLayer({}), m_layers({})
   {
     m_menuLayer[static_cast<size_t>(core::MenuState::MainMenu)] =
         std::make_unique<core::MainMenu>(*this, m_gui);
@@ -120,5 +120,14 @@ namespace menu
   core::IMenuLayer *MenuManager::getMenuLayer()
   {
     return m_layers[m_layers.size() - 1];
+  }
+
+  void MenuManager::update()
+  {
+    m_gui.update();
+  }
+
+  MenuManager::~MenuManager()
+  {
   }
 }

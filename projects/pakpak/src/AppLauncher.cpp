@@ -150,6 +150,9 @@ namespace core
 
     m_currentContext->enable();
 
+    resizer::AssetResizer::initResizer(m_window->getWidth(),
+                                       m_window->getHeight());
+
     // Render Loop
     while (true)
       {
@@ -160,10 +163,16 @@ namespace core
 	  return false;
 
 	// Update Window Size
+
 	CEGUI::Size<float> sizef;
-	sizef.d_height = m_window->getHeight();
-	sizef.d_width = m_window->getWidth();
-	CEGUI::System::getSingleton().notifyDisplaySizeChanged(sizef);
+	sizef.d_height = static_cast<float>(m_window->getHeight());
+	sizef.d_width = static_cast<float>(m_window->getWidth());
+	if (resizer::AssetResizer::hasWindowResized(*m_window))
+	  {
+	    nope::log::Log(Debug) << "Resizing W: " << sizef.d_width
+	                          << " H: " << sizef.d_height;
+	    CEGUI::System::getSingleton().notifyDisplaySizeChanged(sizef);
+	  }
 
 	// Update game logic
 	state = m_currentContext->update();
