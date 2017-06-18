@@ -74,6 +74,7 @@ namespace core
     nope::log::Log(Debug) << "Disconnecting client";
     if (m_conn)
       {
+	m_conn->disconnect();
 	m_conn.reset(nullptr);
       }
   }

@@ -150,7 +150,7 @@ namespace core
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
         std::make_unique<game::ContextGame>(m_window, m_inputListener,
-                                            m_settings);
+                                            m_settings, m_network);
 
     m_currentContext =
         m_contexts[static_cast<std::size_t>(GameState::Splash)].get();
