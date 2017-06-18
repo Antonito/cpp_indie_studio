@@ -117,7 +117,8 @@ namespace game
 	  }
 	else if (thousand)
 	  {
-	    m_speed[1]->setProperty(image, gl_speedAssets[game::SPEED_UNITS::U0]);
+	    m_speed[1]->setProperty(image,
+	                            gl_speedAssets[game::SPEED_UNITS::U0]);
 	  }
 	else
 	  {
@@ -130,7 +131,8 @@ namespace game
 	  }
 	else
 	  {
-	    m_speed[0]->setProperty(image, gl_speedAssets[game::SPEED_UNITS::U0]);
+	    m_speed[0]->setProperty(image,
+	                            gl_speedAssets[game::SPEED_UNITS::U0]);
 	  }
       }
   }
@@ -150,8 +152,8 @@ namespace game
     else
       {
 	if (m_positionSuffix)
-	  m_positionSuffix->setProperty(image,
-	                                gl_positionAssets[game::POSITIONS::TH]);
+	  m_positionSuffix->setProperty(
+	      image, gl_positionAssets[game::POSITIONS::TH]);
       }
   }
 }
