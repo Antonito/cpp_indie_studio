@@ -5,9 +5,9 @@
 #ifndef CPP_INDIE_STUDIO_INGAMEPAUSE_HPP
 #define CPP_INDIE_STUDIO_INGAMEPAUSE_HPP
 
-#include "game/menu/GUI.hpp"
-#include "game/menu/MenuManager.hpp"
-#include "game/menu/IMenuLayer.hpp"
+#include "GUI.hpp"
+#include "MenuManager.hpp"
+#include "IMenuLayer.hpp"
 
 namespace core
 {
@@ -15,35 +15,34 @@ namespace core
   {
   public:
     InGamePause(menu::MenuManager &menuManager, GUI &gui);
-    virtual ~InGamePause(){};
-    void draw();
-    void entry();
-    void exit();
-    void destroy();
+    virtual ~InGamePause()
+    {
+    }
+    void      draw();
+    void      entry();
+    void      exit();
+    void      destroy();
     GameState update() const;
-    void build();
+    void      build();
     bool keyPressed(const OIS::KeyEvent &arg);
     bool mouseMoved(const OIS::MouseEvent &arg);
-    bool mousePressed(const OIS::MouseEvent &arg,
-                      OIS::MouseButtonID     id);
-    bool mouseReleased(const OIS::MouseEvent &arg,
-                       OIS::MouseButtonID     id);
+    bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+    bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     bool keyReleased(const OIS::KeyEvent &arg);
-
 
   private:
     InGamePause(InGamePause const &) = delete;
     InGamePause(InGamePause &&) = delete;
-    InGamePause &operator=(InGamePause const &) = delete;
-    InGamePause &operator=(InGamePause &&) = delete;
+    InGamePause &      operator=(InGamePause const &) = delete;
+    InGamePause &      operator=(InGamePause &&) = delete;
     CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID);
 
-    GUI                 &m_gui;
-    GameState           m_curState;
-    menu::MenuManager   &m_menuManager;
+    GUI &              m_gui;
+    GameState          m_curState;
+    menu::MenuManager &m_menuManager;
 
     bool onBackClick(CEGUI::EventArgs const &);
   };
 }
 
-#endif //CPP_INDIE_STUDIO_INGAMEPAUSE_HPP
+#endif // CPP_INDIE_STUDIO_INGAMEPAUSE_HPP

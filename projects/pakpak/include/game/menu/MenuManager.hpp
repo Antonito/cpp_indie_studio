@@ -6,10 +6,17 @@
 #define CPP_INDIE_STUDIO_MENUMANAGER_HPP
 
 #include <OGRE/Ogre.h>
+#if defined __APPLE__
+#include <ois/OIS.h>
+#else
 #include <OIS/OIS.h>
+#endif
+#include "SoundManager.hpp"
 #include "FastStack.hpp"
 #include "IMenuLayer.hpp"
 #include "IEventHandler.hpp"
+#include "SettingsPlayer.hpp"
+#include "GUI.hpp"
 #include "ILayerStack.hpp"
 #include "InputListener.hpp"
 
@@ -18,13 +25,13 @@ namespace menu
   class MenuManager : public game::IEventHandler
   {
   public:
-    explicit MenuManager(Ogre::RenderWindow *win);
+    explicit MenuManager(Ogre::RenderWindow *  win,
+                         core::SettingsPlayer &settings,
+                         core::SoundManager &sound, core::NetworkManager &net);
+
     MenuManager(MenuManager const &) = delete;
     MenuManager(MenuManager &&) = delete;
-    virtual ~MenuManager()
-    {
-    }
-
+    virtual ~MenuManager();
     MenuManager &operator=(MenuManager &) = delete;
     MenuManager &operator=(MenuManager &&) = delete;
     bool keyPressed(OIS::KeyEvent const &ke);
@@ -32,10 +39,11 @@ namespace menu
     bool mouseMoved(OIS::MouseEvent const &me);
     bool mousePressed(OIS::MouseEvent const &me, OIS::MouseButtonID id);
     bool mouseReleased(OIS::MouseEvent const &me, OIS::MouseButtonID id);
-    void push(core::MenuState);
-    void popLayer();
-    void begin();
-    void end();
+    void              update();
+    void              push(core::MenuState);
+    void              popLayer();
+    void              begin();
+    void              end();
     core::IMenuLayer *getMenuLayer();
 
   private:

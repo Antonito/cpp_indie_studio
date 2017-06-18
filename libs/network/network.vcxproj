@@ -153,7 +153,6 @@
     <ClInclude Include="include\ISocket.hpp" />
     <ClInclude Include="include\network_stdafx.hpp" />
     <ClInclude Include="include\network_targetver.h" />
-    <ClInclude Include="include\Packet.hpp" />
     <ClInclude Include="include\PacketFactory.hpp" />
     <ClInclude Include="include\TCPSocket.hpp" />
   </ItemGroup>

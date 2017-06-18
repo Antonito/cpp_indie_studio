@@ -19,5 +19,6 @@
 
 #include "Section.hpp"
 #include "Ini.hpp"
+#include "IOError.hpp"
 
 #endif // !INI_STDAFX_HPP_

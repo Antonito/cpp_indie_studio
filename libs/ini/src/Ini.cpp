@@ -127,7 +127,7 @@ namespace ini
 
     if (os.is_open() == false)
       {
-	throw std::exception();
+	throw IOError("Cannot open " + filename);
       }
 
     bool first = true;
@@ -164,7 +164,7 @@ namespace ini
 
     if (fs.is_open() == false)
       {
-	throw std::exception();
+	throw IOError("Cannot open " + filename);
       }
 
     std::string line;
@@ -203,19 +203,18 @@ namespace ini
 	  {
 	    std::size_t start = i;
 
-
 	    while (line[i] != '=')
 	      {
 		if (i == line.size())
 		  {
-		    throw std::exception();
+		    throw IOError("Invalid line (mising equal sign)");
 		  }
 		++i;
 	      }
 
 	    if (i == start)
 	      {
-		throw std::exception();
+		throw IOError("Invalid line (missing property)");
 	      }
 
 	    if (m_sections.size() == 0)

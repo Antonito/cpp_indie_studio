@@ -2,7 +2,8 @@
 
 namespace game
 {
-  Chat::Chat(GameData &data, ILayerStack &layer) : ALayer(data, layer)
+  Chat::Chat(GameData &data, ILayerStack &layer, core::HUD *hud)
+      : ALayer(data, layer, hud)
   {
   }
 

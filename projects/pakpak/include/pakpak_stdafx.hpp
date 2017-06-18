@@ -30,7 +30,11 @@
 //
 // OIS
 //
+#if defined __APPLE__
+#include <ois/OIS.h>
+#else
 #include <OIS/OIS.h>
+#endif
 
 //
 // Windows
@@ -42,20 +46,50 @@
 //
 // Utils
 //
+#include <functional>
 #include <cassert>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <fstream>
+#include <cstring>
 
 //
 // Project headers
 //
 #include "AppLauncher.hpp"
 #include "binary.hpp"
+#include "json.hpp"
 #include "ContextGame.hpp"
 #include "game/menu/ContextMenu.hpp"
 #include "ContextSplash.hpp"
 #include "GameState.hpp"
 #include "InputListener.hpp"
+#include "SettingsPlayer.hpp"
+#include "SoundManager.hpp"
+#include "SaveData.hpp"
+
+// Menu
+#include "AssetSetter.hpp"
+#include "ContextMenu.hpp"
+#include "GUI.hpp"
+#include "IMenuLayer.hpp"
+#include "InGameHUD.hpp"
+#include "InGamePause.hpp"
+#include "MainMenu.hpp"
+#include "MenuKeymap.hpp"
+#include "MenuManager.hpp"
+#include "MenuMultiplayer.hpp"
+#include "MenuOptions.hpp"
+#include "MenuScores.hpp"
+#include "MenuSolo.hpp"
+#include "MenuPopError.hpp"
+#include "game/menu/AssetResizer.hpp"
+#include "game/menu/Dim.hpp"
 
 // Game
+#include "Pauser.hpp"
 #include "AContext.hpp"
 #include "CameraMode.hpp"
 #include "GameData.hpp"
@@ -87,5 +121,42 @@
 // Logger
 //
 #include "Logger.hpp"
+#include "IOError.hpp"
+#include "NetworkConnectionError.hpp"
+#include "NetworkInvalidAddressError.hpp"
+#include "NetworkInvalidPacketError.hpp"
+#include "NetworkReadPacketError.hpp"
+#include "NetworkWritePacketError.hpp"
+#include "NetworkInvalidMapError.hpp"
+#include "MapError.hpp"
+
+// Network
+#include "NetworkManager.hpp"
+#include "NetworkGameServer.hpp"
+//
+// Physic
+//
+
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang            system_header
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+
+#include <Shapes/OgreBulletCollisionsBoxShape.h>
+#include <Shapes/OgreBulletCollisionsSphereShape.h>
+#include <Shapes/OgreBulletCollisionsTrimeshShape.h>
+#include <Shapes/OgreBulletCollisionsConvexHullShape.h>
+#include "Tools.hpp"
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 #endif // !PAKPAK_STDAFX_HPP_

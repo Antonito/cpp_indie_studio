@@ -20,7 +20,8 @@ SRC_DIR=	./src/
 INCLUDE_DIR=	./include/
 
 DIR_LIST=	$(SRC_DIR)				\
-		$(ROOT_DIR)/libs/network/include/
+		$(ROOT_DIR)/libs/network/include/	\
+		$(ROOT_DIR)/libs/logger/include/
 
 HEADER=		packet_stdafx.hpp
 
@@ -28,6 +29,7 @@ HEADER=		packet_stdafx.hpp
 
 SRC_FILES=	GameServerToCM.cpp	\
 		GameClientToCM.cpp	\
+		GameClientToGS.cpp	\
 		PacketHeader.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))

@@ -19,11 +19,25 @@
 #include <memory>
 #include <vector>
 #include <cstring>
+#include <algorithm>
+#include <atomic>
 #include "Logger.hpp"
 #include "GameServer.hpp"
 #include "TCPSocket.hpp"
 #include "Packet.hpp"
 #include "GameServerCMPacket.hpp"
 #include "Token.hpp"
+#include "Ini.hpp"
+#include "Config.hpp"
+#include "GameLogic.hpp"
+#include "GameClient.hpp"
+#include "json.hpp"
+#include "MapError.hpp"
+
+#if defined(_WIN32)
+#include "dirent/dirent.h"
+#else
+#include <dirent.h>
+#endif
 
 #endif // !GAME_SERVER_STDAFX_HPP_

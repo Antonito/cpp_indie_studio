@@ -14,7 +14,7 @@ namespace core
   class MainMenu : public IMenuLayer
   {
   public:
-    MainMenu(menu::MenuManager &menuManager, GUI &gui);
+    MainMenu(menu::MenuManager &menuManager, GUI &gui, SoundManager &sound);
     virtual ~MainMenu()
     {
     }
@@ -36,15 +36,26 @@ namespace core
     MainMenu(MainMenu &&) = delete;
     MainMenu &operator=(MainMenu const &) = delete;
     void      initGUI();
-    bool      onExitClick(CEGUI::EventArgs const &);
-    bool      onSoloClick(CEGUI::EventArgs const &);
-    bool      onMultiClick(CEGUI::EventArgs const &);
-    bool      onOptionClick(CEGUI::EventArgs const &);
-    bool      onScoreClick(CEGUI::EventArgs const &);
 
-    GUI &              m_gui;
-    GameState          m_curState;
-    menu::MenuManager &m_menuManager;
+    void soundClick();
+    void soundPass();
+
+    bool onExitClick(CEGUI::EventArgs const &);
+    bool onSoloClick(CEGUI::EventArgs const &);
+    bool onMultiClick(CEGUI::EventArgs const &);
+    bool onOptionClick(CEGUI::EventArgs const &);
+    bool onScoreClick(CEGUI::EventArgs const &);
+
+    bool onExitArea(CEGUI::EventArgs const &);
+    bool onSoloArea(CEGUI::EventArgs const &);
+    bool onMultiArea(CEGUI::EventArgs const &);
+    bool onOptionArea(CEGUI::EventArgs const &);
+    bool onScoreArea(CEGUI::EventArgs const &);
+
+    GUI &               m_gui;
+    GameState           m_curState;
+    menu::MenuManager & m_menuManager;
+    core::SoundManager &m_sound;
   };
 }
 

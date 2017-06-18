@@ -2,7 +2,8 @@
 
 namespace game
 {
-  PreGame::PreGame(GameData &data, ILayerStack &layer) : ALayer(data, layer)
+  PreGame::PreGame(GameData &data, ILayerStack &layer, core::HUD *hud)
+      : ALayer(data, layer, hud)
   {
   }
 

@@ -18,26 +18,21 @@ namespace game
     ACar &operator=(ACar const &) = delete;
     ACar &operator=(ACar &&) = delete;
 
-    Ogre::Vector3 const &position() const;
-    Ogre::Vector3 const &direction() const;
-    Ogre::Vector3 const &movement() const;
-    double               speed() const;
+    Ogre::Vector3 const &   position() const;
+    Ogre::Quaternion const &direction() const;
+    double                  speed() const;
 
     void move(double);
     void turn(double);
+    void resetOrientation();
 
     void update(double);
 
     Ogre::Camera *getCamera() const;
 
   protected:
-    ACar(Ogre::SceneManager *sceneMgr, std::string const &mesh,
-         Ogre::Vector3 const &pos, Ogre::Vector3 const &dir);
-
-    Ogre::Vector3 m_pos;
-    Ogre::Vector3 m_dir;
-    Ogre::Vector3 m_mov;
-    double        m_speed;
+    ACar(game::GameData &gamedata, std::string const &mesh,
+         Ogre::Vector3 const &pos, Ogre::Quaternion const &dir);
 
     double m_tryMoving;
     double m_tryTurning;
@@ -46,6 +41,34 @@ namespace game
     Ogre::SceneNode *m_carNode;
     Ogre::Entity *   m_entity;
     Ogre::Camera *   m_camera;
+
+    OgreBulletDynamics::RigidBody *m_body;
+
+    btRigidBody *m_hullbody;
+
+    btRaycastVehicle::btVehicleTuning m_tuning;
+    btRaycastVehicle *                m_vehicle;
+    btVehicleRaycaster *              m_raycaster;
+
+    GameData &m_gamedata;
+
+    double m_steering;
+
+    double m_engineForce;
+    double m_breakingForce;
+    double m_maxEngineForce;
+    double m_maxBreakingForce;
+    double m_vehicleSteering;
+    double m_steeringIncrement;
+    double m_steeringClamp;
+    double m_wheelRadius;
+    double m_wheelWidth;
+    double m_wheelFriction;
+    double m_suspensionStiffness;
+    double m_suspensionDamping;
+    double m_suspensionCompression;
+    double m_rollInfluence;
+    double m_suspensionRestLength;
   };
 }
 

@@ -4,11 +4,14 @@
 #include <string>
 #include <cstdint>
 #include <thread>
+#include <memory>
 #include "TCPSocket.hpp"
 #include "IServer.hpp"
 #include "IClient.hpp"
 #include "Token.hpp"
 #include "GameClient.hpp"
+#include "GameLogic.hpp"
+#include "IOError.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
@@ -27,6 +30,8 @@ public:
   // IServer
   virtual bool run();
   virtual void stop();
+
+  // TCP
   virtual bool addClient();
   virtual bool removeClient(network::IClient &);
 
@@ -37,9 +42,23 @@ public:
   virtual bool                           hasTimedOut() const;
 
 private:
-  bool authenticateToConnectManager();
-  void connectManagerCom();
-  void gameServerTCP();
+  // ConnectManager methods
+  bool         authenticateToConnectManager();
+  void         connectManagerCom();
+  std::int32_t connectManagerComActivity(std::int32_t const sock,
+                                         fd_set &readfds, fd_set &writefds,
+                                         fd_set &exceptfds, bool canWrite);
+  network::IClient::ClientAction connectManagerComTreatInput(bool &canWrite);
+  network::IClient::ClientAction connectManagerComTreatOutput(bool &canWrite);
+
+  // GameServerTCP methods
+  void         gameServerTCP();
+  std::int32_t gameServerTCPActivity(std::int32_t const sock, fd_set &readfds,
+                                     fd_set &writefds, fd_set &exceptfds);
+  std::int32_t gameServerTCPIO(std::int32_t const sock, fd_set &readfds,
+                               fd_set &writefds, fd_set &exceptfds);
+
+  // GameServerUDP methods
   void gameServerUDP();
 
   // Basic datas
@@ -48,6 +67,7 @@ private:
   std::int32_t const m_maxClients;
   std::int32_t       m_curClients;
   std::string        m_licence;
+  GameLogic          m_gameLogic;
 
   // Sockets and servers
   network::TCPSocket m_connectManagerSock;
@@ -55,10 +75,11 @@ private:
   std::thread        m_connectSrv;
   std::thread        m_gameSrvTCP;
   std::thread        m_gameSrvUDP;
+  std::thread        m_gameLogicThread;
 
   // Tokens
-  std::vector<GameClient> m_clientList;
-  std::vector<Token>      m_tokenList;
+  std::vector<std::unique_ptr<GameClient>> m_clientList;
+  std::vector<Token>                       m_tokenList;
 };
 
 // Disable clang warning for implicit padding

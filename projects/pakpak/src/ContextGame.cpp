@@ -2,8 +2,10 @@
 
 namespace game
 {
-  ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input)
-      : core::AContext(win, input), m_game(), m_players(), m_quit(false)
+  ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
+                           core::SettingsPlayer &settings)
+      : core::AContext(win, input), m_game(), m_players(),
+        m_settings(settings), m_quit(false), m_hud(nullptr)
   {
   }
 
@@ -13,38 +15,47 @@ namespace game
 
   void ContextGame::enable()
   {
+    Pauser::unpause();
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
+    m_quit = false;
 
-    std::size_t nbPlayer = 6;
+    std::size_t nbPlayer = 2;
 
+    m_game.setPlayerNb(0);
     m_game.setPlayerNb(nbPlayer);
 
-    std::size_t nbLocalPlayer = 3;
+    std::size_t nbLocalPlayer = 1;
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
-	m_game[i].setCar(std::make_unique<EmptyCar>(m_game.sceneMgr(),
-	                                            Ogre::Vector3(0, 0, 0),
-	                                            Ogre::Vector3(0, 0, -1)));
+	m_game[i].setCar(std::make_unique<EmptyCar>(
+	    m_game, Ogre::Vector3::ZERO, Ogre::Quaternion::IDENTITY));
+      }
+    if (m_players.size() < 2)
+      {
+	nope::log::Log(Debug) << "Creating HUD";
+	m_hud = std::make_unique<core::HUD>();
       }
 
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
-	m_players.emplace_back(
-	    std::make_unique<LocalPlayer>(m_win, m_game, &m_game[i], i));
+	m_players.emplace_back(std::make_unique<LocalPlayer>(
+	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
+	    m_hud.get(), *this));
       }
-
     updateViewPort();
+
+    m_input->setPhysicWorld(m_game.physicWorld());
   }
 
   void ContextGame::updateViewPort()
   {
     int size = static_cast<int>(m_players.size());
 
-    for (std::size_t i = 0; i < static_cast<std::size_t>(size); ++i)
+    for (int i = 0; i < size; ++i)
       {
-	m_players[i]->setViewPort(
+	m_players[static_cast<std::size_t>(i)]->setViewPort(
 	    static_cast<Ogre::Real>(
 	        static_cast<double>((i % 2) * ((size - 1) / 2)) * 0.5),
 	    static_cast<Ogre::Real>(
@@ -63,12 +74,14 @@ namespace game
   void ContextGame::disable()
   {
     m_players.clear();
+    m_input->setPhysicWorld(nullptr);
   }
 
   core::GameState ContextGame::update()
   {
     m_input->capture();
     m_game.update();
+    m_quit = m_hud->getQuit();
     return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }
 
@@ -78,20 +91,14 @@ namespace game
 
   bool ContextGame::keyPressed(OIS::KeyEvent const &ke)
   {
-    if (ke.key == OIS::KC_ESCAPE)
-      {
-        m_quit = true;
-      }
-
     std::size_t i = 0;
     for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
-	std::cout << "		Pressed for player " << i << std::endl;
-
+	nope::log::Log(Debug) << "\t\tPressed for player " << i;
 	p->keyPressed(ke);
 	++i;
       }
-    std::cout << std::endl;
+    nope::log::Log(Debug) << "\n";
     return (true);
   }
 
@@ -131,5 +138,10 @@ namespace game
 	p->mouseReleased(me, id);
       }
     return (true);
+  }
+
+  void ContextGame::setQuit(bool quit)
+  {
+    m_quit = quit;
   }
 }

@@ -2,6 +2,8 @@
 #define CONTEXTMENU_HPP_
 
 #include <array>
+#include "SoundManager.hpp"
+#include "SettingsPlayer.hpp"
 #include "AContext.hpp"
 #include "GUI.hpp"
 #include "IMenuLayer.hpp"
@@ -24,15 +26,18 @@ namespace menu
                             public OIS::MouseListener
   {
   public:
-    ContextMenu(Ogre::RenderWindow *win, core::InputListener *input);
+    ContextMenu(Ogre::RenderWindow *win, core::InputListener *input,
+                core::SettingsPlayer &settings, core::SoundManager &sound,
+                core::NetworkManager &net);
+
     ContextMenu(ContextMenu const &) = delete;
     ContextMenu(ContextMenu &&) = delete;
     virtual ~ContextMenu();
     ContextMenu &operator=(ContextMenu const &) = delete;
     ContextMenu &operator=(ContextMenu &&) = delete;
 
-    virtual void enable();
-    virtual void disable();
+    virtual void            enable();
+    virtual void            disable();
     virtual core::GameState update();
     virtual void            display();
     bool keyPressed(const OIS::KeyEvent &arg);
@@ -42,7 +47,8 @@ namespace menu
     bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
   private:
-    MenuManager m_menu;
+    MenuManager         m_menu;
+    core::SoundManager &m_sound;
   };
 }
 

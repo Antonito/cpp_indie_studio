@@ -1,4 +1,24 @@
 #include "pakpak_stdafx.hpp"
+#if defined __APPLE__
+
+// Disable lib errors
+#if defined   __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreserved-id-macro"
+#endif
+#import <Cocoa/Cocoa.h>
+#ifndef __glew_h__
+#define __glew_h__
+#endif
+#include "OSX/macUtils.h"
+#import "OSXPort.h"
+
+// Reset flags
+#if defined   __clang__
+#pragma clang diagnostic pop
+#endif
+
+#endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 
@@ -12,6 +32,7 @@ int main(int, char **)
 
 {
   nope::log::Logger::start("nope.log");
+  nope::log::Logger::logLevel = nope::log::LogLevel::LOG_DEBUG;
   core::AppLauncher app;
 
   try
@@ -36,6 +57,5 @@ int main(int, char **)
 
 #endif
     }
-
   return 0;
 }

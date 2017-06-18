@@ -2,8 +2,8 @@
 
 namespace game
 {
-  Loading::Loading(GameData &data, ILayerStack &layer)
-      : ALayer(data, layer), m_start()
+  Loading::Loading(GameData &data, ILayerStack &layer, core::HUD *hud)
+      : ALayer(data, layer, hud), m_start()
   {
   }
 

@@ -3,9 +3,33 @@
 
 #include <memory>
 #include <OGRE/Ogre.h>
-#include <OIS/OISInputManager.h>
+#if defined __APPLE__
+#include <ois/OISMouse.h>
+#include <ois/OISKeyboard.h>
+#include <ois/OISInputManager.h>
+#else
 #include <OIS/OISMouse.h>
 #include <OIS/OISKeyboard.h>
+#include <OIS/OISInputManager.h>
+#endif
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang            system_header
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC            system_header
+#endif
+
+#include <OgreBulletDynamicsWorld.h>
+
+// Enable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 namespace core
 {
@@ -26,6 +50,8 @@ namespace core
     virtual void windowClosed(Ogre::RenderWindow *rw);
     bool frameRenderingQueued(const Ogre::FrameEvent &evt);
     void startOIS();
+    void setNormalstate();
+    void setPausedState();
 
     void setMouseEventCallback(OIS::MouseListener *listener);
     void setKeyboardEventCallback(OIS::KeyListener *listener);
@@ -33,12 +59,20 @@ namespace core
     void capture();
     void shutdown();
 
+    bool frameStarted(Ogre::FrameEvent const &evt);
+    bool frameEnd(Ogre::FrameEvent const &evt);
+
+    void setPhysicWorld(OgreBulletDynamics::DynamicsWorld *world);
+
   private:
     Ogre::RenderWindow *m_window;
     OIS::InputManager * m_inputManager;
     OIS::Mouse *        m_mouse;
     OIS::Keyboard *     m_keyboard;
-    bool                m_shutdown;
+
+    OgreBulletDynamics::DynamicsWorld *m_physicWorld;
+
+    bool m_shutdown;
   };
 }
 

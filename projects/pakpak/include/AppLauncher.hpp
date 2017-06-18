@@ -5,6 +5,15 @@
 #include <memory>
 #include "IContext.hpp"
 #include "GameState.hpp"
+#include "SettingsPlayer.hpp"
+#include "SoundManager.hpp"
+#include "NetworkManager.hpp"
+
+// Disable clang warning for templated class padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
 
 // Forward declaration for faster compilation
 namespace Ogre
@@ -36,19 +45,24 @@ namespace core
     void createFrameListener();
 
   private:
-    Ogre::Root *        m_root;
-    Ogre::RenderWindow *m_window;
-    // Ogre::SceneManager *m_sceneMgr;
-    // Ogre::Camera *      m_camera;
-    InputListener *m_inputListener;
-
+    Ogre::Root *                 m_root;
+    Ogre::RenderWindow *         m_window;
+    InputListener *              m_inputListener;
     static constexpr std::size_t nbContext =
         static_cast<std::size_t>(GameState::NbGameState);
-
     std::array<std::unique_ptr<IContext>, nbContext> m_contexts;
-    IContext *                                       m_currentContext;
-    GameState                                        m_gameState;
+    IContext *     m_currentContext;
+    GameState      m_gameState;
+    SettingsPlayer m_settings;
+    SoundManager   m_soundManager;
+    NetworkManager m_network;
+
+    void initOpenAl(char const *);
   };
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !APPLAUNCHER_HPP_

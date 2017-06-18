@@ -4,10 +4,10 @@
 
 #include <cstdlib>
 #include <climits>
+#include <locale>
+#include "PyFunctionInitializationError.hpp"
 #include "PythonModule.hpp"
 #include "PyInitializationError.hpp"
-#include "PyFunctionInitializationError.hpp"
-#include "Logger.hpp"
 
 pythonpp::PythonModule::~PythonModule()
 {
@@ -15,12 +15,12 @@ pythonpp::PythonModule::~PythonModule()
 }
 
 pythonpp::PythonModule::PythonModule(std::string const &moduleName)
-    : m_module(nullptr), m_functions()
+    : m_module(nullptr), m_functions(), m_moduleName(moduleName)
 {
-  char buff[PATH_MAX];
+  char      buff[PATH_MAX];
   PyObject *name;
 
-  printf("started init\n");
+  nope::log::Log(Debug) << "Starting python module '" << moduleName << "'";
   Py_Initialize();
   PySys_SetPath(realpath(".", buff));
   if (!Py_IsInitialized())
@@ -47,28 +47,31 @@ void pythonpp::PythonModule::feedFunctions(
 {
   std::vector<std::string> stolenNames = std::move(functionNames);
 
-  printf("starting function feed\n");
+  nope::log::Log(Debug) << "Starting module '" << m_moduleName
+                        << "' function feed...";
   for (std::string const &name : stolenNames)
     {
       try
-      {
-        m_functions.push_back(std::make_unique<PythonFunction>(m_module, name));
-      }
+	{
+	  m_functions.push_back(
+	      std::make_unique<PythonFunction>(m_module, name));
+	}
       catch (pythonpp::PyFunctionInitializationError &err)
-      {
-        Log(nope::log::Warning) << err.what() << std::endl;
-      }
+	{
+	  Log(nope::log::Warning) << err.what() << std::endl;
+	}
     }
-  printf("finished function feed\n");
+  nope::log::Log(Debug) << "Function feed over";
 }
 
 pythonpp::PythonFunction::~PythonFunction()
 {
+  nope::log::Log(Debug) << "Decrementing function '" << m_name << "'";
   Py_XDECREF(m_function);
 }
 
-pythonpp::PythonFunction::PythonFunction(
-    PyObject *module, std::string const &functionName)
+pythonpp::PythonFunction::PythonFunction(PyObject *         module,
+                                         std::string const &functionName)
     : m_function(nullptr), m_name(functionName)
 {
   m_function = PyObject_GetAttrString(module, functionName.c_str());
@@ -78,5 +81,10 @@ pythonpp::PythonFunction::PythonFunction(
   if (!PyCallable_Check(m_function))
     throw(pythonpp::PyFunctionInitializationError("Object '" + functionName +
                                                   "' is not callable"));
-  std::cout << "function : " << functionName << " pushed" << std::endl;
+  nope::log::Log(Debug) << "Function '" << m_name << "' feeded!";
+}
+
+const std::string &pythonpp::PythonFunction::getName() const
+{
+  return m_name;
 }
