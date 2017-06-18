@@ -20,6 +20,7 @@
 #include <Debug/OgreBulletCollisionsDebugDrawer.h>
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreBulletCollisionsShape.h>
+#include <game/map/Map.hpp>
 
 // Disable clang warning for templated class padding
 #if defined(__clang__)
@@ -29,6 +30,7 @@
 #endif
 
 #include "PlayerData.hpp"
+#include "Ia.hpp"
 #include "Map.hpp"
 
 namespace game

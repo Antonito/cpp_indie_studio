@@ -4,6 +4,7 @@
 #include <string>
 #include <OGRE/OgreEntity.h>
 #include <OGRE/OgreSceneManager.h>
+#include <game/GameData.hpp>
 #include "PathPoint.hpp"
 #include "Metadata.hpp"
 
@@ -24,6 +25,7 @@ namespace game
 
     void                           loadFromFile(std::string filename);
     void                           unload();
+    std::vector<Ogre::Vector3>	const &getNodes() const;
     OgreBulletDynamics::RigidBody *rigidBody();
 
   private:

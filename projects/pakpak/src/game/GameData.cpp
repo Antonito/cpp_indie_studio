@@ -129,4 +129,15 @@ namespace game
   {
     return (m_map);
   }
+
+    void GameData::setIaNb(std::size_t n)
+    {
+      m_ia.resize(n);
+    }
+
+    size_t GameData::getIaNb() const
+    {
+      return m_ia.size();
+    }
+
 }

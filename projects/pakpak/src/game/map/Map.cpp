@@ -148,7 +148,12 @@ namespace game
     return (m_body);
   }
 
-  Map::MapData::MapData() : points(), elements()
+    std::vector<Ogre::Vector3> const &Map::getNodes() const
+    {
+      return m_points;
+    }
+
+    Map::MapData::MapData() : points(), elements()
   {
   }
 

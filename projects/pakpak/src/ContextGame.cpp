@@ -44,6 +44,10 @@ namespace game
 	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
 	    m_hud.get(), *this));
       }
+      for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
+      {
+          m_ia.emplace_back(std::make_unique<Ia>(m_game[i].car(), m_game.map().getNodes()));
+      }
     updateViewPort();
 
     m_input->setPhysicWorld(m_game.physicWorld());
