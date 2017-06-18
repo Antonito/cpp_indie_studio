@@ -284,7 +284,7 @@ network::IClient::ClientAction GameClient::treatOutgoingData()
 
     case State::UDP_CONNECT:
       rep.pck.eventType = GameClientToGSEvent::UDP_SRV;
-      rep.pck.eventData.udp.port = 1;
+      rep.pck.eventData.udp.port = m_udpPort;
 
       m_packet << rep;
       ret = write(m_packet);
