@@ -42,14 +42,17 @@ namespace core
 	nope::log::Log(Debug)
 	    << "List server : "
 	    << "Server #" + std::to_string(i + 1) + " : " + game.address +
-	           ":" + std::to_string(game.port);
-	nope::log::Log(Info)
-	    << "Server: " << game.address << ":" << game.port << " [ "
-	    << game.clients << " / " << game.maxClients << " ]";
+	           " Player : (" + std::to_string(game.clients) + "/" +
+	           std::to_string(game.maxClients) + ").";
+	nope::log::Log(Info) << "Server: " << game.address << ":" << game.port
+	                     << " [ " << game.clients << " / "
+	                     << game.maxClients << " ]";
 	CEGUI::ItemEntry *itm = static_cast<CEGUI::ItemEntry *>(
 	    winManager->createWindow("TaharezLook/ListboxItem"));
 	itm->setText("Server #" + std::to_string(i + 1) + " : " +
-	             game.address + ":" + std::to_string(game.port));
+	             game.address + " Player : (" +
+	             std::to_string(game.clients) + "/" +
+	             std::to_string(game.maxClients) + ").");
 	static_cast<CEGUI::ItemListbox *>(
 	    m_gui.getRoot()->getChild("servers_list"))
 	    ->addItem(itm);
@@ -185,24 +188,24 @@ namespace core
 
   bool MenuMultiplayer::onPlayClick(CEGUI::EventArgs const &)
   {
-      soundClick();
+    soundClick();
 
-      // Get token from gameServer
-      try
+    // Get token from gameServer
+    try
       {
-          std::string const &token = m_network.getToken(m_selectGameServer);
-          // Connect to game server
-          m_network.connect(m_selectGameServer, token);
+	std::string const &token = m_network.getToken(m_selectGameServer);
+	// Connect to game server
+	m_network.connect(m_selectGameServer, token);
       }
-      catch (...)
+    catch (...)
       {
-          nope::log::Log(Debug)
-                  << "\n======================================================\n=="
-                          "Error cannot connect to the ConnectServerManager "
-                          "!==\n======================================================";
-          //TODO: Remplace by a Error popUp
+	nope::log::Log(Debug)
+	    << "\n======================================================\n=="
+	       "Error cannot connect to the ConnectServerManager "
+	       "!==\n======================================================";
+	// TODO: Remplace by a Error popUp
 
-          return true;
+	return true;
       }
     nope::log::Log(Debug) << "CONNECT TO GAME_SERVER CLEAN";
     m_curState = GameState::InGame;
