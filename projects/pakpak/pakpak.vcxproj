@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SNDFILE_HOME)\include\;$(OPENAL_HOME)\include\;$(ProjectDir)include\game\menu\;$(SolutionDir)libs\exceptions\include\;$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\game\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(ProjectDir)include\network\;$(SolutionDir)libs\crypto\include\;$(SNDFILE_HOME)\include\;$(OPENAL_HOME)\include\;$(ProjectDir)include\game\menu\;$(SolutionDir)libs\exceptions\include\;$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\game\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)build\;$(SNDFILE_HOME)\lib\;$(OPENAL_HOME)\libs\Win64\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
@@ -90,7 +90,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SNDFILE_HOME)\include\;$(OPENAL_HOME)\include\;$(ProjectDir)include\game\menu\;$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\game\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(ProjectDir)include\network\;$(SolutionDir)libs\crypto\include\;$(SNDFILE_HOME)\include\;$(OPENAL_HOME)\include\;$(ProjectDir)include\game\menu\;$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\game\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)build\;$(SNDFILE_HOME)\lib\;$(OPENAL_HOME)\libs\Win64\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
@@ -101,13 +101,13 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>DEBUG;_DEBUG;_WINDOWS;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>INDIE_MAP_EDITOR;DEBUG;_DEBUG;_WINDOWS;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(CEGUI_DEPS_HOME)\include\;$(CEGUI_INCLUDE)\;$(OGRE_HOME)\include\OGRE\Overlay;$(BOOST_HOME)\;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(CEGUI_LIB)\;$(BULLET_ROOT)\lib\Debug\;$(OGRE_BULLET_ROOT)\lib\Debug\;$(BOOST_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>exceptions.lib;OpenAL32.lib;libsndfile-1.lib;OgreOverlay_d.lib;OgreMain_d.lib;OIS_d.lib;OgreBulletCollisions_d.lib;OgreBulletDynamics_d.lib;bulletcollision_Debug.lib;bulletdynamics_Debug.lib;LinearMath_Debug.lib;GIMPACTutils_Debug.lib;ConvexDecomposition_Debug.lib;%(AdditionalDependencies);CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;</AdditionalDependencies>
+      <AdditionalDependencies>libindie_ini.lib;libindie_crypto.lib;network.lib;packet.lib;exceptions.lib;OpenAL32.lib;libsndfile-1.lib;OgreOverlay_d.lib;OgreMain_d.lib;OIS_d.lib;OgreBulletCollisions_d.lib;OgreBulletDynamics_d.lib;bulletcollision_Debug.lib;bulletdynamics_Debug.lib;LinearMath_Debug.lib;GIMPACTutils_Debug.lib;ConvexDecomposition_Debug.lib;%(AdditionalDependencies);CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -173,7 +173,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>INDIE_MAP_EDITOR;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(CEGUI_DEPS_HOME)\include\;$(BULLET_HOME)\src;$(OGRE_HOME)\include\OGRE\Overlay;$(BOOST_HOME)\;$(OGRE_HOME)\include\OGRE\Overlay;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -182,7 +182,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(BULLET_ROOT)\lib\Release\;$(OGRE_BULLET_ROOT)\lib\Release\;$(BOOST_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>exceptions.lib;OpenAL32.lib;libsndfile-1.lib;OgreOverlay.lib;OgreMain.lib;OIS.lib;bulletcollision.lib;bulletdynamics.lib;LinearMath.lib;GIMPACTutils.lib;ConvexDecomposition.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libindie_ini.lib;libindie_crypto.lib;network.lib;packet.lib;exceptions.lib;OpenAL32.lib;libsndfile-1.lib;OgreOverlay.lib;OgreMain.lib;OIS.lib;bulletcollision.lib;bulletdynamics.lib;LinearMath.lib;GIMPACTutils.lib;ConvexDecomposition.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -213,6 +213,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\Config.cpp" />
     <ClCompile Include="src\ContextGame.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -293,6 +294,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\game\layer\HUD.cpp" />
     <ClCompile Include="src\game\layer\InGame.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -323,6 +325,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\game\layer\Pauser.cpp" />
     <ClCompile Include="src\game\layer\PostGame.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -403,6 +406,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\game\menu\AssetResizer.cpp" />
     <ClCompile Include="src\game\menu\AssetSetter.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -415,6 +419,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\game\menu\Dim.cpp" />
     <ClCompile Include="src\game\menu\GUI.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -506,6 +511,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\network\NetworkAuth.cpp" />
+    <ClCompile Include="src\network\NetworkConnect.cpp" />
+    <ClCompile Include="src\network\NetworkGameServer.cpp" />
+    <ClCompile Include="src\network\NetworkManager.cpp" />
+    <ClCompile Include="src\SaveData.cpp" />
     <ClCompile Include="src\SettingsPlayer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -532,6 +542,8 @@
   <ItemGroup>
     <ClInclude Include="include\AContext.hpp" />
     <ClInclude Include="include\AppLauncher.hpp" />
+    <ClInclude Include="include\Config.hpp" />
+    <ClInclude Include="include\ConfigTools.hpp" />
     <ClInclude Include="include\ContextGame.hpp" />
     <ClInclude Include="include\ContextMenu.hpp" />
     <ClInclude Include="include\ContextSplash.hpp" />
@@ -546,11 +558,13 @@
     <ClInclude Include="include\game\layer\Chat.hpp" />
     <ClInclude Include="include\game\layer\GameGUI.hpp" />
     <ClInclude Include="include\game\layer\GameLayer.hpp" />
+    <ClInclude Include="include\game\layer\HUD.hpp" />
     <ClInclude Include="include\game\layer\ILayer.hpp" />
     <ClInclude Include="include\game\layer\ILayerStack.hpp" />
     <ClInclude Include="include\game\layer\InGame.hpp" />
     <ClInclude Include="include\game\layer\Loading.hpp" />
     <ClInclude Include="include\game\layer\Menu.hpp" />
+    <ClInclude Include="include\game\layer\Pauser.hpp" />
     <ClInclude Include="include\game\layer\PostGame.hpp" />
     <ClInclude Include="include\game\layer\PreGame.hpp" />
     <ClInclude Include="include\game\layer\Score.hpp" />
@@ -559,8 +573,10 @@
     <ClInclude Include="include\game\LocalPlayer.hpp" />
     <ClInclude Include="include\game\map\Map.hpp" />
     <ClInclude Include="include\game\map\PathPoint.hpp" />
+    <ClInclude Include="include\game\menu\AssetResizer.hpp" />
     <ClInclude Include="include\game\menu\AssetSetter.hpp" />
     <ClInclude Include="include\game\menu\ContextMenu.hpp" />
+    <ClInclude Include="include\game\menu\Dim.hpp" />
     <ClInclude Include="include\game\menu\GUI.hpp" />
     <ClInclude Include="include\game\menu\IMenuLayer.hpp" />
     <ClInclude Include="include\game\menu\InGameHUD.hpp" />
@@ -577,7 +593,12 @@
     <ClInclude Include="include\IEventHandler.hpp" />
     <ClInclude Include="include\IContext.hpp" />
     <ClInclude Include="include\InputListener.hpp" />
+    <ClInclude Include="include\network\NetworkAuth.hpp" />
+    <ClInclude Include="include\network\NetworkConnect.hpp" />
+    <ClInclude Include="include\network\NetworkGameServer.hpp" />
+    <ClInclude Include="include\network\NetworkManager.hpp" />
     <ClInclude Include="include\pakpak_stdafx.hpp" />
+    <ClInclude Include="include\SaveData.hpp" />
     <ClInclude Include="include\SettingsPlayer.hpp" />
     <ClInclude Include="include\targetver.h" />
   </ItemGroup>

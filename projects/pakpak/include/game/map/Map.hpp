@@ -26,6 +26,14 @@ namespace game
     void                           unload();
     OgreBulletDynamics::RigidBody *rigidBody();
 
+#if defined(INDIE_MAP_EDITOR)
+    void save() const;
+    void saveAs(std::string const &filename) const;
+    void addPoint(Ogre::Vector3 const &pt);
+    void removePoint(std::size_t index);
+    void removeSelectedPoint();
+#endif // !INDIE_MAP_EDITOR
+
   private:
     struct MapData
     {
@@ -33,6 +41,7 @@ namespace game
       struct Point
       {
 	Point();
+	Point(float _x, float _y, float _z);
 	// clang-format off
 	NOPE_SERIAL_MEMBER(
 	    float, x,
@@ -44,6 +53,7 @@ namespace game
       struct Quaternion
       {
 	Quaternion();
+	Quaternion(float _x, float _y, float _z, float _w);
 	// clang-format off
 	NOPE_SERIAL_MEMBER(
 	    float, x,
@@ -72,11 +82,17 @@ namespace game
     };
 
     game::GameData &               m_gamedata;
-    std::vector<PathPoint>         m_points;
+    std::vector<Ogre::Vector3>     m_points;
     Ogre::Entity *                 m_map;
     Ogre::Entity *                 m_mapbox;
     Ogre::SceneNode *              m_node;
     OgreBulletDynamics::RigidBody *m_body;
+
+#if defined(INDIE_MAP_EDITOR)
+    std::string m_filename;
+    std::size_t m_selectedPoint;
+#endif // !INDIE_MAP_EDITOR
+
     // std::vector<MapElement> m_elements;
     // std::vector<MapBonus> m_bonus;
   };

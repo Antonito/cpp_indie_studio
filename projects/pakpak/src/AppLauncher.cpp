@@ -135,30 +135,40 @@ namespace core
 
     createFrameListener();
 
+    nope::log::Log(Debug) << "Starting to load contexts";
+
     // Splash context
     m_contexts[static_cast<std::size_t>(GameState::Splash)] =
         std::make_unique<splash::ContextSplash>(m_window, m_inputListener,
                                                 m_soundManager);
+
+    nope::log::Log(Debug) << "Splash context loaded";
 
     // Menu context
     m_contexts[static_cast<std::size_t>(GameState::Menu)] =
         std::make_unique<menu::ContextMenu>(
             m_window, m_inputListener, m_settings, m_soundManager, m_network);
 
+    nope::log::Log(Debug) << "Menu context loaded";
+
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
         std::make_unique<game::ContextGame>(m_window, m_inputListener,
                                             m_settings);
 
+    nope::log::Log(Debug) << "Game context loaded";
+
+    nope::log::Log(Debug) << "Switching context";
     m_currentContext =
         m_contexts[static_cast<std::size_t>(GameState::Splash)].get();
+    m_gameState = GameState::Splash;
 
     m_currentContext->enable();
     resizer::AssetResizer::initResizer(m_window->getWidth(),
                                        m_window->getHeight());
 
     // Render Loop
-    m_gameState = m_currentContext->update();
+    m_currentContext->update();
     while (true)
       {
 	GameState state;
@@ -184,8 +194,8 @@ namespace core
 	sizef.d_width = static_cast<float>(m_window->getWidth());
 	if (resizer::AssetResizer::hasWindowResized(*m_window))
 	  {
-	    nope::log::Log(Debug) << "Resizing W: " << sizef.d_width
-	                          << " H: " << sizef.d_height;
+	    nope::log::Log(Debug)
+	        << "Resizing W: " << sizef.d_width << " H: " << sizef.d_height;
 	    CEGUI::System::getSingleton().notifyDisplaySizeChanged(sizef);
 	  }
 

@@ -41,6 +41,7 @@
 //
 #ifdef _WIN32
 #include "windows.h"
+#include <io.h>
 #endif // !_WIN32
 
 //

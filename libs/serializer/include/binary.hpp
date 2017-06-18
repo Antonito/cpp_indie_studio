@@ -30,6 +30,8 @@ namespace nope
 	// Function itself
 	static void to_binary(buf_t &v, T const &t)
 	{
+	  nope::log::Log(Debug)
+	      << "Serialize a " << typeid(T).name() << " (object)";
 	  // Check if the type has metadata
 	  static_assert(has_metadata<T>::result, "The type has no metadata");
 
@@ -49,6 +51,8 @@ namespace nope
 	// Function itself
 	static void to_binary(buf_t &v, std::string const &s)
 	{
+	  nope::log::Log(Debug)
+	      << "Serialize a " << typeid(std::string).name() << " (string)";
 	  // Get the string size and convert to big endian
 	  std::size_t toSend = host_to_net(s.size());
 	  // Buffer
@@ -70,18 +74,24 @@ namespace nope
 	// Function itself
 	static void to_binary(buf_t &v, std::vector<T> const &s)
 	{
+	  nope::log::Log(Debug)
+	      << "Serialize a " << typeid(std::vector<T>).name()
+	      << " (vector)";
 	  // Get the string size and convert to big endian
-	  std::size_t toSend = host_to_net(s.size());
+	  std::uint32_t toSend =
+	      host_to_net(static_cast<std::uint32_t>(s.size()));
 	  // Buffer
-	  std::array<std::uint8_t, sizeof(std::size_t)> buf;
+	  std::array<std::uint8_t, sizeof(std::uint32_t)> buf;
 
 	  // Copy the number into the buffer
-	  std::memcpy(buf.data(), &toSend, sizeof(std::size_t));
+	  std::memcpy(buf.data(), &toSend, sizeof(std::uint32_t));
 	  // Insert the size buffer
 	  v.insert(v.end(), buf.begin(), buf.end());
 
 	  for (T const &e : s)
 	    {
+	      nope::log::Log(Debug)
+	          << "Serialize a " << typeid(T).name() << " (vector elem)";
 	      detail::to_binary_impl<T>::to_binary(v, e);
 	    }
 	}
@@ -94,6 +104,8 @@ namespace nope
 	// Function itself
 	static void to_binary(buf_t &v, T i)
 	{
+	  nope::log::Log(Debug)
+	      << "Serialize a " << typeid(T).name() << " (fundamental)";
 	  // Get the value to send in big endian
 	  auto toSend = host_to_net<T>(i);
 
@@ -114,6 +126,8 @@ namespace nope
     template <typename T>
     buf_t to_binary(T const &t)
     {
+      nope::log::Log(Debug)
+          << "Serialize a " << typeid(T).name() << " (to_bin)";
       // Check if the type has metadata
       static_assert(has_metadata<T>::result, "The type doesn't have metadata");
       // Vector to store the result
@@ -162,16 +176,16 @@ namespace nope
 	                       std::size_t &cursor)
 	{
 	  // Temporary value
-	  std::size_t _l;
+	  std::uint32_t _l;
 	  // String length
-	  std::size_t len;
+	  std::uint32_t len;
 
 	  // Copy length from buffer
-	  std::memcpy(&_l, &buf[cursor], sizeof(std::size_t));
+	  std::memcpy(&_l, &buf[cursor], sizeof(std::uint32_t));
 	  // Convert it from big endian
-	  len = net_to_host<std::size_t>(_l);
+	  len = net_to_host<std::uint32_t>(_l);
 	  // Increment cursor position
-	  cursor += sizeof(std::size_t);
+	  cursor += sizeof(std::uint32_t);
 
 	  // Get the string from buffer
 	  s = std::string(reinterpret_cast<const char *>(&buf[cursor]), len);
@@ -192,6 +206,9 @@ namespace nope
 	  static_assert(has_metadata<T>::result,
 	                "The type doesn't have metadata");
 
+	  nope::log::Log(Debug)
+	      << "Deserialize a " << typeid(T).name() << " (object)";
+
 	  // Deserialize each member
 	  apply(t.m_metadata, [&v, &cursor](auto e) {
 	    detail::from_binary_impl<typename std::remove_reference<decltype(
@@ -200,7 +217,7 @@ namespace nope
 	}
       };
 
-      // Deserialize vector from binary
+      // Deserialize string from binary
       template <>
       struct from_binary_impl<std::string, false>
       {
@@ -208,13 +225,15 @@ namespace nope
 	static void from_binary(std::string &s, buf_t const &v,
 	                        std::size_t &cursor)
 	{
+	  nope::log::Log(Debug)
+	      << "Deserialize a " << typeid(std::string).name() << " (string)";
 	  // Read a string from buffer
 	  detail::read_bytes_impl<std::string>::read_bytes(v.data(), s,
 	                                                   cursor);
 	}
       };
 
-      // Deserialize string from binary
+      // Deserialize vector from binary
       template <typename T>
       struct from_binary_impl<std::vector<T>, false>
       {
@@ -222,6 +241,10 @@ namespace nope
 	static void from_binary(std::vector<T> &s, buf_t const &v,
 	                        std::size_t &cursor)
 	{
+	  nope::log::Log(Debug)
+	      << "Deserialize a " << typeid(std::vector<T>).name()
+	      << " (vector)";
+
 	  uint32_t tmp;
 	  uint32_t len;
 
@@ -232,6 +255,8 @@ namespace nope
 	  s.resize(len);
 	  for (T &t : s)
 	    {
+	      nope::log::Log(Debug) << "Deserialize a " << typeid(T).name()
+	                            << " (vector element)";
 	      detail::from_binary_impl<T>::from_binary(t, v, cursor);
 	    }
 	}
@@ -244,6 +269,8 @@ namespace nope
 	// Function itself
 	static void from_binary(T &t, buf_t const &v, std::size_t &cursor)
 	{
+	  nope::log::Log(Debug)
+	      << "Deserialize a " << typeid(T).name() << " (fundamental)";
 	  // Read fundamental type from buffer
 	  detail::read_bytes_impl<T>::read_bytes(v.data(), t, cursor);
 	}
@@ -254,6 +281,9 @@ namespace nope
     template <typename T>
     T from_binary(buf_t const &v)
     {
+      nope::log::Log(Debug)
+          << "Deserialize a " << typeid(T).name() << " (from_bin)";
+
       // Check if the type has metadata
       static_assert(has_metadata<T>::result, "The type doesn't have metadata");
       // Cursor into the binary buffer

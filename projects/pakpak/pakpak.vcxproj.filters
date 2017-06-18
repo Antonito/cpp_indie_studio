@@ -37,9 +37,6 @@
     <Filter Include="Source Files\game\map">
       <UniqueIdentifier>{7bc6dffe-5d7b-4c02-82fc-23131be54ed4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\physic">
-      <UniqueIdentifier>{e0401159-fe17-4e45-8b11-ddcbde16491d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\game\tools">
       <UniqueIdentifier>{3037a546-a5fe-465d-bef5-e47e9e473f2c}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,12 @@
     </Filter>
     <Filter Include="Header Files\game\menu">
       <UniqueIdentifier>{47670d33-48f1-43a9-a6e6-2b3fd6d3992c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\network">
+      <UniqueIdentifier>{acc9eb9d-cdbc-47e6-99ad-7f45550f4bae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\network">
+      <UniqueIdentifier>{39864254-0ac0-4dbd-9be1-a0b5e178e475}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +175,36 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\SoundManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\NetworkAuth.cpp">
+      <Filter>Source Files\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\NetworkConnect.cpp">
+      <Filter>Source Files\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\NetworkGameServer.cpp">
+      <Filter>Source Files\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\NetworkManager.cpp">
+      <Filter>Source Files\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\AssetResizer.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\Dim.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\HUD.cpp">
+      <Filter>Source Files\game\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\layer\Pauser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -324,6 +357,39 @@
       <Filter>Header Files\game\menu</Filter>
     </ClInclude>
     <ClInclude Include="include\SettingsPlayer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\network\NetworkAuth.hpp">
+      <Filter>Header Files\network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\network\NetworkConnect.hpp">
+      <Filter>Header Files\network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\network\NetworkGameServer.hpp">
+      <Filter>Header Files\network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\network\NetworkManager.hpp">
+      <Filter>Header Files\network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\AssetResizer.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\Dim.hpp">
+      <Filter>Header Files\game\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\HUD.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\Pauser.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SaveData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Config.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ConfigTools.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

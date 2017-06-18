@@ -15,6 +15,8 @@ namespace game
 
   void ContextGame::enable()
   {
+    nope::log::Log(Debug) << "Game context enabled";
+
     Pauser::unpause();
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
@@ -74,6 +76,7 @@ namespace game
 
   void ContextGame::disable()
   {
+    nope::log::Log(Debug) << "Game context disabled";
     m_players.clear();
     m_input->setPhysicWorld(nullptr);
   }

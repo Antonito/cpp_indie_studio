@@ -35,10 +35,25 @@ namespace game
     std::string action = m_player.settings().actionForKey(
         static_cast<std::size_t>(m_player.order()), ke.key);
 
+#if defined(INDIE_MAP_EDITOR)
+    switch (ke.key)
+      {
+      case OIS::KC_SPACE:
+	m_gameData.map().addPoint(m_player.car().position());
+	break;
+      case OIS::KC_RETURN:
+	m_gameData.map().save();
+	break;
+      default:
+	break;
+      }
+#endif // !INDIE_MAP_EDITOR
+
     if (action == "NO_ACTION")
       {
 	return false;
       }
+
     nope::log::Log(Info) << "DOING ACTION";
     void (LocalPlayer::*ptr)() = m_player.actions(action).first;
     (m_player.*ptr)();
@@ -61,7 +76,6 @@ namespace game
 
   bool InGame::mouseMoved(OIS::MouseEvent const &)
   {
-
     return (false);
   }
 
