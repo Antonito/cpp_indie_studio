@@ -32,6 +32,10 @@ namespace core
     void disconnect();
     bool isConnected() const;
 
+    // TODO -> UDP communication
+    // std::vector<UDPPacket> getUDPPacket() const;
+    // void sendUDPPacket(std::vector<UDPPacket> &&);
+
   private:
     std::unique_ptr<NetworkAuth>    m_auth;
     std::unique_ptr<NetworkConnect> m_conn;

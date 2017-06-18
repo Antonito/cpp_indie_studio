@@ -19,8 +19,10 @@ namespace core
     if (!m_sock->openConnection())
       {
 	nope::log::Log(Error) << "Cannot create UDP connection.";
-	throw std::exception();
+	throw std::exception(); // TODO
       }
+
+    // Identify socket, send information via TCP to GameServer
   }
 
   void NetworkGame::run()
