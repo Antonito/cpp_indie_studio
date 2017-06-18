@@ -236,6 +236,31 @@ network::IClient::ClientAction GameClient::treatIncomingData()
 	}
       break;
 
+    // Confirm UDP connection
+    case State::UDP_CONFIRM:
+      nope::log::Log(Debug) << "Reading in state UDP_CONFIRM [GameClient]";
+      ret = read(m_packet);
+      if (ret == network::IClient::ClientAction::SUCCESS)
+	{
+	  m_packet >> rep;
+	  // The only event allowed is a VALIDATION event
+	  if (rep.pck.eventType == GameClientToGSEvent::VALIDATION_EVENT)
+	    {
+	      nope::log::Log(Debug)
+	          << "Got Validation: " << rep.pck.eventData.valid
+	          << " [GameClient]";
+	      if (rep.pck.eventData.valid == 1)
+		{
+		  nope::log::Log(Debug) << "Got UDP_REQU request [GameClient]";
+		}
+	      else
+		{
+		  ret = network::IClient::ClientAction::FAILURE;
+		}
+	    }
+	}
+      break;
+
     // Lobby
     case State::WAITING:
       ret = lobbyRead();
@@ -289,6 +314,10 @@ network::IClient::ClientAction GameClient::treatOutgoingData()
       m_packet << rep;
       ret = write(m_packet);
       m_state = State::WAITING;
+      break;
+
+    // Send information on lobby
+    case State::UDP_CONFIRM:
       break;
 
     // Lobby

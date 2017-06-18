@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <memory>
 #include <string>
-#include "TCPSocket.hpp"
 #include "UDPSocket.hpp"
 
 namespace core
@@ -18,8 +17,7 @@ namespace core
     NetworkGame(NetworkGame const &) = delete;
     NetworkGame &operator=(NetworkGame const &) = delete;
 
-    void init(std::uint16_t const port, std::string const &addr,
-              network::TCPSocket &tcpSock);
+    void init(std::uint16_t const port, std::string const &addr);
     void run();
 
   private:

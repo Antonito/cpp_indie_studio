@@ -422,7 +422,7 @@ namespace core
     if (ret != network::IClient::ClientAction::SUCCESS)
       {
 	nope::log::Log(Error) << "Write failed ! [NetworkConnect]";
-	return;
+	throw std::exception(); // TODO
       }
     nope::log::Log(Debug) << "Packet sent [NetworkConnect]";
 
@@ -452,7 +452,7 @@ namespace core
       nope::log::Log(Debug) << "Starting UDP thread";
       try
 	{
-	  m_game->init(port, m_ip, m_sock);
+	  m_game->init(port, m_ip);
 	}
       catch (...)
 	{
@@ -476,7 +476,18 @@ namespace core
       }
     nope::log::Log(Debug) << "Waited for UDP server. [NetworkConnect]";
 
-    // Send information connection
+    // Send confirmation
+    nope::log::Log(Debug) << "Asking UDP server informations";
+    pckContent.pck.eventType = GameClientToGSEvent::VALIDATION_EVENT;
+    pckContent.pck.eventData.valid = 1;
+    pck << pckContent;
+    ret = write(pck);
+    if (ret != network::IClient::ClientAction::SUCCESS)
+      {
+	nope::log::Log(Error) << "Write failed ! [NetworkConnect]";
+	throw std::exception(); // TODO
+      }
+    nope::log::Log(Debug) << "Packet sent [NetworkConnect]";
   }
 
   void NetworkConnect::Tokenize(std::string const &       str,

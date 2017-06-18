@@ -23,6 +23,7 @@ public:
     AUTHENTICATED,
     CHECKING_MAPS,
     UDP_CONNECT,
+    UDP_CONFIRM,
     WAITING,
     PLAYING
   };

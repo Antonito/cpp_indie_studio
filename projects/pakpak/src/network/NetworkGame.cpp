@@ -10,8 +10,7 @@ namespace core
   {
   }
 
-  void NetworkGame::init(std::uint16_t const port, std::string const &addr,
-                         network::TCPSocket &tcpSock)
+  void NetworkGame::init(std::uint16_t const port, std::string const &addr)
   {
     nope::log::Log(Debug) << "Initializing UDP connection.";
     m_sock = std::make_shared<network::UDPSocket>(
@@ -21,12 +20,11 @@ namespace core
 	nope::log::Log(Error) << "Cannot create UDP connection.";
 	throw std::exception(); // TODO
       }
-
-    // Identify socket, send information via TCP to GameServer
   }
 
   void NetworkGame::run()
   {
     nope::log::Log(Debug) << "Starting UDP exchanges";
+    // TODO
   }
 }
