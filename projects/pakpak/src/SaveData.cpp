@@ -19,7 +19,7 @@ namespace core
   }
 
   SaveData::SaveData(SaveData const &cpy)
-      : m_key(cpy.m_key), m_data(cpy.m_data), m_xor(cpy.m_xor)
+      : m_key(cpy.m_key), m_data(cpy.m_data), m_xor(cpy.m_xor), m_crypto()
   {
   }
 
