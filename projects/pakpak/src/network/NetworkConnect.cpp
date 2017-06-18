@@ -26,6 +26,7 @@ namespace core
     authenticate();
     checkFiles();
     setup();
+    m_conn = true;
   }
 
   NetworkConnect::~NetworkConnect()
@@ -35,8 +36,15 @@ namespace core
 
   bool NetworkConnect::disconnect()
   {
-    // TODO
-    return (false);
+    // Stop UDP server
+    if (m_udp.joinable())
+      {
+	nope::log::Log(Debug) << "Joining UDP thread";
+	m_udp.join();
+      }
+    nope::log::Log(Debug) << "Destroying UDP";
+    m_game.reset(nullptr);
+    return (true);
   }
 
   network::IClient::ClientAction NetworkConnect::write(IPacket const &pck)
