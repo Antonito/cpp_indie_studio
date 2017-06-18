@@ -25,24 +25,24 @@ namespace game
 	    m_gui->getRoot()->getChildRecursive("resume_button");
 	if (button)
 	  {
-            button->subscribeEvent(
+	    button->subscribeEvent(
 	        CEGUI::PushButton::EventClicked,
 	        CEGUI::Event::Subscriber(&Menu::onResumeClick, this));
 	  }
-        button = m_gui->getRoot()->getChildRecursive("quit_button");
-        if (button)
-        {
-          button->subscribeEvent(
-              CEGUI::PushButton::EventClicked,
-              CEGUI::Event::Subscriber(&Menu::onQuitClick, this));
-        }
-        button = m_gui->getRoot()->getChildRecursive("settings_button");
-        if (button)
-        {
-          button->subscribeEvent(
-              CEGUI::PushButton::EventClicked,
-              CEGUI::Event::Subscriber(&Menu::onResumeClick, this));
-        }
+	button = m_gui->getRoot()->getChildRecursive("quit_button");
+	if (button)
+	  {
+	    button->subscribeEvent(
+	        CEGUI::PushButton::EventClicked,
+	        CEGUI::Event::Subscriber(&Menu::onQuitClick, this));
+	  }
+	button = m_gui->getRoot()->getChildRecursive("settings_button");
+	if (button)
+	  {
+	    button->subscribeEvent(
+	        CEGUI::PushButton::EventClicked,
+	        CEGUI::Event::Subscriber(&Menu::onResumeClick, this));
+	  }
       }
   }
 
@@ -77,7 +77,7 @@ namespace game
   bool Menu::keyReleased(OIS::KeyEvent const &arg)
   {
     CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(
-        (CEGUI::Key::Scan)arg.key);
+        static_cast<CEGUI::Key::Scan>(arg.key));
     return (true);
   }
 
@@ -85,7 +85,8 @@ namespace game
   {
     CEGUI::GUIContext &context =
         CEGUI::System::getSingleton().getDefaultGUIContext();
-    context.injectMouseMove((float)arg.state.X.rel, (float)arg.state.Y.rel);
+    context.injectMouseMove(static_cast<float>(arg.state.X.rel),
+                            static_cast<float>(arg.state.Y.rel));
     return (false);
   }
 

@@ -6,9 +6,9 @@
 
 namespace game
 {
-  enum SPEED_UNITS : public std::uint8_t
+  enum SPEED_UNITS
   {
-    U0 = 0,
+    U0,
     U1,
     U2,
     U3,
@@ -20,9 +20,9 @@ namespace game
     U9
   };
 
-  enum POSITIONS : public std::uint8_t
+  enum POSITIONS
   {
-    ST = 0,
+    ST,
     ND,
     RD,
     TH
