@@ -2,7 +2,7 @@
 // Created by duhieu_b on 18/06/17.
 //
 
-#include "MenuPopError.hpp"
+#include "pakpak_stdafx.hpp"
 
 core::MenuPopError::MenuPopError(menu::MenuManager &menuManager,
                                  core::GUI &gui, core::SoundManager &sound)
@@ -54,10 +54,9 @@ bool core::MenuPopError::mouseMoved(const OIS::MouseEvent &arg)
       static_cast<float>(arg.state.Y.rel));
 }
 
-bool core::MenuPopError::mousePressed(const OIS::MouseEvent &arg,
+bool core::MenuPopError::mousePressed(const OIS::MouseEvent &,
                                       OIS::MouseButtonID     id)
 {
-  (void)arg;
   return CEGUI::System::getSingleton()
       .getDefaultGUIContext()
       .injectMouseButtonDown(convertButton(id));
@@ -80,20 +79,20 @@ bool core::MenuPopError::keyReleased(const OIS::KeyEvent &arg)
 
 void core::MenuPopError::initGUI()
 {
-    m_gui.loadLayout("server_error.layout");
+    m_gui.addLayout("server_error.layout");
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
 
-    if (m_gui.getRoot()->getChildRecursive("redPanel/Button") == NULL)
+    if (m_gui.getRoot()->getChildRecursive("Button") == NULL)
     {
         nope::log::Log(Debug) << "IT's NULLLLLLLLLLLLLLLLLLLLLLL";
     }
     m_gui.getRoot()
-            ->getChild("redPanel/Button")
+            ->getChildRecursive("Button")
             ->subscribeEvent(
                     CEGUI::PushButton::EventClicked,
                     CEGUI::Event::Subscriber(&MenuPopError::onOkClick, this));
     m_gui.getRoot()
-            ->getChild("redPanel/Button")
+            ->getChildRecursive("Button")
             ->subscribeEvent(
                     CEGUI::PushButton::EventMouseEntersArea,
                     CEGUI::Event::Subscriber(&MenuPopError::onOkArea, this));
@@ -128,6 +127,7 @@ bool core::MenuPopError::onOkArea(CEGUI::EventArgs const &)
 bool core::MenuPopError::onOkClick(CEGUI::EventArgs const &)
 {
     soundClick();
+    m_gui.removeLayout("server_error.layout");
     m_menuManager.popLayer();
     m_menuManager.begin();
     return true;
