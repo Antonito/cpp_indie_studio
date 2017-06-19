@@ -5,12 +5,12 @@ namespace game
   GameData::GameData()
       : m_sceneMgr(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Game scene manager")),
-        m_players(),
-        m_world(new OgreBulletDynamics::DynamicsWorld(
-            m_sceneMgr, Ogre::AxisAlignedBox(
-                            Ogre::Vector3(-100000000, -100000000, -100000000),
-                            Ogre::Vector3(100000000, 100000000, 100000000)),
-            Ogre::Vector3(0.0f, -9.81f * 80, 0.0f))),
+        m_players(), m_world(new OgreBulletDynamics::DynamicsWorld(
+                         m_sceneMgr,
+                         Ogre::AxisAlignedBox(
+                             Ogre::Vector3(-100000000, -100000000, -100000000),
+                             Ogre::Vector3(100000000, 100000000, 100000000)),
+                         Ogre::Vector3(0.0f, -9.81f * 80, 0.0f))),
 #ifdef DEBUG
         m_debugDrawer(nullptr),
 #endif
@@ -19,10 +19,6 @@ namespace game
   {
     // todo: move in Map
     m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-    m_sceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
-    Ogre::Light *l = m_sceneMgr->createLight("MainLight");
-    l->setPosition(20, 80, 50);
-    l->setCastShadows(true);
 
 #ifdef DEBUG
     m_debugDrawer = std::make_unique<OgreBulletCollisions::DebugDrawer>();
@@ -129,15 +125,4 @@ namespace game
   {
     return (m_map);
   }
-
-    void GameData::setIaNb(std::size_t n)
-    {
-      m_ia.resize(n);
-    }
-
-    size_t GameData::getIaNb() const
-    {
-      return m_ia.size();
-    }
-
 }

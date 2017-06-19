@@ -35,6 +35,7 @@
 #include "MapError.hpp"
 
 #if defined(_WIN32)
+#include <io.h>
 #include "dirent/dirent.h"
 #else
 #include <dirent.h>

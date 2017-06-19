@@ -16,6 +16,8 @@
 #include <vector>
 #include <sndfile.h>
 #include <iostream>
+#include <vector>
+#include <iomanip>
 
 // Disable clang warning for templated class padding
 #if defined(__clang__)

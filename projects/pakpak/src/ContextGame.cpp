@@ -4,7 +4,7 @@ namespace game
 {
   ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
                            core::SettingsPlayer &settings)
-      : core::AContext(win, input), m_game(), m_players(),
+      : core::AContext(win, input), m_game(), m_players(), m_ia(),
         m_settings(settings), m_quit(false), m_hud(nullptr)
   {
   }
@@ -15,6 +15,8 @@ namespace game
 
   void ContextGame::enable()
   {
+    nope::log::Log(Debug) << "Game context enabled";
+
     Pauser::unpause();
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
@@ -29,8 +31,9 @@ namespace game
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
-	m_game[i].setCar(std::make_unique<EmptyCar>(
-	    m_game, Ogre::Vector3::ZERO, Ogre::Quaternion::IDENTITY));
+	m_game[i].setCar(
+	    std::make_unique<EmptyCar>(m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
+	                               Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)));
       }
     if (m_players.size() < 2)
       {
@@ -77,6 +80,7 @@ namespace game
 
   void ContextGame::disable()
   {
+    nope::log::Log(Debug) << "Game context disabled";
     m_players.clear();
     m_input->setPhysicWorld(nullptr);
   }
@@ -85,6 +89,10 @@ namespace game
   {
     m_input->capture();
     m_game.update();
+      for (std::unique_ptr<Ia> const &l_ia : m_ia)
+      {
+          l_ia->race();
+      }
     m_quit = m_hud->getQuit();
     return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }

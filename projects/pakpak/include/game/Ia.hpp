@@ -12,7 +12,7 @@ namespace game
     class Ia
     {
     public:
-        explicit Ia(game::ACar &, std::vector<Ogre::Vector3> &);
+        explicit Ia(game::ACar &, std::vector<Ogre::Vector3> const&);
 
         Ia(Ia const &) = delete;
 
@@ -23,15 +23,13 @@ namespace game
 
         virtual ~Ia();
 
-        void feedNodeRace(std::vector<Ogre::Vector3> &);
-
         void race();
 
         void distNode();
 
     private:
         std::int32_t m_curNode;
-        std::vector<Ogre::Vector3> m_nodes;
+        std::vector<Ogre::Vector3> const& m_nodes;
         game::ACar &m_car;
         std::int32_t m_dir;
     };

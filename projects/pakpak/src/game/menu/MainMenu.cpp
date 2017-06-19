@@ -18,6 +18,31 @@ namespace core
   {
     m_gui.loadLayout("indie.layout");
 
+    if (!(m_gui.getRoot()->getChild("quit_button")))
+    {
+      throw std::exception();
+      // TODO:Arthur find exception for button assets missing.
+    }
+    if (!(m_gui.getRoot()->getChild("play_button")))
+    {
+      throw std::exception();
+      // TODO:Arthur find exception for button assets missing.
+    }
+    if (!(m_gui.getRoot()->getChild("options_button")))
+    {
+      throw std::exception();
+      // TODO:Arthur find exception for button assets missing.
+    }
+    if (!(m_gui.getRoot()->getChild("multi")))
+    {
+      throw std::exception();
+      // TODO:Arthur find exception for button assets missing.
+    }
+    if (!(m_gui.getRoot()->getChild("stats_button")))
+    {
+      throw std::exception();
+      // TODO:Arthur find exception for button assets missing.
+    }
     m_gui.getRoot()
         ->getChild("quit_button")
         ->subscribeEvent(

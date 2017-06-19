@@ -194,7 +194,7 @@ namespace nope
 	static float net_to_host(std::uint32_t t)
 	{
 	  std::uint32_t i = ntohl(t);
-	  return (static_cast<float>(*reinterpret_cast<std::int32_t *>(i)) /
+	  return (static_cast<float>(*reinterpret_cast<std::int32_t *>(&i)) /
 	          0xFFFF);
 	}
       };

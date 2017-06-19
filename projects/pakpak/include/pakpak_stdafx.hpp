@@ -41,6 +41,7 @@
 //
 #ifdef _WIN32
 #include "windows.h"
+#include <io.h>
 #endif // !_WIN32
 
 //
@@ -134,6 +135,11 @@
 // Network
 #include "NetworkManager.hpp"
 #include "NetworkGameServer.hpp"
+//
+// Sound
+//
+#include "SoundManager.hpp"
+
 //
 // Physic
 //
