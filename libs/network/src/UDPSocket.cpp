@@ -93,43 +93,7 @@ namespace network
       }
     else
       {
-	ret = true;
-	try
-	  {
-	    initSocket(AF_INET, SOCK_DGRAM, 0);
-	    m_addr.sin_port = htons(m_port);
-	    m_addr.sin_family = AF_INET;
-	  }
-	catch (std::exception &e)
-	  {
-	    nope::log::Log(Error) << e.what();
-	    ret = false;
-	  }
-	if (ret)
-	  {
-	    if (m_ip)
-	      {
-		nope::log::Log(Debug) << "Host is an IP";
-		m_addr.sin_addr.s_addr = inet_addr(m_host.c_str());
-	      }
-	    else
-	      {
-		struct hostent *hostinfo;
-
-		nope::log::Log(Debug) << "Host is not an IP";
-		hostinfo = gethostbyname(m_host.c_str());
-		if (hostinfo == NULL)
-		  {
-		    nope::log::Log(Error) << "Unknown host " << m_host.c_str();
-		    ret = false;
-		  }
-		else
-		  {
-		    m_addr.sin_addr =
-		        *reinterpret_cast<in_addr const *>(hostinfo->h_addr);
-		  }
-	      }
-	  }
+	ret = connectToHost(SOCK_DGRAM, IPPROTO_UDP, false);
       }
     if (ret == false)
       {
