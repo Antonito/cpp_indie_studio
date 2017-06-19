@@ -1,7 +1,9 @@
 #ifndef ASOCKET_HPP_
 #define ASOCKET_HPP_
 
+#include <cstring>
 #include <string>
+#include <cstring>
 #include "ISocket.hpp"
 
 // Disable clang warning for implicit padding

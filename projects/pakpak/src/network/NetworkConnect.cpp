@@ -37,6 +37,10 @@ namespace core
   bool NetworkConnect::disconnect()
   {
     // Stop UDP server
+    if (m_game)
+      {
+	m_game->stop();
+      }
     if (m_udp.joinable())
       {
 	nope::log::Log(Debug) << "Joining UDP thread";

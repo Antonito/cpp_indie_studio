@@ -34,7 +34,7 @@ endif
 # Debug Infos
 ifeq ($(DEBUG), yes)
 CXXFLAGS=	-g -DDEBUG -O0 $(LOCAL_DEBUG_FLAGS)
-LDFLAGS=	-g -rdynamic #-fsanitize=undefined -fsanitize=address
+LDFLAGS=	-g -rdynamic -fsanitize=undefined -fsanitize=address
 else
 CXXFLAGS=	-DNDEBUG -fomit-frame-pointer -march=native -Werror
 

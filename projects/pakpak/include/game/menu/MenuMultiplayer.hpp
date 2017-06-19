@@ -18,7 +18,8 @@ namespace core
   {
   public:
     MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui,
-                    SoundManager &sound, NetworkManager &net);
+                    SoundManager &sound, NetworkManager &net,
+                    SettingsPlayer &settings);
     virtual ~MenuMultiplayer()
     {
     }
@@ -47,6 +48,7 @@ namespace core
     SoundManager &     m_sound;
     GameServer         m_selectGameServer;
     NetworkManager &   m_network;
+    SettingsPlayer &   m_settings;
 
     bool onBackClick(CEGUI::EventArgs const &);
     bool onPlayClick(CEGUI::EventArgs const &);
