@@ -44,17 +44,6 @@ namespace game
 	  {
 	    throw GUIError("Missing asset quit_button");
 	  }
-	button = m_gui->getRoot()->getChildRecursive("settings_button");
-	if (button)
-	  {
-	    button->subscribeEvent(
-	        CEGUI::PushButton::EventClicked,
-	        CEGUI::Event::Subscriber(&Menu::onResumeClick, this));
-	  }
-	else
-	  {
-	    throw GUIError("Missing asset settings_button");
-	  }
       }
   }
 
