@@ -37,7 +37,7 @@ struct GameClientToGSPAcketLobbyType
   std::uint16_t type;
 };
 
-struct GameClientToGSPacketUDP
+struct GameClientToGSPacketUDPRequ
 {
   std::uint16_t port;
 };
@@ -82,7 +82,7 @@ struct GameClientToGSPacketRaw
     GameClientToGSPacketMD5Requ   md5requ;
     GameClientToGSPacketMD5Resp   md5resp;
     GameClientToGSPacketFile      file;
-    GameClientToGSPacketUDP       udp;
+    GameClientToGSPacketUDPRequ   udp;
     GameClientToGSPAcketLobbyType lobbyType;
   } eventData;
 };

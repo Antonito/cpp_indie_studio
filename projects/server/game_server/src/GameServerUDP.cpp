@@ -27,8 +27,14 @@ std::int32_t GameServer::gameServerUDPIO(std::int32_t const sock,
 {
   if (FD_ISSET(sock, &readfds))
     {
+      sockaddr_in_t addr;
+      socklen_t     len;
+
+      m_gameSockUDP.rec(nullptr, 0, reinterpret_cast<sockaddr_t *>(&addr),
+                        &len);
       // TODO: Read from client
-      // Determine client
+
+      // Check if client exist
     }
   return (0);
 }
