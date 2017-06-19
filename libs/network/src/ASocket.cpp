@@ -186,8 +186,13 @@ namespace network
     return (m_type);
   }
 
+  sockaddr_in_t const &ASocket::getSockAddr() const
+  {
+    return (m_addr);
+  }
+
   bool ASocket::connectToHost(std::int32_t const socktype,
-                              std::int32_t const proto)
+                              std::int32_t const proto, bool shouldConnect)
   {
     addrinfo_t  hints = {};
     addrinfo_t *res = nullptr;
@@ -224,12 +229,17 @@ namespace network
 		std::cerr << e.what() << std::endl;
 		break;
 	      }
+
+	    ret = 0;
+	    if (shouldConnect)
+	      {
 #if defined(__linux__) || defined(__APPLE__)
-	    ret = connect(m_socket, ptr->ai_addr, ptr->ai_addrlen);
+		ret = connect(m_socket, ptr->ai_addr, ptr->ai_addrlen);
 #elif defined(_WIN32)
-	    ret = connect(m_socket, ptr->ai_addr,
-	                  static_cast<std::int32_t>(ptr->ai_addrlen));
+		ret = connect(m_socket, ptr->ai_addr,
+		              static_cast<std::int32_t>(ptr->ai_addrlen));
 #endif
+	      }
 	    if (ret != -1)
 	      {
 		if (typeBackup == ASocket::NONBLOCKING)
@@ -239,6 +249,12 @@ namespace network
 		      {
 			throw network::SockError("Cannot set socket type");
 		      }
+		  }
+		assert(sizeof(m_addr) <= res->ai_addrlen);
+		if (sizeof(m_addr) <= res->ai_addrlen)
+		  {
+		    nope::log::Log(Debug) << "Updating sockaddr_in content";
+		    std::memcpy(&m_addr, res->ai_addr, res->ai_addrlen);
 		  }
 		nope::log::Log(Debug) << "Found an address, connected !";
 		connected = true;

@@ -422,7 +422,7 @@ namespace core
     if (ret != network::IClient::ClientAction::SUCCESS)
       {
 	nope::log::Log(Error) << "Write failed ! [NetworkConnect]";
-	throw std::exception(); // TODO
+	throw NetworkWritePacketError("Write failed ! [NetworkConnect]");
       }
     nope::log::Log(Debug) << "Packet sent [NetworkConnect]";
 
@@ -433,13 +433,13 @@ namespace core
     if (ret != network::IClient::ClientAction::SUCCESS)
       {
 	nope::log::Log(Error) << "Read failed ! [NetworkConnect]";
-	throw std::exception(); // TODO
+	throw NetworkWritePacketError("Read failed ! [NetworkConnect]");
       }
     pck >> pckContent;
     if (pckContent.pck.eventType != GameClientToGSEvent::UDP_SRV)
       {
 	nope::log::Log(Error) << "Invalid event type [NetworkConnect]";
-	throw std::exception(); // TODO
+	throw NetworkInvalidPacketError("Invalid event type [NetworkConnect]");
       }
     std::uint16_t const port = pckContent.pck.eventData.udp.port;
     nope::log::Log(Debug) << "Going to connect to UDP port : " << port;
@@ -472,7 +472,7 @@ namespace core
       {
 	// Couldn't start UDP thread
 	nope::log::Log(Error) << "Couldn't start UDP thread.";
-	throw std::exception(); // TODO
+	throw NetworkConnectionError("Couldn't start UDP thread.");
       }
     nope::log::Log(Debug) << "Waited for UDP server. [NetworkConnect]";
 
@@ -485,7 +485,7 @@ namespace core
     if (ret != network::IClient::ClientAction::SUCCESS)
       {
 	nope::log::Log(Error) << "Write failed ! [NetworkConnect]";
-	throw std::exception(); // TODO
+	throw NetworkWritePacketError("Write failed ! [NetworkConnect]");
       }
     nope::log::Log(Debug) << "Packet sent [NetworkConnect]";
 
@@ -494,13 +494,13 @@ namespace core
     if (ret != network::IClient::ClientAction::SUCCESS)
       {
 	nope::log::Log(Error) << "Read failed ! [NetworkConnect]";
-	throw std::exception(); // TODO
+	throw NetworkReadPacketError("Read failed ! [NetworkConnect]");
       }
     pck >> pckContent;
     if (pckContent.pck.eventType != GameClientToGSEvent::LOBBY_TYPE)
       {
 	nope::log::Log(Error) << "Invalid event type [NetworkConnect]";
-	throw std::exception(); // TODO
+	throw NetworkInvalidPacketError("Invalid event type [NetworkConnect]");
       }
     std::string const lobbyType[] = {"SPECTATOR", "PLAYING"};
     nope::log::Log(Info)
