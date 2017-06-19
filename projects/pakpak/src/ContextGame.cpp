@@ -93,27 +93,32 @@ namespace game
 
   core::GameState ContextGame::update()
   {
-#if 0
-    static std::chrono::time_point<std::chrono::steady_clock> lastTime =
+    static std::chrono::steady_clock::time_point lastTimePck =
         std::chrono::steady_clock::now();
-    std::chrono::time_point<std::chrono::steady_clock> currentTime =
+    std::chrono::steady_clock::time_point now =
         std::chrono::steady_clock::now();
-    std::chrono::duration<double> diff = currentTime - lastTime;
-#endif
 
     // Send network packets
-    if (0)
+    if (m_net.isConnected())
       {
-	std::vector<GameClientToGSPacketUDP> pck;
-	GameClientToGSPacketUDP              pckContent;
+	// TODO: Change to 17ms
+	if (std::chrono::duration_cast<std::chrono::seconds>(now - lastTimePck)
+	        .count() >= 1)
+	  {
+	    std::vector<GameClientToGSPacketUDP> pck;
+	    GameClientToGSPacketUDP              pckContent;
 
-	// Build packets
-	pckContent.pck.eventType = GameClientToGSEventUDP::SIMPLE_EVENT;
-	pckContent.pck.eventData.i = 23;
-	pck.push_back(pckContent);
+	    // TODO: Build correct packet
+	    // Build packets
+	    pckContent.pck.eventType = GameClientToGSEventUDP::SIMPLE_EVENT;
+	    pckContent.pck.eventData.i = 23;
+	    pck.push_back(pckContent);
 
-	// Send packet
-	m_net.sendUDPPacket(std::move(pck));
+	    nope::log::Log(Debug) << "Seding UDP packet";
+	    // Send packet
+	    m_net.sendUDPPacket(std::move(pck));
+	    lastTimePck = std::chrono::steady_clock::now();
+	  }
       }
 
     // Game process

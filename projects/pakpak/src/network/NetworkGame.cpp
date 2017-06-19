@@ -94,7 +94,8 @@ namespace core
 	for (GameClientToGSPacketUDP const &ev : gameEvents)
 	  {
 	    m_pck << ev;
-	    if (!writeUDP(m_pck, addr))
+	    if (writeUDP(m_pck, addr) !=
+	        network::IClient::ClientAction::SUCCESS)
 	      {
 		nope::log::Log(Warning) << "Couldn't send UDP packet";
 	      }
