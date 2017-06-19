@@ -13,6 +13,7 @@
 #endif
 
 #include "HUD.hpp"
+#include "Ia.hpp"
 #include "AContext.hpp"
 #include "LocalPlayer.hpp"
 
@@ -41,9 +42,9 @@ namespace game
     void                    updateViewPort();
     virtual core::GameState update();
     virtual void            display();
-    bool keyPressed(const OIS::KeyEvent &arg);
-    bool keyReleased(const OIS::KeyEvent &arg);
-    bool mouseMoved(const OIS::MouseEvent &arg);
+    bool                    keyPressed(const OIS::KeyEvent &arg);
+    bool                    keyReleased(const OIS::KeyEvent &arg);
+    bool                    mouseMoved(const OIS::MouseEvent &arg);
     bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     void setQuit(bool);
@@ -51,6 +52,7 @@ namespace game
   private:
     GameData                                  m_game;
     std::vector<std::unique_ptr<LocalPlayer>> m_players;
+    std::vector<std::unique_ptr<Ia>>          m_ia;
     core::SettingsPlayer &                    m_settings;
     bool                                      m_quit;
     std::unique_ptr<core::HUD>                m_hud;

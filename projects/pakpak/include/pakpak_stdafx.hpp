@@ -41,6 +41,7 @@
 //
 #ifdef _WIN32
 #include "windows.h"
+#include <io.h>
 #endif // !_WIN32
 
 //
@@ -96,6 +97,8 @@
 #include "GameData.hpp"
 #include "LocalPlayer.hpp"
 #include "PlayerData.hpp"
+#include "Timer.hpp"
+#include "Ia.hpp"
 
 // Game.Car
 #include "ACar.hpp"
@@ -130,6 +133,7 @@
 #include "NetworkWritePacketError.hpp"
 #include "NetworkInvalidMapError.hpp"
 #include "MapError.hpp"
+#include "GUIError.hpp"
 
 // Network
 #include "NetworkManager.hpp"
@@ -137,6 +141,11 @@
 
 // Multithread
 #include "Barrier.hpp"
+
+//
+// Sound
+//
+#include "SoundManager.hpp"
 
 //
 // Physic

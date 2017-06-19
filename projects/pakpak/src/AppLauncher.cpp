@@ -137,23 +137,33 @@ namespace core
 
     // load all sound resource
     m_soundManager.loadAllSound();
+    nope::log::Log(Debug) << "Starting to load contexts";
+
     // Splash context
     m_contexts[static_cast<std::size_t>(GameState::Splash)] =
         std::make_unique<splash::ContextSplash>(m_window, m_inputListener,
                                                 m_soundManager);
+
+    nope::log::Log(Debug) << "Splash context loaded";
 
     // Menu context
     m_contexts[static_cast<std::size_t>(GameState::Menu)] =
         std::make_unique<menu::ContextMenu>(
             m_window, m_inputListener, m_settings, m_soundManager, m_network);
 
+    nope::log::Log(Debug) << "Menu context loaded";
+
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
         std::make_unique<game::ContextGame>(m_window, m_inputListener,
                                             m_settings, m_network);
 
+    nope::log::Log(Debug) << "Game context loaded";
+
+    nope::log::Log(Debug) << "Switching context";
     m_currentContext =
         m_contexts[static_cast<std::size_t>(GameState::Splash)].get();
+    m_gameState = GameState::Splash;
 
     m_currentContext->enable();
     resizer::AssetResizer::initResizer(m_window->getWidth(),

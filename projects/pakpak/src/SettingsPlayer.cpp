@@ -213,14 +213,11 @@ namespace core
       {
 	m_loaded[playerIndex] = true;
       }
-    std::ifstream fs(playerFile[static_cast<int>(playerIndex)].c_str());
+    std::ifstream fs;
 
-    if (fs.is_open() == false)
-      {
-	Log(nope::log::Debug) << "Can't open the file";
-	throw IOError("Cannot open " +
-	              playerFile[static_cast<int>(playerIndex)]);
-      }
+    // This allow to throw in case of fail to open
+    fs.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    fs.open(playerFile[static_cast<int>(playerIndex)].c_str());
     ss << fs.rdbuf();
     std::string content = ss.str();
 

@@ -30,6 +30,10 @@ namespace game
 	        CEGUI::PushButton::EventClicked,
 	        CEGUI::Event::Subscriber(&Menu::onResumeClick, this));
 	  }
+	else
+	  {
+	    throw GUIError("Missing asset resume_button");
+	  }
 	button = m_gui->getRoot()->getChildRecursive("quit_button");
 	if (button)
 	  {
@@ -37,12 +41,9 @@ namespace game
 	        CEGUI::PushButton::EventClicked,
 	        CEGUI::Event::Subscriber(&Menu::onQuitClick, this));
 	  }
-	button = m_gui->getRoot()->getChildRecursive("settings_button");
-	if (button)
+	else
 	  {
-	    button->subscribeEvent(
-	        CEGUI::PushButton::EventClicked,
-	        CEGUI::Event::Subscriber(&Menu::onResumeClick, this));
+	    throw GUIError("Missing asset quit_button");
 	  }
       }
   }

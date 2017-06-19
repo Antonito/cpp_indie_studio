@@ -57,7 +57,7 @@ namespace game
 
     Log(nope::log::Debug) << "Adding viewport '" << m_order << "' to window";
     m_viewport = m_win->addViewport(m_cam, m_order);
-    m_viewport->setBackgroundColour(Ogre::ColourValue(0.1f, 0.1f, 0.1f));
+    m_viewport->setBackgroundColour(Ogre::ColourValue(0.0f, 0.0f, 0.0f));
     m_cam->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
                           Ogre::Real(m_viewport->getActualHeight()));
     setActionMap();

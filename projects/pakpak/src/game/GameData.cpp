@@ -19,10 +19,6 @@ namespace game
   {
     // todo: move in Map
     m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-    m_sceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
-    Ogre::Light *l = m_sceneMgr->createLight("MainLight");
-    l->setPosition(20, 80, 50);
-    l->setCastShadows(true);
 
 #ifdef DEBUG
     m_debugDrawer = std::make_unique<OgreBulletCollisions::DebugDrawer>();

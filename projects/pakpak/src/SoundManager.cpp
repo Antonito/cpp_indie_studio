@@ -119,8 +119,6 @@ namespace core
     m_source.push_back(source);
   }
 
-
-
   // Init device and context of OpenAl
   void SoundManager::initOpenAl(char const *deviceName)
   {
@@ -164,7 +162,8 @@ namespace core
   }
 
   // Set the position of the sound
-  void SoundManager::setPosition(std::size_t const idx, float x, float y, float z)
+  void SoundManager::setPosition(std::size_t const idx, float x, float y,
+                                 float z)
   {
     nope::log::Log(Debug) << "Setting sound to position {" << x << ", " << y
                           << ", " << z << "}.";
@@ -239,7 +238,8 @@ namespace core
   }
 
   // Set the orientation of the sound to a specific direction
-  void SoundManager::setOrientation(std::size_t const idx, float x, float y, float z)
+  void SoundManager::setOrientation(std::size_t const idx, float x, float y,
+                                    float z)
   {
     nope::log::Log(Debug) << "Set sound to direction ; {" << x << ", " << y
                           << ", " << z << "}.";
@@ -268,11 +268,12 @@ namespace core
     return m_volume;
   }
 
-    void SoundManager::loadAllSound()
-    {
-      loadSound("deps/indie_resource/songs/theme.wav");
-      loadSound("deps/indie_resource/songs/splash.wav");
-      loadSound("deps/indie_resource/songs/GUI/pass.wav");
-      loadSound("deps/indie_resource/songs/GUI/click.wav");
-    }
+  void SoundManager::loadAllSound()
+  {
+    loadSound("deps/indie_resource/songs/theme.wav");
+    loadSound("deps/indie_resource/songs/splash.wav");
+    loadSound("deps/indie_resource/songs/GUI/pass.wav");
+    loadSound("deps/indie_resource/songs/GUI/click.wav");
+//    loadSound("deps/indie_resource/songs/Karts/K_Gla/klaxon.wav");
+  }
 }

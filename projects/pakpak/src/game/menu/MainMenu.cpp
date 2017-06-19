@@ -18,6 +18,26 @@ namespace core
   {
     m_gui.loadLayout("indie.layout");
 
+    if (!(m_gui.getRoot()->getChild("quit_button")))
+      {
+	throw GUIError("Missing asset quit_button");
+      }
+    if (!(m_gui.getRoot()->getChild("play_button")))
+      {
+	throw GUIError("Missing asset play_button");
+      }
+    if (!(m_gui.getRoot()->getChild("options_button")))
+      {
+	throw GUIError("Missing asset options_button");
+      }
+    if (!(m_gui.getRoot()->getChild("multi")))
+      {
+	throw GUIError("Missing asset multi_button");
+      }
+    if (!(m_gui.getRoot()->getChild("stats_button")))
+      {
+	throw GUIError("Missing asset stats_button");
+      }
     m_gui.getRoot()
         ->getChild("quit_button")
         ->subscribeEvent(
@@ -94,16 +114,14 @@ namespace core
                          static_cast<float>(arg.state.Y.rel));
   }
 
-  bool MainMenu::mousePressed(OIS::MouseEvent const &,
-                              OIS::MouseButtonID     id)
+  bool MainMenu::mousePressed(OIS::MouseEvent const &, OIS::MouseButtonID id)
   {
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
         .injectMouseButtonDown(convertButton(id));
   }
 
-  bool MainMenu::mouseReleased(OIS::MouseEvent const &,
-                               OIS::MouseButtonID     id)
+  bool MainMenu::mouseReleased(OIS::MouseEvent const &, OIS::MouseButtonID id)
   {
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
@@ -194,11 +212,11 @@ namespace core
 	    << "\n======================================================\n=="
 	       "Error cannot connect to the ConnectServerManager "
 	       "!==\n======================================================";
-      //TODO: Remplace by a Error popUp
-        m_menuManager.popLayer();
-        m_menuManager.push(MenuState::PopError);
-        m_menuManager.begin();
-        return true;
+	// TODO: Remplace by a Error popUp
+	m_menuManager.popLayer();
+	m_menuManager.push(MenuState::PopError);
+	m_menuManager.begin();
+	return true;
       }
     return true;
   }

@@ -17,6 +17,8 @@ namespace game
 
   void ContextGame::enable()
   {
+    nope::log::Log(Debug) << "Game context enabled";
+
     Pauser::unpause();
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
@@ -31,7 +33,8 @@ namespace game
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
 	m_game[i].setCar(std::make_unique<EmptyCar>(
-	    m_game, Ogre::Vector3::ZERO, Ogre::Quaternion::IDENTITY));
+	    m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
+	    Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)));
       }
 
     nope::log::Log(Debug) << "Creating HUD";
@@ -42,6 +45,14 @@ namespace game
 	m_players.emplace_back(std::make_unique<LocalPlayer>(
 	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
 	    i == 0 ? m_hud.get() : nullptr, *this, m_players, nbLocalPlayer));
+<<<<<<< HEAD
+=======
+      }
+    for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
+      {
+	m_ia.emplace_back(
+	    std::make_unique<Ia>(m_game[i].car(), m_game.map().getNodes()));
+>>>>>>> master
       }
     updateViewPort();
 
@@ -72,6 +83,7 @@ namespace game
 
   void ContextGame::disable()
   {
+    nope::log::Log(Debug) << "Game context disabled";
     m_players.clear();
     m_input->setPhysicWorld(nullptr);
     nope::log::Log(Debug) << "Disabling game.";
@@ -110,7 +122,6 @@ namespace game
     // Game process
     m_input->capture();
     m_game.update();
-
     m_quit = m_hud->getQuit();
     return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }
@@ -120,6 +131,10 @@ namespace game
     for (std::uint8_t i = 0; i < m_players.size(); ++i)
       {
 	m_players[i]->display();
+      }
+    for (std::unique_ptr<Ia> const &l_ia : m_ia)
+      {
+	l_ia->race();
       }
   }
 

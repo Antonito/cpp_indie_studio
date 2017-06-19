@@ -2,7 +2,8 @@
 
 namespace game
 {
-  PathPoint::PathPoint() : m_points(Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0))
+  PathPoint::PathPoint()
+      : m_points(Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0))
   {
   }
 

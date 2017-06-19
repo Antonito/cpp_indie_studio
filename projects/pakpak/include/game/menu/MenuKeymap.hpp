@@ -39,6 +39,8 @@ namespace core
     MenuKeymap &       operator=(MenuKeymap const &) = delete;
     MenuKeymap &       operator=(MenuKeymap &&) = delete;
     CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID);
+    void checkPlayerButton();
+
     bool onPlayer1Click(CEGUI::EventArgs const &);
     bool onPlayer2Click(CEGUI::EventArgs const &);
     bool onPlayer3Click(CEGUI::EventArgs const &);
