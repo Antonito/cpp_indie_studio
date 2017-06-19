@@ -95,6 +95,7 @@ namespace game
     virtual void update()
     {
     }
+
     virtual void display()
     {
     }
@@ -138,8 +139,7 @@ namespace game
       return (false);
     }
 
-    virtual bool mouseReleased(OIS::MouseEvent const &,
-                               OIS::MouseButtonID)
+    virtual bool mouseReleased(OIS::MouseEvent const &, OIS::MouseButtonID)
     {
       return (false);
     }
