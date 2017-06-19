@@ -15,7 +15,7 @@ GameServer::GameServer(std::string const & connectManagerIp,
                     static_cast<std::uint32_t>(m_maxClients),
                     network::ASocket::SocketType::BLOCKING),
       m_connectSrv(), m_gameSrvTCP(), m_gameSrvUDP(), m_gameLogicThread(),
-      m_clientList(), m_tokenList()
+      m_clientList(), m_tokenList(), m_pckUDP(), m_repUDP()
 {
   std::ifstream licenceFile(".license");
 
