@@ -60,7 +60,11 @@ private:
                                fd_set &writefds, fd_set &exceptfds);
 
   // GameServerUDP methods
-  void gameServerUDP();
+  void         gameServerUDP();
+  std::int32_t gameServerUDPActivity(std::int32_t const sock, fd_set &readfds,
+                                     fd_set &writefds, fd_set &exceptfds);
+  std::int32_t gameServerUDPIO(std::int32_t const sock, fd_set &readfds,
+                               fd_set &writefds, fd_set &exceptfds);
 
   // Basic datas
   std::uint16_t      m_connectManagerPort;
