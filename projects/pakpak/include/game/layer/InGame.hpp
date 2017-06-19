@@ -193,10 +193,10 @@ namespace game
 	    }
 	}
       else if (m_time.reached())
-      {
-          ++m_startIdx;
-          m_time.reset();
-      }
+	{
+	  ++m_startIdx;
+	  m_time.reset();
+	}
     }
 
     void setSpeed()
@@ -288,7 +288,8 @@ namespace game
 	  for (std::uint8_t playerIndex = 0;
 	       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
 	    {
-	      std::uint32_t position = m_players[playerIndex]->getPosition();
+	      std::uint32_t position = playerIndex + 1;
+	      // TODO m_players[playerIndex]->getPosition();
 
 	      if (position <= 9 && m_positionPrefix)
 		m_positionPrefix[playerIndex]->setProperty(

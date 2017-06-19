@@ -44,7 +44,7 @@ namespace core
     void setCursorArrow(std::string const &);
     void removeLayout(const std::string &layout);
     void addLayout(const std::string &layout);
-
+    CEGUI::OgreRenderer &getOgreRenderer();
 
   private:
     CEGUI::OgreRenderer *m_renderer;

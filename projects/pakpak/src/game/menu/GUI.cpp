@@ -164,4 +164,9 @@ namespace core
     m_windows[layout] = nullptr;
     nope::log::Log(Debug) << "Layout '" << layout << "' removed";
   }
+
+  CEGUI::OgreRenderer &GUI::getOgreRenderer()
+  {
+    return *m_renderer;
+  }
 }
