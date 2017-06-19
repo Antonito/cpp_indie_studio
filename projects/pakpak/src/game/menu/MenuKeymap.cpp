@@ -26,23 +26,19 @@ namespace core
 
     if (!(m_buttons[0] = m_gui.getRoot()->getChild("player1_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset player1_button");
       }
     if (!(m_buttons[1] = m_gui.getRoot()->getChild("player2_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset player2_button");
       }
     if (!(m_buttons[2] = m_gui.getRoot()->getChild("player3_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset player3_button");
       }
     if (!(m_buttons[3] = m_gui.getRoot()->getChild("player4_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset player4_button");
       }
 
     checkPlayerButton();
@@ -508,33 +504,27 @@ namespace core
   {
     if (!(m_gui.getRoot()->getChild("up_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset quit_button");
       }
     if (!(m_gui.getRoot()->getChild("down_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset quit_button");
       }
     if (!(m_gui.getRoot()->getChild("left_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset quit_button");
       }
     if (!(m_gui.getRoot()->getChild("right_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset quit_button");
       }
     if (!(m_gui.getRoot()->getChild("pause_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset quit_button");
       }
     if (!(m_gui.getRoot()->getChild("use_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset quit_button");
       }
   }
 }

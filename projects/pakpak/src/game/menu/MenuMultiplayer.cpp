@@ -33,18 +33,15 @@ namespace core
 
     if (!(m_gui.getRoot()->getChild("servers_list")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset servers_list");
       }
     if (!(m_gui.getRoot()->getChild("back_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset back_button");
       }
     if (!(m_gui.getRoot()->getChild("launch_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset launch_button");
       }
     static_cast<CEGUI::ItemListbox *>(
         m_gui.getRoot()->getChild("servers_list"))
@@ -59,9 +56,9 @@ namespace core
 	    << "Server #" + std::to_string(i + 1) + " : " + game.address +
 	           " Player : (" + std::to_string(game.clients) + "/" +
 	           std::to_string(game.maxClients) + ").";
-	nope::log::Log(Info) << "Server: " << game.address << ":" << game.port
-	                     << " [ " << game.clients << " / "
-	                     << game.maxClients << " ]";
+	nope::log::Log(Info)
+	    << "Server: " << game.address << ":" << game.port << " [ "
+	    << game.clients << " / " << game.maxClients << " ]";
 	CEGUI::ItemEntry *itm = static_cast<CEGUI::ItemEntry *>(
 	    winManager->createWindow("TaharezLook/ListboxItem"));
 	itm->setText("Server #" + std::to_string(i + 1) + " : " +

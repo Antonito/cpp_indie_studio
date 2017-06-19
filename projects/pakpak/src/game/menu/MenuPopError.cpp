@@ -84,8 +84,7 @@ void core::MenuPopError::initGUI()
 
   if (m_gui.getRoot()->getChildRecursive("Button") == NULL)
     {
-      throw std::exception();
-      // TODO:Arthur find exception for button assets missing.
+      throw GUIError("Missing asset Button");
     }
   m_gui.getRoot()->getChildRecursive("Button")->subscribeEvent(
       CEGUI::PushButton::EventClicked,

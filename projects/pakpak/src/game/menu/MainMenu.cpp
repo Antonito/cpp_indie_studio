@@ -20,28 +20,23 @@ namespace core
 
     if (!(m_gui.getRoot()->getChild("quit_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset quit_button");
       }
     if (!(m_gui.getRoot()->getChild("play_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset play_button");
       }
     if (!(m_gui.getRoot()->getChild("options_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset options_button");
       }
     if (!(m_gui.getRoot()->getChild("multi")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset multi_button");
       }
     if (!(m_gui.getRoot()->getChild("stats_button")))
       {
-	throw std::exception();
-	// TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset stats_button");
       }
     m_gui.getRoot()
         ->getChild("quit_button")

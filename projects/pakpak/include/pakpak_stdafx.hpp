@@ -133,6 +133,7 @@
 #include "NetworkWritePacketError.hpp"
 #include "NetworkInvalidMapError.hpp"
 #include "MapError.hpp"
+#include "GUIError.hpp"
 
 // Network
 #include "NetworkManager.hpp"

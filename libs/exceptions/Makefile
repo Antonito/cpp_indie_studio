@@ -28,6 +28,7 @@ HEADER=		exceptions_stdafx.hpp
 SRC_FILES=	AException.cpp				\
 		MapError.cpp				\
 		IOError.cpp				\
+		GUIError.cpp				\
 		NetworkConnectionError.cpp		\
 		NetworkInvalidAddressError.cpp		\
 		NetworkInvalidMapError.cpp		\

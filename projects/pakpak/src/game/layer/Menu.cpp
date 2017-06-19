@@ -31,8 +31,7 @@ namespace game
 	  }
 	else
 	  {
-	    throw std::exception();
-	    // TODO:Arthur find exception for button assets missing.
+	    throw GUIError("Missing asset resume_button");
 	  }
 	button = m_gui->getRoot()->getChildRecursive("quit_button");
 	if (button)
@@ -43,8 +42,7 @@ namespace game
 	  }
 	else
 	  {
-	    throw std::exception();
-	    // TODO:Arthur find exception for button assets missing.
+	    throw GUIError("Missing asset quit_button");
 	  }
 	button = m_gui->getRoot()->getChildRecursive("settings_button");
 	if (button)
@@ -55,8 +53,7 @@ namespace game
 	  }
 	else
 	  {
-	    throw std::exception();
-	    // TODO:Arthur find exception for button assets missing.
+	    throw GUIError("Missing asset settings_button");
 	  }
       }
   }
