@@ -7,7 +7,7 @@
 
 #include <chrono>
 
-namespace timer
+namespace game
 {
     class Timer
     {

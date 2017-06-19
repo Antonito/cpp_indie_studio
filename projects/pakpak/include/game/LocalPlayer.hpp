@@ -33,7 +33,8 @@ namespace game
   public:
     LocalPlayer() = delete;
     LocalPlayer(Ogre::RenderWindow *, GameData &, PlayerData *, int,
-                core::SettingsPlayer &, core::HUD *, game::ContextGame &);
+                core::SettingsPlayer &, core::HUD *, game::ContextGame &,
+                std::vector<std::unique_ptr<LocalPlayer>> &, std::uint8_t);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&);
     virtual ~LocalPlayer();
@@ -51,7 +52,9 @@ namespace game
                                OIS::MouseButtonID     id);
 
     virtual void push(GameLayer layer);
-    virtual void popLayer();
+    virtual void          popLayer();
+    virtual std::uint32_t getSpeed() const;
+    virtual std::uint32_t getPosition() const;
 
     void setViewPort(Ogre::Real left, Ogre::Real top, Ogre::Real width,
                      Ogre::Real height);
@@ -106,11 +109,11 @@ namespace game
     core::SettingsPlayer &m_settings;
     std::map<std::string,
              std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()>>
-                        m_actions;
-    Ogre::RenderWindow *m_win;
-    int                 m_order;
-    core::HUD *         m_hud;
-    game::ContextGame & m_contextGame;
+                                               m_actions;
+    Ogre::RenderWindow *                       m_win;
+    int                                        m_order;
+    core::HUD *                                m_hud;
+    game::ContextGame &                        m_contextGame;
   };
 }
 

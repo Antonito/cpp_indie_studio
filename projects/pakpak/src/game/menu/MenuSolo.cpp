@@ -7,10 +7,9 @@
 namespace core
 {
   MenuSolo::MenuSolo(menu::MenuManager &menuManager, GUI &gui,
-                     SoundManager &sound)
+                     SoundManager &sound, SettingsPlayer &settings)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
-        m_sound(sound), m_playerCount(1)
-
+        m_sound(sound), m_playerCount(1), m_settings(settings)
   {
   }
 
@@ -187,6 +186,7 @@ namespace core
     soundClick();
     m_curState = GameState::InGame;
     m_gui.hideCursor();
+    m_settings.setPlayerCount(m_playerCount);
     return true;
   }
 
@@ -236,7 +236,7 @@ namespace core
   bool MenuSolo::onPlayersClick(CEGUI::EventArgs const &)
   {
     soundClick();
-    m_playerCount = m_playerCount + 1 > 4 ? 1 : m_playerCount + 1;
+    m_playerCount = m_playerCount + 1u > 4u ? 1u : m_playerCount + 1u;
     setButtonText("soloplayers_button");
     return true;
   }

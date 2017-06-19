@@ -2,8 +2,9 @@
 
 namespace game
 {
-  Menu::Menu(GameData &data, ILayerStack &layer, core::HUD *hud)
-      : ALayer(data, layer, hud)
+  Menu::Menu(GameData &data, ILayerStack &layer, core::HUD *hud,
+             std::vector<std::unique_ptr<LocalPlayer>> &players)
+      : ALayer(data, layer, hud, players)
   {
   }
 

@@ -9,7 +9,8 @@ namespace game
   {
   public:
     PreGame() = delete;
-    PreGame(GameData &data, ILayerStack &layer, core::HUD *hud);
+    PreGame(GameData &data, ILayerStack &layer, core::HUD *hud,
+            std::vector<std::unique_ptr<LocalPlayer>> &players);
     PreGame(PreGame const &) = delete;
     PreGame(PreGame &&) = delete;
     virtual ~PreGame();
