@@ -24,7 +24,7 @@
 // implement buttonPressed and apps without a NIB have no target for the action.
 @implementation NSApplication (_suppressUnimplementedActionWarning)
 - (void)buttonPressed:(id)sender {
-  /* Do nothing */
+  // Do nothing
 }
 @end
 

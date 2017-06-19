@@ -71,7 +71,7 @@ namespace network
   {
     bool ret;
 
-    nope::log::Log(Debug) << "Opening UDP connection";
+    nope::log::Log(Debug) << "Opening UDP connection [ " << m_port << " ]";
     assert(!isStarted());
     if (getMode() == ASocket::SERVER)
       {
@@ -80,6 +80,7 @@ namespace network
 	try
 	  {
 	    initSocket(AF_INET, SOCK_DGRAM, 0);
+	    nope::log::Log(Debug) << "Socket init'd.";
 	    m_addr.sin_port = htons(m_port);
 	    m_addr.sin_family = AF_INET;
 	    hostConnection();

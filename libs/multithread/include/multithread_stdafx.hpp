@@ -17,5 +17,6 @@
 #include "Semaphore.hpp"
 #include "Queue.hpp"
 #include "ResultGetter.hpp"
+#include "Barrier.hpp"
 
 #endif // !MULTITHREAD_STDAFX_HPP_

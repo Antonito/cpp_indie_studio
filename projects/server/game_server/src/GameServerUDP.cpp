@@ -2,5 +2,8 @@
 
 void GameServer::gameServerUDP()
 {
-  // TODO: Open UDP connection
+  nope::log::Log(Info) << "Game Server UDP started";
+  while (1)
+    {
+    }
 }

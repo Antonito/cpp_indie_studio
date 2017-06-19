@@ -33,6 +33,14 @@ std::unique_ptr<std::uint8_t[]>
     {
       data->eventData.file.len = htonl(pck.eventData.file.len);
     }
+  else if (pck.eventType == GameClientToGSEvent::UDP_SRV)
+    {
+      data->eventData.udp.port = htons(pck.eventData.udp.port);
+    }
+  else if (pck.eventType == GameClientToGSEvent::LOBBY_TYPE)
+    {
+      data->eventData.lobbyType.type = htons(pck.eventData.lobbyType.type);
+    }
 
   return (serial);
 }
@@ -51,12 +59,21 @@ void GameClientToGSPacket::deserialize(std::size_t, std::uint8_t *data)
       pck.eventData.valid = ntohs(pck.eventData.valid);
     }
   else if (pck.eventType == GameClientToGSEvent::MD5_REQUEST ||
-           pck.eventType == GameClientToGSEvent::MD5_RESPONSE)
+           pck.eventType == GameClientToGSEvent::MD5_RESPONSE ||
+           pck.eventType == GameClientToGSEvent::UDP_REQU)
     {
     }
   else if (pck.eventType == GameClientToGSEvent::FILE_EVENT)
     {
       pck.eventData.file.len = ntohl(pck.eventData.file.len);
+    }
+  else if (pck.eventType == GameClientToGSEvent::UDP_SRV)
+    {
+      pck.eventData.udp.port = ntohs(pck.eventData.udp.port);
+    }
+  else if (pck.eventType == GameClientToGSEvent::LOBBY_TYPE)
+    {
+      pck.eventData.lobbyType.type = ntohs(pck.eventData.lobbyType.type);
     }
   else
     {

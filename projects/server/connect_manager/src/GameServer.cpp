@@ -213,6 +213,7 @@ network::IClient::ClientAction GameServer::treatIncomingData()
 		return (network::IClient::ClientAction::DISCONNECT);
 	      }
 	    m_port = rep.pck.eventData.licence.port;
+	    m_maxClients = rep.pck.eventData.licence.maxClients;
 	  }
       }
       break;

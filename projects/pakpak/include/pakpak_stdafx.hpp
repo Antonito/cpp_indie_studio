@@ -54,6 +54,7 @@
 #include <cmath>
 #include <fstream>
 #include <cstring>
+#include <atomic>
 
 //
 // Project headers
@@ -133,6 +134,10 @@
 // Network
 #include "NetworkManager.hpp"
 #include "NetworkGameServer.hpp"
+
+// Multithread
+#include "Barrier.hpp"
+
 //
 // Physic
 //

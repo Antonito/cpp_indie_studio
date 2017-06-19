@@ -3,7 +3,8 @@
 GameClient::GameClient(sock_t const fd, std::vector<Token> &tokenList,
                        std::size_t const ndx)
     : m_sock(fd), m_canWrite(false), m_state(GameClient::State::CONNECTED),
-      m_packet(), m_tokenList(tokenList), m_id(static_cast<std::int32_t>(ndx))
+      m_packet(), m_tokenList(tokenList), m_id(static_cast<std::int32_t>(ndx)),
+      m_udpPort(Config::getInstance().getUDPGameServerPort())
 {
 }
 
@@ -213,7 +214,51 @@ network::IClient::ClientAction GameClient::treatIncomingData()
 	    }
 	}
       break;
+
     case State::CHECKING_MAPS:
+      break;
+
+    case State::UDP_CONNECT:
+      nope::log::Log(Debug) << "Reading in state UDP_CONNECT [GameClient]";
+      ret = read(m_packet);
+      if (ret == network::IClient::ClientAction::SUCCESS)
+	{
+	  m_packet >> rep;
+	  // The only event allowed is a UDP_REQU event
+	  if (rep.pck.eventType == GameClientToGSEvent::UDP_REQU)
+	    {
+	      nope::log::Log(Debug) << "Got UDP_REQU request [GameClient]";
+	    }
+	  else
+	    {
+	      ret = network::IClient::ClientAction::FAILURE;
+	    }
+	}
+      break;
+
+    // Confirm UDP connection
+    case State::UDP_CONFIRM:
+      nope::log::Log(Debug) << "Reading in state UDP_CONFIRM [GameClient]";
+      ret = read(m_packet);
+      if (ret == network::IClient::ClientAction::SUCCESS)
+	{
+	  m_packet >> rep;
+	  // The only event allowed is a VALIDATION event
+	  if (rep.pck.eventType == GameClientToGSEvent::VALIDATION_EVENT)
+	    {
+	      nope::log::Log(Debug)
+	          << "Got Validation: " << rep.pck.eventData.valid
+	          << " [GameClient]";
+	      if (rep.pck.eventData.valid == 1)
+		{
+		  nope::log::Log(Debug) << "Got UDP_REQU request [GameClient]";
+		}
+	      else
+		{
+		  ret = network::IClient::ClientAction::FAILURE;
+		}
+	    }
+	}
       break;
 
     // Lobby
@@ -257,9 +302,30 @@ network::IClient::ClientAction GameClient::treatOutgoingData()
       if (checkMaps())
 	{
 	  ret = network::IClient::ClientAction::SUCCESS;
-	  nope::log::Log(Debug) << "Switching to State::WAITING";
-	  m_state = State::WAITING;
+	  nope::log::Log(Debug) << "Switching to State::UDP_CONNECT";
+	  m_state = State::UDP_CONNECT;
 	}
+      break;
+
+    case State::UDP_CONNECT:
+      rep.pck.eventType = GameClientToGSEvent::UDP_SRV;
+      rep.pck.eventData.udp.port = m_udpPort;
+
+      m_packet << rep;
+      ret = write(m_packet);
+      m_state = State::UDP_CONFIRM;
+      break;
+
+    // Send information on lobby
+    case State::UDP_CONFIRM:
+      rep.pck.eventType = GameClientToGSEvent::LOBBY_TYPE;
+      // TODO: Detect if PLAYING or SPECTATOR
+      rep.pck.eventData.lobbyType.type =
+          static_cast<std::uint16_t>(GameClientToGSLobbyType::PLAYING);
+      m_packet << rep;
+      ret = write(m_packet);
+      m_state = State::WAITING;
+      nope::log::Log(Debug) << "Sent Lobby Type, switching to State::WAITING";
       break;
 
     // Lobby

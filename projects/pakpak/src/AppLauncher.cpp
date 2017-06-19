@@ -135,7 +135,7 @@ namespace core
 
     createFrameListener();
 
-    //load all sound resource
+    // load all sound resource
     m_soundManager.loadAllSound();
     // Splash context
     m_contexts[static_cast<std::size_t>(GameState::Splash)] =
@@ -150,7 +150,7 @@ namespace core
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
         std::make_unique<game::ContextGame>(m_window, m_inputListener,
-                                            m_settings);
+                                            m_settings, m_network);
 
     m_currentContext =
         m_contexts[static_cast<std::size_t>(GameState::Splash)].get();
@@ -160,7 +160,7 @@ namespace core
                                        m_window->getHeight());
 
     // Render Loop
-    m_gameState = m_currentContext->update();
+    m_currentContext->update();
     while (true)
       {
 	GameState state;
@@ -186,8 +186,8 @@ namespace core
 	sizef.d_width = static_cast<float>(m_window->getWidth());
 	if (resizer::AssetResizer::hasWindowResized(*m_window))
 	  {
-	    nope::log::Log(Debug) << "Resizing W: " << sizef.d_width
-	                          << " H: " << sizef.d_height;
+	    nope::log::Log(Debug)
+	        << "Resizing W: " << sizef.d_width << " H: " << sizef.d_height;
 	    CEGUI::System::getSingleton().notifyDisplaySizeChanged(sizef);
 	  }
 

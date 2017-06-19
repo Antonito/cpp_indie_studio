@@ -5,6 +5,12 @@
 #include "ConfigTools.hpp"
 #include "Ini.hpp"
 
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpadded"
+#endif
+
 class Config
 {
 public:
@@ -22,6 +28,7 @@ public:
   std::string const &           getConnectManagerIp() const;
   std::uint16_t                 getConnectManagerPort() const;
   std::uint16_t                 getGameServerPort() const;
+  std::uint16_t                 getUDPGameServerPort() const;
   std::int32_t                  getGameServerMaxClients() const;
   std::vector<MapConfig> const &getMapConfig() const;
   std::string const &           getMapMD5() const;
@@ -39,11 +46,17 @@ private:
   std::string            m_connectManagerIp;
   std::uint16_t          m_connectManagerPort;
   std::uint16_t          m_gameServerPort;
+  std::uint16_t          m_UDPGameServerPort;
   std::int32_t           m_gameServerMaxClients;
   std::vector<MapConfig> m_mapConfig;
   std::string            m_mapMD5;
 
   // Game
 };
+
+// Disable clang warning for implicit padding
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif // !CONFIG_HPP_
