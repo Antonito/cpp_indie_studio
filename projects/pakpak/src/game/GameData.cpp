@@ -19,7 +19,6 @@ namespace game
   {
     // todo: move in Map
     m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-
 #ifdef DEBUG
     m_debugDrawer = std::make_unique<OgreBulletCollisions::DebugDrawer>();
     m_debugDrawer->setDrawWireframe(true);
@@ -69,6 +68,7 @@ namespace game
       {
 	p.car().update(1 / 60.0);
       }
+    m_map.getPlayerOrder();
   }
 
   Ogre::Camera *GameData::createCamera(std::string const &name)

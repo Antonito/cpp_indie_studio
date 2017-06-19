@@ -6,6 +6,7 @@
 #include <OGRE/OgreSceneManager.h>
 #include "PathPoint.hpp"
 #include "Metadata.hpp"
+#include "CheckPoint.hpp"
 
 namespace game
 {
@@ -34,6 +35,8 @@ namespace game
     void removeSelectedPoint();
 #endif // !INDIE_MAP_EDITOR
 
+    std::vector<std::int32_t> getPlayerOrder();
+
   private:
     struct MapData
     {
@@ -41,31 +44,50 @@ namespace game
       struct Point
       {
 	Point();
-	Point(float _x, float _y, float _z);
+	Point(Point const &) = delete;
+	Point(Point &&);
+
+	Point(std::int32_t _x, std::int32_t _y, std::int32_t _z);
+
+	Point &operator=(Point const &) = delete;
+	Point &operator=(Point &&);
+
 	// clang-format off
 	NOPE_SERIAL_MEMBER(
-	    float, x,
-	    float, y,
-	    float, z)
+	    std::int32_t, x,
+	    std::int32_t, y,
+	    std::int32_t, z)
 	// clang-format on
       };
 
       struct Quaternion
       {
 	Quaternion();
-	Quaternion(float _x, float _y, float _z, float _w);
+	Quaternion(Quaternion const &) = delete;
+	Quaternion(Quaternion &&);
+	Quaternion(std::int32_t _x, std::int32_t _y, std::int32_t _z,
+	           std::int32_t _w);
+
+	Quaternion &operator=(Quaternion const &) = delete;
+	Quaternion &operator=(Quaternion &&);
+
 	// clang-format off
 	NOPE_SERIAL_MEMBER(
-	    float, x,
-	    float, y,
-	    float, z,
-	    float, w)
+	    std::int32_t, x,
+	    std::int32_t, y,
+	    std::int32_t, z,
+	    std::int32_t, w)
 	// clang-format on
       };
 
       struct Element
       {
 	Element();
+	Element(Element const &) = delete;
+	Element(Element &&);
+
+	Element &operator=(Element const &) = delete;
+	Element &operator=(Element &&);
 	// clang-format off
 	  NOPE_SERIAL_MEMBER(
 	      Point,        pos,
@@ -83,6 +105,7 @@ namespace game
 
     game::GameData &               m_gamedata;
     std::vector<Ogre::Vector3>     m_points;
+    std::vector<CheckPoint>        m_checkpoints;
     Ogre::Entity *                 m_map;
     Ogre::Entity *                 m_mapbox;
     Ogre::SceneNode *              m_node;

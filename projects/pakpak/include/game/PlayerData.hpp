@@ -26,9 +26,13 @@ namespace game
     ACar &      car();
     ACar const &car() const;
 
+    std::int32_t getCheckPoint() const;
+    void         nextCheckPoint();
+
   private:
     std::unique_ptr<ACar> m_car;
     int                   m_score;
+    std::int32_t          m_currentCheckpoint;
   };
 }
 

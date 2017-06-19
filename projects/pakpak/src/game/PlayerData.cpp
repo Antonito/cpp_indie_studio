@@ -2,12 +2,13 @@
 
 namespace game
 {
-  PlayerData::PlayerData() : m_car(nullptr), m_score(0)
+  PlayerData::PlayerData() : m_car(nullptr), m_score(0), m_currentCheckpoint(0)
   {
   }
 
   PlayerData::PlayerData(PlayerData &&that)
-      : m_car(std::move(that.m_car)), m_score(0)
+      : m_car(std::move(that.m_car)), m_score(0),
+        m_currentCheckpoint(that.m_currentCheckpoint)
   {
   }
 
@@ -45,5 +46,16 @@ namespace game
   {
     assert(m_car.get() != nullptr && "Trying to access a null-set car");
     return (*m_car);
+  }
+  std::int32_t PlayerData::getCheckPoint() const
+  {
+    return (m_currentCheckpoint);
+  }
+
+  void PlayerData::nextCheckPoint()
+  {
+    ++m_currentCheckpoint;
+    nope::log::Log(Debug) << "Players passed checkpoint "
+                          << m_currentCheckpoint;
   }
 }

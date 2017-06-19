@@ -78,15 +78,7 @@ namespace nope
 	      << "Serialize a " << typeid(std::vector<T>).name()
 	      << " (vector)";
 	  // Get the string size and convert to big endian
-	  std::uint32_t toSend =
-	      host_to_net(static_cast<std::uint32_t>(s.size()));
-	  // Buffer
-	  std::array<std::uint8_t, sizeof(std::uint32_t)> buf;
-
-	  // Copy the number into the buffer
-	  std::memcpy(buf.data(), &toSend, sizeof(std::uint32_t));
-	  // Insert the size buffer
-	  v.insert(v.end(), buf.begin(), buf.end());
+	  detail::to_binary_impl<std::uint32_t>::to_binary(v, s.size());
 
 	  for (T const &e : s)
 	    {
@@ -104,13 +96,14 @@ namespace nope
 	// Function itself
 	static void to_binary(buf_t &v, T i)
 	{
-	  nope::log::Log(Debug)
-	      << "Serialize a " << typeid(T).name() << " (fundamental)";
 	  // Get the value to send in big endian
 	  auto toSend = host_to_net<T>(i);
 
 	  using toSend_t = decltype(toSend);
 
+	  nope::log::Log(Debug)
+	      << "Serialize a " << typeid(T).name() << " (fundamental) ("
+	      << sizeof(toSend_t) << ')';
 	  // Buffer
 	  std::array<std::uint8_t, sizeof(toSend_t)> buf;
 
@@ -157,6 +150,9 @@ namespace nope
 	  // Type to read
 	  using toRead_t = decltype(host_to_net<T>(e));
 	  toRead_t t;
+
+	  nope::log::Log(Debug)
+	      << "Reading fundamental (" << sizeof(toRead_t) << ')';
 
 	  // Get it from the buffer
 	  std::memcpy(&t, &buf[cursor], sizeof(toRead_t));
@@ -248,9 +244,7 @@ namespace nope
 	  uint32_t tmp;
 	  uint32_t len;
 
-	  std::memcpy(&tmp, &v[cursor], sizeof(tmp));
-	  len = net_to_host<std::uint32_t>(tmp);
-	  cursor += sizeof(tmp);
+	  detail::from_binary_impl<std::uint32_t>::from_binary(len, v, cursor);
 
 	  s.resize(len);
 	  for (T &t : s)
