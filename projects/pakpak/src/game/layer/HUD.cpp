@@ -5,7 +5,7 @@
 #include "pakpak_stdafx.hpp"
 
 core::HUD::HUD()
-    : m_renderer(nullptr), m_rootWindow(nullptr), m_context(nullptr),
+    : m_rootWindow(nullptr), m_context(nullptr),
       m_param(), m_windows({}), m_quit(false)
 {
   initHUD();
