@@ -96,6 +96,7 @@
 #include "GameData.hpp"
 #include "LocalPlayer.hpp"
 #include "PlayerData.hpp"
+#include "Timer.hpp"
 #include "Ia.hpp"
 
 // Game.Car
