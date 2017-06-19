@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <thread>
 #include <memory>
+#include <atomic>
 #include "IClient.hpp"
 #include "TCPSocket.hpp"
 #include "GameClientGSPacket.hpp"
