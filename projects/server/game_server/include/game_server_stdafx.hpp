@@ -33,6 +33,7 @@
 #include "GameLogic.hpp"
 #include "GameClient.hpp"
 #include "json.hpp"
+#include "GenNetwork.hpp"
 #include "MapError.hpp"
 
 #if defined(_WIN32)

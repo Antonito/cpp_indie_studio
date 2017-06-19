@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <netdb.h>
+#include <arpa/inet.h>
 #define closesocket(s) close(s)
 
 // Uniform type declarations

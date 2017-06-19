@@ -13,6 +13,7 @@
 #endif
 
 #include "HUD.hpp"
+#include "Ia.hpp"
 #include "AContext.hpp"
 #include "LocalPlayer.hpp"
 

@@ -9,10 +9,12 @@
 
 namespace game
 {
+    class ACar;
+
     class Ia
     {
     public:
-        explicit Ia(game::ACar &, std::vector<Ogre::Vector3> const&);
+        explicit Ia(ACar &, std::vector<Ogre::Vector3> const&);
 
         Ia(Ia const &) = delete;
 

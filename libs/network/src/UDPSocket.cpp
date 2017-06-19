@@ -44,7 +44,7 @@ namespace network
 	ret = sendto(m_socket, data, len, 0, dest, destLen);
       }
     while (ret == -1 && errno == EINTR);
-    return (false);
+    return (ret != -1);
   }
 
   bool UDPSocket::rec(void *, std::size_t, ssize_t *) const
@@ -64,7 +64,7 @@ namespace network
 	ret = recvfrom(m_socket, buffer, rlen, 0, addr, addrLen);
       }
     while (ret == -1 && errno == EINTR);
-    return (false);
+    return (ret != -1);
   }
 
   bool UDPSocket::openConnection()
@@ -93,7 +93,7 @@ namespace network
       }
     else
       {
-	ret = connectToHost(SOCK_DGRAM, IPPROTO_UDP);
+	ret = connectToHost(SOCK_DGRAM, IPPROTO_UDP, false);
       }
     if (ret == false)
       {

@@ -224,7 +224,7 @@ namespace game
 
     m_hullbody->setDamping(0.2f, 0.5f);
 
-    double connectionHeight = -5;
+    double connectionHeight = -7;
 
     bool isFrontWheel = true;
 

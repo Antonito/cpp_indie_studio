@@ -41,10 +41,9 @@ namespace game
 
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
-          m_players.emplace_back(std::make_unique<LocalPlayer>(
-              m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
-              i == 0 ? m_hud.get() : nullptr, *this, m_players, nbLocalPlayer));
-
+	m_players.emplace_back(std::make_unique<LocalPlayer>(
+	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
+	    i == 0 ? m_hud.get() : nullptr, *this, m_players, nbLocalPlayer));
       }
     for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
       {
@@ -95,16 +94,20 @@ namespace game
   {
     m_input->capture();
     m_game.update();
-    for (std::unique_ptr<Ia> const &l_ia : m_ia)
-      {
-	l_ia->race();
-      }
     m_quit = m_hud->getQuit();
     return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }
 
   void ContextGame::display()
   {
+    for (std::uint8_t i = 0; i < m_players.size(); ++i)
+      {
+	m_players[i]->display();
+      }
+    for (std::unique_ptr<Ia> const &l_ia : m_ia)
+      {
+	l_ia->race();
+      }
   }
 
   bool ContextGame::keyPressed(OIS::KeyEvent const &ke)

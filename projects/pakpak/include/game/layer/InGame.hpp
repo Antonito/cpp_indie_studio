@@ -31,7 +31,7 @@ namespace game
   class InGame           final : public ALayer
   {
   public:
-    InGame() = delete;
+    explicit InGame() = delete;
     InGame(GameData &data, LocalPlayer &player, core::HUD *hud,
            std::vector<std::unique_ptr<LocalPlayer>> &players)
         : ALayer(data, player, hud, players), m_player(player), m_speed(),
@@ -95,6 +95,7 @@ namespace game
 	}
         m_time.start();
     }
+
     virtual void disable()
     {
     }
@@ -123,6 +124,7 @@ namespace game
             }
             m_time.reset();
         }
+      setSpeed();
     }
 
     virtual bool keyPressed(OIS::KeyEvent const &ke)
@@ -184,36 +186,46 @@ namespace game
 	  for (std::uint8_t playerIndex = 0;
 	       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
 	    {
-	      std::uint32_t speed = m_players[playerIndex]->getSpeed();
+	      double        rawSpeed = m_players[playerIndex]->car().speed();
+	      std::uint32_t speed = static_cast<std::uint32_t>(
+	          (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
+	      nope::log::Log(Debug)
+	          << "setting Speed :" << speed
+	          << "car speed : " << m_players[playerIndex]->car().speed();
+
 	      if (speed < 1000)
 		{
 
 		  std::uint32_t unit = speed % 10;
-		  std::uint32_t decade = speed / 10;
-		  std::uint32_t thousand = speed / 100;
+		  std::uint32_t decade = (speed / 10) % 10;
+		  std::uint32_t thousand = (speed / 100) % 10;
 
 		  if (thousand)
 		    {
+		      m_speed[playerIndex][2]->setVisible(true);
 		      m_speed[playerIndex][2]->setProperty(
 		          image, gl_speedAssets[thousand - 1]);
 		    }
 		  else
 		    {
-		      m_speed[playerIndex][2]->setProperty(image, "");
+		      m_speed[playerIndex][2]->setVisible(false);
 		    }
 
 		  if (decade)
 		    {
+		      m_speed[playerIndex][1]->setVisible(true);
 		      m_speed[playerIndex][1]->setProperty(
 		          image, gl_speedAssets[decade - 1]);
 		    }
 		  else if (thousand)
 		    {
+		      m_speed[playerIndex][1]->setVisible(true);
 		      m_speed[playerIndex][1]->setProperty(
 		          image, gl_speedAssets[game::SPEED_UNITS::U0]);
 		    }
 		  else
 		    {
+		      m_speed[playerIndex][1]->setVisible(false);
 		      m_speed[playerIndex][1]->setProperty(image, "");
 		    }
 

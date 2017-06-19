@@ -13,6 +13,7 @@
 #include "GameClient.hpp"
 #include "GameLogic.hpp"
 #include "IOError.hpp"
+#include "GameClientGSPacketUDP.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
@@ -60,7 +61,13 @@ private:
                                fd_set &writefds, fd_set &exceptfds);
 
   // GameServerUDP methods
-  void gameServerUDP();
+  void         gameServerUDP();
+  std::int32_t gameServerUDPActivity(std::int32_t const sock, fd_set &readfds,
+                                     fd_set &writefds, fd_set &exceptfds);
+  std::int32_t gameServerUDPIO(std::int32_t const sock, fd_set &readfds,
+                               fd_set &writefds, fd_set &exceptfds);
+  network::IClient::ClientAction writeUDP(IPacket const &      pck,
+                                          sockaddr_in_t const *addr);
 
   // Basic datas
   std::uint16_t      m_connectManagerPort;
@@ -83,6 +90,10 @@ private:
   // Tokens
   std::vector<std::unique_ptr<GameClient>> m_clientList;
   std::vector<Token>                       m_tokenList;
+
+  // UDP
+  Packet<GameClientToGSPacketUDP> m_pckUDP;
+  GameClientToGSPacketUDP         m_repUDP;
 };
 
 // Disable clang warning for implicit padding
