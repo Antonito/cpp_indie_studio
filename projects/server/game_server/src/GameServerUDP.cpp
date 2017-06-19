@@ -46,19 +46,19 @@ std::int32_t GameServer::gameServerUDPIO(std::int32_t const sock,
     {
       nope::log::Log(Debug) << "There's data to read [UDP]";
       // TODO: Use memory pool
-      std::size_t const buffSize = packetSize::GameClientToGSPacketUDPSize;
+      std::size_t const pckSize = packetSize::GameClientToGSPacketUDPSize;
       std::unique_ptr<uint8_t[]> buff =
-          std::make_unique<std::uint8_t[]>(buffSize);
+          std::make_unique<std::uint8_t[]>(pckSize);
       sockaddr_in_t addr;
       socklen_t     len;
 
-      if (m_gameSockUDP.rec(buff.get(), buffSize,
+      if (m_gameSockUDP.rec(buff.get(), pckSize,
                             reinterpret_cast<sockaddr_t *>(&addr), &len))
 	{
 	  nope::log::Log(Debug)
 	      << "**UDP** Received packet [" << inet_ntoa(addr.sin_addr) << ":"
 	      << ntohs(addr.sin_port) << "]";
-	  m_pckUDP.setData(buffSize, std::move(buff));
+	  m_pckUDP.setData(pckSize, std::move(buff));
 	  m_pckUDP >> m_repUDP;
 	  // Check if client exist
 	}
