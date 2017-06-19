@@ -158,7 +158,7 @@ namespace core
   void GUI::removeLayout(const std::string &layout)
   {
     if (m_windows.find(layout) == m_windows.end())
-      throw (std::runtime_error("Tried to remove unadded layout"));
+      throw(std::runtime_error("Tried to remove unadded layout"));
     nope::log::Log(Debug) << "Removing layout '" << layout << "'";
     m_root->removeChild(m_windows[layout]);
     m_windows[layout] = nullptr;

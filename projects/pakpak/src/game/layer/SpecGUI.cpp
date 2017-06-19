@@ -2,8 +2,8 @@
 
 namespace game
 {
-  SpecGUI::SpecGUI(GameData &data, ILayerStack &layer, core::HUD *hud) :
-      ALayer(data, layer, hud)
+  SpecGUI::SpecGUI(GameData &data, ILayerStack &layer, core::HUD *hud)
+      : ALayer(data, layer, hud)
   {
   }
 
