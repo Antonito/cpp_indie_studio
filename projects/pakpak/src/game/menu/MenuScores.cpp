@@ -23,35 +23,29 @@ namespace core
     m_gui.loadLayout("scores.layout");
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
 
-      if (!m_gui.getRoot()->getChild("back_button"))
+    if (!m_gui.getRoot()->getChild("back_button"))
       {
-          throw std::exception();
-          //TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset back_button");
       }
-      if (!m_gui.getRoot()->getChild("list_best_times"))
+    if (!m_gui.getRoot()->getChild("list_best_times"))
       {
-          throw std::exception();
-          //TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset list_best_times");
       }
-      if (!m_gui.getRoot()->getChild("list_finished_tracks"))
+    if (!m_gui.getRoot()->getChild("list_finished_tracks"))
       {
-          throw std::exception();
-          //TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset list_finished_tracks");
       }
-      if (!m_gui.getRoot()->getChild("list_max_speed"))
+    if (!m_gui.getRoot()->getChild("list_max_speed"))
       {
-          throw std::exception();
-          //TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset list_max_speed");
       }
-      if (!m_gui.getRoot()->getChild("list_collision_count"))
+    if (!m_gui.getRoot()->getChild("list_collision_count"))
       {
-          throw std::exception();
-          //TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset list_collision_count");
       }
-      if (!m_gui.getRoot()->getChild("list_total_km"))
+    if (!m_gui.getRoot()->getChild("list_total_km"))
       {
-          throw std::exception();
-          //TODO:Arthur find exception for button assets missing.
+	throw GUIError("Missing asset list_total_km");
       }
     m_gui.getRoot()
         ->getChild("back_button")

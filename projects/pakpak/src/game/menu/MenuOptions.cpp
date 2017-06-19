@@ -31,50 +31,41 @@ namespace core
     nope::log::Log(Debug) << "Current Volume : " << m_sound.getVolume();
     m_volumeSelected = 4;
     if (!(m_volumeButtons[0] = m_gui.getRoot()->getChild("volume/level_0")))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw GUIError("Missing asset volume/level_0");
+      }
     if (!(m_volumeButtons[1] = m_gui.getRoot()->getChild("volume/level_25")))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw GUIError("Missing asset volume/level_25");
+      }
     if (!(m_volumeButtons[2] = m_gui.getRoot()->getChild("volume/level_50")))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw GUIError("Missing asset volume/level_50");
+      }
     if (!(m_volumeButtons[3] = m_gui.getRoot()->getChild("volume/level_75")))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw GUIError("Missing asset volume/level_75");
+      }
     if (!(m_volumeButtons[4] = m_gui.getRoot()->getChild("volume/level_100")))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw GUIError("Missing asset volume/level_100");
+      }
     if (!(m_graphicButtons[0] = m_gui.getRoot()->getChild("low_button")))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw GUIError("Missing asset low_button");
+      }
     if (!(m_graphicButtons[1] = m_gui.getRoot()->getChild("high_button")))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw GUIError("Missing asset high_button");
+      }
     if (!(m_gui.getRoot()->getChild("back_button")))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw GUIError("Missing asset back_button");
+      }
     if (!(m_gui.getRoot()->getChild("edit_button")))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw GUIError("Missing asset edit_button");
+      }
     size_t newVolume = static_cast<std::size_t>(m_sound.getVolume() * 4.0f);
     swapButtons(m_volumeButtons, m_volumeSelected, newVolume,
                 AssetSetter::greyButton, AssetSetter::redButton);
