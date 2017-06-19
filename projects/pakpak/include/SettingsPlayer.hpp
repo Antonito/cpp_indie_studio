@@ -100,8 +100,8 @@ namespace core
     int switchKey(OIS::KeyCode old, OIS::KeyCode newKey);
 
     GameSettings &getPlayer(std::size_t const playerIndex);
-    std::uint8_t getPlayerCount() const;
-    void setPlayerCount(std::uint8_t playerCount);
+    std::uint32_t getPlayerCount() const;
+    void setPlayerCount(std::uint32_t playerCount);
 
     std::vector<SaveData> m_data;
 
@@ -110,7 +110,7 @@ namespace core
     std::vector<std::map<std::int32_t, std::string>> m_keycodes;
     std::vector<bool> m_used;
     std::vector<bool> m_loaded;
-    std::uint8_t      m_playerCount;
+    std::uint32_t     m_playerCount;
   };
 }
 

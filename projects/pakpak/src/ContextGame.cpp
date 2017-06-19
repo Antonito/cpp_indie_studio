@@ -25,7 +25,7 @@ namespace game
 
     m_game.setPlayerNb(nbPlayer);
 
-    std::uint8_t nbLocalPlayer = m_settings.getPlayerCount();
+    std::uint32_t nbLocalPlayer = m_settings.getPlayerCount();
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {

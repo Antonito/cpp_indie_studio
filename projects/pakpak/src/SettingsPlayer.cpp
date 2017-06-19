@@ -431,12 +431,12 @@ namespace core
     return (m_players[playerIndex]);
   }
 
-  std::uint8_t SettingsPlayer::getPlayerCount() const
+  std::uint32_t SettingsPlayer::getPlayerCount() const
   {
     return m_playerCount;
   }
 
-  void SettingsPlayer::setPlayerCount(std::uint8_t playerCount)
+  void SettingsPlayer::setPlayerCount(std::uint32_t playerCount)
   {
     m_playerCount = playerCount;
   }
