@@ -86,12 +86,17 @@ namespace game
   {
     m_input->capture();
     m_game.update();
+
     m_quit = m_hud->getQuit();
     return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }
 
   void ContextGame::display()
   {
+    for (std::uint8_t i = 0; i < m_players.size(); ++i)
+    {
+      m_players[i]->display();
+    }
   }
 
   bool ContextGame::keyPressed(OIS::KeyEvent const &ke)

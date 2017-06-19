@@ -58,7 +58,7 @@ namespace game
 
     void setViewPort(Ogre::Real left, Ogre::Real top, Ogre::Real width,
                      Ogre::Real height);
-
+    void display();
     void crossFinishLine(
         std::chrono::time_point<std::chrono::high_resolution_clock> finishTime,
         int                                                         nbRounds);
