@@ -48,7 +48,6 @@ namespace core
 
     std::memset(&FileInfos, 0, sizeof(FileInfos));
     nope::log::Log(Debug) << "Prepare open file sound";
-
     SNDFILE *File = sf_open(Filename.c_str(), SFM_READ, &FileInfos);
     if (!File)
       {
