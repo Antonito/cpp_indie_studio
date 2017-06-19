@@ -354,4 +354,12 @@ namespace game
     // TODO return car position
     return 1;
   }
+
+  void LocalPlayer::display()
+  {
+    for (std::uint32_t i = 0; i < m_layers.size(); ++i)
+      {
+	m_layers[i]->display();
+      }
+  }
 }
