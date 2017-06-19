@@ -7,9 +7,10 @@
 namespace core
 {
   MenuMultiplayer::MenuMultiplayer(menu::MenuManager &menuManager, GUI &gui,
-                                   SoundManager &sound, NetworkManager &net)
+                                   SoundManager &sound, NetworkManager &net,
+                                   SettingsPlayer &settings)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
-        m_sound(sound), m_selectGameServer(), m_network(net)
+        m_sound(sound), m_selectGameServer(), m_network(net), m_settings(settings)
   {
     nope::log::Log(Debug) << "Building MenuMultiplayer";
   }
@@ -193,7 +194,7 @@ namespace core
   bool MenuMultiplayer::onPlayClick(CEGUI::EventArgs const &)
   {
     soundClick();
-
+    m_settings.setPlayerCount(1);
     // Get token from gameServer
     try
       {
