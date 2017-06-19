@@ -60,6 +60,7 @@ std::int32_t GameServer::gameServerUDPIO(std::int32_t const sock,
 	      << ntohs(addr.sin_port) << "]";
 	  m_pckUDP.setData(pckSize, std::move(buff));
 	  m_pckUDP >> m_repUDP;
+
 	  // Check if client exist
 	}
       else
@@ -68,6 +69,7 @@ std::int32_t GameServer::gameServerUDPIO(std::int32_t const sock,
 	      << "Cannot read [UDP] : " << std::strerror(errno);
 	}
     }
+  // Loop over all clients and broadcast
   return (0);
 }
 

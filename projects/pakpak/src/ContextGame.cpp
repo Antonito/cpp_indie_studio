@@ -7,7 +7,8 @@ namespace game
                            core::SettingsPlayer &settings,
                            core::NetworkManager &net)
       : core::AContext(win, input), m_game(), m_players(),
-        m_settings(settings), m_quit(false), m_hud(nullptr), m_net(net)
+        m_settings(settings), m_quit(false), m_hud(nullptr), m_net(net),
+        m_networkPacket()
   {
   }
 
@@ -98,9 +99,9 @@ namespace game
     std::chrono::steady_clock::time_point now =
         std::chrono::steady_clock::now();
 
-    // Send network packets
     if (m_net.isConnected())
       {
+	// Process network I/O
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(now -
 	                                                          lastTimePck)
 	        .count() >= 17)
@@ -119,6 +120,9 @@ namespace game
 	    // Send packet
 	    m_net.sendUDPPacket(std::move(pck));
 	    lastTimePck = std::chrono::steady_clock::now();
+
+	    // Read packets
+	    m_networkPacket = m_net.getUDPPacket();
 	  }
       }
 
