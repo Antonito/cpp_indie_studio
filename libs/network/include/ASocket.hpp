@@ -1,6 +1,7 @@
 #ifndef ASOCKET_HPP_
 #define ASOCKET_HPP_
 
+#include <cstring>
 #include <string>
 #include "ISocket.hpp"
 
