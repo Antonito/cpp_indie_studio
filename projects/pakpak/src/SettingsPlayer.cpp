@@ -170,7 +170,8 @@ namespace core
   };
 
   SettingsPlayer::SettingsPlayer()
-      : m_data(), m_players(), m_keycodes(), m_used(), m_loaded()
+      : m_data(), m_players(), m_keycodes(), m_used(), m_loaded(),
+        m_playerCount(1)
   {
     m_players.resize(5);
     m_data.resize(5);
@@ -189,7 +190,7 @@ namespace core
   SettingsPlayer::SettingsPlayer(SettingsPlayer const &that)
       : m_data(that.m_data), m_players(that.m_players),
         m_keycodes(that.m_keycodes), m_used(that.m_used),
-        m_loaded(that.m_loaded)
+        m_loaded(that.m_loaded), m_playerCount(1)
   {
   }
 
@@ -294,7 +295,7 @@ namespace core
   {
     Log(nope::log::Debug) << "SettingsPlayer::save -> " << playerIndex << " : "
                           << playerFile[static_cast<int>(playerIndex)];
-    std::ofstream     fs(playerFile[static_cast<int>(playerIndex)].c_str(),
+    std::ofstream fs(playerFile[static_cast<int>(playerIndex)].c_str(),
                      std::ofstream::out | std::ofstream::trunc);
 
     if (fs.is_open() == false)
@@ -428,6 +429,16 @@ namespace core
       SettingsPlayer::getPlayer(std::size_t const playerIndex)
   {
     return (m_players[playerIndex]);
+  }
+
+  std::uint32_t SettingsPlayer::getPlayerCount() const
+  {
+    return m_playerCount;
+  }
+
+  void SettingsPlayer::setPlayerCount(std::uint32_t playerCount)
+  {
+    m_playerCount = playerCount;
   }
 
   SettingsPlayer::GameSettings::GameSettings() : key(), graphic()

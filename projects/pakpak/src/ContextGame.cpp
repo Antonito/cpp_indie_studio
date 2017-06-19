@@ -21,29 +21,27 @@ namespace game
     m_input->setKeyboardEventCallback(this);
     m_quit = false;
 
-    std::size_t nbPlayer = 2;
+    std::size_t nbPlayer = m_settings.getPlayerCount();
 
-    m_game.setPlayerNb(0);
     m_game.setPlayerNb(nbPlayer);
 
-    std::size_t nbLocalPlayer = 1;
+    std::uint32_t nbLocalPlayer = m_settings.getPlayerCount();
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
 	m_game[i].setCar(std::make_unique<EmptyCar>(
 	    m_game, Ogre::Vector3::ZERO, Ogre::Quaternion::IDENTITY));
       }
-    if (m_players.size() < 2)
-      {
-	nope::log::Log(Debug) << "Creating HUD";
-	m_hud = std::make_unique<core::HUD>();
-      }
+
+    nope::log::Log(Debug) << "Creating HUD";
+    m_hud = std::make_unique<core::HUD>();
 
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
-	m_players.emplace_back(std::make_unique<LocalPlayer>(
-	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
-	    m_hud.get(), *this));
+          m_players.emplace_back(std::make_unique<LocalPlayer>(
+              m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
+              i == 0 ? m_hud.get() : nullptr, *this, m_players, nbLocalPlayer));
+
       }
     updateViewPort();
 

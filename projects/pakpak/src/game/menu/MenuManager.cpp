@@ -22,7 +22,7 @@ namespace menu
     m_menuLayer[static_cast<size_t>(core::MenuState::Keymap)] =
         std::make_unique<core::MenuKeymap>(*this, m_gui, settings, sound);
     m_menuLayer[static_cast<size_t>(core::MenuState::SoloPlayerGame)] =
-        std::make_unique<core::MenuSolo>(*this, m_gui, sound);
+        std::make_unique<core::MenuSolo>(*this, m_gui, sound, settings);
     m_menuLayer[static_cast<size_t>(core::MenuState::MultiPlayerGame)] =
         std::make_unique<core::MenuMultiplayer>(*this, m_gui, sound, net);
     m_menuLayer[static_cast<size_t>(core::MenuState::Score)] =

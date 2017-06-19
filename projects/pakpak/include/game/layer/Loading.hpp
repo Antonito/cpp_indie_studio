@@ -10,7 +10,8 @@ namespace game
   {
   public:
     Loading() = delete;
-    Loading(GameData &data, ILayerStack &layerStack, core::HUD *hud);
+    Loading(GameData &data, ILayerStack &layerStack, core::HUD *hud,
+            std::vector<std::unique_ptr<LocalPlayer>> &players);
     Loading(Loading const &) = delete;
     Loading(Loading &&) = delete;
     virtual ~Loading();

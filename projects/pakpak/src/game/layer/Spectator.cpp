@@ -2,8 +2,9 @@
 
 namespace game
 {
-  Spectator::Spectator(GameData &data, ILayerStack &layer, core::HUD *hud)
-      : ALayer(data, layer, hud)
+  Spectator::Spectator(GameData &data, ILayerStack &layer, core::HUD *hud,
+                       std::vector<std::unique_ptr<LocalPlayer>> &players)
+      : ALayer(data, layer, hud, players)
   {
   }
 

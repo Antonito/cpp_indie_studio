@@ -10,7 +10,8 @@ namespace game
   {
   public:
     GameGUI() = delete;
-    GameGUI(GameData &data, LocalPlayer &layer, core::HUD *hud);
+    GameGUI(GameData &data, LocalPlayer &layer, core::HUD *hud,
+            std::vector<std::unique_ptr<LocalPlayer>> &players);
     GameGUI(GameGUI const &) = delete;
     GameGUI(GameGUI &&) = delete;
     virtual ~GameGUI();

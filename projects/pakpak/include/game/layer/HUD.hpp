@@ -42,7 +42,6 @@ namespace core
     bool           getQuit() const;
 
   private:
-    CEGUI::OgreRenderer *m_renderer;
     CEGUI::Window *      m_rootWindow;
     CEGUI::GUIContext *  m_context;
     OIS::ParamList       m_param;
