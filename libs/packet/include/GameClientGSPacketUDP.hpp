@@ -21,6 +21,9 @@ enum class GameClientToGSEventUDP : std::uint16_t
 
 struct GameClientToGSPacketUDPRaw
 {
+  GameClientToGSPacketUDPRaw();
+  GameClientToGSPacketUDPRaw(GameClientToGSPacketUDPRaw const &);
+
   GameClientToGSEventUDP eventType;
   union
   {
@@ -31,6 +34,7 @@ struct GameClientToGSPacketUDPRaw
 struct GameClientToGSPacketUDP : public ISerializable
 {
   GameClientToGSPacketUDP();
+  GameClientToGSPacketUDP(GameClientToGSPacketUDP const &);
   GameClientToGSPacketUDPRaw pck;
 
   virtual std::unique_ptr<std::uint8_t[]>

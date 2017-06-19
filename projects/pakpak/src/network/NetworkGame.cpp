@@ -3,7 +3,8 @@
 namespace core
 {
   NetworkGame::NetworkGame()
-      : m_sock(nullptr), m_pck(), m_pckContent(), m_running(false)
+      : m_sock(nullptr), m_pck(), m_pckContent(), m_running(false),
+        m_gamePckIn()
   {
   }
 
@@ -48,6 +49,24 @@ namespace core
     m_running = false;
   }
 
+  void NetworkGame::sendPacket(GameClientToGSPacketUDP const &pck)
+  {
+    m_gamePckIn.push(pck);
+  }
+
+  std::vector<GameClientToGSPacketUDP> NetworkGame::getPacket()
+  {
+    std::vector<GameClientToGSPacketUDP> events;
+
+    // Poll out events
+    while (!m_gamePckOut.empty())
+      {
+	events.push_back(m_gamePckOut.front());
+	m_gamePckOut.pop();
+      }
+    return (events);
+  }
+
   void NetworkGame::run()
   {
     nope::log::Log(Debug) << "Starting UDP exchanges";
@@ -57,22 +76,34 @@ namespace core
     m_pckContent.pck.eventData.i = 23;
     m_pck << m_pckContent;
 
-    // TODO: rm
-    for (int i = 0; i < 20; ++i)
-      {
-	if (writeUDP(m_pck, addr))
-	  {
-	    nope::log::Log(Debug) << "Send UDP packet";
-	  }
-      }
-
-    // TODO
     m_running = true;
+    std::vector<GameClientToGSPacketUDP> gameEvents;
     while (m_running)
       {
+	// Clear datas
+	gameEvents.clear();
+
 	// Get Game events
+	while (!m_gamePckIn.empty())
+	  {
+	    gameEvents.push_back(m_gamePckIn.front());
+	    m_gamePckIn.pop();
+	  }
+
 	// Send game events to server
+	for (GameClientToGSPacketUDP const &ev : gameEvents)
+	  {
+	    m_pck << ev;
+	    if (!writeUDP(m_pck, addr))
+	      {
+		nope::log::Log(Warning) << "Couldn't send UDP packet";
+	      }
+	  }
+
+	// TODO
 	// Read Server events
+
+	// TODO
 	// Send server events to game
       }
   }

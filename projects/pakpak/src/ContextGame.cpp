@@ -1,3 +1,4 @@
+#include <chrono>
 #include "pakpak_stdafx.hpp"
 
 namespace game
@@ -38,10 +39,9 @@ namespace game
 
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
-          m_players.emplace_back(std::make_unique<LocalPlayer>(
-              m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
-              i == 0 ? m_hud.get() : nullptr, *this, m_players, nbLocalPlayer));
-
+	m_players.emplace_back(std::make_unique<LocalPlayer>(
+	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
+	    i == 0 ? m_hud.get() : nullptr, *this, m_players, nbLocalPlayer));
       }
     updateViewPort();
 
@@ -84,6 +84,30 @@ namespace game
 
   core::GameState ContextGame::update()
   {
+#if 0
+    static std::chrono::time_point<std::chrono::steady_clock> lastTime =
+        std::chrono::steady_clock::now();
+    std::chrono::time_point<std::chrono::steady_clock> currentTime =
+        std::chrono::steady_clock::now();
+    std::chrono::duration<double> diff = currentTime - lastTime;
+#endif
+
+    // Send network packets
+    if (0)
+      {
+	std::vector<GameClientToGSPacketUDP> pck;
+	GameClientToGSPacketUDP              pckContent;
+
+	// Build packets
+	pckContent.pck.eventType = GameClientToGSEventUDP::SIMPLE_EVENT;
+	pckContent.pck.eventData.i = 23;
+	pck.push_back(pckContent);
+
+	// Send packet
+	m_net.sendUDPPacket(std::move(pck));
+      }
+
+    // Game process
     m_input->capture();
     m_game.update();
 
@@ -94,9 +118,9 @@ namespace game
   void ContextGame::display()
   {
     for (std::uint8_t i = 0; i < m_players.size(); ++i)
-    {
-      m_players[i]->display();
-    }
+      {
+	m_players[i]->display();
+      }
   }
 
   bool ContextGame::keyPressed(OIS::KeyEvent const &ke)

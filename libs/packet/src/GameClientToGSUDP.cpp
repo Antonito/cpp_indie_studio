@@ -4,6 +4,23 @@ GameClientToGSPacketUDP::GameClientToGSPacketUDP() : pck()
 {
 }
 
+GameClientToGSPacketUDPRaw::GameClientToGSPacketUDPRaw()
+    : eventType(GameClientToGSEventUDP::SIMPLE_EVENT), eventData{}
+{
+}
+
+GameClientToGSPacketUDP::GameClientToGSPacketUDP(
+    GameClientToGSPacketUDP const &other)
+    : pck(other.pck)
+{
+}
+
+GameClientToGSPacketUDPRaw::GameClientToGSPacketUDPRaw(
+    GameClientToGSPacketUDPRaw const &other)
+    : eventType(other.eventType), eventData(other.eventData)
+{
+}
+
 std::unique_ptr<std::uint8_t[]>
     GameClientToGSPacketUDP::serialize(std::size_t &sizeToFill) const
 {

@@ -87,4 +87,18 @@ namespace core
       }
     return (m_conn->isConnected());
   }
+
+  void NetworkManager::sendUDPPacket(
+      std::vector<GameClientToGSPacketUDP> &&packet)
+  {
+    for (GameClientToGSPacketUDP const &pck : packet)
+      {
+	m_game->sendPacket(pck);
+      }
+  }
+
+  std::vector<GameClientToGSPacketUDP> NetworkManager::getUDPPacket()
+  {
+    return (m_game->getPacket());
+  }
 }
