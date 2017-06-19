@@ -45,14 +45,11 @@ namespace game
 	m_players.emplace_back(std::make_unique<LocalPlayer>(
 	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
 	    i == 0 ? m_hud.get() : nullptr, *this, m_players, nbLocalPlayer));
-<<<<<<< HEAD
-=======
       }
     for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
       {
 	m_ia.emplace_back(
 	    std::make_unique<Ia>(m_game[i].car(), m_game.map().getNodes()));
->>>>>>> master
       }
     updateViewPort();
 
