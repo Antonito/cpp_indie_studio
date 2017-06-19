@@ -21,12 +21,11 @@ namespace game
     m_input->setKeyboardEventCallback(this);
     m_quit = false;
 
-    std::size_t nbPlayer = 4;
+    std::size_t nbPlayer = m_settings.getPlayerCount();
 
-    m_game.setPlayerNb(0);
     m_game.setPlayerNb(nbPlayer);
 
-    std::uint8_t nbLocalPlayer = 4;
+    std::uint8_t nbLocalPlayer = m_settings.getPlayerCount();
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
