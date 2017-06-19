@@ -250,8 +250,7 @@ namespace network
 			throw network::SockError("Cannot set socket type");
 		      }
 		  }
-		assert(sizeof(m_addr) <= res->ai_addrlen);
-		if (sizeof(m_addr) <= res->ai_addrlen)
+		if (res->ai_addrlen <= sizeof(m_addr))
 		  {
 		    nope::log::Log(Debug) << "Updating sockaddr_in content";
 		    std::memcpy(&m_addr, res->ai_addr, res->ai_addrlen);

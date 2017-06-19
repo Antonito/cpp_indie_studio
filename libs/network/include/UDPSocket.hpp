@@ -17,6 +17,7 @@ namespace network
     virtual bool send(void const *data, std::size_t len) const;
     virtual bool rec(void *buffer, std::size_t rlen, ssize_t *buffLen) const;
     virtual bool openConnection();
+
     bool send(void const *data, std::size_t len, sockaddr_t const *dest,
               socklen_t destLen) const;
     bool rec(void *buffer, std::size_t rlen, sockaddr_t *addr,
