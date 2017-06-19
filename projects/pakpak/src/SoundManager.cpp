@@ -46,7 +46,8 @@ namespace core
     // Open audio file with libsndfile
     SF_INFO FileInfos;
 
-    std::memset(&FileInfos, 0, sizeof(FileInfos));
+
+      std::memset(&FileInfos, 0, sizeof(FileInfos));
     nope::log::Log(Debug) << "Prepare open file sound";
     SNDFILE *File = sf_open(Filename.c_str(), SFM_READ, &FileInfos);
     if (!File)
@@ -274,6 +275,5 @@ namespace core
     loadSound("deps/indie_resource/songs/splash.wav");
     loadSound("deps/indie_resource/songs/GUI/pass.wav");
     loadSound("deps/indie_resource/songs/GUI/click.wav");
-//    loadSound("deps/indie_resource/songs/Karts/K_Gla/klaxon.wav");
   }
 }

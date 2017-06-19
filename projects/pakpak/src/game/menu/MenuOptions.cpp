@@ -2,6 +2,7 @@
 // Created by brout_m on 09/06/17.
 //
 
+#include <game/menu/MenuOptions.hpp>
 #include "pakpak_stdafx.hpp"
 
 namespace core
@@ -50,13 +51,13 @@ namespace core
       {
 	throw GUIError("Missing asset volume/level_100");
       }
-    if (!(m_graphicButtons[0] = m_gui.getRoot()->getChild("low_button")))
+    if (!(m_graphicButtons[0] = m_gui.getRoot()->getChild("windowed_button")))
       {
-	throw GUIError("Missing asset low_button");
+	throw GUIError("Missing asset windowed_button");
       }
-    if (!(m_graphicButtons[1] = m_gui.getRoot()->getChild("high_button")))
+    if (!(m_graphicButtons[1] = m_gui.getRoot()->getChild("fullscreen_button")))
       {
-	throw GUIError("Missing asset high_button");
+	throw GUIError("Missing asset fullscreen_button");
       }
     if (!(m_gui.getRoot()->getChild("back_button")))
       {

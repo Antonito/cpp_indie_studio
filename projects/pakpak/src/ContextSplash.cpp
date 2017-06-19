@@ -39,7 +39,6 @@ namespace splash
   {
     m_sound.playSound(core::ESound::SPLASH_SONG);
     nope::log::Log(Debug) << "Splash context enabled";
-    m_sound.loadSound("deps/indie_resource/songs/splash.wav");
     m_viewport = m_win->addViewport(m_camera);
 
     m_viewport->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
@@ -52,7 +51,6 @@ namespace splash
   {
     m_sound.stopSound(core::ESound::SPLASH_SONG);
     nope::log::Log(Debug) << "Splash context disabled";
-    m_sound.clear();
     m_win->removeAllViewports();
   }
 
