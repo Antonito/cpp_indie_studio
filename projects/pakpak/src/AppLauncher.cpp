@@ -156,7 +156,7 @@ namespace core
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
         std::make_unique<game::ContextGame>(m_window, m_inputListener,
-                                            m_settings);
+                                            m_settings, m_network);
 
     nope::log::Log(Debug) << "Game context loaded";
 
@@ -196,8 +196,8 @@ namespace core
 	sizef.d_width = static_cast<float>(m_window->getWidth());
 	if (resizer::AssetResizer::hasWindowResized(*m_window))
 	  {
-	    nope::log::Log(Debug) << "Resizing W: " << sizef.d_width
-	                          << " H: " << sizef.d_height;
+	    nope::log::Log(Debug)
+	        << "Resizing W: " << sizef.d_width << " H: " << sizef.d_height;
 	    CEGUI::System::getSingleton().notifyDisplaySizeChanged(sizef);
 	  }
 

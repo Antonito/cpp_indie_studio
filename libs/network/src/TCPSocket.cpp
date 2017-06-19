@@ -47,6 +47,11 @@ namespace network
 	    m_addr.sin_port = htons(m_port);
 	    m_addr.sin_family = AF_INET;
 	    hostConnection();
+	    if (listen(m_socket, static_cast<std::int32_t>(m_maxClients)) ==
+	        -1)
+	      {
+		throw network::SockError("Cannot listen on socket");
+	      }
 	  }
 	catch (std::exception &e)
 	  {

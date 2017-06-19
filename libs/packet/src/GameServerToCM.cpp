@@ -28,6 +28,8 @@ std::unique_ptr<std::uint8_t[]>
   if (pck.eventType == GameServerToCMEvent::LICENCE_EVENT)
     {
       data->eventData.licence.port = htons(data->eventData.licence.port);
+      data->eventData.licence.maxClients =
+          htons(data->eventData.licence.maxClients);
     }
   else if (pck.eventType == GameServerToCMEvent::NB_CLIENTS)
     {
@@ -55,6 +57,8 @@ void GameServerToCMPacket::deserialize(std::size_t, std::uint8_t *data)
   else if (pck.eventType == GameServerToCMEvent::LICENCE_EVENT)
     {
       pck.eventData.licence.port = ntohs(pck.eventData.licence.port);
+      pck.eventData.licence.maxClients =
+          ntohs(pck.eventData.licence.maxClients);
     }
   else if (pck.eventType == GameServerToCMEvent::NB_CLIENTS)
     {

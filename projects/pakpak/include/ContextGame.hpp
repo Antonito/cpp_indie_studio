@@ -30,7 +30,7 @@ namespace game
   {
   public:
     ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
-                core::SettingsPlayer &);
+                core::SettingsPlayer &, core::NetworkManager &);
     virtual ~ContextGame();
     ContextGame &operator=(ContextGame const &) = delete;
     ContextGame &operator=(ContextGame &&) = delete;
@@ -55,6 +55,7 @@ namespace game
     core::SettingsPlayer &                    m_settings;
     bool                                      m_quit;
     std::unique_ptr<core::HUD>                m_hud;
+    core::NetworkManager &                    m_net;
   };
 }
 

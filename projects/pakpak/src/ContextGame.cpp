@@ -3,9 +3,10 @@
 namespace game
 {
   ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
-                           core::SettingsPlayer &settings)
-      : core::AContext(win, input), m_game(), m_players(), m_ia(),
-        m_settings(settings), m_quit(false), m_hud(nullptr)
+                           core::SettingsPlayer &settings,
+                           core::NetworkManager &net)
+      : core::AContext(win, input), m_game(), m_players(),
+        m_settings(settings), m_quit(false), m_hud(nullptr), m_net(net)
   {
   }
 
@@ -84,6 +85,12 @@ namespace game
     nope::log::Log(Debug) << "Game context disabled";
     m_players.clear();
     m_input->setPhysicWorld(nullptr);
+    nope::log::Log(Debug) << "Disabling game.";
+    if (m_net.isConnected())
+      {
+	nope::log::Log(Debug) << "Game is connected to Game Server.";
+	m_net.disconnect();
+      }
   }
 
   core::GameState ContextGame::update()

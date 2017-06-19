@@ -24,6 +24,7 @@
 #include "Logger.hpp"
 #include "GameServer.hpp"
 #include "TCPSocket.hpp"
+#include "UDPSocket.hpp"
 #include "Packet.hpp"
 #include "GameServerCMPacket.hpp"
 #include "Token.hpp"
