@@ -18,7 +18,7 @@ namespace core
     if (!m_sock->openConnection())
       {
 	nope::log::Log(Error) << "Cannot create UDP connection.";
-	throw std::exception(); // TODO
+	throw NetworkConnectionError("Cannot create UDP connection.");
       }
   }
 
