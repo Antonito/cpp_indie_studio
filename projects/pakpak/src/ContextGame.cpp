@@ -101,9 +101,9 @@ namespace game
     // Send network packets
     if (m_net.isConnected())
       {
-	// TODO: Change to 17ms
-	if (std::chrono::duration_cast<std::chrono::seconds>(now - lastTimePck)
-	        .count() >= 1)
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(now -
+	                                                          lastTimePck)
+	        .count() >= 17)
 	  {
 	    std::vector<GameClientToGSPacketUDP> pck;
 	    GameClientToGSPacketUDP              pckContent;
