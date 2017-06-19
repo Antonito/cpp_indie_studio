@@ -2,7 +2,8 @@
 
 namespace core
 {
-  NetworkGame::NetworkGame() : m_sock(nullptr), m_pck(), m_pckContent()
+  NetworkGame::NetworkGame()
+      : m_sock(nullptr), m_pck(), m_pckContent(), m_running(false)
   {
   }
 
@@ -42,6 +43,11 @@ namespace core
     return (ret);
   }
 
+  void NetworkGame::stop()
+  {
+    m_running = false;
+  }
+
   void NetworkGame::run()
   {
     nope::log::Log(Debug) << "Starting UDP exchanges";
@@ -58,6 +64,16 @@ namespace core
 	  {
 	    nope::log::Log(Debug) << "Send UDP packet";
 	  }
+      }
+
+    // TODO
+    m_running = true;
+    while (m_running)
+      {
+	// Get Game events
+	// Send game events to server
+	// Read Server events
+	// Send server events to game
       }
   }
 }
