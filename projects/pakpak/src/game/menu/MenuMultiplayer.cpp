@@ -32,20 +32,20 @@ namespace core
     nope::log::Log(Debug) << "Server list OKAY";
 
     if (!(m_gui.getRoot()->getChild("servers_list")))
-    {
-        throw std::exception();
-        //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw std::exception();
+	// TODO:Arthur find exception for button assets missing.
+      }
     if (!(m_gui.getRoot()->getChild("back_button")))
-    {
-        throw std::exception();
-        //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw std::exception();
+	// TODO:Arthur find exception for button assets missing.
+      }
     if (!(m_gui.getRoot()->getChild("launch_button")))
-    {
-        throw std::exception();
-        //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw std::exception();
+	// TODO:Arthur find exception for button assets missing.
+      }
     static_cast<CEGUI::ItemListbox *>(
         m_gui.getRoot()->getChild("servers_list"))
         ->setAutoResizeEnabled(1);
@@ -155,7 +155,7 @@ namespace core
   }
 
   bool MenuMultiplayer::mousePressed(const OIS::MouseEvent &,
-                                     OIS::MouseButtonID     id)
+                                     OIS::MouseButtonID id)
   {
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
@@ -163,7 +163,7 @@ namespace core
   }
 
   bool MenuMultiplayer::mouseReleased(const OIS::MouseEvent &,
-                                      OIS::MouseButtonID     id)
+                                      OIS::MouseButtonID id)
   {
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()

@@ -261,17 +261,17 @@ namespace game
     if (m_layers[static_cast<std::size_t>(GameLayer::Menu)].get() !=
         m_currentLayers.top())
       {
-        if (!Pauser::isPaused())
-        {
-          nope::log::Log(Debug) << "Opening Pause Menu";
-          m_currentLayers.push(
-              m_layers[static_cast<std::size_t>(GameLayer::Menu)].get());
-          m_currentLayers.top()->enable();
-        }
-        else
-        {
-          Pauser::unpause();
-        }
+	if (!Pauser::isPaused())
+	  {
+	    nope::log::Log(Debug) << "Opening Pause Menu";
+	    m_currentLayers.push(
+	        m_layers[static_cast<std::size_t>(GameLayer::Menu)].get());
+	    m_currentLayers.top()->enable();
+	  }
+	else
+	  {
+	    Pauser::unpause();
+	  }
       }
   }
 

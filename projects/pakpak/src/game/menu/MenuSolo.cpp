@@ -25,25 +25,25 @@ namespace core
     m_curState = GameState::Menu;
 
     if (!m_gui.getRoot()->getChild("back_button"))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw std::exception();
+	// TODO:Arthur find exception for button assets missing.
+      }
     if (!m_gui.getRoot()->getChild("play_button"))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw std::exception();
+	// TODO:Arthur find exception for button assets missing.
+      }
     if (!m_gui.getRoot()->getChild("easy_button"))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw std::exception();
+	// TODO:Arthur find exception for button assets missing.
+      }
     if (!m_gui.getRoot()->getChild("hard_button"))
-    {
-      throw std::exception();
-      //TODO:Arthur find exception for button assets missing.
-    }
+      {
+	throw std::exception();
+	// TODO:Arthur find exception for button assets missing.
+      }
     m_gui.getRoot()
         ->getChild("back_button")
         ->subscribeEvent(

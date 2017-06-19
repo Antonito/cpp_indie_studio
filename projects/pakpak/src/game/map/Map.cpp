@@ -3,14 +3,14 @@
 namespace game
 {
   Map::Map(game::GameData &gamedata)
-      : m_gamedata(gamedata), m_points(), m_map(nullptr), m_mapbox(nullptr), m_node(nullptr),
-        m_body(nullptr)
+      : m_gamedata(gamedata), m_points(), m_map(nullptr), m_mapbox(nullptr),
+        m_node(nullptr), m_body(nullptr)
   {
   }
 
   Map::Map(game::GameData &gamedata, std::string const &filename)
-      : m_gamedata(gamedata), m_points(), m_map(nullptr), m_mapbox(nullptr), m_node(nullptr),
-        m_body(nullptr)
+      : m_gamedata(gamedata), m_points(), m_map(nullptr), m_mapbox(nullptr),
+        m_node(nullptr), m_body(nullptr)
   {
     this->loadFromFile(filename);
   }
@@ -237,7 +237,6 @@ namespace game
   {
     return m_points;
   }
-
 
 #if defined(INDIE_MAP_EDITOR)
   void Map::addPoint(Ogre::Vector3 const &pt)

@@ -5,12 +5,12 @@ namespace game
   GameData::GameData()
       : m_sceneMgr(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Game scene manager")),
-        m_players(), m_world(new OgreBulletDynamics::DynamicsWorld(
-                         m_sceneMgr,
-                         Ogre::AxisAlignedBox(
-                             Ogre::Vector3(-100000000, -100000000, -100000000),
-                             Ogre::Vector3(100000000, 100000000, 100000000)),
-                         Ogre::Vector3(0.0f, -9.81f * 80, 0.0f))),
+        m_players(),
+        m_world(new OgreBulletDynamics::DynamicsWorld(
+            m_sceneMgr, Ogre::AxisAlignedBox(
+                            Ogre::Vector3(-100000000, -100000000, -100000000),
+                            Ogre::Vector3(100000000, 100000000, 100000000)),
+            Ogre::Vector3(0.0f, -9.81f * 80, 0.0f))),
 #ifdef DEBUG
         m_debugDrawer(nullptr),
 #endif

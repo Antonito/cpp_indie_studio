@@ -291,7 +291,7 @@ namespace core
   {
     Log(nope::log::Debug) << "SettingsPlayer::save -> " << playerIndex << " : "
                           << playerFile[static_cast<int>(playerIndex)];
-    std::ofstream     fs(playerFile[static_cast<int>(playerIndex)].c_str(),
+    std::ofstream fs(playerFile[static_cast<int>(playerIndex)].c_str(),
                      std::ofstream::out | std::ofstream::trunc);
 
     if (fs.is_open() == false)
@@ -442,7 +442,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings &SettingsPlayer::GameSettings::
-                                operator=(GameSettings const &that)
+      operator=(GameSettings const &that)
   {
     this->key = that.key;
     this->graphic = that.graphic;
@@ -450,7 +450,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings &SettingsPlayer::GameSettings::
-                                operator=(GameSettings &&that)
+      operator=(GameSettings &&that)
   {
     this->key = std::move(that.key);
     this->graphic = std::move(that.graphic);
@@ -458,7 +458,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Key &SettingsPlayer::GameSettings::Key::
-                                     operator=(GameSettings::Key const &that)
+      operator=(GameSettings::Key const &that)
   {
     this->speedUp = that.speedUp;
     this->slowDown = that.slowDown;
@@ -473,7 +473,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Key &SettingsPlayer::GameSettings::Key::
-                                     operator=(GameSettings::Key &&that)
+      operator=(GameSettings::Key &&that)
   {
     this->speedUp = that.speedUp;
     this->slowDown = that.slowDown;
@@ -506,7 +506,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Graphic &
-          SettingsPlayer::GameSettings::Graphic::
+      SettingsPlayer::GameSettings::Graphic::
           operator=(GameSettings::Graphic const &that)
   {
     this->sensibility = that.sensibility;
@@ -515,7 +515,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Graphic &
-          SettingsPlayer::GameSettings::Graphic::
+      SettingsPlayer::GameSettings::Graphic::
           operator=(GameSettings::Graphic &&that)
   {
     this->sensibility = that.sensibility;

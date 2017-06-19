@@ -26,7 +26,7 @@ void core::MenuPopError::exit()
 
 void core::MenuPopError::destroy()
 {
-    m_gui.destroy();
+  m_gui.destroy();
 }
 
 core::GameState core::MenuPopError::update() const
@@ -55,7 +55,7 @@ bool core::MenuPopError::mouseMoved(const OIS::MouseEvent &arg)
 }
 
 bool core::MenuPopError::mousePressed(const OIS::MouseEvent &,
-                                      OIS::MouseButtonID     id)
+                                      OIS::MouseButtonID id)
 {
   return CEGUI::System::getSingleton()
       .getDefaultGUIContext()
@@ -63,41 +63,36 @@ bool core::MenuPopError::mousePressed(const OIS::MouseEvent &,
 }
 
 bool core::MenuPopError::mouseReleased(const OIS::MouseEvent &,
-                                       OIS::MouseButtonID     id)
+                                       OIS::MouseButtonID id)
 {
-    return CEGUI::System::getSingleton()
-            .getDefaultGUIContext()
-            .injectMouseButtonUp(convertButton(id));
+  return CEGUI::System::getSingleton()
+      .getDefaultGUIContext()
+      .injectMouseButtonUp(convertButton(id));
 }
 
 bool core::MenuPopError::keyReleased(const OIS::KeyEvent &arg)
 {
-    CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(
-            static_cast<CEGUI::Key::Scan>(arg.key));
-    return true;
+  CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(
+      static_cast<CEGUI::Key::Scan>(arg.key));
+  return true;
 }
 
 void core::MenuPopError::initGUI()
 {
-    m_gui.addLayout("server_error.layout");
-    m_gui.setCursorArrow("TaharezLook/MouseArrow");
+  m_gui.addLayout("server_error.layout");
+  m_gui.setCursorArrow("TaharezLook/MouseArrow");
 
-    if (m_gui.getRoot()->getChildRecursive("Button") == NULL)
+  if (m_gui.getRoot()->getChildRecursive("Button") == NULL)
     {
-        throw std::exception();
-        //TODO:Arthur find exception for button assets missing.
+      throw std::exception();
+      // TODO:Arthur find exception for button assets missing.
     }
-    m_gui.getRoot()
-            ->getChildRecursive("Button")
-            ->subscribeEvent(
-                    CEGUI::PushButton::EventClicked,
-                    CEGUI::Event::Subscriber(&MenuPopError::onOkClick, this));
-    m_gui.getRoot()
-            ->getChildRecursive("Button")
-            ->subscribeEvent(
-                    CEGUI::PushButton::EventMouseEntersArea,
-                    CEGUI::Event::Subscriber(&MenuPopError::onOkArea, this));
-
+  m_gui.getRoot()->getChildRecursive("Button")->subscribeEvent(
+      CEGUI::PushButton::EventClicked,
+      CEGUI::Event::Subscriber(&MenuPopError::onOkClick, this));
+  m_gui.getRoot()->getChildRecursive("Button")->subscribeEvent(
+      CEGUI::PushButton::EventMouseEntersArea,
+      CEGUI::Event::Subscriber(&MenuPopError::onOkArea, this));
 }
 
 CEGUI::MouseButton
@@ -121,25 +116,25 @@ CEGUI::MouseButton
 
 bool core::MenuPopError::onOkArea(CEGUI::EventArgs const &)
 {
-    soundPass();
-    return true;
+  soundPass();
+  return true;
 }
 
 bool core::MenuPopError::onOkClick(CEGUI::EventArgs const &)
 {
-    soundClick();
-    m_gui.removeLayout("server_error.layout");
-    m_menuManager.popLayer();
-    m_menuManager.begin();
-    return true;
+  soundClick();
+  m_gui.removeLayout("server_error.layout");
+  m_menuManager.popLayer();
+  m_menuManager.begin();
+  return true;
 }
 
 void core::MenuPopError::soundClick()
 {
-    m_sound.playSound(core::ESound::CLICK_BUTTON);
+  m_sound.playSound(core::ESound::CLICK_BUTTON);
 }
 
 void core::MenuPopError::soundPass()
 {
-    m_sound.playSound(core::ESound::PASS_BUTTON);
+  m_sound.playSound(core::ESound::PASS_BUTTON);
 }

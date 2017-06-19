@@ -135,7 +135,7 @@ namespace core
 
     createFrameListener();
 
-    //load all sound resource
+    // load all sound resource
     m_soundManager.loadAllSound();
     nope::log::Log(Debug) << "Starting to load contexts";
 
@@ -196,8 +196,8 @@ namespace core
 	sizef.d_width = static_cast<float>(m_window->getWidth());
 	if (resizer::AssetResizer::hasWindowResized(*m_window))
 	  {
-	    nope::log::Log(Debug)
-	        << "Resizing W: " << sizef.d_width << " H: " << sizef.d_height;
+	    nope::log::Log(Debug) << "Resizing W: " << sizef.d_width
+	                          << " H: " << sizef.d_height;
 	    CEGUI::System::getSingleton().notifyDisplaySizeChanged(sizef);
 	  }
 

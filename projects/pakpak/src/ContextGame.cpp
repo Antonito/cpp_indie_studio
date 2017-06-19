@@ -31,9 +31,9 @@ namespace game
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
-	m_game[i].setCar(
-	    std::make_unique<EmptyCar>(m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
-	                               Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)));
+	m_game[i].setCar(std::make_unique<EmptyCar>(
+	    m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
+	    Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)));
       }
     if (m_players.size() < 2)
       {
@@ -47,9 +47,10 @@ namespace game
 	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
 	    m_hud.get(), *this));
       }
-      for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
+    for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
       {
-          m_ia.emplace_back(std::make_unique<Ia>(m_game[i].car(), m_game.map().getNodes()));
+	m_ia.emplace_back(
+	    std::make_unique<Ia>(m_game[i].car(), m_game.map().getNodes()));
       }
     updateViewPort();
 
@@ -89,9 +90,9 @@ namespace game
   {
     m_input->capture();
     m_game.update();
-      for (std::unique_ptr<Ia> const &l_ia : m_ia)
+    for (std::unique_ptr<Ia> const &l_ia : m_ia)
       {
-          l_ia->race();
+	l_ia->race();
       }
     m_quit = m_hud->getQuit();
     return (m_quit ? core::GameState::Menu : core::GameState::InGame);

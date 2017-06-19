@@ -62,7 +62,7 @@ void core::HUD::addLayout(const std::string &layout)
 void core::HUD::removeLayout(const std::string &layout)
 {
   if (m_windows.find(layout) == m_windows.end())
-    throw (std::runtime_error("Tried to remove unadded layout"));
+    throw(std::runtime_error("Tried to remove unadded layout"));
   nope::log::Log(Debug) << "Removing layout '" << layout << "'";
   m_rootWindow->removeChild(m_windows[layout]);
   m_windows[layout] = nullptr;

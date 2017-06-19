@@ -29,11 +29,11 @@ namespace game
 	        CEGUI::PushButton::EventClicked,
 	        CEGUI::Event::Subscriber(&Menu::onResumeClick, this));
 	  }
-        else
-        {
-            throw std::exception();
-            //TODO:Arthur find exception for button assets missing.
-        }
+	else
+	  {
+	    throw std::exception();
+	    // TODO:Arthur find exception for button assets missing.
+	  }
 	button = m_gui->getRoot()->getChildRecursive("quit_button");
 	if (button)
 	  {
@@ -41,11 +41,11 @@ namespace game
 	        CEGUI::PushButton::EventClicked,
 	        CEGUI::Event::Subscriber(&Menu::onQuitClick, this));
 	  }
-        else
-        {
-            throw std::exception();
-            //TODO:Arthur find exception for button assets missing.
-        }
+	else
+	  {
+	    throw std::exception();
+	    // TODO:Arthur find exception for button assets missing.
+	  }
 	button = m_gui->getRoot()->getChildRecursive("settings_button");
 	if (button)
 	  {
@@ -53,11 +53,11 @@ namespace game
 	        CEGUI::PushButton::EventClicked,
 	        CEGUI::Event::Subscriber(&Menu::onResumeClick, this));
 	  }
-        else
-        {
-            throw std::exception();
-            //TODO:Arthur find exception for button assets missing.
-        }
+	else
+	  {
+	    throw std::exception();
+	    // TODO:Arthur find exception for button assets missing.
+	  }
       }
   }
 

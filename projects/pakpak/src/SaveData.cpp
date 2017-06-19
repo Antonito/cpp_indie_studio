@@ -52,7 +52,8 @@ namespace core
 	  }
 	else
 	  {
-	    nope::log::Log(Error) << "**Warning cannot save in " << file << "**";
+	    nope::log::Log(Error) << "**Warning cannot save in " << file
+	                          << "**";
 	  }
 	ofs.close();
       }
@@ -89,18 +90,18 @@ namespace core
 	buf = ss.str().substr(32);
 	key = toXor(key);
 	char *xorToStruct = toXor(buf.c_str(), sizeof(m_data));
-	nope::log::Log(Debug)
-	    << "Recup from file : " << file << " Key : " << key;
+	nope::log::Log(Debug) << "Recup from file : " << file
+	                      << " Key : " << key;
 	std::memcpy(reinterpret_cast<char *>(&m_data), xorToStruct,
 	            sizeof(m_data));
 	delete[] xorToStruct;
 	ifs.close();
 	generate();
-          nope::log::Log(Debug) << "END GENERATE KEY";
+	nope::log::Log(Debug) << "END GENERATE KEY";
 
-          if (!compareKey(key))
+	if (!compareKey(key))
 	  {
-            nope::log::Log(Debug) << "File Corrupt, reset data file";
+	    nope::log::Log(Debug) << "File Corrupt, reset data file";
 	    m_data.reset();
 	    saveInFile(file);
 	  }
