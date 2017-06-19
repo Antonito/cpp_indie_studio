@@ -26,7 +26,7 @@ namespace network
   protected:
     virtual bool connectToHost(std::int32_t const socktype,
                                std::int32_t const proto,
-                               bool               shouldConnect = true) = 0;
+                               bool               shouldConnect) = 0;
     virtual void hostConnection() = 0;
   };
 }

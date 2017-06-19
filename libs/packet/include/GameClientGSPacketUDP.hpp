@@ -37,9 +37,6 @@ struct GameClientToGSPacketUDP : public ISerializable
       serialize(std::size_t &sizeToFill) const;
 
   virtual void deserialize(std::size_t size, std::uint8_t *data);
-
-private:
-  std::array<std::uint8_t, 2> __padding;
 };
 
 namespace packetSize
