@@ -34,10 +34,12 @@ namespace game
 
   void ACar::resetOrientation()
   {
-    Ogre::Vector3    p = m_carNode->getPosition() + Ogre::Vector3(0, 50, 0);
-    Ogre::Quaternion q(Ogre::Degree(0), Ogre::Vector3::UNIT_Y);
-    btTransform      tr;
-    btVector3        v(p.x, p.y, p.z);
+    Ogre::Vector3 p = m_carNode->getPosition() + Ogre::Vector3(0, 10, 0);
+    btTransform   tr;
+    btVector3     v(p.x, p.y, p.z);
+
+    Ogre::Quaternion q(m_carNode->getOrientation().getYaw(),
+                       Ogre::Vector3::UNIT_Y);
 
     tr.setIdentity();
     btQuaternion quat;
@@ -57,10 +59,31 @@ namespace game
     m_vehicle->debugDraw(m_gamedata.debugDrawer());
 #endif // !DEBUG
 
+    Ogre::Vector3 orient = this->direction() * Ogre::Vector3::UNIT_Y;
+
+    double maxOrient =
+        (Ogre::Quaternion(Ogre::Degree(45), Ogre::Vector3::UNIT_X) *
+         Ogre::Vector3::UNIT_Y)
+            .dotProduct(Ogre::Vector3::UNIT_Y);
+
+    if (orient.dotProduct(Ogre::Vector3::UNIT_Y) < maxOrient)
+      {
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(
+	        clock_t::now() - m_timeLastGoodOrientation)
+	        .count() > 2000)
+	  {
+	    this->resetOrientation();
+	  }
+      }
+    else
+      {
+	m_timeLastGoodOrientation = clock_t::now();
+      }
+
     // Get the car position
     Ogre::Vector3 p = m_carNode->getPosition();
 
-    double newSteering = m_tryTurning * 0.5;
+    double newSteering = m_tryTurning;
     double accelerator = m_tryMoving * -5.0;
 
     // When steering, wake up the wheel rigidbodies so that their orientation

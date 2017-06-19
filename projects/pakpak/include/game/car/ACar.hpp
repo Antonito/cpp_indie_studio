@@ -69,6 +69,10 @@ namespace game
     double m_suspensionCompression;
     double m_rollInfluence;
     double m_suspensionRestLength;
+
+    using clock_t = std::chrono::high_resolution_clock;
+
+    std::chrono::time_point<clock_t> m_timeLastGoodOrientation;
   };
 }
 
