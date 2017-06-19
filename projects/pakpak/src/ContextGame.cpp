@@ -5,7 +5,7 @@ namespace game
   ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
                            core::SettingsPlayer &settings,
                            core::NetworkManager &net)
-      : core::AContext(win, input), m_game(), m_players(),
+      : core::AContext(win, input), m_game(), m_players(), m_ia(),
         m_settings(settings), m_quit(false), m_hud(nullptr), m_net(net)
   {
   }

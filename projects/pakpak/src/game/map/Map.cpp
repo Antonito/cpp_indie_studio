@@ -5,12 +5,18 @@ namespace game
   Map::Map(game::GameData &gamedata)
       : m_gamedata(gamedata), m_points(), m_map(nullptr), m_mapbox(nullptr),
         m_node(nullptr), m_body(nullptr)
+#if defined(INDIE_MAP_EDITOR)
+    , m_filename(""), m_selectedPoint(0)
+#endif // !INDIE_MAP_EDITOR
   {
   }
 
   Map::Map(game::GameData &gamedata, std::string const &filename)
       : m_gamedata(gamedata), m_points(), m_map(nullptr), m_mapbox(nullptr),
         m_node(nullptr), m_body(nullptr)
+#if defined(INDIE_MAP_EDITOR)
+    , m_filename(""), m_selectedPoint(0)
+#endif // !INDIE_MAP_EDITOR
   {
     this->loadFromFile(filename);
   }
