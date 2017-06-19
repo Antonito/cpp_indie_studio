@@ -39,7 +39,6 @@ namespace network
     assert(!isStarted());
     if (getMode() == ASocket::SERVER)
       {
-	nope::log::Log(Debug) << "Hosting connection";
 	ret = true;
 	try
 	  {
@@ -61,7 +60,7 @@ namespace network
       }
     else
       {
-	ret = connectToHost(SOCK_STREAM, IPPROTO_TCP);
+	ret = connectToHost(SOCK_STREAM, IPPROTO_TCP, true);
       }
     if (ret == false)
       {

@@ -55,12 +55,11 @@ namespace network
             SocketType type = ASocket::BLOCKING);
 
     virtual bool connectToHost(std::int32_t const socktype,
-                               std::int32_t const proto,
-                               bool               shouldConnect = true);
+                               std::int32_t const proto, bool shouldConnect);
+    virtual void hostConnection();
     void initSocket(std::int32_t domain, std::int32_t type,
                     std::int32_t protocol);
-    bool         setSocketType() const;
-    virtual void hostConnection();
+    bool setSocketType() const;
 
     sock_t        m_socket;
     std::uint16_t m_port;

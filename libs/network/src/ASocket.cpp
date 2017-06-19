@@ -303,6 +303,7 @@ namespace network
 
   void ASocket::hostConnection()
   {
+    nope::log::Log(Debug) << "Socket created successfuly";
     assert(m_socket != -1);
     m_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     if (bind(m_socket, reinterpret_cast<sockaddr_t *>(&m_addr),
