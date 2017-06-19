@@ -274,5 +274,6 @@ namespace core
     loadSound("deps/indie_resource/songs/splash.wav");
     loadSound("deps/indie_resource/songs/GUI/pass.wav");
     loadSound("deps/indie_resource/songs/GUI/click.wav");
+//    loadSound("deps/indie_resource/songs/Karts/K_Gla/klaxon.wav");
   }
 }

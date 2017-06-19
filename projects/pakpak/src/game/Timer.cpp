@@ -9,7 +9,8 @@ namespace game
 {
     Timer::Timer(int p_duree) :
             m_started(false),
-            m_duree(p_duree)
+            m_duree(p_duree),
+            m_starting_point()
     {
 
     }

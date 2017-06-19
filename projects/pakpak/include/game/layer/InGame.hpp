@@ -35,7 +35,8 @@ namespace game
     InGame(GameData &data, LocalPlayer &player, core::HUD *hud,
            std::vector<std::unique_ptr<LocalPlayer>> &players)
         : ALayer(data, player, hud, players), m_player(player), m_speed(),
-          m_positionSuffix(), m_positionPrefix(), m_start(), m_startIdx(0), m_time(2000)
+          m_positionSuffix(), m_positionPrefix(), m_start(), m_startIdx(0),
+          m_time(1000)
     {
     }
     virtual ~InGame()
@@ -83,17 +84,21 @@ namespace game
 	          screens[playerIndex] + "place_postfix");
 	      m_positionPrefix[playerIndex] = m_gui->getRoot()->getChild(
 	          screens[playerIndex] + "place_suffix");
-              m_start[playerIndex][0] = m_gui->getRoot()->getChild(screens[playerIndex] + "1");
-              m_start[playerIndex][0]->setVisible(false);
-              m_start[playerIndex][1] = m_gui->getRoot()->getChild(screens[playerIndex] + "2");
-              m_start[playerIndex][1]->setVisible(false);
-              m_start[playerIndex][2] = m_gui->getRoot()->getChild(screens[playerIndex] + "3");
-              m_start[playerIndex][2]->setVisible(false);
-              m_start[playerIndex][3] = m_gui->getRoot()->getChild(screens[playerIndex] + "GO");
-              m_start[playerIndex][3]->setVisible(false);
-            }
+	      m_start[playerIndex][0] =
+	          m_gui->getRoot()->getChild(screens[playerIndex] + "3");
+	      m_start[playerIndex][0]->setVisible(false);
+	      m_start[playerIndex][1] =
+	          m_gui->getRoot()->getChild(screens[playerIndex] + "2");
+	      m_start[playerIndex][1]->setVisible(false);
+	      m_start[playerIndex][2] =
+	          m_gui->getRoot()->getChild(screens[playerIndex] + "1");
+	      m_start[playerIndex][2]->setVisible(false);
+	      m_start[playerIndex][3] =
+	          m_gui->getRoot()->getChild(screens[playerIndex] + "GO");
+	      m_start[playerIndex][3]->setVisible(false);
+	    }
 	}
-        m_time.start();
+      m_time.start();
     }
 
     virtual void disable()
@@ -106,24 +111,7 @@ namespace game
 
     virtual void display()
     {
-        if (m_time.reached() && m_startIdx < 5)
-        {
-            if (m_startIdx >= 1)
-            {
-                for (std::uint8_t playerIndex = 0;
-                     playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
-                {
-                    m_start[playerIndex][m_startIdx - 1]->setVisible(false);
-                }
-            }
-            m_startIdx++;
-            for (std::uint8_t playerIndex = 0;
-                 playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
-            {
-                m_start[playerIndex][m_startIdx - 1]->setVisible(true);
-            }
-            m_time.reset();
-        }
+      setStart();
       setSpeed();
     }
 
@@ -132,7 +120,7 @@ namespace game
       std::string action = m_player.settings().actionForKey(
           static_cast<std::size_t>(m_player.order()), ke.key);
 
-      if (action == "NO_ACTION" || m_startIdx < 5)
+      if (action == "NO_ACTION" || m_startIdx <= 3)
 	{
 	  return false;
 	}
@@ -146,7 +134,7 @@ namespace game
     {
       std::string action = m_player.settings().actionForKey(
           static_cast<std::size_t>(m_player.order()), ke.key);
-      if (action == "NO_ACTION" || m_startIdx < 5)
+      if (action == "NO_ACTION" || m_startIdx <= 3)
 	{
 	  return false;
 	}
@@ -171,6 +159,46 @@ namespace game
       return (false);
     }
 
+    void setStart()
+    {
+      if (m_gui)
+	{
+	  if (m_time.reached())
+	    {
+	      m_startIdx++;
+	      if (m_startIdx <= 4)
+		{
+		  for (std::uint8_t playerIndex = 0;
+		       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
+		    {
+		      nope::log::Log(Debug)
+		          << "Player index : " << static_cast<int>(playerIndex)
+		          << " StartIdx : " << m_startIdx - 1;
+		      m_start[playerIndex][m_startIdx - 1]->setVisible(true);
+		    }
+		  nope::log::Log(Debug) << "Reset Time!";
+		  m_time.reset();
+		}
+	      else if (m_startIdx == 5)
+		{
+		  for (std::uint8_t playerIndex = 0;
+		       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
+		    {
+		      m_start[playerIndex][0]->setVisible(false);
+		      m_start[playerIndex][1]->setVisible(false);
+		      m_start[playerIndex][2]->setVisible(false);
+		      m_start[playerIndex][3]->setVisible(false);
+		    }
+		}
+	    }
+	}
+      else if (m_time.reached())
+      {
+          ++m_startIdx;
+          m_time.reset();
+      }
+    }
+
     void setSpeed()
     {
       if (m_gui)
@@ -189,9 +217,6 @@ namespace game
 	      double        rawSpeed = m_players[playerIndex]->car().speed();
 	      std::uint32_t speed = static_cast<std::uint32_t>(
 	          (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
-	      nope::log::Log(Debug)
-	          << "setting Speed :" << speed
-	          << "car speed : " << m_players[playerIndex]->car().speed();
 
 	      if (speed < 1000)
 		{
@@ -290,8 +315,8 @@ namespace game
     CEGUI::Window *m_positionSuffix[PCOUNT];
     CEGUI::Window *m_positionPrefix[PCOUNT];
     CEGUI::Window *m_start[PCOUNT][4];
-    std::int32_t    m_startIdx;
-    Timer           m_time;
+    std::int32_t   m_startIdx;
+    Timer          m_time;
   };
 }
 
