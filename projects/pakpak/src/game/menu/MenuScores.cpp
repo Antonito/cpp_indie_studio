@@ -245,6 +245,7 @@ namespace core
   bool MenuScores::onBackClick(CEGUI::EventArgs const &)
   {
     soundClick();
+    m_sound.playSound(core::ESound::BACK_RACE_SOUND);
     m_menuManager.popLayer();
     m_menuManager.begin();
     return false;

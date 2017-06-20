@@ -314,7 +314,7 @@ namespace game
               (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
 
     m_sound.stopSound(core::ESound::ACC_KART_SOUND);
-    if (speed > 15)
+    if (speed > 30)
     {
         nope::log::Log(Debug) << "SLow mode !!";
         m_sound.playSound(core::ESound::SLOW_KART_SOUND);

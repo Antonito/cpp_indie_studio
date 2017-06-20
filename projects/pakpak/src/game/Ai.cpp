@@ -71,8 +71,8 @@ namespace game
       }
   }
 
-  /*  game::ACar &Ai::car()
+    game::ACar &Ai::car()
     {
         return m_car;
-    }*/
+    }
 }

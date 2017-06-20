@@ -8,7 +8,7 @@ namespace core
 {
   SoundManager::SoundManager()
       : m_device(nullptr), m_context(nullptr), m_buffer(), m_source(),
-        m_state(AL_INITIAL), m_volume(1.0f)
+        m_state(AL_INITIAL), m_volume(0.5f)
   {
     nope::log::Log(Debug) << "**Initialization SoundManager**";
   }
@@ -288,5 +288,11 @@ namespace core
     loadSound("deps/indie_resource/songs/Karts/kart_dash.wav");
     loadSound("deps/indie_resource/songs/start.wav");
     loadSound("deps/indie_resource/songs/Karts/kart_speedDown.wav");
+    loadSound("deps/indie_resource/songs/solo.wav");
+    loadSound("deps/indie_resource/songs/score.wav");
+    loadSound("deps/indie_resource/songs/failed.wav");
+    loadSound("deps/indie_resource/songs/setting.wav");
+    loadSound("deps/indie_resource/songs/go.wav");
+    loadSound("deps/indie_resource/songs/back.wav");
   }
 }

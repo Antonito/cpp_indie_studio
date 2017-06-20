@@ -15,7 +15,7 @@
 #endif
 
 #include "HUD.hpp"
-//#include "Ai.hpp"
+#include "Ai.hpp"
 #include "AContext.hpp"
 #include "LocalPlayer.hpp"
 
@@ -54,7 +54,7 @@ namespace game
   private:
     GameData                                  m_game;
     std::vector<std::unique_ptr<LocalPlayer>> m_players;
-    //std::vector<std::unique_ptr<Ai>>          m_ia;
+    std::vector<std::unique_ptr<Ai>>          m_ia;
     core::SettingsPlayer &                    m_settings;
     bool                                      m_quit;
     std::unique_ptr<core::HUD>                m_hud;

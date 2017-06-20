@@ -6,7 +6,7 @@ namespace game
                            core::SettingsPlayer &settings,
                            core::NetworkManager &net,
                            core::SoundManager &  sound)
-      : core::AContext(win, input), m_game(), m_players(),
+      : core::AContext(win, input), m_game(), m_players(), m_ia(),
         m_settings(settings), m_quit(false), m_hud(nullptr), m_net(net),
         m_sound(sound), m_timer(850), m_gameStart(false)
   {
@@ -125,52 +125,12 @@ namespace game
 
     for (std::uint8_t i = 0; i < m_players.size(); ++i)
       {
-	/*m_sound.setPosition(core::ESound::ACC_KART_SOUND,
-	                    m_players[i]->car().position().x,
-	                    m_players[i]->car().position().y,
-	                    m_players[i]->car().position().z);
-          m_sound.setPosition(core::ESound::SLOW_KART_SOUND,
-                              m_players[i]->car().position().x,
-                              m_players[i]->car().position().y,
-                              m_players[i]->car().position().z);
-          m_sound.setPosition(core::ESound::BOOST_SONG,
-                              m_players[i]->car().position().x,
-                              m_players[i]->car().position().y,
-                              m_players[i]->car().position().z);
-          m_sound.setPosition(core::ESound::IDLE_KART_SOUND,
-                              m_players[i]->car().position().x,
-                              m_players[i]->car().position().y,
-                              m_players[i]->car().position().z);
-          m_sound.setPosition(core::ESound::KLAXON_KART_SOUND,
-                              m_players[i]->car().position().x,
-                              m_players[i]->car().position().y,
-                              m_players[i]->car().position().z);*/
 	m_players[i]->display();
       }
-    /*for (std::unique_ptr<Ai> const &l_ia : m_ia)
+    for (std::unique_ptr<Ai> const &l_ia : m_ia)
       {
-          m_sound.setPosition(core::ESound::ACC_KART_SOUND,
-                              l_ia->car().position().x,
-                              l_ia->car().position().y,
-                              l_ia->car().position().z);
-          m_sound.setPosition(core::ESound::SLOW_KART_SOUND,
-                              l_ia->car().position().x,
-                              l_ia->car().position().y,
-                              l_ia->car().position().z);
-          m_sound.setPosition(core::ESound::BOOST_SONG,
-                              l_ia->car().position().x,
-                              l_ia->car().position().y,
-                              l_ia->car().position().z);
-          m_sound.setPosition(core::ESound::IDLE_KART_SOUND,
-                              l_ia->car().position().x,
-                              l_ia->car().position().y,
-                              l_ia->car().position().z);
-          m_sound.setPosition(core::ESound::KLAXON_KART_SOUND,
-                              l_ia->car().position().x,
-                              l_ia->car().position().y,
-                              l_ia->car().position().z);
           l_ia->race();
-      }*/
+      }
   }
 
   bool ContextGame::keyPressed(OIS::KeyEvent const &ke)

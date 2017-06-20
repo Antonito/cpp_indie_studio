@@ -40,6 +40,12 @@ namespace core
         BOOST_SONG,
         START_SONG,
         SLOW_KART_SOUND,
+        SOLO_LAUNCH_SOUND,
+        SCORE_LAUNCH_SOUND,
+        FALIED_CONNECTION_SOUND,
+        SETTING_LAUNCH_SOUND,
+        GO_RACE_SOUND,
+        BACK_RACE_SOUND,
         NUMBER_SOUND
     };
   class SoundManager

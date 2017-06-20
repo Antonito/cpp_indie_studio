@@ -5,7 +5,6 @@
 #ifndef CPP_INDIE_STUDIO_IA_HPP
 #define CPP_INDIE_STUDIO_IA_HPP
 
-#include <game/car/ACar.hpp>
 #include "pakpak_stdafx.hpp"
 
 namespace game
@@ -28,7 +27,7 @@ namespace game
 
         void race();
 
-//        game::ACar  &car();
+        game::ACar  &car();
 
         void distNode();
 

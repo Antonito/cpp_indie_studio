@@ -176,6 +176,7 @@ namespace core
   bool MenuSolo::onBackClick(CEGUI::EventArgs const &)
   {
     soundClick();
+    m_sound.playSound(core::ESound::BACK_RACE_SOUND);
     m_menuManager.popLayer();
     m_menuManager.begin();
     return false;
@@ -184,6 +185,7 @@ namespace core
   bool MenuSolo::onPlayClick(CEGUI::EventArgs const &)
   {
     soundClick();
+    m_sound.playSound(core::ESound::GO_RACE_SOUND);
     m_curState = GameState::InGame;
     m_gui.hideCursor();
     m_settings.setPlayerCount(m_playerCount);
