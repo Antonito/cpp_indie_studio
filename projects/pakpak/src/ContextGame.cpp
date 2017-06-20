@@ -25,7 +25,7 @@ namespace game
     m_input->setKeyboardEventCallback(this);
     m_quit = false;
 
-    std::size_t nbPlayer = m_settings.getPlayerCount();
+    std::size_t nbPlayer = 4;//m_settings.getPlayerCount();
 
     m_game.setPlayerNb(nbPlayer);
 
@@ -49,11 +49,11 @@ namespace game
 	    i == 0 ? m_hud.get() : nullptr, *this, m_players, nbLocalPlayer,
 	    m_sound));
       }
-    /*for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
+    for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
       {
 	m_ia.emplace_back(
 	    std::make_unique<Ai>(m_game[i].car(), m_game.map().getNodes()));
-      }*/
+      }
     m_sound.playSound(core::ESound::GAME_SONG);
     m_sound.loopSound(core::ESound::GAME_SONG);
     m_sound.playSound(core::ESound::IDLE_KART_SOUND);

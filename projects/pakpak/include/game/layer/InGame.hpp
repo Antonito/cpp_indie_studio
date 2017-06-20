@@ -140,7 +140,6 @@ namespace game
 	{
 	  return false;
 	}
-      nope::log::Log(Info) << "DOING ACTION";
       void (LocalPlayer::*ptr)() = m_player.actions(action).first;
       (m_player.*ptr)();
       return true;
@@ -154,7 +153,6 @@ namespace game
 	{
 	  return false;
 	}
-      nope::log::Log(Info) << "DOING ACTION";
       void (LocalPlayer::*ptr)() = m_player.actions(action).second;
       (m_player.*ptr)();
       return true;
