@@ -35,6 +35,8 @@ namespace core
     void sendUDPPacket(std::vector<GameClientToGSPacketUDP> &&packet);
     std::vector<GameClientToGSPacketUDP> getUDPPacket();
 
+    std::uint16_t getId() const;
+
   private:
     std::unique_ptr<NetworkAuth>    m_auth;
     std::unique_ptr<NetworkConnect> m_conn;

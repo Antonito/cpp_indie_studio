@@ -101,4 +101,9 @@ namespace core
   {
     return (m_game->getPacket());
   }
+
+  std::uint16_t NetworkManager::getId() const
+  {
+    return (m_conn->getId());
+  }
 }

@@ -13,7 +13,7 @@ namespace core
                                  std::unique_ptr<NetworkGame> &net)
       : m_ip(ip), m_port(port), m_conn(false),
         m_sock(m_port, m_ip, true, network::ASocket::SocketType::BLOCKING),
-        m_token(token), m_game(net), m_udp()
+        m_token(token), m_game(net), m_udp(), m_id(0)
   {
     nope::log::Log(Debug) << "Creating connection [NetworkConnect]";
     nope::log::Log(Info) << "Opening connection";
@@ -507,10 +507,12 @@ namespace core
 	throw NetworkInvalidPacketError("Invalid event type [NetworkConnect]");
       }
     std::string const lobbyType[] = {"SPECTATOR", "PLAYING"};
-    nope::log::Log(Info)
-        << "Lobby: " << lobbyType[pckContent.pck.eventData.lobbyType.type ==
-                                  static_cast<std::uint16_t>(
-                                      GameClientToGSLobbyType::PLAYING)];
+    m_id = pckContent.pck.eventData.lobbyType.id;
+    nope::log::Log(Debug)
+        << "Id: " << static_cast<std::uint32_t>(m_id)
+        << " | Lobby: " << lobbyType[pckContent.pck.eventData.lobbyType.type ==
+                                     static_cast<std::uint16_t>(
+                                         GameClientToGSLobbyType::PLAYING)];
   }
 
   void NetworkConnect::Tokenize(std::string const &       str,
@@ -527,6 +529,11 @@ namespace core
 	lastPos = str.find_first_not_of(delimiters, pos);
 	pos = str.find_first_of(delimiters, lastPos);
       }
+  }
+
+  std::uint16_t NetworkConnect::getId() const
+  {
+    return (m_id);
   }
 }
 

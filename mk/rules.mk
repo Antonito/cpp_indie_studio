@@ -15,7 +15,7 @@ NAME_EXTENSION=	$(suffix $(NAME))
 
 $(NAME):
 ifneq ($(HEADER),)
-		$(MAKE) $(PRECOMPILED_OBJ)
+		@$(MAKE) $(PRECOMPILED_OBJ)
 endif
 		@$(foreach dir, $(MAIN_OBJ_DIR) $(OBJ_DIR_LIST), $(MKDIR) $(dir) &> /dev/null && \
 		$(ECHO) "$(WHITE)[$(PURPLE)MKDIR$(WHITE)] Created obj directory $(CYAN)"$(dir)"\n$(CLEAR)" || \
@@ -94,8 +94,8 @@ fclean:		clean
 		@$(ECHO) "$(WHITE)[$(YELLOW)RM$(WHITE)] Removed $(CYAN)"$(NAME)"\n$(CLEAR)"
 
 re:
-		$(MAKE) fclean
-		$(MAKE) all
+		@$(MAKE) fclean
+		@$(MAKE) all
 
 run:
 		./$(NAME)
