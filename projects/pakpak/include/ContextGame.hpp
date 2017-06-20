@@ -16,6 +16,7 @@
 #include "Ia.hpp"
 #include "AContext.hpp"
 #include "LocalPlayer.hpp"
+#include "EmptyCar.hpp"
 
 // Disable clang warning for templated class padding
 #if defined(__clang__)
@@ -58,6 +59,15 @@ namespace game
     std::unique_ptr<core::HUD>                m_hud;
     core::NetworkManager &                    m_net;
     std::vector<GameClientToGSPacketUDP>      m_networkPacket;
+
+    void setUDPPacket(GameClientToGSPacketUDP &packet, LocalPlayer &player);
+    void setUDPPacketDirection(GameClientToGSPacketUDP &,
+                               Ogre::Quaternion const &);
+    void setUDPPatcketPosition(GameClientToGSPacketUDP &,
+                               Ogre::Vector3 const &);
+    void setPlayersFromUDPPackets();
+    void setDirectionFromUDP(game::EmptyCar &, GameClientToGSPacketUDP const &);
+    void setPositionFromUDP(game::EmptyCar &, GameClientToGSPacketUDP const &);
   };
 }
 

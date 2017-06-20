@@ -24,11 +24,11 @@ struct GameClientToGSPacketUDPRaw
   GameClientToGSPacketUDPRaw();
   GameClientToGSPacketUDPRaw(GameClientToGSPacketUDPRaw const &);
 
-  GameClientToGSEventUDP eventType;
-  union
-  {
-    int i; // TODO: rm
-  } eventData;
+  std::array<std::uint32_t, 3> pos;
+  std::array<std::uint32_t, 4> dir;
+  std::uint32_t speed;
+  std::uint16_t id;
+  std::uint16_t playerCount;
 };
 
 struct GameClientToGSPacketUDP : public ISerializable
@@ -41,6 +41,10 @@ struct GameClientToGSPacketUDP : public ISerializable
       serialize(std::size_t &sizeToFill) const;
 
   virtual void deserialize(std::size_t size, std::uint8_t *data);
+  std::vector<float> getDirection() const;
+  std::vector<float> getPosition() const;
+  void setDirection(std::vector<float> const &quat);
+  void setPosition(std::vector<float> const &vec);
 };
 
 namespace packetSize

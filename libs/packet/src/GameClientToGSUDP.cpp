@@ -1,3 +1,4 @@
+#include <OGRE/OgreQuaternion.h>
 #include "packet_stdafx.hpp"
 
 GameClientToGSPacketUDP::GameClientToGSPacketUDP() : pck()
@@ -5,7 +6,7 @@ GameClientToGSPacketUDP::GameClientToGSPacketUDP() : pck()
 }
 
 GameClientToGSPacketUDPRaw::GameClientToGSPacketUDPRaw()
-    : eventType(GameClientToGSEventUDP::SIMPLE_EVENT), eventData{}
+    : pos(), dir(), speed(0), id(0), playerCount(0)
 {
 }
 
@@ -17,7 +18,8 @@ GameClientToGSPacketUDP::GameClientToGSPacketUDP(
 
 GameClientToGSPacketUDPRaw::GameClientToGSPacketUDPRaw(
     GameClientToGSPacketUDPRaw const &other)
-    : eventType(other.eventType), eventData(other.eventData)
+    : pos(other.pos), dir(other.dir), speed(other.speed), id(other.id),
+      playerCount(other.playerCount)
 {
 }
 
@@ -37,8 +39,17 @@ std::unique_ptr<std::uint8_t[]>
 
   GameClientToGSPacketUDPRaw *data =
       reinterpret_cast<GameClientToGSPacketUDPRaw *>(&serial[cursor]);
-  data->eventType = static_cast<GameClientToGSEventUDP>(
-      htons(static_cast<std::uint16_t>(data->eventType)));
+  for (std::uint32_t &pos : data->pos)
+    {
+      pos = htonl(static_cast<std::uint32_t>(pos));
+    }
+  for (std::uint32_t &dir : data->dir)
+    {
+      dir = htonl(static_cast<std::uint32_t>(dir));
+    }
+  data->speed = htonl(static_cast<std::uint32_t>(data->speed));
+  data->id = htons(data->id);
+  data->playerCount = htons(data->playerCount);
   return (serial);
 }
 
@@ -46,13 +57,53 @@ void GameClientToGSPacketUDP::deserialize(std::size_t, std::uint8_t *data)
 {
   std::memcpy(&pck, data, sizeof(pck));
 
-  pck.eventType = static_cast<GameClientToGSEventUDP>(
-      ntohs(static_cast<std::uint16_t>(pck.eventType)));
-  if (pck.eventType == GameClientToGSEventUDP::SIMPLE_EVENT)
+  for (std::uint32_t &pos : pck.pos)
     {
+      pos = ntohl(static_cast<std::uint32_t>(pos));
     }
-  else
+  for (std::uint32_t &dir : pck.dir)
     {
-      throw std::runtime_error("Invalid packet received");
+      dir = ntohl(static_cast<std::uint32_t>(dir));
     }
+  pck.speed = ntohl(static_cast<std::uint32_t>(pck.speed));
+  pck.id = ntohs(pck.id);
+  pck.playerCount = ntohs(pck.playerCount);
+}
+
+std::vector<float> GameClientToGSPacketUDP::getDirection() const
+{
+  std::vector<float> quat;
+
+  quat.push_back(static_cast<float>(pck.dir[0]) / 1000.0f);
+  quat.push_back(static_cast<float>(pck.dir[1]) / 1000.0f);
+  quat.push_back(static_cast<float>(pck.dir[2]) / 1000.0f);
+  quat.push_back(static_cast<float>(pck.dir[3]) / 1000.0f);
+
+  return quat;
+}
+
+std::vector<float> GameClientToGSPacketUDP::getPosition() const
+{
+  std::vector<float> vec;
+
+  vec.push_back(static_cast<float>(pck.pos[0]) / 1000.0f);
+  vec.push_back(static_cast<float>(pck.pos[1]) / 1000.0f);
+  vec.push_back(static_cast<float>(pck.pos[2]) / 1000.0f);
+
+  return vec;
+}
+
+void GameClientToGSPacketUDP::setDirection(std::vector<float> const &quat)
+{
+  pck.dir[0] = static_cast<std::uint32_t>(quat[0] * 1000.0f);
+  pck.dir[1] = static_cast<std::uint32_t>(quat[1] * 1000.0f);
+  pck.dir[2] = static_cast<std::uint32_t>(quat[2] * 1000.0f);
+  pck.dir[3] = static_cast<std::uint32_t>(quat[3] * 1000.0f);
+}
+
+void GameClientToGSPacketUDP::setPosition(std::vector<float> const &vec)
+{
+  pck.pos[0] = static_cast<std::uint32_t>(vec[0] * 1000.0f);
+  pck.pos[1] = static_cast<std::uint32_t>(vec[1] * 1000.0f);
+  pck.pos[2] = static_cast<std::uint32_t>(vec[2] * 1000.0f);
 }

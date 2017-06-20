@@ -29,6 +29,9 @@ namespace game
     void update(double);
 
     Ogre::Camera *getCamera() const;
+    void setPosition(Ogre::Vector3 &);
+    void setDirection(Ogre::Quaternion &);
+    void setSpeed(double);
 
   protected:
     ACar(game::GameData &gamedata, std::string const &mesh,

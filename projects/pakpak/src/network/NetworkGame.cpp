@@ -4,7 +4,7 @@ namespace core
 {
   NetworkGame::NetworkGame()
       : m_sock(nullptr), m_pck(), m_pckContent(), m_running(false),
-        m_gamePckIn()
+        m_gamePckIn(), m_gamePckOut()
   {
   }
 
@@ -72,10 +72,6 @@ namespace core
     nope::log::Log(Debug) << "Starting UDP exchanges";
     sockaddr_in_t const *addr = &m_sock->getSockAddr();
 
-    m_pckContent.pck.eventType = GameClientToGSEventUDP::SIMPLE_EVENT;
-    m_pckContent.pck.eventData.i = 23;
-    m_pck << m_pckContent;
-
     m_running = true;
     std::vector<GameClientToGSPacketUDP> gameEvents;
     while (m_running)
@@ -101,11 +97,45 @@ namespace core
 	      }
 	  }
 
-	// TODO
 	// Read Server events
+	std::vector<GameClientToGSPacketUDP> serverEvents;
+	GameClientToGSPacketUDP              packetUDP;
+	socklen_t                            len = sizeof(*addr);
+	sockaddr_in_t                        addrCpy;
+	std::uint16_t                        playerCount = 0;
+	std::uint16_t                        cur = 0;
 
-	// TODO
+	std::memcpy(&addrCpy, addr, sizeof(*addr));
+
+        //TODO Antoine :: non-blocking read
+        #if 0
+	do
+	  {
+	    if (!m_sock->rec(&packetUDP, sizeof(packetUDP),
+			     reinterpret_cast<sockaddr_t *>(&addrCpy), &len))
+	      {
+		nope::log::Log(Debug)
+		    << "Error occured while receiving packet : " << cur << ".";
+		break;
+	      }
+	    if (!cur)
+	      {
+		playerCount = packetUDP.pck.playerCount;
+                nope::log::Log(Debug)
+                    << "Total player count :\n\t" << playerCount << ".";
+	      }
+	    serverEvents.push_back(packetUDP);
+	    ++cur;
+	  }
+	while (cur < playerCount);
+        #endif
+
 	// Send server events to game
+	while (!serverEvents.empty())
+	  {
+	    m_gamePckOut.push(std::move(serverEvents.back()));
+	    serverEvents.pop_back();
+	  }
       }
   }
 }

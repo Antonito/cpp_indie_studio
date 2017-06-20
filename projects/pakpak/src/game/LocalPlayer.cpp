@@ -6,11 +6,11 @@ namespace game
                            int order, core::SettingsPlayer &settings,
                            core::HUD *hud, game::ContextGame &contextGame,
                            std::vector<std::unique_ptr<LocalPlayer>> &players,
-                           std::uint8_t nbplayers)
+                           std::uint8_t nbplayers, std::uint16_t id)
       : m_data(p), m_cameraMode(CameraMode::Top), m_layers(),
         m_currentLayers(), m_cam(nullptr), m_viewport(nullptr), m_rounds(),
         m_settings(settings), m_actions(), m_win(win), m_order(order),
-        m_hud(hud), m_contextGame(contextGame)
+        m_hud(hud), m_contextGame(contextGame), m_id(id)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
         std::make_unique<Loading>(g, *this, hud, players);
@@ -70,7 +70,7 @@ namespace game
         m_viewport(that.m_viewport), m_rounds(that.m_rounds),
         m_settings(that.m_settings), m_actions(that.m_actions),
         m_win(that.m_win), m_order(that.m_order), m_hud(that.m_hud),
-        m_contextGame(that.m_contextGame)
+        m_contextGame(that.m_contextGame), m_id(that.m_id)
   {
     that.m_cam = nullptr;
     that.m_viewport = nullptr;
@@ -343,23 +343,26 @@ namespace game
     m_order = order;
   }
 
-  std::uint32_t LocalPlayer::getSpeed() const
-  {
-    // TODO return car speed
-    return 20;
-  }
-
-  std::uint32_t LocalPlayer::getPosition() const
-  {
-    // TODO return car position
-    return 1;
-  }
-
   void LocalPlayer::display()
   {
     for (std::uint32_t i = 0; i < m_layers.size(); ++i)
       {
 	m_layers[i]->display();
       }
+  }
+
+  std::uint16_t LocalPlayer::getID() const
+  {
+    return m_id;
+  }
+
+  void LocalPlayer::setID(std::uint16_t id)
+  {
+    m_id = id;
+  }
+
+  bool LocalPlayer::operator==(std::uint16_t id) const
+  {
+    return m_id == id;
   }
 }
