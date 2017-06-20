@@ -18,6 +18,7 @@
 #include "Ai.hpp"
 #include "AContext.hpp"
 #include "LocalPlayer.hpp"
+#include "Timer.hpp"
 
 // Disable clang warning for templated class padding
 #if defined(__clang__)
