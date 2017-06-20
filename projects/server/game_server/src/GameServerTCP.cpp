@@ -23,6 +23,8 @@ bool GameServer::addClient()
           << "Added client FD #" << m_clientList.back()->getSocket();
       nope::log::Log(Info) << "New player connected #"
                            << m_clientList.back()->getId();
+      ++m_curClients;
+      nope::log::Log(Debug) << "There are now " << m_curClients << " clients.";
       return (true);
     }
   return (false);
@@ -42,6 +44,8 @@ bool GameServer::removeClient(network::IClient &c)
                                       return (*o == g);
                                     }),
                      m_clientList.end());
+  --m_curClients;
+  nope::log::Log(Debug) << "There are now " << m_curClients << " clients.";
   return (true);
 }
 

@@ -30,6 +30,8 @@ std::unique_ptr<std::uint8_t[]>
       data->eventData.licence.port = htons(data->eventData.licence.port);
       data->eventData.licence.maxClients =
           htons(data->eventData.licence.maxClients);
+      data->eventData.licence.curClients =
+          htons(data->eventData.licence.curClients);
     }
   else if (pck.eventType == GameServerToCMEvent::NB_CLIENTS)
     {
@@ -39,6 +41,7 @@ std::unique_ptr<std::uint8_t[]>
     {
       data->eventData.token.port = htons(pck.eventData.token.port);
       data->eventData.token.treated = htons(pck.eventData.token.treated);
+      data->eventData.token.curClients = htons(pck.eventData.token.curClients);
     }
 
   return (serial);
@@ -59,6 +62,8 @@ void GameServerToCMPacket::deserialize(std::size_t, std::uint8_t *data)
       pck.eventData.licence.port = ntohs(pck.eventData.licence.port);
       pck.eventData.licence.maxClients =
           ntohs(pck.eventData.licence.maxClients);
+      pck.eventData.licence.curClients =
+          ntohs(pck.eventData.licence.curClients);
     }
   else if (pck.eventType == GameServerToCMEvent::NB_CLIENTS)
     {
@@ -72,6 +77,7 @@ void GameServerToCMPacket::deserialize(std::size_t, std::uint8_t *data)
     {
       pck.eventData.token.port = ntohs(pck.eventData.token.port);
       pck.eventData.token.treated = ntohs(pck.eventData.token.treated);
+      pck.eventData.token.curClients = ntohs(pck.eventData.token.curClients);
     }
   else
     {

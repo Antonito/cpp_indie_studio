@@ -44,7 +44,7 @@ std::int32_t GameServer::gameServerUDPIO(std::int32_t const sock,
 {
   if (FD_ISSET(sock, &readfds))
     {
-      nope::log::Log(Debug) << "There's data to read [GameServerUDP]";
+      //      nope::log::Log(Debug) << "There's data to read [GameServerUDP]";
       // TODO: Use memory pool
       std::size_t const pckSize = packetSize::GameClientToGSPacketUDPSize;
       std::unique_ptr<uint8_t[]> buff =
@@ -55,9 +55,11 @@ std::int32_t GameServer::gameServerUDPIO(std::int32_t const sock,
       if (m_gameSockUDP.rec(buff.get(), pckSize,
                             reinterpret_cast<sockaddr_t *>(&addr), &len))
 	{
+#if 0
 	  nope::log::Log(Debug) << "{GameServerUDP} Received packet ["
 	                        << inet_ntoa(addr.sin_addr) << ":"
 	                        << ntohs(addr.sin_port) << "]";
+#endif
 	  m_pckUDP.setData(pckSize, std::move(buff));
 
 	  // Check if client exist
@@ -129,7 +131,7 @@ void GameServer::gameServerUDP()
       else if (rc > 0)
 	{
 	  // Treat I/O
-	  nope::log::Log(Debug) << "Treating I/O [GameServerUDP]";
+	  //	  nope::log::Log(Debug) << "Treating I/O [GameServerUDP]";
 	  gameServerUDPIO(sock, readfds, writefds, exceptfds);
 	}
 
