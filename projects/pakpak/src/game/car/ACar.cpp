@@ -334,16 +334,17 @@ namespace game
 
   void ACar::setDirection(Ogre::Quaternion &)
   {
-    //TODO ludo implement
+    // TODO ludo implement
   }
 
-  void ACar::setSpeed(double )
+  void ACar::setSpeed(double)
   {
-    //TODO ludo implement
+    // TODO ludo implement
   }
 
-  void ACar::setPosition(Ogre::Vector3 &)
+  void ACar::setPosition(Ogre::Vector3 &p)
   {
-    //TODO ludo implement
+    // TODO ludo implement
+    m_carNode->setPosition(p);
   }
 }

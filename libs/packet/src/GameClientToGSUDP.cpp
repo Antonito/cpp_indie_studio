@@ -87,10 +87,14 @@ std::vector<float> GameClientToGSPacketUDP::getDirection() const
 {
   std::vector<float> quat;
 
-  quat.push_back(static_cast<float>(pck.dir[0]) / 1000.0f);
-  quat.push_back(static_cast<float>(pck.dir[1]) / 1000.0f);
-  quat.push_back(static_cast<float>(pck.dir[2]) / 1000.0f);
-  quat.push_back(static_cast<float>(pck.dir[3]) / 1000.0f);
+  quat.push_back(static_cast<float>(static_cast<std::int32_t>(pck.dir[0])) /
+                 1000.0f);
+  quat.push_back(static_cast<float>(static_cast<std::int32_t>(pck.dir[1])) /
+                 1000.0f);
+  quat.push_back(static_cast<float>(static_cast<std::int32_t>(pck.dir[2])) /
+                 1000.0f);
+  quat.push_back(static_cast<float>(static_cast<std::int32_t>(pck.dir[3])) /
+                 1000.0f);
 
   return quat;
 }
@@ -99,9 +103,12 @@ std::vector<float> GameClientToGSPacketUDP::getPosition() const
 {
   std::vector<float> vec;
 
-  vec.push_back(static_cast<float>(pck.pos[0]) / 1000.0f);
-  vec.push_back(static_cast<float>(pck.pos[1]) / 1000.0f);
-  vec.push_back(static_cast<float>(pck.pos[2]) / 1000.0f);
+  vec.push_back(static_cast<float>(static_cast<std::int32_t>(pck.pos[0])) /
+                1000.0f);
+  vec.push_back(static_cast<float>(static_cast<std::int32_t>(pck.pos[1])) /
+                1000.0f);
+  vec.push_back(static_cast<float>(static_cast<std::int32_t>(pck.pos[2])) /
+                1000.0f);
 
   return vec;
 }

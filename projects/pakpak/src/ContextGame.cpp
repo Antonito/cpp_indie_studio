@@ -230,7 +230,8 @@ namespace game
   {
     packet.reinit();
     packet.pck.id = player.getID();
-    nope::log::Log(Debug) << "Setting up UDP packet for player : "
+    nope::log::Log(Debug) << "================= SENDING ======\nSetting up "
+                             "UDP packet for player : "
                           << packet.pck.id;
 
     game::EmptyCar &car = static_cast<game::EmptyCar &>(player.car());
@@ -238,6 +239,7 @@ namespace game
     setUDPPacketDirection(packet, car.direction());
     nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
     packet.pck.speed = static_cast<std::uint32_t>(car.speed() * 1000.0);
+    nope::log::Log(Debug) << "=====================";
   }
 
   void ContextGame::setUDPPacketDirection(GameClientToGSPacketUDP &packet,
