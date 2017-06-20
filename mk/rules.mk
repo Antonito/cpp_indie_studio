@@ -20,7 +20,6 @@ endif
 		@$(foreach dir, $(MAIN_OBJ_DIR) $(OBJ_DIR_LIST), $(MKDIR) $(dir) &> /dev/null && \
 		$(ECHO) "$(WHITE)[$(PURPLE)MKDIR$(WHITE)] Created obj directory $(CYAN)"$(dir)"\n$(CLEAR)" || \
 		$(ECHO) "$(WHITE)[$(PURPLE)MKDIR$(WHITE)] Cannot create obj directory $(CYAN)"$(dir)"\n$(CLEAR)";)
-		sleep 1
 		$(MAKE) binary
 
 binary:	 $(OBJ)
@@ -94,7 +93,9 @@ fclean:		clean
 		@$(RM) $(NAME)
 		@$(ECHO) "$(WHITE)[$(YELLOW)RM$(WHITE)] Removed $(CYAN)"$(NAME)"\n$(CLEAR)"
 
-re:		fclean all
+re:
+		$(MAKE) fclean
+		$(MAKE) all
 
 run:
 		./$(NAME)

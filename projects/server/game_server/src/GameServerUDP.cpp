@@ -44,32 +44,29 @@ std::int32_t GameServer::gameServerUDPIO(std::int32_t const sock,
 {
   if (FD_ISSET(sock, &readfds))
     {
-      //      nope::log::Log(Debug) << "There's data to read [GameServerUDP]";
       // TODO: Use memory pool
       std::size_t const pckSize = packetSize::GameClientToGSPacketUDPSize;
       std::unique_ptr<uint8_t[]> buff =
           std::make_unique<std::uint8_t[]>(pckSize);
-      sockaddr_in_t addr;
-      socklen_t     len;
+      sockaddr_in_t cliAddr;
+      socklen_t     len = sizeof(cliAddr);
 
       if (m_gameSockUDP.rec(buff.get(), pckSize,
-                            reinterpret_cast<sockaddr_t *>(&addr), &len))
+                            reinterpret_cast<sockaddr_t *>(&cliAddr), &len))
 	{
-#if 1
 	  nope::log::Log(Debug) << "{GameServerUDP} Received packet ["
-	                        << inet_ntoa(addr.sin_addr) << ":"
-	                        << ntohs(addr.sin_port) << "]";
-#endif
+	                        << inet_ntoa(cliAddr.sin_addr) << ":"
+	                        << ntohs(cliAddr.sin_port) << "]";
 	  m_pckUDP.setData(pckSize, std::move(buff));
 
 	  // Check if client exist
 	  std::vector<UDPClient>::iterator ite =
-	      std::find(m_clientUDP.begin(), m_clientUDP.end(), addr);
+	      std::find(m_clientUDP.begin(), m_clientUDP.end(), cliAddr);
 	  if (ite == m_clientUDP.end())
 	    {
 	      // Client is new, add it to vector
 	      m_clientUDP.push_back(
-	          UDPClient(addr, m_gameSockUDP)); // TODO: get ID
+	          UDPClient(cliAddr, m_gameSockUDP)); // TODO: get ID
 	      nope::log::Log(Info)
 	          << "Added new client to server. [GameServerUDP]";
 	      ite = m_clientUDP.end() - 1; // Get iterator on added element

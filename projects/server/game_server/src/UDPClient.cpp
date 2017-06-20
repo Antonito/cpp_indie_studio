@@ -4,6 +4,8 @@ UDPClient::UDPClient(sockaddr_in_t const &addr, network::UDPSocket &sock)
     : m_addr(addr), m_sock(sock), m_data(),
       m_lastAction(std::chrono::system_clock::now())
 {
+  nope::log::Log(Debug) << "Creating client [UDPClient - "
+                        << inet_ntoa(m_addr.sin_addr) << "]";
 }
 
 UDPClient::~UDPClient()
@@ -26,7 +28,15 @@ UDPClient &UDPClient::operator=(UDPClient const &other)
 
 bool UDPClient::operator==(sockaddr_in_t const &addr) const
 {
-  return (std::memcmp(&addr, &m_addr, sizeof(addr)) == 0);
+#if defined _WIN32
+  if (addr.sin_addr.S_addr != m_addr.sin_addr.S_addr)
+#else
+  if (addr.sin_addr.s_addr != m_addr.sin_addr.s_addr)
+#endif
+    {
+      return (false);
+    }
+  return (addr.sin_port == m_addr.sin_port);
 }
 
 bool UDPClient::operator==(UDPClient const &cli) const
@@ -50,8 +60,9 @@ network::IClient::ClientAction UDPClient::write(IPacket const &pck)
                   reinterpret_cast<sockaddr_t const *>(&m_addr),
                   sizeof(m_addr)) == false)
     {
-      nope::log::Log(Debug)
-          << "Failed to write data " << std::strerror(errno) << "[UDPClient]";
+      nope::log::Log(Warning)
+          << "Failed to write data " << std::strerror(errno) << "[UDPClient - "
+          << inet_ntoa(m_addr.sin_addr) << "]";
       ret = network::IClient::ClientAction::FAILURE;
     }
   return (ret);
@@ -71,7 +82,8 @@ bool UDPClient::hasTimedOut() const
   if (std::chrono::duration_cast<std::chrono::seconds>(now - m_lastAction)
           .count() >= 5)
     {
-      nope::log::Log(Info) << "Client time'd out. [UDPClient]";
+      nope::log::Log(Info) << "Client time'd out. [UDPClient - "
+                           << inet_ntoa(m_addr.sin_addr) << "]";
       return (true);
     }
   return (false);
