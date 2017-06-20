@@ -76,9 +76,6 @@ namespace core
     std::vector<GameClientToGSPacketUDP> gameEvents;
     while (m_running)
       {
-	// Clear datas
-	gameEvents.clear();
-
 	// Monitoring socket
 	fd_set       readfds, writefds;
 	sock_t const sock = m_sock->getSocket();
@@ -143,19 +140,14 @@ namespace core
 		// Get Game events
 		while (!m_gamePckIn.empty())
 		  {
-		    gameEvents.push_back(m_gamePckIn.front());
-		    m_gamePckIn.pop();
-		  }
-
-		// Send game events to server
-		for (GameClientToGSPacketUDP const &ev : gameEvents)
-		  {
+		    GameClientToGSPacketUDP &ev = m_gamePckIn.front();
 		    m_pck << ev;
 		    if (writeUDP(m_pck, addr) !=
 		        network::IClient::ClientAction::SUCCESS)
 		      {
 			nope::log::Log(Warning) << "Couldn't send UDP packet";
 		      }
+		    m_gamePckIn.pop();
 		  }
 	      }
 	  }
