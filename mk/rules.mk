@@ -20,7 +20,7 @@ endif
 		@$(foreach dir, $(MAIN_OBJ_DIR) $(OBJ_DIR_LIST), $(MKDIR) $(dir) &> /dev/null && \
 		$(ECHO) "$(WHITE)[$(PURPLE)MKDIR$(WHITE)] Created obj directory $(CYAN)"$(dir)"\n$(CLEAR)" || \
 		$(ECHO) "$(WHITE)[$(PURPLE)MKDIR$(WHITE)] Cannot create obj directory $(CYAN)"$(dir)"\n$(CLEAR)";)
-		$(MAKE) binary
+		@$(MAKE) binary
 
 binary:	 $(OBJ)
 ifeq ($(NAME_EXTENSION),.a)
