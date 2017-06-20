@@ -114,8 +114,6 @@ namespace game
 	    setUDPPacket(pckContent, *m_players[0]);
 	    pck.push_back(pckContent);
 
-	    nope::log::Log(Debug) << "Sending UDP packet";
-
 	    // Send packet
 	    m_net.sendUDPPacket(std::move(pck));
 	    lastTimePck = std::chrono::steady_clock::now();

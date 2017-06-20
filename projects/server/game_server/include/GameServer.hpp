@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cstdint>
+#include <chrono>
 #include <thread>
 #include <memory>
 #include "TCPSocket.hpp"
@@ -14,6 +15,7 @@
 #include "GameLogic.hpp"
 #include "IOError.hpp"
 #include "GameClientGSPacketUDP.hpp"
+#include "UDPClient.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
@@ -68,6 +70,8 @@ private:
                                fd_set &writefds, fd_set &exceptfds);
   network::IClient::ClientAction writeUDP(IPacket const &      pck,
                                           sockaddr_in_t const *addr);
+  void deleteUDPClient(UDPClient &cli);
+  void updateUDPTick();
 
   // Basic datas
   std::uint16_t      m_connectManagerPort;
@@ -92,8 +96,10 @@ private:
   std::vector<Token>                       m_tokenList;
 
   // UDP
-  Packet<GameClientToGSPacketUDP> m_pckUDP;
-  GameClientToGSPacketUDP         m_repUDP;
+  Packet<GameClientToGSPacketUDP>       m_pckUDP;
+  GameClientToGSPacketUDP               m_repUDP;
+  std::vector<UDPClient>                m_clientUDP;
+  std::chrono::system_clock::time_point m_tickUDP;
 };
 
 // Disable clang warning for implicit padding

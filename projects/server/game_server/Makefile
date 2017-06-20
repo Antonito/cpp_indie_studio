@@ -40,7 +40,8 @@ SRC_FILES=	main.cpp		\
 		Token.cpp		\
 		GameClient.cpp		\
 		GameLogic.cpp		\
-		Config.cpp
+		Config.cpp		\
+		UDPClient.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 

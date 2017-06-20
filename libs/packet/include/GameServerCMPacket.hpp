@@ -33,6 +33,7 @@ struct GameServerToCMPacketLicence
   GameServerToCMPacketSimple licence;
   std::uint16_t              port;
   std::uint16_t              maxClients;
+  std::uint16_t              curClients;
 };
 
 struct GameServerToCMPacketToken
@@ -40,6 +41,7 @@ struct GameServerToCMPacketToken
   std::uint16_t port;
   std::uint16_t treated;
   std::array<char, 40> tokenData;
+  std::uint16_t curClients;
 };
 
 struct GameServerToCMPacketRaw
