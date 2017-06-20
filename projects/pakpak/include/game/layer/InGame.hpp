@@ -229,7 +229,7 @@ namespace game
 		    {
 		      m_speed[playerIndex][2]->setVisible(true);
 		      m_speed[playerIndex][2]->setProperty(
-		          image, gl_speedAssets[thousand - 1]);
+		          image, gl_speedAssets[thousand]);
 		    }
 		  else
 		    {
@@ -240,7 +240,7 @@ namespace game
 		    {
 		      m_speed[playerIndex][1]->setVisible(true);
 		      m_speed[playerIndex][1]->setProperty(
-		          image, gl_speedAssets[decade - 1]);
+		          image, gl_speedAssets[decade]);
 		    }
 		  else if (thousand)
 		    {
@@ -257,7 +257,7 @@ namespace game
 		  if (unit)
 		    {
 		      m_speed[playerIndex]
-		             [0]->setProperty(image, gl_speedAssets[unit - 1]);
+		             [0]->setProperty(image, gl_speedAssets[unit]);
 		    }
 		  else
 		    {

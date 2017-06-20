@@ -31,6 +31,7 @@ namespace core
     bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     bool keyReleased(const OIS::KeyEvent &arg);
+    std::int32_t getSelectedMap() const;
 
   private:
     MenuSolo(MenuSolo const &) = delete;
@@ -45,11 +46,12 @@ namespace core
     SoundManager &     m_sound;
     std::uint32_t      m_playerCount;
     SettingsPlayer &   m_settings;
+    std::int32_t m_curMap;
 
     bool onBackClick(CEGUI::EventArgs const &);
     bool onPlayClick(CEGUI::EventArgs const &);
-    bool onEasyClick(CEGUI::EventArgs const &);
-    bool onHardClick(CEGUI::EventArgs const &);
+    bool onLeftClick(CEGUI::EventArgs const &);
+    bool onRightClick(CEGUI::EventArgs const &);
     bool onPlayersClick(CEGUI::EventArgs const &);
     bool onArea(CEGUI::EventArgs const &);
 

@@ -9,7 +9,7 @@ namespace core
   MenuSolo::MenuSolo(menu::MenuManager &menuManager, GUI &gui,
                      SoundManager &sound, SettingsPlayer &settings)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
-        m_sound(sound), m_playerCount(1), m_settings(settings)
+        m_sound(sound), m_playerCount(1), m_settings(settings), m_curMap(0)
   {
   }
 
@@ -32,14 +32,18 @@ namespace core
       {
 	throw GUIError("Missing asset play_button");
       }
-    if (!m_gui.getRoot()->getChild("easy_button"))
+    if (!m_gui.getRoot()->getChild("right_button"))
       {
-	throw GUIError("Missing asset easy_button");
+	throw GUIError("Missing asset right_button");
       }
-    if (!m_gui.getRoot()->getChild("hard_button"))
+    if (!m_gui.getRoot()->getChild("left_button"))
       {
-	throw GUIError("Missing asset hard_button");
+	throw GUIError("Missing asset left_button");
       }
+    if (!m_gui.getRoot()->getChild("map_holder"))
+    {
+      throw GUIError("Missing asset map_holder");
+    }
     m_gui.getRoot()
         ->getChild("back_button")
         ->subscribeEvent(
@@ -63,24 +67,24 @@ namespace core
                          CEGUI::Event::Subscriber(&MenuSolo::onArea, this));
 
     m_gui.getRoot()
-        ->getChild("easy_button")
+        ->getChild("left_button")
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
-            CEGUI::Event::Subscriber(&MenuSolo::onEasyClick, this));
+            CEGUI::Event::Subscriber(&MenuSolo::onLeftClick, this));
 
     m_gui.getRoot()
-        ->getChild("easy_button")
+        ->getChild("left_button")
         ->subscribeEvent(CEGUI::PushButton::EventMouseEntersArea,
                          CEGUI::Event::Subscriber(&MenuSolo::onArea, this));
 
     m_gui.getRoot()
-        ->getChild("hard_button")
+        ->getChild("right_button")
         ->subscribeEvent(
             CEGUI::PushButton::EventClicked,
-            CEGUI::Event::Subscriber(&MenuSolo::onHardClick, this));
+            CEGUI::Event::Subscriber(&MenuSolo::onRightClick, this));
 
     m_gui.getRoot()
-        ->getChild("hard_button")
+        ->getChild("right_button")
         ->subscribeEvent(CEGUI::PushButton::EventMouseEntersArea,
                          CEGUI::Event::Subscriber(&MenuSolo::onArea, this));
 
@@ -192,31 +196,30 @@ namespace core
     return true;
   }
 
-  bool MenuSolo::onEasyClick(CEGUI::EventArgs const &)
+  static std::vector<std::string> gl_map = {
+      "pakpak_map/one",
+      "pakpak_map/two",
+      "pakpak_map/three",
+      "pakpak_map/four"
+  };
+
+  bool MenuSolo::onLeftClick(CEGUI::EventArgs const &)
   {
-    CEGUI::Window &easyButton = *m_gui.getRoot()->getChild("easy_button");
-    CEGUI::Window &hardButton = *m_gui.getRoot()->getChild("hard_button");
-
     soundClick();
-    AssetSetter::setButtonBack(easyButton, AssetSetter::BUTTON_COLOR::BYELLOW);
-    AssetSetter::setTextColor(easyButton, AssetSetter::TEXT_COLOR::TRED);
-
-    AssetSetter::setButtonBack(hardButton, AssetSetter::BUTTON_COLOR::BGREY);
-    AssetSetter::setTextColor(hardButton, AssetSetter::TEXT_COLOR::TBLACK);
+    m_curMap = m_curMap - 1 < 0 ? gl_map.size() - 1 : m_curMap - 1;
+    m_gui.getRoot()
+        ->getChild("map_holder")
+        ->setProperty("Image", gl_map[m_curMap]);
     return true;
   }
 
-  bool MenuSolo::onHardClick(CEGUI::EventArgs const &)
+  bool MenuSolo::onRightClick(CEGUI::EventArgs const &)
   {
-    CEGUI::Window &easyButton = *m_gui.getRoot()->getChild("easy_button");
-    CEGUI::Window &hardButton = *m_gui.getRoot()->getChild("hard_button");
-
     soundClick();
-    AssetSetter::setButtonBack(hardButton, AssetSetter::BUTTON_COLOR::BYELLOW);
-    AssetSetter::setTextColor(hardButton, AssetSetter::TEXT_COLOR::TRED);
-
-    AssetSetter::setButtonBack(easyButton, AssetSetter::BUTTON_COLOR::BGREY);
-    AssetSetter::setTextColor(easyButton, AssetSetter::TEXT_COLOR::TBLACK);
+    m_curMap = m_curMap + 1 == gl_map.size() ? 0 : m_curMap + 1;
+    m_gui.getRoot()
+        ->getChild("map_holder")
+        ->setProperty("Image", gl_map[m_curMap]);
     return true;
   }
   bool MenuSolo::onArea(const CEGUI::EventArgs &)
@@ -241,6 +244,11 @@ namespace core
     m_playerCount = m_playerCount + 1u > 4u ? 1u : m_playerCount + 1u;
     setButtonText("soloplayers_button");
     return true;
+  }
+
+  std::int32_t MenuSolo::getSelectedMap() const
+  {
+    return m_curMap;
   }
 
   void MenuSolo::setButtonText(std::string const &buttonName)
