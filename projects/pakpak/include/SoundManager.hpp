@@ -33,6 +33,13 @@ namespace core
         SPLASH_SONG,
         PASS_BUTTON,
         CLICK_BUTTON,
+        GAME_SONG,
+        IDLE_KART_SOUND,
+        ACC_KART_SOUND,
+        KLAXON_KART_SOUND,
+        BOOST_SONG,
+        START_SONG,
+        SLOW_KART_SOUND,
         NUMBER_SOUND
     };
   class SoundManager
@@ -57,6 +64,8 @@ namespace core
     void stopSound(std::size_t const);
 
     void loopSound(std::size_t const);
+
+    void setVolumeSource(std::size_t const, float);
 
     void setVolume(float);
 

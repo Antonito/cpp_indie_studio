@@ -30,7 +30,6 @@
 #endif
 
 #include "PlayerData.hpp"
-#include "Ia.hpp"
 #include "Map.hpp"
 
 namespace game

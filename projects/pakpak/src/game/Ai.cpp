@@ -6,16 +6,16 @@
 
 namespace game
 {
-  Ia::~Ia()
+  Ai::~Ai()
   {
   }
 
-  Ia::Ia(ACar &car, std::vector<Ogre::Vector3> const &nodes)
+  Ai::Ai(ACar &car, std::vector<Ogre::Vector3> const &nodes)
       : m_curNode(0), m_nodes(nodes), m_car(car), m_dir(0)
   {
   }
 
-  void Ia::race()
+  void Ai::race()
   {
     /*nope::log::Log(Debug) << "CUR NODE[" << m_curNode << "] POS : {" <<
        m_nodes[m_curNode].x
@@ -27,7 +27,7 @@ namespace game
                           << ", " << m_nodes[m_curNode].y << ", " <<
        m_nodes[m_curNode].z
                           << "}.";*/
-    Ogre::Vector3 l_mastDir = m_nodes[m_curNode] - m_car.position();
+    Ogre::Vector3 l_mastDir = m_nodes[static_cast<std::size_t >(m_curNode)] - m_car.position();
     /*nope::log::Log(Debug) << "DIrection to next Point : {" << l_mastDir.x
                           << ", " << l_mastDir.y << ", " << l_mastDir.z
                           << "}.";*/
@@ -59,10 +59,10 @@ namespace game
     m_car.move(-0.3);
   }
 
-  void Ia::distNode()
+  void Ai::distNode()
   {
-    Ogre::Vector3 m_relativeVector = m_nodes[m_curNode] - m_car.position();
-    if (m_relativeVector.length() < 0.5)
+    Ogre::Vector3 m_relativeVector = m_nodes[static_cast<std::size_t>(m_curNode)] - m_car.position();
+    if (static_cast<double>(m_relativeVector.length()) < 0.5)
       {
 	if (m_curNode == static_cast<std::int32_t>(m_nodes.size() - 1))
 	  m_curNode = 0;
@@ -70,4 +70,9 @@ namespace game
 	  m_curNode++;
       }
   }
+
+  /*  game::ACar &Ai::car()
+    {
+        return m_car;
+    }*/
 }

@@ -34,7 +34,7 @@ namespace game
     LocalPlayer() = delete;
     LocalPlayer(Ogre::RenderWindow *, GameData &, PlayerData *, int,
                 core::SettingsPlayer &, core::HUD *, game::ContextGame &,
-                std::vector<std::unique_ptr<LocalPlayer>> &, std::uint8_t);
+                std::vector<std::unique_ptr<LocalPlayer>> &, std::uint8_t, core::SoundManager &);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&);
     virtual ~LocalPlayer();
@@ -114,6 +114,7 @@ namespace game
     int                                        m_order;
     core::HUD *                                m_hud;
     game::ContextGame &                        m_contextGame;
+    core::SoundManager &                       m_sound;
   };
 }
 
