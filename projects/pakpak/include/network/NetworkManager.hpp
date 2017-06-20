@@ -6,6 +6,7 @@
 #include <memory>
 #include "NetworkAuth.hpp"
 #include "NetworkConnect.hpp"
+#include "NetworkGame.hpp"
 #include "Config.hpp"
 
 namespace core
@@ -31,9 +32,14 @@ namespace core
     void disconnect();
     bool isConnected() const;
 
+    // TODO -> UDP communication
+    // std::vector<UDPPacket> getUDPPacket() const;
+    // void sendUDPPacket(std::vector<UDPPacket> &&);
+
   private:
     std::unique_ptr<NetworkAuth>    m_auth;
     std::unique_ptr<NetworkConnect> m_conn;
+    std::unique_ptr<NetworkGame>    m_game;
     std::string                     m_connectManagerAddr;
     std::uint16_t                   m_connectManagerPort;
     std::string                     m_gameServerToken;

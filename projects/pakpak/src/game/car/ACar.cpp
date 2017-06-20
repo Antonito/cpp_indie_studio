@@ -83,7 +83,7 @@ namespace game
     // Get the car position
     Ogre::Vector3 p = m_carNode->getPosition();
 
-    double newSteering = m_tryTurning;
+    double newSteering = m_tryTurning / 2;
     double accelerator = m_tryMoving * -5.0;
 
     // When steering, wake up the wheel rigidbodies so that their orientation
@@ -156,7 +156,8 @@ namespace game
         m_steeringIncrement(0.0), m_steeringClamp(0.0), m_wheelRadius(0.0),
         m_wheelWidth(0.0), m_wheelFriction(0.0), m_suspensionStiffness(0.0),
         m_suspensionDamping(0.0), m_suspensionCompression(0.0),
-        m_rollInfluence(0.0), m_suspensionRestLength(0.0)
+        m_rollInfluence(0.0), m_suspensionRestLength(0.0),
+        m_timeLastGoodOrientation()
   {
     static std::int32_t id = 0;
 

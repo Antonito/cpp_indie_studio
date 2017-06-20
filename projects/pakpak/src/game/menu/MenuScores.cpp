@@ -23,6 +23,30 @@ namespace core
     m_gui.loadLayout("scores.layout");
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
 
+    if (!m_gui.getRoot()->getChild("back_button"))
+      {
+	throw GUIError("Missing asset back_button");
+      }
+    if (!m_gui.getRoot()->getChild("list_best_times"))
+      {
+	throw GUIError("Missing asset list_best_times");
+      }
+    if (!m_gui.getRoot()->getChild("list_finished_tracks"))
+      {
+	throw GUIError("Missing asset list_finished_tracks");
+      }
+    if (!m_gui.getRoot()->getChild("list_max_speed"))
+      {
+	throw GUIError("Missing asset list_max_speed");
+      }
+    if (!m_gui.getRoot()->getChild("list_collision_count"))
+      {
+	throw GUIError("Missing asset list_collision_count");
+      }
+    if (!m_gui.getRoot()->getChild("list_total_km"))
+      {
+	throw GUIError("Missing asset list_total_km");
+      }
     m_gui.getRoot()
         ->getChild("back_button")
         ->subscribeEvent(
@@ -234,13 +258,11 @@ namespace core
 
   void MenuScores::soundPass()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::PASS_BUTTON);
   }
 
   void MenuScores::soundClick()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::CLICK_BUTTON);
   }
 }

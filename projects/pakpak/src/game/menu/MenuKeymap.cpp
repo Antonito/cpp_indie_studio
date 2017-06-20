@@ -24,11 +24,24 @@ namespace core
     m_gui.loadLayout("keymap.layout");
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
 
-    m_buttons[0] = m_gui.getRoot()->getChild("player1_button");
-    m_buttons[1] = m_gui.getRoot()->getChild("player2_button");
-    m_buttons[2] = m_gui.getRoot()->getChild("player3_button");
-    m_buttons[3] = m_gui.getRoot()->getChild("player4_button");
+    if (!(m_buttons[0] = m_gui.getRoot()->getChild("player1_button")))
+      {
+	throw GUIError("Missing asset player1_button");
+      }
+    if (!(m_buttons[1] = m_gui.getRoot()->getChild("player2_button")))
+      {
+	throw GUIError("Missing asset player2_button");
+      }
+    if (!(m_buttons[2] = m_gui.getRoot()->getChild("player3_button")))
+      {
+	throw GUIError("Missing asset player3_button");
+      }
+    if (!(m_buttons[3] = m_gui.getRoot()->getChild("player4_button")))
+      {
+	throw GUIError("Missing asset player4_button");
+      }
 
+    checkPlayerButton();
     m_gui.getRoot()
         ->getChild("back_button")
         ->subscribeEvent(
@@ -341,6 +354,7 @@ namespace core
 
   void MenuKeymap::loadLayout(std::size_t playerIndex)
   {
+    checkPlayerButton();
     m_gui.getRoot()
         ->getChild("up_button")
         ->setProperty("Text",
@@ -412,14 +426,12 @@ namespace core
 
   void MenuKeymap::soundPass()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::PASS_BUTTON);
   }
 
   void MenuKeymap::soundClick()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::CLICK_BUTTON);
   }
 
   bool MenuKeymap::onPlayer1Area(const CEGUI::EventArgs &)
@@ -486,5 +498,33 @@ namespace core
   {
     soundPass();
     return true;
+  }
+
+  void MenuKeymap::checkPlayerButton()
+  {
+    if (!(m_gui.getRoot()->getChild("up_button")))
+      {
+	throw GUIError("Missing asset quit_button");
+      }
+    if (!(m_gui.getRoot()->getChild("down_button")))
+      {
+	throw GUIError("Missing asset quit_button");
+      }
+    if (!(m_gui.getRoot()->getChild("left_button")))
+      {
+	throw GUIError("Missing asset quit_button");
+      }
+    if (!(m_gui.getRoot()->getChild("right_button")))
+      {
+	throw GUIError("Missing asset quit_button");
+      }
+    if (!(m_gui.getRoot()->getChild("pause_button")))
+      {
+	throw GUIError("Missing asset quit_button");
+      }
+    if (!(m_gui.getRoot()->getChild("use_button")))
+      {
+	throw GUIError("Missing asset quit_button");
+      }
   }
 }

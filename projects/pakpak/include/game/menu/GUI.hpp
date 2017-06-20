@@ -23,7 +23,7 @@ namespace core
   {
   public:
     ~GUI();
-    GUI(Ogre::RenderWindow *win);
+    explicit GUI(Ogre::RenderWindow *win);
     void           init();
     void           destroy();
     void           draw();
@@ -42,6 +42,9 @@ namespace core
     CEGUI::Window *      getRoot() const;
     void hideCursor(bool disable = true);
     void setCursorArrow(std::string const &);
+    void removeLayout(const std::string &layout);
+    void addLayout(const std::string &layout);
+    CEGUI::OgreRenderer &getOgreRenderer();
 
   private:
     CEGUI::OgreRenderer *m_renderer;
@@ -49,6 +52,7 @@ namespace core
     CEGUI::GUIContext *  m_context;
     OIS::ParamList       m_param;
     Ogre::RenderWindow * m_win;
+    std::map<std::string, CEGUI::Window *> m_windows;
 
     GUI(GUI const &) = delete;
     GUI &operator=(GUI const &) = delete;

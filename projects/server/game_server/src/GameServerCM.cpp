@@ -141,6 +141,8 @@ bool GameServer::authenticateToConnectManager()
   std::memcpy(data.pck.eventData.licence.licence.data.data(),
               m_licence.c_str(), m_licence.length() + 1);
   data.pck.eventData.licence.port = m_gameServerPort;
+  data.pck.eventData.licence.maxClients =
+      static_cast<std::uint16_t>(m_maxClients);
   pck << data;
   if (write(pck) != network::IClient::ClientAction::SUCCESS)
     {

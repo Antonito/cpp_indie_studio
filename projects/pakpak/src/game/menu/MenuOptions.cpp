@@ -2,6 +2,7 @@
 // Created by brout_m on 09/06/17.
 //
 
+#include <game/menu/MenuOptions.hpp>
 #include "pakpak_stdafx.hpp"
 
 namespace core
@@ -29,14 +30,46 @@ namespace core
 
     m_graphicSelected = 0;
     nope::log::Log(Debug) << "Current Volume : " << m_sound.getVolume();
-    m_volumeSelected = static_cast<std::size_t>(m_sound.getVolume() * 4.0f);
-    m_volumeButtons[0] = m_gui.getRoot()->getChild("volume/level_0");
-    m_volumeButtons[1] = m_gui.getRoot()->getChild("volume/level_25");
-    m_volumeButtons[2] = m_gui.getRoot()->getChild("volume/level_50");
-    m_volumeButtons[3] = m_gui.getRoot()->getChild("volume/level_75");
-    m_volumeButtons[4] = m_gui.getRoot()->getChild("volume/level_100");
-    m_graphicButtons[0] = m_gui.getRoot()->getChild("low_button");
-    m_graphicButtons[1] = m_gui.getRoot()->getChild("high_button");
+    m_volumeSelected = 4;
+    if (!(m_volumeButtons[0] = m_gui.getRoot()->getChild("volume/level_0")))
+      {
+	throw GUIError("Missing asset volume/level_0");
+      }
+    if (!(m_volumeButtons[1] = m_gui.getRoot()->getChild("volume/level_25")))
+      {
+	throw GUIError("Missing asset volume/level_25");
+      }
+    if (!(m_volumeButtons[2] = m_gui.getRoot()->getChild("volume/level_50")))
+      {
+	throw GUIError("Missing asset volume/level_50");
+      }
+    if (!(m_volumeButtons[3] = m_gui.getRoot()->getChild("volume/level_75")))
+      {
+	throw GUIError("Missing asset volume/level_75");
+      }
+    if (!(m_volumeButtons[4] = m_gui.getRoot()->getChild("volume/level_100")))
+      {
+	throw GUIError("Missing asset volume/level_100");
+      }
+    if (!(m_graphicButtons[0] = m_gui.getRoot()->getChild("windowed_button")))
+      {
+	throw GUIError("Missing asset windowed_button");
+      }
+    if (!(m_graphicButtons[1] = m_gui.getRoot()->getChild("fullscreen_button")))
+      {
+	throw GUIError("Missing asset fullscreen_button");
+      }
+    if (!(m_gui.getRoot()->getChild("back_button")))
+      {
+	throw GUIError("Missing asset back_button");
+      }
+    if (!(m_gui.getRoot()->getChild("edit_button")))
+      {
+	throw GUIError("Missing asset edit_button");
+      }
+    size_t newVolume = static_cast<std::size_t>(m_sound.getVolume() * 4.0f);
+    swapButtons(m_volumeButtons, m_volumeSelected, newVolume,
+                AssetSetter::greyButton, AssetSetter::redButton);
 
     m_gui.getRoot()
         ->getChild("back_button")
@@ -262,7 +295,7 @@ namespace core
   bool MenuOptions::onVolumeLevel75(CEGUI::EventArgs const &)
   {
     soundClick();
-    m_sound.setVolume(0.50f);
+    m_sound.setVolume(0.75f);
     swapButtons(m_volumeButtons, m_volumeSelected, 3, AssetSetter::greyButton,
                 AssetSetter::redButton);
     return true;
@@ -337,13 +370,11 @@ namespace core
 
   void MenuOptions::soundClick()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::CLICK_BUTTON);
   }
 
   void MenuOptions::soundPass()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::PASS_BUTTON);
   }
 }

@@ -29,10 +29,18 @@ namespace game
     std::int32_t getCheckPoint() const;
     void         nextCheckPoint();
 
+    std::size_t getRank() const;
+    void        setRank(std::size_t);
+
+    bool getFinished() const;
+    void setFinished(bool);
+
   private:
     std::unique_ptr<ACar> m_car;
     int                   m_score;
     std::int32_t          m_currentCheckpoint;
+    std::size_t           m_rank;
+    bool                  m_finished;
   };
 }
 

@@ -5,17 +5,18 @@ namespace game
   GameData::GameData()
       : m_sceneMgr(Ogre::Root::getSingleton().createSceneManager(
             "DefaultSceneManager", "Game scene manager")),
-        m_players(), m_world(new OgreBulletDynamics::DynamicsWorld(
-                         m_sceneMgr,
-                         Ogre::AxisAlignedBox(
-                             Ogre::Vector3(-100000000, -100000000, -100000000),
-                             Ogre::Vector3(100000000, 100000000, 100000000)),
-                         Ogre::Vector3(0.0f, -9.81f * 80, 0.0f))),
+        m_players(),
+        m_world(new OgreBulletDynamics::DynamicsWorld(
+            m_sceneMgr, Ogre::AxisAlignedBox(
+                            Ogre::Vector3(-100000000, -100000000, -100000000),
+                            Ogre::Vector3(100000000, 100000000, 100000000)),
+            Ogre::Vector3(0.0f, -9.81f * 80, 0.0f))),
 #ifdef DEBUG
         m_debugDrawer(nullptr),
 #endif
         m_bodies(), m_shapes(),
-        m_map(*this, "./deps/indie_resource/maps/test/map.dat"), m_startTime()
+        m_map(*this, "./deps/indie_resource/maps/test/map.dat"), m_startTime(),
+        m_laps(1)
   {
     // todo: move in Map
     m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
@@ -67,8 +68,17 @@ namespace game
     for (PlayerData &p : m_players)
       {
 	p.car().update(1 / 60.0);
+	std::int32_t checkpt = p.getCheckPoint() + 1;
+
+	if (!p.getFinished() && (checkpt / m_map.getNbCheckPoint()) >= m_laps)
+	  p.setFinished(true);
       }
-    m_map.getPlayerOrder();
+    std::vector<int32_t> ranking = m_map.getPlayerOrder();
+    for (std::size_t i = 0; i < ranking.size(); ++i)
+      {
+	if (ranking[i] < static_cast<std::int32_t>(m_players.size()))
+	  m_players[ranking[i]].setRank(i);
+      }
   }
 
   Ogre::Camera *GameData::createCamera(std::string const &name)
@@ -124,5 +134,15 @@ namespace game
   Map const &GameData::map() const
   {
     return (m_map);
+  }
+
+  std::int32_t GameData::getLaps() const
+  {
+    return (m_laps);
+  }
+
+  void GameData::setLaps(std::int32_t laps)
+  {
+    m_laps = laps;
   }
 }

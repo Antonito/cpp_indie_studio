@@ -170,7 +170,8 @@ namespace core
   };
 
   SettingsPlayer::SettingsPlayer()
-      : m_data(), m_players(), m_keycodes(), m_used(), m_loaded()
+      : m_data(), m_players(), m_keycodes(), m_used(), m_loaded(),
+        m_playerCount(1)
   {
     m_players.resize(5);
     m_data.resize(5);
@@ -189,7 +190,7 @@ namespace core
   SettingsPlayer::SettingsPlayer(SettingsPlayer const &that)
       : m_data(that.m_data), m_players(that.m_players),
         m_keycodes(that.m_keycodes), m_used(that.m_used),
-        m_loaded(that.m_loaded)
+        m_loaded(that.m_loaded), m_playerCount(1)
   {
   }
 
@@ -220,14 +221,15 @@ namespace core
     ss << fs.rdbuf();
     std::string content = ss.str();
 
-    nope::log::Log(Debug) << "Index " << playerIndex << ' ' << m_players.size();
+    nope::log::Log(Debug) << "Index " << playerIndex << ' '
+                          << m_players.size();
 
-      m_players[playerIndex] =
+    m_players[playerIndex] =
         nope::serialization::from_json<SettingsPlayer::GameSettings>(content);
     if (check_used(playerIndex))
       {
-	Log(nope::log::Error) << "Config File : key already used";
-	throw std::exception();
+	Log(nope::log::Debug) << "Config File : key already used";
+	throw IOError("Settings File Error: Key already used");
       }
 
     setUsed(playerIndex, true);
@@ -290,13 +292,13 @@ namespace core
   {
     Log(nope::log::Debug) << "SettingsPlayer::save -> " << playerIndex << " : "
                           << playerFile[static_cast<int>(playerIndex)];
-    std::stringstream ss;
-    std::ofstream     fs(playerFile[static_cast<int>(playerIndex)].c_str(),
+    std::ofstream fs(playerFile[static_cast<int>(playerIndex)].c_str(),
                      std::ofstream::out | std::ofstream::trunc);
 
     if (fs.is_open() == false)
       {
-	throw std::exception();
+	throw IOError("Cannot open " +
+	              playerFile[static_cast<int>(playerIndex)]);
       }
     fs << nope::serialization::to_json(m_players[playerIndex]);
     fs.close();
@@ -426,6 +428,16 @@ namespace core
     return (m_players[playerIndex]);
   }
 
+  std::uint32_t SettingsPlayer::getPlayerCount() const
+  {
+    return m_playerCount;
+  }
+
+  void SettingsPlayer::setPlayerCount(std::uint32_t playerCount)
+  {
+    m_playerCount = playerCount;
+  }
+
   SettingsPlayer::GameSettings::GameSettings() : key(), graphic()
   {
   }
@@ -441,7 +453,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings &SettingsPlayer::GameSettings::
-                                operator=(GameSettings const &that)
+      operator=(GameSettings const &that)
   {
     this->key = that.key;
     this->graphic = that.graphic;
@@ -449,7 +461,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings &SettingsPlayer::GameSettings::
-                                operator=(GameSettings &&that)
+      operator=(GameSettings &&that)
   {
     this->key = std::move(that.key);
     this->graphic = std::move(that.graphic);
@@ -457,7 +469,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Key &SettingsPlayer::GameSettings::Key::
-                                     operator=(GameSettings::Key const &that)
+      operator=(GameSettings::Key const &that)
   {
     this->speedUp = that.speedUp;
     this->slowDown = that.slowDown;
@@ -472,7 +484,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Key &SettingsPlayer::GameSettings::Key::
-                                     operator=(GameSettings::Key &&that)
+      operator=(GameSettings::Key &&that)
   {
     this->speedUp = that.speedUp;
     this->slowDown = that.slowDown;
@@ -505,7 +517,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Graphic &
-          SettingsPlayer::GameSettings::Graphic::
+      SettingsPlayer::GameSettings::Graphic::
           operator=(GameSettings::Graphic const &that)
   {
     this->sensibility = that.sensibility;
@@ -514,7 +526,7 @@ namespace core
   }
 
   SettingsPlayer::GameSettings::Graphic &
-          SettingsPlayer::GameSettings::Graphic::
+      SettingsPlayer::GameSettings::Graphic::
           operator=(GameSettings::Graphic &&that)
   {
     this->sensibility = that.sensibility;

@@ -9,6 +9,7 @@
 #include "MenuManager.hpp"
 #include "IMenuLayer.hpp"
 #include "AssetSetter.hpp"
+#include "NetworkManager.hpp"
 
 namespace core
 {
@@ -61,7 +62,6 @@ namespace core
     bool onHighPass(CEGUI::EventArgs const &);
     bool onKeymapEditArea(CEGUI::EventArgs const &);
     bool onBackArea(CEGUI::EventArgs const &);
-
     void swapButtons(CEGUI::Window **, size_t &, size_t,
                      core::AssetSetter::ButtonStyle const &,
                      core::AssetSetter::ButtonStyle const &);

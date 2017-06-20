@@ -33,7 +33,8 @@ namespace game
   public:
     LocalPlayer() = delete;
     LocalPlayer(Ogre::RenderWindow *, GameData &, PlayerData *, int,
-                core::SettingsPlayer &, core::HUD *, game::ContextGame &);
+                core::SettingsPlayer &, core::HUD *, game::ContextGame &,
+                std::vector<std::unique_ptr<LocalPlayer>> &, std::uint8_t);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&);
     virtual ~LocalPlayer();
@@ -51,11 +52,13 @@ namespace game
                                OIS::MouseButtonID     id);
 
     virtual void push(GameLayer layer);
-    virtual void popLayer();
+    virtual void          popLayer();
+    virtual std::uint32_t getSpeed() const;
+    virtual std::uint32_t getPosition() const;
 
     void setViewPort(Ogre::Real left, Ogre::Real top, Ogre::Real width,
                      Ogre::Real height);
-
+    void display();
     void crossFinishLine(
         std::chrono::time_point<std::chrono::high_resolution_clock> finishTime,
         int                                                         nbRounds);
@@ -69,6 +72,10 @@ namespace game
     std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()> &
                           actions(std::string const &);
     core::SettingsPlayer &settings();
+
+    std::size_t getRank() const;
+
+    bool getFinished() const;
 
   private:
     void setActionMap();

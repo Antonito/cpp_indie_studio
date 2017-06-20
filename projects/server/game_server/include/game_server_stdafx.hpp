@@ -24,6 +24,7 @@
 #include "Logger.hpp"
 #include "GameServer.hpp"
 #include "TCPSocket.hpp"
+#include "UDPSocket.hpp"
 #include "Packet.hpp"
 #include "GameServerCMPacket.hpp"
 #include "Token.hpp"
@@ -32,6 +33,8 @@
 #include "GameLogic.hpp"
 #include "GameClient.hpp"
 #include "json.hpp"
+#include "GenNetwork.hpp"
+#include "MapError.hpp"
 
 #if defined(_WIN32)
 #include <io.h>

@@ -5,13 +5,13 @@ MK_COMMON_DIR=	./../../mk/
 # Definitions for Makefile
 NAME=		$(ROOT_DIR)/pakpak
 
-LOCAL_COMP_FLAGS=	-DINDIE_MAP_EDITOR_
+LOCAL_COMP_FLAGS=   -D INDIE_MAP_EDITOR_
 
 LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
 			-L $(ROOT_DIR)/build/ -l indie_logger 	\
 			-l CEGUIBase-0 -l CEGUIOgreRenderer-0 	\
 			-l indie_network -lindie_ini		\
-			-l indie_packet				\
+			-l indie_packet	-l indie_multithread	\
 			-l indie_crypto -l sndfile		\
 			-l indie_exceptions			\
 			-l BulletDynamics -l BulletCollision	\
@@ -87,14 +87,15 @@ SRC_FILES=		main.cpp			\
 			ContextSplash.cpp		\
 			Config.cpp
 
-GAME_FILES=		GameData.cpp			\
+GAME_FILES=		GameData.cpp		\
 			LocalPlayer.cpp			\
+			Ia.cpp                  \
+		    Timer.cpp               \
 			PlayerData.cpp
 
 GAME_LAYER_FILES=	ALayer.cpp			\
 			Chat.cpp			\
 			GameGUI.cpp			\
-			InGame.cpp			\
 			Loading.cpp			\
 			Menu.cpp			\
 			PostGame.cpp			\
@@ -114,14 +115,15 @@ GAME_MAP_FILES=		Map.cpp				\
 
 GAME_TOOLS_FILES=	Tools.cpp
 
-GAME_MENU_FILES=    	GUI.cpp				\
+GAME_MENU_FILES=    	GUI.cpp		\
 			MainMenu.cpp			\
 			ContextMenu.cpp			\
-			MenuManager.cpp     		\
+			MenuManager.cpp     	\
 			MenuOptions.cpp 		\
 			MenuKeymap.cpp 			\
 			MenuSolo.cpp 			\
-			MenuMultiplayer.cpp 		\
+			MenuMultiplayer.cpp 	\
+			MenuPopError.cpp        \
 			AssetSetter.cpp			\
 			MenuScores.cpp			\
 			InGameHUD.cpp			\
@@ -132,7 +134,8 @@ GAME_MENU_FILES=    	GUI.cpp				\
 NETWORK_FILES=		NetworkManager.cpp		\
 			NetworkAuth.cpp			\
 			NetworkGameServer.cpp		\
-			NetworkConnect.cpp
+			NetworkConnect.cpp		\
+			NetworkGame.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))			\
 		$(addprefix $(GAME_DIR), $(GAME_FILES))			\
@@ -149,6 +152,7 @@ INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)			\
 		$(ROOT_DIR)/libs/logger/include/			\
 		$(ROOT_DIR)/libs/exceptions/include/			\
 		$(ROOT_DIR)/libs/crypto/include/			\
+		$(ROOT_DIR)/libs/multithread/include/			\
 		$(ROOT_DIR)/libs/network/include/			\
 		$(ROOT_DIR)/libs/packet/include/			\
 		$(ROOT_DIR)/libs/ini/include/				\

@@ -9,7 +9,8 @@ namespace game
   {
   public:
     Score() = delete;
-    Score(GameData &data, ILayerStack &layer, core::HUD *hud);
+    Score(GameData &data, ILayerStack &layer, core::HUD *hud,
+          std::vector<std::unique_ptr<LocalPlayer>> &players);
     Score(Score const &) = delete;
     Score(Score &&) = delete;
     virtual ~Score();

@@ -135,6 +135,8 @@ namespace core
 
     createFrameListener();
 
+    // load all sound resource
+    m_soundManager.loadAllSound();
     nope::log::Log(Debug) << "Starting to load contexts";
 
     // Splash context
@@ -154,7 +156,7 @@ namespace core
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
         std::make_unique<game::ContextGame>(m_window, m_inputListener,
-                                            m_settings);
+                                            m_settings, m_network);
 
     nope::log::Log(Debug) << "Game context loaded";
 

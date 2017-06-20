@@ -255,7 +255,6 @@ namespace nope
 	      << "Deserialize a " << typeid(std::vector<T>).name()
 	      << " (vector)";
 
-	  uint32_t tmp;
 	  uint32_t len;
 
 	  detail::from_binary_impl<std::uint32_t>::from_binary(len, v, cursor);

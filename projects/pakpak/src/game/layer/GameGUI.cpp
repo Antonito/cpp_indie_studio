@@ -2,8 +2,9 @@
 
 namespace game
 {
-  GameGUI::GameGUI(GameData &data, LocalPlayer &player, core::HUD *hud)
-      : ALayer(data, player, hud), m_player(player)
+  GameGUI::GameGUI(GameData &data, LocalPlayer &player, core::HUD *hud,
+                   std::vector<std::unique_ptr<LocalPlayer>> &players)
+      : ALayer(data, player, hud, players), m_player(player)
   {
     static_cast<void>(m_player); // TODO: rm
   }

@@ -39,7 +39,6 @@ namespace network
     assert(!isStarted());
     if (getMode() == ASocket::SERVER)
       {
-	nope::log::Log(Debug) << "Hosting connection";
 	ret = true;
 	try
 	  {
@@ -47,6 +46,11 @@ namespace network
 	    m_addr.sin_port = htons(m_port);
 	    m_addr.sin_family = AF_INET;
 	    hostConnection();
+	    if (listen(m_socket, static_cast<std::int32_t>(m_maxClients)) ==
+	        -1)
+	      {
+		throw network::SockError("Cannot listen on socket");
+	      }
 	  }
 	catch (std::exception &e)
 	  {
@@ -56,7 +60,7 @@ namespace network
       }
     else
       {
-	ret = connectToHost(SOCK_STREAM, IPPROTO_TCP);
+	ret = connectToHost(SOCK_STREAM, IPPROTO_TCP, true);
       }
     if (ret == false)
       {

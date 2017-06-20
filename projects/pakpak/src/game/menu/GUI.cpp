@@ -6,6 +6,13 @@
 
 namespace core
 {
+  GUI::GUI(Ogre::RenderWindow *win)
+      : m_renderer(nullptr), m_root(nullptr), m_context(nullptr), m_param(),
+        m_win(win), m_windows({})
+  {
+    init();
+  }
+
   void GUI::init()
   {
     nope::log::Log(Debug) << "Ogre::Root::singletonPtr : "
@@ -95,13 +102,6 @@ namespace core
   {
   }
 
-  GUI::GUI(Ogre::RenderWindow *win)
-      : m_renderer(nullptr), m_root(nullptr), m_context(nullptr), m_param(),
-        m_win(win)
-  {
-    init();
-  }
-
   void GUI::loadSheme(std::string const &p_shem)
   {
     CEGUI::SchemeManager::getSingleton().createFromFile(p_shem);
@@ -141,5 +141,32 @@ namespace core
 
     m_root = CEGUI::WindowManager::getSingleton().loadLayoutFromFile(p_path);
     m_context->setRootWindow(m_root);
+  }
+
+  void GUI::addLayout(const std::string &layout)
+  {
+    nope::log::Log(Debug) << "Adding layout '" << layout << "'";
+    CEGUI::Window *win =
+        CEGUI::WindowManager::getSingleton().loadLayoutFromFile(layout);
+    if (!win)
+      throw(std::runtime_error("HUD layout not added"));
+    m_root->addChild(win);
+    m_windows[layout] = win;
+    nope::log::Log(Debug) << "Layout '" << layout << "' added";
+  }
+
+  void GUI::removeLayout(const std::string &layout)
+  {
+    if (m_windows.find(layout) == m_windows.end())
+      throw(std::runtime_error("Tried to remove unadded layout"));
+    nope::log::Log(Debug) << "Removing layout '" << layout << "'";
+    m_root->removeChild(m_windows[layout]);
+    m_windows[layout] = nullptr;
+    nope::log::Log(Debug) << "Layout '" << layout << "' removed";
+  }
+
+  CEGUI::OgreRenderer &GUI::getOgreRenderer()
+  {
+    return *m_renderer;
   }
 }

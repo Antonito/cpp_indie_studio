@@ -44,7 +44,7 @@ namespace network
 	ret = sendto(m_socket, data, len, 0, dest, destLen);
       }
     while (ret == -1 && errno == EINTR);
-    return (false);
+    return (ret != -1);
   }
 
   bool UDPSocket::rec(void *, std::size_t, ssize_t *) const
@@ -64,14 +64,14 @@ namespace network
 	ret = recvfrom(m_socket, buffer, rlen, 0, addr, addrLen);
       }
     while (ret == -1 && errno == EINTR);
-    return (false);
+    return (ret != -1);
   }
 
   bool UDPSocket::openConnection()
   {
     bool ret;
 
-    nope::log::Log(Debug) << "Opening UDP connection";
+    nope::log::Log(Debug) << "Opening UDP connection [ " << m_port << " ]";
     assert(!isStarted());
     if (getMode() == ASocket::SERVER)
       {
@@ -80,6 +80,7 @@ namespace network
 	try
 	  {
 	    initSocket(AF_INET, SOCK_DGRAM, 0);
+	    nope::log::Log(Debug) << "Socket init'd.";
 	    m_addr.sin_port = htons(m_port);
 	    m_addr.sin_family = AF_INET;
 	    hostConnection();
@@ -92,7 +93,7 @@ namespace network
       }
     else
       {
-	ret = connectToHost(SOCK_DGRAM, IPPROTO_UDP);
+	ret = connectToHost(SOCK_DGRAM, IPPROTO_UDP, false);
       }
     if (ret == false)
       {

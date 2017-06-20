@@ -186,8 +186,13 @@ namespace network
     return (m_type);
   }
 
+  sockaddr_in_t const &ASocket::getSockAddr() const
+  {
+    return (m_addr);
+  }
+
   bool ASocket::connectToHost(std::int32_t const socktype,
-                              std::int32_t const proto)
+                              std::int32_t const proto, bool shouldConnect)
   {
     addrinfo_t  hints = {};
     addrinfo_t *res = nullptr;
@@ -224,12 +229,17 @@ namespace network
 		std::cerr << e.what() << std::endl;
 		break;
 	      }
+
+	    ret = 0;
+	    if (shouldConnect)
+	      {
 #if defined(__linux__) || defined(__APPLE__)
-	    ret = connect(m_socket, ptr->ai_addr, ptr->ai_addrlen);
+		ret = connect(m_socket, ptr->ai_addr, ptr->ai_addrlen);
 #elif defined(_WIN32)
-	    ret = connect(m_socket, ptr->ai_addr,
-	                  static_cast<std::int32_t>(ptr->ai_addrlen));
+		ret = connect(m_socket, ptr->ai_addr,
+		              static_cast<std::int32_t>(ptr->ai_addrlen));
 #endif
+	      }
 	    if (ret != -1)
 	      {
 		if (typeBackup == ASocket::NONBLOCKING)
@@ -239,6 +249,11 @@ namespace network
 		      {
 			throw network::SockError("Cannot set socket type");
 		      }
+		  }
+		if (res->ai_addrlen <= sizeof(m_addr))
+		  {
+		    nope::log::Log(Debug) << "Updating sockaddr_in content";
+		    std::memcpy(&m_addr, res->ai_addr, res->ai_addrlen);
 		  }
 		nope::log::Log(Debug) << "Found an address, connected !";
 		connected = true;
@@ -287,6 +302,7 @@ namespace network
 
   void ASocket::hostConnection()
   {
+    nope::log::Log(Debug) << "Socket created successfuly";
     assert(m_socket != -1);
     m_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     if (bind(m_socket, reinterpret_cast<sockaddr_t *>(&m_addr),
@@ -306,10 +322,6 @@ namespace network
 	    throw network::SockError("Cannot get port selected by the kernel");
 	  }
 	m_port = ntohs(newAddr.sin_port);
-      }
-    if (listen(m_socket, static_cast<std::int32_t>(m_maxClients)) == -1)
-      {
-	throw network::SockError("Cannot listen on socket");
       }
   }
 

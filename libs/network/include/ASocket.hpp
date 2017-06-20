@@ -1,7 +1,9 @@
 #ifndef ASOCKET_HPP_
 #define ASOCKET_HPP_
 
+#include <cstring>
 #include <string>
+#include <cstring>
 #include "ISocket.hpp"
 
 // Disable clang warning for implicit padding
@@ -42,6 +44,8 @@ namespace network
     SocketMode    getMode() const;
     SocketType    getType() const;
 
+    sockaddr_in_t const &getSockAddr() const;
+
     bool operator==(ASocket const &other) const;
 
   protected:
@@ -52,11 +56,11 @@ namespace network
             SocketType type = ASocket::BLOCKING);
 
     virtual bool connectToHost(std::int32_t const socktype,
-                               std::int32_t const proto);
+                               std::int32_t const proto, bool shouldConnect);
+    virtual void hostConnection();
     void initSocket(std::int32_t domain, std::int32_t type,
                     std::int32_t protocol);
-    bool         setSocketType() const;
-    virtual void hostConnection();
+    bool setSocketType() const;
 
     sock_t        m_socket;
     std::uint16_t m_port;

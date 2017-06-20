@@ -25,6 +25,7 @@ namespace core
     MultiPlayerGame,
     Score,
     Quit,
+    PopError,
     NbMenuState
   };
 

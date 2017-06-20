@@ -218,7 +218,7 @@ namespace nope
 	static double net_to_host(std::uint64_t t)
 	{
 	  std::uint64_t i = ntohll(t);
-	  return (static_cast<double>(*reinterpret_cast<std::int64_t *>(i)) /
+	  return (static_cast<double>(*reinterpret_cast<std::int64_t *>(&i)) /
 	          0xFFFFFFFF);
 	}
       };

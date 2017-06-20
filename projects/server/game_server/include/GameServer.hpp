@@ -6,12 +6,14 @@
 #include <thread>
 #include <memory>
 #include "TCPSocket.hpp"
+#include "UDPSocket.hpp"
 #include "IServer.hpp"
 #include "IClient.hpp"
 #include "Token.hpp"
 #include "GameClient.hpp"
 #include "GameLogic.hpp"
 #include "IOError.hpp"
+#include "GameClientGSPacketUDP.hpp"
 
 // Disable clang warning for implicit padding
 #if defined(__clang__)
@@ -59,11 +61,18 @@ private:
                                fd_set &writefds, fd_set &exceptfds);
 
   // GameServerUDP methods
-  void gameServerUDP();
+  void         gameServerUDP();
+  std::int32_t gameServerUDPActivity(std::int32_t const sock, fd_set &readfds,
+                                     fd_set &writefds, fd_set &exceptfds);
+  std::int32_t gameServerUDPIO(std::int32_t const sock, fd_set &readfds,
+                               fd_set &writefds, fd_set &exceptfds);
+  network::IClient::ClientAction writeUDP(IPacket const &      pck,
+                                          sockaddr_in_t const *addr);
 
   // Basic datas
   std::uint16_t      m_connectManagerPort;
   std::uint16_t      m_gameServerPort;
+  std::uint16_t      m_gameServerPortUDP;
   std::int32_t const m_maxClients;
   std::int32_t       m_curClients;
   std::string        m_licence;
@@ -72,6 +81,7 @@ private:
   // Sockets and servers
   network::TCPSocket m_connectManagerSock;
   network::TCPSocket m_gameSock;
+  network::UDPSocket m_gameSockUDP;
   std::thread        m_connectSrv;
   std::thread        m_gameSrvTCP;
   std::thread        m_gameSrvUDP;
@@ -80,6 +90,10 @@ private:
   // Tokens
   std::vector<std::unique_ptr<GameClient>> m_clientList;
   std::vector<Token>                       m_tokenList;
+
+  // UDP
+  Packet<GameClientToGSPacketUDP> m_pckUDP;
+  GameClientToGSPacketUDP         m_repUDP;
 };
 
 // Disable clang warning for implicit padding

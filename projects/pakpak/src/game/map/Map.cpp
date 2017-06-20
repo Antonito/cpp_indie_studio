@@ -3,14 +3,22 @@
 namespace game
 {
   Map::Map(game::GameData &gamedata)
-      : m_gamedata(gamedata), m_points(), m_map(nullptr), m_node(nullptr),
-        m_body(nullptr)
+      : m_gamedata(gamedata), m_points(), m_checkpoints(), m_map(nullptr),
+        m_mapbox(nullptr), m_node(nullptr), m_body(nullptr)
+#if defined(INDIE_MAP_EDITOR)
+        ,
+        m_filename(""), m_selectedPoint(0)
+#endif // !INDIE_MAP_EDITOR
   {
   }
 
   Map::Map(game::GameData &gamedata, std::string const &filename)
-      : m_gamedata(gamedata), m_points(), m_map(nullptr), m_node(nullptr),
-        m_body(nullptr)
+      : m_gamedata(gamedata), m_points(), m_checkpoints(), m_map(nullptr),
+        m_mapbox(nullptr), m_node(nullptr), m_body(nullptr)
+#if defined(INDIE_MAP_EDITOR)
+        ,
+        m_filename(""), m_selectedPoint(0)
+#endif // !INDIE_MAP_EDITOR
   {
     this->loadFromFile(filename);
   }
@@ -31,7 +39,7 @@ namespace game
 
     if (fs.is_open() == false)
       {
-	throw std::exception();
+	throw IOError("Can't open file -> " + filename);
       }
 
     ss << fs.rdbuf();
@@ -75,7 +83,7 @@ namespace game
 
     if (meshFile == nullptr)
       {
-	throw std::exception(); // TODO: change exception
+	throw MapError("Invalid Mesh Data");
       }
 
     struct stat fileStat;
@@ -268,6 +276,11 @@ namespace game
     return (m_body);
   }
 
+  std::vector<Ogre::Vector3> const &Map::getNodes() const
+  {
+    return m_points;
+  }
+
 #if defined(INDIE_MAP_EDITOR)
   void Map::addPoint(Ogre::Vector3 const &pt)
   {
@@ -295,19 +308,15 @@ namespace game
     for (std::size_t i = 0; i < m_gamedata.getPlayerNb(); ++i)
       {
 	std::int32_t chkpt = m_gamedata[i].getCheckPoint() + 1;
-	std::int32_t lap = chkpt / m_checkpoints.size();
 
-	chkpt %= m_checkpoints.size();
+	chkpt %= static_cast<std::int32_t>(m_checkpoints.size());
 
-	auto x = m_gamedata[i].car().position();
-	nope::log::Log(Debug)
-	    << "Position : " << x.x << ", " << x.y << ", " << x.z;
 	if (m_checkpoints[chkpt].hasPassed(m_gamedata[i].car().position()))
 	  {
 	    nope::log::Log(Debug) << "Checkpoint done!";
 
 	    m_gamedata[i].nextCheckPoint();
-	    m_checkpoints[chkpt].addCheck(i);
+	    m_checkpoints[chkpt].addCheck(static_cast<std::int32_t>(i));
 	  }
       }
 
@@ -315,8 +324,6 @@ namespace game
 
     std::vector<std::int32_t> res;
     std::vector<info_t>       curPos;
-    std::int32_t maxLaps = std::numeric_limits<std::int32_t>::max();
-    std::int32_t curLap;
 
     for (std::size_t i = 0; i < m_gamedata.getPlayerNb(); ++i)
       {
@@ -325,7 +332,7 @@ namespace game
 
     std::sort(curPos.begin(), curPos.end(),
               [](info_t const &left, info_t const &right) {
-                return (left.second < right.second);
+                return (left.second > right.second);
               });
 
     for (info_t const &info : curPos)
@@ -379,7 +386,7 @@ namespace game
   }
 
   Map::MapData::Quaternion &Map::MapData::Quaternion::
-                            operator=(Map::MapData::Quaternion &&that)
+      operator=(Map::MapData::Quaternion &&that)
   {
     if (this == &that)
       return (*this);
@@ -400,7 +407,7 @@ namespace game
   }
 
   Map::MapData::Element &Map::MapData::Element::
-                         operator=(Map::MapData::Element &&that)
+      operator=(Map::MapData::Element &&that)
   {
     if (this == &that)
       return (*this);
@@ -408,5 +415,10 @@ namespace game
     rot = std::move(that.rot);
     type = that.type;
     return (*this);
+  }
+
+  std::int32_t Map::getNbCheckPoint() const
+  {
+    return (static_cast<int32_t>(m_checkpoints.size()));
   }
 }

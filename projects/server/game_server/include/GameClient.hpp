@@ -22,6 +22,8 @@ public:
     AUTHENTICATING,
     AUTHENTICATED,
     CHECKING_MAPS,
+    UDP_CONNECT,
+    UDP_CONFIRM,
     WAITING,
     PLAYING
   };
@@ -56,6 +58,7 @@ private:
   Packet<GameClientToGSPacket> m_packet;
   std::vector<Token> &         m_tokenList;
   std::int32_t                 m_id;
+  std::uint16_t                m_udpPort;
 
   bool                           checkMaps();
   network::IClient::ClientAction lobbyRead();

@@ -18,6 +18,26 @@ namespace core
   {
     m_gui.loadLayout("indie.layout");
 
+    if (!(m_gui.getRoot()->getChild("quit_button")))
+      {
+	throw GUIError("Missing asset quit_button");
+      }
+    if (!(m_gui.getRoot()->getChild("play_button")))
+      {
+	throw GUIError("Missing asset play_button");
+      }
+    if (!(m_gui.getRoot()->getChild("options_button")))
+      {
+	throw GUIError("Missing asset options_button");
+      }
+    if (!(m_gui.getRoot()->getChild("multi")))
+      {
+	throw GUIError("Missing asset multi_button");
+      }
+    if (!(m_gui.getRoot()->getChild("stats_button")))
+      {
+	throw GUIError("Missing asset stats_button");
+      }
     m_gui.getRoot()
         ->getChild("quit_button")
         ->subscribeEvent(
@@ -94,19 +114,15 @@ namespace core
                          static_cast<float>(arg.state.Y.rel));
   }
 
-  bool MainMenu::mousePressed(OIS::MouseEvent const &arg,
-                              OIS::MouseButtonID     id)
+  bool MainMenu::mousePressed(OIS::MouseEvent const &, OIS::MouseButtonID id)
   {
-    (void)arg;
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
         .injectMouseButtonDown(convertButton(id));
   }
 
-  bool MainMenu::mouseReleased(OIS::MouseEvent const &arg,
-                               OIS::MouseButtonID     id)
+  bool MainMenu::mouseReleased(OIS::MouseEvent const &, OIS::MouseButtonID id)
   {
-    (void)arg;
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
         .injectMouseButtonUp(convertButton(id));
@@ -196,10 +212,11 @@ namespace core
 	    << "\n======================================================\n=="
 	       "Error cannot connect to the ConnectServerManager "
 	       "!==\n======================================================";
-      //TODO: Remplace by a Error popUp
-          m_menuManager.popLayer();
-          m_menuManager.begin();
-          return true;
+	// TODO: Remplace by a Error popUp
+	m_menuManager.popLayer();
+	m_menuManager.push(MenuState::PopError);
+	m_menuManager.begin();
+	return true;
       }
     return true;
   }
@@ -244,13 +261,11 @@ namespace core
 
   void MainMenu::soundClick()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::CLICK_BUTTON);
   }
 
   void MainMenu::soundPass()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::PASS_BUTTON);
   }
 }

@@ -7,10 +7,9 @@
 namespace core
 {
   MenuSolo::MenuSolo(menu::MenuManager &menuManager, GUI &gui,
-                     SoundManager &sound)
+                     SoundManager &sound, SettingsPlayer &settings)
       : m_gui(gui), m_curState(GameState::Menu), m_menuManager(menuManager),
-        m_sound(sound)
-
+        m_sound(sound), m_playerCount(1), m_settings(settings)
   {
   }
 
@@ -22,8 +21,25 @@ namespace core
   {
     m_gui.loadLayout("soloplayer.layout");
     m_gui.setCursorArrow("TaharezLook/MouseArrow");
+    setButtonText("soloplayers_button");
     m_curState = GameState::Menu;
 
+    if (!m_gui.getRoot()->getChild("back_button"))
+      {
+	throw GUIError("Missing asset back_button");
+      }
+    if (!m_gui.getRoot()->getChild("play_button"))
+      {
+	throw GUIError("Missing asset play_button");
+      }
+    if (!m_gui.getRoot()->getChild("easy_button"))
+      {
+	throw GUIError("Missing asset easy_button");
+      }
+    if (!m_gui.getRoot()->getChild("hard_button"))
+      {
+	throw GUIError("Missing asset hard_button");
+      }
     m_gui.getRoot()
         ->getChild("back_button")
         ->subscribeEvent(
@@ -32,9 +48,8 @@ namespace core
 
     m_gui.getRoot()
         ->getChild("back_button")
-        ->subscribeEvent(
-            CEGUI::PushButton::EventMouseEntersArea,
-            CEGUI::Event::Subscriber(&MenuSolo::onBackArea, this));
+        ->subscribeEvent(CEGUI::PushButton::EventMouseEntersArea,
+                         CEGUI::Event::Subscriber(&MenuSolo::onArea, this));
 
     m_gui.getRoot()
         ->getChild("play_button")
@@ -44,9 +59,8 @@ namespace core
 
     m_gui.getRoot()
         ->getChild("play_button")
-        ->subscribeEvent(
-            CEGUI::PushButton::EventMouseEntersArea,
-            CEGUI::Event::Subscriber(&MenuSolo::onPlayArea, this));
+        ->subscribeEvent(CEGUI::PushButton::EventMouseEntersArea,
+                         CEGUI::Event::Subscriber(&MenuSolo::onArea, this));
 
     m_gui.getRoot()
         ->getChild("easy_button")
@@ -56,9 +70,8 @@ namespace core
 
     m_gui.getRoot()
         ->getChild("easy_button")
-        ->subscribeEvent(
-            CEGUI::PushButton::EventMouseEntersArea,
-            CEGUI::Event::Subscriber(&MenuSolo::onEasyArea, this));
+        ->subscribeEvent(CEGUI::PushButton::EventMouseEntersArea,
+                         CEGUI::Event::Subscriber(&MenuSolo::onArea, this));
 
     m_gui.getRoot()
         ->getChild("hard_button")
@@ -68,9 +81,19 @@ namespace core
 
     m_gui.getRoot()
         ->getChild("hard_button")
+        ->subscribeEvent(CEGUI::PushButton::EventMouseEntersArea,
+                         CEGUI::Event::Subscriber(&MenuSolo::onArea, this));
+
+    m_gui.getRoot()
+        ->getChild("soloplayers_button")
         ->subscribeEvent(
-            CEGUI::PushButton::EventMouseEntersArea,
-            CEGUI::Event::Subscriber(&MenuSolo::onHardArea, this));
+            CEGUI::PushButton::EventClicked,
+            CEGUI::Event::Subscriber(&MenuSolo::onPlayersClick, this));
+
+    m_gui.getRoot()
+        ->getChild("soloplayers_button")
+        ->subscribeEvent(CEGUI::PushButton::EventMouseEntersArea,
+                         CEGUI::Event::Subscriber(&MenuSolo::onArea, this));
   }
 
   void MenuSolo::exit()
@@ -163,6 +186,7 @@ namespace core
     soundClick();
     m_curState = GameState::InGame;
     m_gui.hideCursor();
+    m_settings.setPlayerCount(m_playerCount);
     return true;
   }
 
@@ -193,25 +217,7 @@ namespace core
     AssetSetter::setTextColor(easyButton, AssetSetter::TEXT_COLOR::TBLACK);
     return true;
   }
-  bool MenuSolo::onBackArea(const CEGUI::EventArgs &)
-  {
-    soundPass();
-    return true;
-  }
-
-  bool MenuSolo::onPlayArea(const CEGUI::EventArgs &)
-  {
-    soundPass();
-    return true;
-  }
-
-  bool MenuSolo::onEasyArea(const CEGUI::EventArgs &)
-  {
-    soundPass();
-    return true;
-  }
-
-  bool MenuSolo::onHardArea(const CEGUI::EventArgs &)
+  bool MenuSolo::onArea(const CEGUI::EventArgs &)
   {
     soundPass();
     return true;
@@ -219,13 +225,43 @@ namespace core
 
   void MenuSolo::soundPass()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/pass.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::PASS_BUTTON);
   }
 
   void MenuSolo::soundClick()
   {
-    m_sound.loadSound("deps/indie_resource/songs/GUI/click.wav");
-    m_sound.playSound();
+    m_sound.playSound(core::ESound::CLICK_BUTTON);
+  }
+
+  bool MenuSolo::onPlayersClick(CEGUI::EventArgs const &)
+  {
+    soundClick();
+    m_playerCount = m_playerCount + 1u > 4u ? 1u : m_playerCount + 1u;
+    setButtonText("soloplayers_button");
+    return true;
+  }
+
+  void MenuSolo::setButtonText(std::string const &buttonName)
+  {
+    CEGUI::PushButton *button = static_cast<CEGUI::PushButton *>(
+        m_gui.getRoot()->getChildRecursive(buttonName));
+
+    if (button)
+      {
+	switch (m_playerCount)
+	  {
+	  case (2):
+	    button->setText("2");
+	    break;
+	  case (3):
+	    button->setText("3");
+	    break;
+	  case (4):
+	    button->setText("4");
+	    break;
+	  default:
+	    button->setText("1");
+	  }
+      }
   }
 }

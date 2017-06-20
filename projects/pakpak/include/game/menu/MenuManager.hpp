@@ -19,6 +19,7 @@
 #include "GUI.hpp"
 #include "ILayerStack.hpp"
 #include "InputListener.hpp"
+#include "NetworkManager.hpp"
 
 namespace menu
 {

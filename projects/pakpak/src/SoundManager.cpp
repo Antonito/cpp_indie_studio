@@ -45,6 +45,9 @@ namespace core
   {
     // Open audio file with libsndfile
     SF_INFO FileInfos;
+
+
+      std::memset(&FileInfos, 0, sizeof(FileInfos));
     nope::log::Log(Debug) << "Prepare open file sound";
     SNDFILE *File = sf_open(Filename.c_str(), SFM_READ, &FileInfos);
     if (!File)
@@ -148,6 +151,7 @@ namespace core
   void SoundManager::shutdownOpenAl()
   {
     nope::log::Log(Debug) << "Clear openAl";
+    clear();
     // Deactivate the current context
     alcMakeContextCurrent(NULL);
 
@@ -159,47 +163,48 @@ namespace core
   }
 
   // Set the position of the sound
-  void SoundManager::setPosition(float x, float y, float z)
+  void SoundManager::setPosition(std::size_t const idx, float x, float y,
+                                 float z)
   {
     nope::log::Log(Debug) << "Setting sound to position {" << x << ", " << y
                           << ", " << z << "}.";
-    alSourcei(m_source[m_source.size() - 1], AL_SOURCE_RELATIVE, AL_TRUE);
-    alSource3f(m_source[m_source.size() - 1], AL_POSITION, x, y, z);
+    alSourcei(m_source[idx], AL_SOURCE_RELATIVE, AL_TRUE);
+    alSource3f(m_source[idx], AL_POSITION, x, y, z);
   }
 
   // Put the current sound in looping
-  void SoundManager::loopSound()
+  void SoundManager::loopSound(std::size_t const idx)
   {
     nope::log::Log(Debug) << "Looping sound";
-    alSourcei(m_source[m_source.size() - 1], AL_LOOPING, AL_TRUE);
+    alSourcei(m_source[idx], AL_LOOPING, AL_TRUE);
   }
 
   // Stop the sound
-  void SoundManager::stopSound()
+  void SoundManager::stopSound(std::size_t const idx)
   {
     nope::log::Log(Debug) << "Stopping sound";
-    alSourceStop(m_source[m_source.size() - 1]);
+    alSourceStop(m_source[idx]);
   }
 
   // Put sound in pause
-  void SoundManager::pauseSound()
+  void SoundManager::pauseSound(std::size_t const idx)
   {
     nope::log::Log(Debug) << "Pause sound";
-    alSourcePause(m_source[m_source.size() - 1]);
+    alSourcePause(m_source[idx]);
   }
 
   // Play the sound
-  void SoundManager::playSound()
+  void SoundManager::playSound(std::size_t const idx)
   {
-    nope::log::Log(Debug) << "Play sound";
-    alSourcef(m_source[m_source.size() - 1], AL_GAIN, m_volume);
-    alSourcePlay(m_source[m_source.size() - 1]);
+    nope::log::Log(Debug) << "Play sound : at index " << idx;
+    alSourcef(m_source[idx], AL_GAIN, m_volume);
+    alSourcePlay(m_source[idx]);
   }
 
   // Set the current state of the volume
-  void SoundManager::state()
+  void SoundManager::state(std::size_t const idx)
   {
-    alGetSourcei(m_source[m_source.size() - 1], AL_SOURCE_STATE, &m_state);
+    alGetSourcei(m_source[idx], AL_SOURCE_STATE, &m_state);
   }
 
   // Get the actual sound state
@@ -234,11 +239,12 @@ namespace core
   }
 
   // Set the orientation of the sound to a specific direction
-  void SoundManager::setOrientation(float x, float y, float z)
+  void SoundManager::setOrientation(std::size_t const idx, float x, float y,
+                                    float z)
   {
     nope::log::Log(Debug) << "Set sound to direction ; {" << x << ", " << y
                           << ", " << z << "}.";
-    alSource3f(m_source[m_source.size() - 1], AL_ORIENTATION, x, y, z);
+    alSource3f(m_source[idx], AL_ORIENTATION, x, y, z);
   }
 
   // Get the Source of the sound
@@ -261,5 +267,13 @@ namespace core
   ALfloat SoundManager::getVolume() const
   {
     return m_volume;
+  }
+
+  void SoundManager::loadAllSound()
+  {
+    loadSound("deps/indie_resource/songs/theme.wav");
+    loadSound("deps/indie_resource/songs/splash.wav");
+    loadSound("deps/indie_resource/songs/GUI/pass.wav");
+    loadSound("deps/indie_resource/songs/GUI/click.wav");
   }
 }

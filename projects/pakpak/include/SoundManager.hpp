@@ -27,6 +27,14 @@
 
 namespace core
 {
+    enum ESound
+    {
+        THEME_SONG = 0,
+        SPLASH_SONG,
+        PASS_BUTTON,
+        CLICK_BUTTON,
+        NUMBER_SOUND
+    };
   class SoundManager
   {
   public:
@@ -42,29 +50,31 @@ namespace core
 
     void shutdownOpenAl();
 
-    void playSound();
+    void playSound(std::size_t const);
 
-    void pauseSound();
+    void pauseSound(std::size_t const);
 
-    void stopSound();
+    void stopSound(std::size_t const);
 
-    void loopSound();
+    void loopSound(std::size_t const);
 
     void setVolume(float);
 
-    void state();
+    void state(std::size_t const);
 
     ALint getState() const;
 
     ALuint getSource(std::size_t const idx) const;
 
-    void setPosition(float, float, float);
+    void setPosition(std::size_t const, float, float, float);
 
-    void setOrientation(float, float, float);
+    void setOrientation(std::size_t const, float, float, float);
 
     ALfloat getVolume() const;
 
     void loadSound(std::string const &);
+
+    void loadAllSound();
 
     void clear();
 

@@ -9,7 +9,8 @@ namespace game
   {
   public:
     PostGame() = delete;
-    PostGame(GameData &data, ILayerStack &layer, core::HUD *hud);
+    PostGame(GameData &data, ILayerStack &layer, core::HUD *hud,
+             std::vector<std::unique_ptr<LocalPlayer>> &players);
     PostGame(PostGame const &) = delete;
     PostGame(PostGame &&) = delete;
     virtual ~PostGame();

@@ -3,9 +3,10 @@
 namespace game
 {
   ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
-                           core::SettingsPlayer &settings)
-      : core::AContext(win, input), m_game(), m_players(),
-        m_settings(settings), m_quit(false), m_hud(nullptr)
+                           core::SettingsPlayer &settings,
+                           core::NetworkManager &net)
+      : core::AContext(win, input), m_game(), m_players(), m_ia(),
+        m_settings(settings), m_quit(false), m_hud(nullptr), m_net(net)
   {
   }
 
@@ -22,30 +23,32 @@ namespace game
     m_input->setKeyboardEventCallback(this);
     m_quit = false;
 
-    std::size_t nbPlayer = 2;
+    std::size_t nbPlayer = m_settings.getPlayerCount();
 
-    m_game.setPlayerNb(0);
     m_game.setPlayerNb(nbPlayer);
 
-    std::size_t nbLocalPlayer = 1;
+    std::uint32_t nbLocalPlayer = m_settings.getPlayerCount();
 
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
-	m_game[i].setCar(
-	    std::make_unique<EmptyCar>(m_game, Ogre::Vector3(0, 10, 100 * i),
-	                               Ogre::Quaternion::IDENTITY));
+	m_game[i].setCar(std::make_unique<EmptyCar>(
+	    m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
+	    Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)));
       }
-    if (m_players.size() < 2)
-      {
-	nope::log::Log(Debug) << "Creating HUD";
-	m_hud = std::make_unique<core::HUD>();
-      }
+
+    nope::log::Log(Debug) << "Creating HUD";
+    m_hud = std::make_unique<core::HUD>();
 
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
 	m_players.emplace_back(std::make_unique<LocalPlayer>(
 	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
-	    m_hud.get(), *this));
+	    i == 0 ? m_hud.get() : nullptr, *this, m_players, nbLocalPlayer));
+      }
+    for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
+      {
+	m_ia.emplace_back(
+	    std::make_unique<Ia>(m_game[i].car(), m_game.map().getNodes()));
       }
     updateViewPort();
 
@@ -79,6 +82,12 @@ namespace game
     nope::log::Log(Debug) << "Game context disabled";
     m_players.clear();
     m_input->setPhysicWorld(nullptr);
+    nope::log::Log(Debug) << "Disabling game.";
+    if (m_net.isConnected())
+      {
+	nope::log::Log(Debug) << "Game is connected to Game Server.";
+	m_net.disconnect();
+      }
   }
 
   core::GameState ContextGame::update()
@@ -91,6 +100,14 @@ namespace game
 
   void ContextGame::display()
   {
+    for (std::uint8_t i = 0; i < m_players.size(); ++i)
+      {
+	m_players[i]->display();
+      }
+    for (std::unique_ptr<Ia> const &l_ia : m_ia)
+      {
+	l_ia->race();
+      }
   }
 
   bool ContextGame::keyPressed(OIS::KeyEvent const &ke)

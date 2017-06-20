@@ -26,12 +26,20 @@ HEADER=		exceptions_stdafx.hpp
 # Project's files
 
 SRC_FILES=	AException.cpp				\
+		MapError.cpp				\
 		IOError.cpp				\
+		GUIError.cpp				\
+		NetworkConnectionError.cpp		\
+		NetworkInvalidAddressError.cpp		\
+		NetworkInvalidMapError.cpp		\
+		NetworkInvalidPacketError.cpp		\
+		NetworkReadPacketError.cpp		\
+		NetworkWritePacketError.cpp		\
 		SockError.cpp 				\
 		PyInitializationError.cpp 		\
 		PyFunctionArgError.cpp			\
 		PyFunctionReturnError.cpp		\
-		PyFunctionInitializationError.cpp	\
+		PyFunctionInitializationError.cpp
 
 SRC=		$(addprefix $(SRC_DIR), $(SRC_FILES))
 

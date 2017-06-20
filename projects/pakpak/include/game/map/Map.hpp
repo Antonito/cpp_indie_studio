@@ -1,5 +1,5 @@
-#ifndef MAP_HPP_
-#define MAP_HPP_
+#ifndef INDIE_MAP_HPP_
+#define INDIE_MAP_HPP_
 
 #include <string>
 #include <OGRE/OgreEntity.h>
@@ -10,12 +10,14 @@
 
 namespace game
 {
+  class GameData;
+
   class Map
   {
   public:
     Map() = delete;
-    Map(game::GameData &gamedata);
-    Map(game::GameData &gamedata, std::string const &filename);
+    Map(GameData &);
+    Map(GameData &, std::string const &filename);
     Map(Map const &) = delete;
     Map(Map &&) = delete;
     ~Map();
@@ -23,9 +25,10 @@ namespace game
     Map &operator=(Map const &) = delete;
     Map &operator=(Map &&) = delete;
 
-    void                           loadFromFile(std::string filename);
-    void                           unload();
-    OgreBulletDynamics::RigidBody *rigidBody();
+    void loadFromFile(std::string filename);
+    void                              unload();
+    std::vector<Ogre::Vector3> const &getNodes() const;
+    OgreBulletDynamics::RigidBody *   rigidBody();
 
 #if defined(INDIE_MAP_EDITOR)
     void save() const;
@@ -36,6 +39,7 @@ namespace game
 #endif // !INDIE_MAP_EDITOR
 
     std::vector<std::int32_t> getPlayerOrder();
+    std::int32_t              getNbCheckPoint() const;
 
   private:
     struct MapData
@@ -110,7 +114,6 @@ namespace game
     Ogre::Entity *                 m_mapbox;
     Ogre::SceneNode *              m_node;
     OgreBulletDynamics::RigidBody *m_body;
-
 #if defined(INDIE_MAP_EDITOR)
     std::string m_filename;
     std::size_t m_selectedPoint;
@@ -121,4 +124,4 @@ namespace game
   };
 }
 
-#endif // !MAP_HPP_
+#endif // !INDIE_MAP_HPP_

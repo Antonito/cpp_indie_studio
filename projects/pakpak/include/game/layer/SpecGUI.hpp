@@ -9,7 +9,8 @@ namespace game
   {
   public:
     SpecGUI() = delete;
-    SpecGUI(GameData &data, ILayerStack &layer, core::HUD *hud);
+    SpecGUI(GameData &data, ILayerStack &layer, core::HUD *hud,
+            std::vector<std::unique_ptr<LocalPlayer>> &players);
     SpecGUI(SpecGUI const &) = delete;
     SpecGUI(SpecGUI &&) = delete;
     virtual ~SpecGUI();
