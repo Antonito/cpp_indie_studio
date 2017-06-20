@@ -2,6 +2,7 @@
 // Created by brout_m on 09/06/17.
 //
 
+#include <game/menu/MenuOptions.hpp>
 #include "pakpak_stdafx.hpp"
 
 namespace core
