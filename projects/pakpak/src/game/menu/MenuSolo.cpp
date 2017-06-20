@@ -41,9 +41,9 @@ namespace core
 	throw GUIError("Missing asset left_button");
       }
     if (!m_gui.getRoot()->getChild("map_holder"))
-    {
-      throw GUIError("Missing asset map_holder");
-    }
+      {
+	throw GUIError("Missing asset map_holder");
+      }
     m_gui.getRoot()
         ->getChild("back_button")
         ->subscribeEvent(
@@ -196,17 +196,15 @@ namespace core
     return true;
   }
 
-  static std::vector<std::string> gl_map = {
-      "pakpak_map/one",
-      "pakpak_map/two",
-      "pakpak_map/three",
-      "pakpak_map/four"
-  };
+  static std::vector<std::string> gl_map = {"pakpak_map/one", "pakpak_map/two",
+                                            "pakpak_map/three",
+                                            "pakpak_map/four"};
 
   bool MenuSolo::onLeftClick(CEGUI::EventArgs const &)
   {
     soundClick();
-    m_curMap = m_curMap - 1 < 0 ? gl_map.size() - 1 : m_curMap - 1;
+    m_curMap = m_curMap - 1 < 0 ? static_cast<std::int32_t>(gl_map.size()) - 1
+                                : m_curMap - 1;
     m_gui.getRoot()
         ->getChild("map_holder")
         ->setProperty("Image", gl_map[m_curMap]);
@@ -216,7 +214,9 @@ namespace core
   bool MenuSolo::onRightClick(CEGUI::EventArgs const &)
   {
     soundClick();
-    m_curMap = m_curMap + 1 == gl_map.size() ? 0 : m_curMap + 1;
+    m_curMap = m_curMap + 1 == static_cast<std::int32_t>(gl_map.size())
+                   ? 0
+                   : m_curMap + 1;
     m_gui.getRoot()
         ->getChild("map_holder")
         ->setProperty("Image", gl_map[m_curMap]);
