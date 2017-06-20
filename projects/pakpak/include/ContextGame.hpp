@@ -10,13 +10,16 @@
 #else
 #include <OIS/OISMouse.h>
 #include <OIS/OISKeyboard.h>
+#include <game/Timer.hpp>
+
 #endif
 
 #include "HUD.hpp"
-#include "Ia.hpp"
+#include "Ai.hpp"
 #include "AContext.hpp"
 #include "LocalPlayer.hpp"
 #include "EmptyCar.hpp"
+#include "Timer.hpp"
 
 // Disable clang warning for templated class padding
 #if defined(__clang__)
@@ -32,7 +35,8 @@ namespace game
   {
   public:
     ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
-                core::SettingsPlayer &, core::NetworkManager &);
+                core::SettingsPlayer &, core::NetworkManager &,
+                core::SoundManager &);
     virtual ~ContextGame();
     ContextGame &operator=(ContextGame const &) = delete;
     ContextGame &operator=(ContextGame &&) = delete;
@@ -53,12 +57,16 @@ namespace game
   private:
     GameData                                  m_game;
     std::vector<std::unique_ptr<LocalPlayer>> m_players;
-    std::vector<std::unique_ptr<Ia>>          m_ia;
+    std::vector<std::unique_ptr<Ai>>          m_ia;
     core::SettingsPlayer &                    m_settings;
     bool                                      m_quit;
     std::unique_ptr<core::HUD>                m_hud;
     core::NetworkManager &                    m_net;
-    std::vector<GameClientToGSPacketUDP>      m_networkPacket;
+
+    std::vector<GameClientToGSPacketUDP> m_networkPacket;
+    core::SoundManager &                 m_sound;
+    game::Timer                          m_timer;
+    bool                                 m_gameStart;
 
     void setUDPPacket(GameClientToGSPacketUDP &packet, LocalPlayer &player);
     void setUDPPacketDirection(GameClientToGSPacketUDP &,
@@ -66,7 +74,8 @@ namespace game
     void setUDPPatcketPosition(GameClientToGSPacketUDP &,
                                Ogre::Vector3 const &);
     void setPlayersFromUDPPackets();
-    void setDirectionFromUDP(game::EmptyCar &, GameClientToGSPacketUDP const &);
+    void setDirectionFromUDP(game::EmptyCar &,
+                             GameClientToGSPacketUDP const &);
     void setPositionFromUDP(game::EmptyCar &, GameClientToGSPacketUDP const &);
   };
 }

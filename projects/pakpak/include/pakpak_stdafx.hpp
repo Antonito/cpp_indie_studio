@@ -98,7 +98,7 @@
 #include "LocalPlayer.hpp"
 #include "PlayerData.hpp"
 #include "Timer.hpp"
-#include "Ia.hpp"
+#include "Ai.hpp"
 
 // Game.Car
 #include "ACar.hpp"
@@ -120,6 +120,8 @@
 // Game.Map
 #include "Map.hpp"
 #include "PathPoint.hpp"
+//#include "tinyxml.h"
+#include "CheckPoint.hpp"
 
 //
 // Logger

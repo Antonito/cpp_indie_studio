@@ -55,7 +55,8 @@ namespace core
       {
 	throw GUIError("Missing asset windowed_button");
       }
-    if (!(m_graphicButtons[1] = m_gui.getRoot()->getChild("fullscreen_button")))
+    if (!(m_graphicButtons[1] =
+              m_gui.getRoot()->getChild("fullscreen_button")))
       {
 	throw GUIError("Missing asset fullscreen_button");
       }
@@ -225,6 +226,7 @@ namespace core
   bool MenuOptions::onBackClick(CEGUI::EventArgs const &)
   {
     soundClick();
+    m_sound.playSound(core::ESound::BACK_RACE_SOUND);
     m_menuManager.popLayer();
     m_menuManager.begin();
     return false;

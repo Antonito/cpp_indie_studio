@@ -7,7 +7,7 @@ namespace core
   class FastList
   {
   public:
-    FastList() : m_data
+    FastList() : m_data()
     {
     }
 
@@ -66,12 +66,12 @@ namespace core
 
     void push_front(T const &e)
     {
-      m_data.insert(begin(m_data), e);
+      m_data.insert(m_data.begin(), e);
     }
 
     void push_front(T &&e)
     {
-      m_data.insert(begin(m_data), std::move(e));
+      m_data.insert(m_data.begin(), std::move(e));
     }
 
     T &front()
@@ -106,7 +106,7 @@ namespace core
 
     void pop_front()
     {
-      m_data.erase(begin(m_data));
+      m_data.erase(m_data.begin());
     }
 
     void pop_back()
@@ -116,18 +116,19 @@ namespace core
 
     void erase(std::size_t n)
     {
-      m_data.erase(begin(m_data) + n);
+      m_data.erase(m_data.begin() + n);
     }
 
     void erase(std::size_t n, std::size_t m)
     {
-      m_data.erase(begin(m_data) + n, begin(m_data) + m);
+      m_data.erase(m_data.begin() + n, m_data.begin() + m);
     }
 
-    using iterator = std::vector<T>::iterator;
-    using const_iterator = std::vector<T>::const_iterator;
-    using reverse_iterator = std::vector<T>::reverse_iterator;
-    using const_reverse_iterator = std::vector<T>::const_reverse_iterator;
+    using iterator = typename std::vector<T>::iterator;
+    using const_iterator = typename std::vector<T>::const_iterator;
+    using reverse_iterator = typename std::vector<T>::reverse_iterator;
+    using const_reverse_iterator =
+        typename std::vector<T>::const_reverse_iterator;
 
     iterator begin()
     {

@@ -5,7 +5,7 @@ MK_COMMON_DIR=	./../../mk/
 # Definitions for Makefile
 NAME=		$(ROOT_DIR)/pakpak
 
-LOCAL_COMP_FLAGS=   -DINDIE_MAP_EDITOR
+LOCAL_COMP_FLAGS=   -D INDIE_MAP_EDITOR_
 
 LOCAL_LINK_FLAGS= 	-l OIS -l OgreMain -l boost_system 	\
 			-L $(ROOT_DIR)/build/ -l indie_logger 	\
@@ -89,9 +89,9 @@ SRC_FILES=		main.cpp			\
 
 GAME_FILES=		GameData.cpp		\
 			LocalPlayer.cpp			\
-			Ia.cpp                  \
 		    Timer.cpp               \
-			PlayerData.cpp
+			PlayerData.cpp          \
+			Ai.cpp
 
 GAME_LAYER_FILES=	ALayer.cpp			\
 			Chat.cpp			\
@@ -110,7 +110,8 @@ GAME_CAR_FILES=		ACar.cpp			\
 			EmptyCar.cpp
 
 GAME_MAP_FILES=		Map.cpp				\
-			PathPoint.cpp
+			PathPoint.cpp			\
+			CheckPoint.cpp
 
 GAME_TOOLS_FILES=	Tools.cpp
 

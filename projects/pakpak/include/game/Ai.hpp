@@ -11,21 +11,23 @@ namespace game
 {
     class ACar;
 
-    class Ia
+    class Ai
     {
     public:
-        explicit Ia(ACar &, std::vector<Ogre::Vector3> const&);
+        explicit Ai(ACar &, std::vector<Ogre::Vector3> const&);
 
-        Ia(Ia const &) = delete;
+        Ai(Ai const &) = delete;
 
-        Ia(Ia &&) = delete;
+        Ai(Ai &&) = delete;
 
-        Ia &operator=(Ia &) = delete;
+        Ai &operator=(Ai &) = delete;
 
 
-        virtual ~Ia();
+        virtual ~Ai();
 
         void race();
+
+        game::ACar  &car();
 
         void distNode();
 

@@ -15,11 +15,11 @@ namespace game
         m_debugDrawer(nullptr),
 #endif
         m_bodies(), m_shapes(),
-        m_map(*this, "./deps/indie_resource/maps/test/map.dat"), m_startTime()
+        m_map(*this, "./deps/indie_resource/maps/test/map.dat"), m_startTime(),
+        m_laps(1)
   {
     // todo: move in Map
     m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-
 #ifdef DEBUG
     m_debugDrawer = std::make_unique<OgreBulletCollisions::DebugDrawer>();
     m_debugDrawer->setDrawWireframe(true);
@@ -68,6 +68,17 @@ namespace game
     for (PlayerData &p : m_players)
       {
 	p.car().update(1 / 60.0);
+	std::int32_t checkpt = p.getCheckPoint() + 1;
+
+	if (!p.getFinished() && m_map.getNbCheckPoint() != 0 &&
+	    (checkpt / m_map.getNbCheckPoint()) >= m_laps)
+	  p.setFinished(true);
+      }
+    std::vector<int32_t> ranking = m_map.getPlayerOrder();
+    for (std::size_t i = 0; i < ranking.size(); ++i)
+      {
+	if (ranking[i] < static_cast<std::int32_t>(m_players.size()))
+	  m_players[static_cast<std::size_t>(ranking[i])].setRank(i);
       }
   }
 
@@ -124,5 +135,15 @@ namespace game
   Map const &GameData::map() const
   {
     return (m_map);
+  }
+
+  std::int32_t GameData::getLaps() const
+  {
+    return (m_laps);
+  }
+
+  void GameData::setLaps(std::int32_t laps)
+  {
+    m_laps = laps;
   }
 }

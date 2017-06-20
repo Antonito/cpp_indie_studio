@@ -22,6 +22,8 @@ namespace menu
                           << "***********************\n";
     m_sound.playSound(core::ESound::THEME_SONG);
     m_sound.loopSound(core::ESound::THEME_SONG);
+    m_sound.setVolumeSource(core::ESound::THEME_SONG,
+                            0.25f * m_sound.getVolume());
     m_input->setMouseEventCallback(this);
     m_input->setKeyboardEventCallback(this);
 
