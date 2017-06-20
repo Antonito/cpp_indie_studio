@@ -70,7 +70,8 @@ namespace game
 	p.car().update(1 / 60.0);
 	std::int32_t checkpt = p.getCheckPoint() + 1;
 
-	if (!p.getFinished() && (checkpt / m_map.getNbCheckPoint()) >= m_laps)
+	if (!p.getFinished() && m_map.getNbCheckPoint() != 0 &&
+	    (checkpt / m_map.getNbCheckPoint()) >= m_laps)
 	  p.setFinished(true);
       }
     std::vector<int32_t> ranking = m_map.getPlayerOrder();
