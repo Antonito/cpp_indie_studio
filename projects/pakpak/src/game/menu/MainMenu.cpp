@@ -178,6 +178,7 @@ namespace core
   bool MainMenu::onOptionClick(CEGUI::EventArgs const &)
   {
     soundClick();
+    m_sound.playSound(core::ESound::SETTING_LAUNCH_SOUND);
     m_menuManager.push(MenuState::Option);
     m_menuManager.begin();
     return true;
@@ -186,6 +187,7 @@ namespace core
   bool MainMenu::onExitClick(CEGUI::EventArgs const &)
   {
     soundClick();
+    m_sound.playSound(core::ESound::SETTING_LAUNCH_SOUND);
     m_curState = GameState::Quit;
     return true;
   }
@@ -193,6 +195,7 @@ namespace core
   bool MainMenu::onSoloClick(CEGUI::EventArgs const &)
   {
     soundClick();
+    m_sound.playSound(core::ESound::SOLO_LAUNCH_SOUND);
     m_menuManager.push(MenuState::SoloPlayerGame);
     m_menuManager.begin();
     return true;
@@ -213,17 +216,20 @@ namespace core
 	       "Error cannot connect to the ConnectServerManager "
 	       "!==\n======================================================";
 	// TODO: Remplace by a Error popUp
+	m_sound.playSound(core::ESound::FALIED_CONNECTION_SOUND);
 	m_menuManager.popLayer();
 	m_menuManager.push(MenuState::PopError);
 	m_menuManager.begin();
 	return true;
       }
+    m_sound.playSound(core::ESound::SOLO_LAUNCH_SOUND);
     return true;
   }
 
   bool MainMenu::onScoreClick(CEGUI::EventArgs const &)
   {
     soundClick();
+    m_sound.playSound(core::ESound::SCORE_LAUNCH_SOUND);
     m_menuManager.push(MenuState::Score);
     m_menuManager.begin();
     return true;

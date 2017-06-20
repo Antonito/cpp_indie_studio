@@ -228,8 +228,8 @@ namespace game
     m_steeringIncrement = 1.0;
     m_steeringClamp = 0.1;
     m_steering = 0.0;
-    m_wheelRadius = 0.3 * size.y;
-    m_wheelWidth = 0.2 * size.x;
+    m_wheelRadius = 0.3 * static_cast<double>(size.y);
+    m_wheelWidth = 0.2 * static_cast<double>(size.x);
     m_wheelFriction = 12.0;        // BT_LARGE_FLOAT;
     m_suspensionStiffness = 10.0;  // 20.f;
     m_suspensionDamping = 4.0;     // 2.3f;

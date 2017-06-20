@@ -199,7 +199,8 @@ namespace game
     for (std::int32_t i = 1; i < static_cast<std::int32_t>(m_points.size());
          ++i)
       {
-	m_checkpoints.emplace_back(m_points[i], m_points[i - 1]);
+	m_checkpoints.emplace_back(m_points[static_cast<std::size_t>(i)],
+	                           m_points[static_cast<std::size_t>(i - 1)]);
       }
 
 #if defined(INDIE_MAP_EDITOR)
@@ -222,7 +223,9 @@ namespace game
 	    m_gamedata.sceneMgr()->getRootSceneNode()->createChildSceneNode(
 	        ss.str(), pt);
 	node->attachObject(ent);
-	node->setScale(0.01, 0.01, 0.01);
+	node->setScale(static_cast<Ogre::Real>(0.01),
+	               static_cast<Ogre::Real>(0.01),
+	               static_cast<Ogre::Real>(0.01));
 	++id;
       }
 #endif // !DEBUG
@@ -311,12 +314,14 @@ namespace game
 
 	chkpt %= static_cast<std::int32_t>(m_checkpoints.size());
 
-	if (m_checkpoints[chkpt].hasPassed(m_gamedata[i].car().position()))
+	if (m_checkpoints[static_cast<std::size_t>(chkpt)].hasPassed(
+	        m_gamedata[i].car().position()))
 	  {
 	    nope::log::Log(Debug) << "Checkpoint done!";
 
 	    m_gamedata[i].nextCheckPoint();
-	    m_checkpoints[chkpt].addCheck(static_cast<std::int32_t>(i));
+	    m_checkpoints[static_cast<std::size_t>(chkpt)].addCheck(
+	        static_cast<std::int32_t>(i));
 	  }
       }
 

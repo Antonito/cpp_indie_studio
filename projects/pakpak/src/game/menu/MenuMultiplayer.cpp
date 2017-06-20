@@ -197,6 +197,7 @@ namespace core
   bool MenuMultiplayer::onBackClick(CEGUI::EventArgs const &)
   {
     soundClick();
+    m_sound.playSound(core::ESound::BACK_RACE_SOUND);
     exit();
     m_menuManager.popLayer();
     m_menuManager.begin();
@@ -220,11 +221,13 @@ namespace core
 	    << "\n======================================================\n=="
 	       "Error cannot connect to the ConnectServerManager "
 	       "!==\n======================================================";
+        m_sound.playSound(core::ESound::FALIED_CONNECTION_SOUND);
 	m_menuManager.push(MenuState::PopError);
 	m_menuManager.begin();
 	return true;
       }
     nope::log::Log(Debug) << "CONNECT TO GAME_SERVER CLEAN";
+    m_sound.playSound(core::ESound::GO_RACE_SOUND);
     m_curState = GameState::InGame;
     m_gui.hideCursor();
     return true;

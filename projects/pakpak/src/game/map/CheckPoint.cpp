@@ -56,7 +56,7 @@ namespace game
   {
     Ogre::Vector3 diff = (pos - m_point).normalisedCopy();
 
-    return (m_normale.dotProduct(diff) > 0.0);
+    return (m_normale.dotProduct(diff) > 0.0f);
   }
 
   std::chrono::time_point<std::chrono::high_resolution_clock>

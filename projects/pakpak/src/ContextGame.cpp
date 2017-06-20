@@ -4,9 +4,11 @@ namespace game
 {
   ContextGame::ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
                            core::SettingsPlayer &settings,
-                           core::NetworkManager &net)
+                           core::NetworkManager &net,
+                           core::SoundManager &  sound)
       : core::AContext(win, input), m_game(), m_players(), m_ia(),
-        m_settings(settings), m_quit(false), m_hud(nullptr), m_net(net)
+        m_settings(settings), m_quit(false), m_hud(nullptr), m_net(net),
+        m_sound(sound), m_timer(850), m_gameStart(false)
   {
   }
 
@@ -29,6 +31,7 @@ namespace game
 
     std::uint32_t nbLocalPlayer = m_settings.getPlayerCount();
 
+    m_timer.start();
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
 	m_game[i].setCar(std::make_unique<EmptyCar>(
@@ -43,13 +46,22 @@ namespace game
       {
 	m_players.emplace_back(std::make_unique<LocalPlayer>(
 	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
-	    i == 0 ? m_hud.get() : nullptr, *this, m_players, nbLocalPlayer));
+	    i == 0 ? m_hud.get() : nullptr, *this, m_players, nbLocalPlayer,
+	    m_sound));
       }
-    for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
+    /*for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
       {
 	m_ia.emplace_back(
-	    std::make_unique<Ia>(m_game[i].car(), m_game.map().getNodes()));
-      }
+	    std::make_unique<Ai>(m_game[i].car(), m_game.map().getNodes()));
+      }*/
+    m_sound.playSound(core::ESound::GAME_SONG);
+    m_sound.loopSound(core::ESound::GAME_SONG);
+    m_sound.playSound(core::ESound::IDLE_KART_SOUND);
+    m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
+    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND,
+                            2.0f * m_sound.getVolume());
+    m_sound.setVolumeSource(core::ESound::GAME_SONG,
+                            0.2f * m_sound.getVolume());
     updateViewPort();
 
     m_input->setPhysicWorld(m_game.physicWorld());
@@ -81,6 +93,9 @@ namespace game
   {
     nope::log::Log(Debug) << "Game context disabled";
     m_players.clear();
+    m_gameStart = false;
+    m_sound.stopSound(core::ESound::GAME_SONG);
+    m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
     m_input->setPhysicWorld(nullptr);
     nope::log::Log(Debug) << "Disabling game.";
     if (m_net.isConnected())
@@ -100,13 +115,21 @@ namespace game
 
   void ContextGame::display()
   {
+    if (m_timer.reached() && !m_gameStart)
+      {
+	m_sound.playSound(core::ESound::START_SONG);
+	m_sound.setVolumeSource(core::ESound::START_SONG,
+	                        0.4f * m_sound.getVolume());
+	m_gameStart = true;
+      }
+
     for (std::uint8_t i = 0; i < m_players.size(); ++i)
       {
 	m_players[i]->display();
       }
-    for (std::unique_ptr<Ia> const &l_ia : m_ia)
+    for (std::unique_ptr<Ai> const &l_ia : m_ia)
       {
-	l_ia->race();
+          l_ia->race();
       }
   }
 

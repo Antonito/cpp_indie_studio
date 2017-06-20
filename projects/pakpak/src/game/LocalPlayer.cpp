@@ -6,11 +6,11 @@ namespace game
                            int order, core::SettingsPlayer &settings,
                            core::HUD *hud, game::ContextGame &contextGame,
                            std::vector<std::unique_ptr<LocalPlayer>> &players,
-                           std::uint8_t nbplayers)
+                           std::uint8_t nbplayers, core::SoundManager &sound)
       : m_data(p), m_cameraMode(CameraMode::Top), m_layers(),
         m_currentLayers(), m_cam(nullptr), m_viewport(nullptr), m_rounds(),
         m_settings(settings), m_actions(), m_win(win), m_order(order),
-        m_hud(hud), m_contextGame(contextGame)
+        m_hud(hud), m_contextGame(contextGame), m_sound(sound)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
         std::make_unique<Loading>(g, *this, hud, players);
@@ -70,7 +70,7 @@ namespace game
         m_viewport(that.m_viewport), m_rounds(that.m_rounds),
         m_settings(that.m_settings), m_actions(that.m_actions),
         m_win(that.m_win), m_order(that.m_order), m_hud(that.m_hud),
-        m_contextGame(that.m_contextGame)
+        m_contextGame(that.m_contextGame), m_sound(that.m_sound)
   {
     that.m_cam = nullptr;
     that.m_viewport = nullptr;
@@ -236,11 +236,24 @@ namespace game
 
   void LocalPlayer::speedUp()
   {
+    nope::log::Log(Debug) << "ACC mode !!";
+    m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
+    m_sound.playSound(core::ESound::ACC_KART_SOUND);
+    m_sound.loopSound(core::ESound::ACC_KART_SOUND);
+    m_sound.setVolumeSource(core::ESound::ACC_KART_SOUND, 0.45f * m_sound.getVolume());
+
     m_data->car().move(-1);
   }
 
   void LocalPlayer::slowDown()
   {
+    m_sound.stopSound(core::ESound::ACC_KART_SOUND);
+    if (m_data->car().speed() >= 5.0)
+    {
+        m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
+        m_sound.playSound(core::ESound::SLOW_KART_SOUND);
+        m_sound.setVolumeSource(core::ESound::SLOW_KART_SOUND, 0.45f * m_sound.getVolume());
+    }
     m_data->car().move(1);
   }
 
@@ -295,11 +308,29 @@ namespace game
 
   void LocalPlayer::speedUpReleased()
   {
+    nope::log::Log(Debug) << "Idle mode !!";
+    double        rawSpeed = m_data->car().speed();
+    std::uint32_t speed = static_cast<std::uint32_t>(
+              (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
+
+    m_sound.stopSound(core::ESound::ACC_KART_SOUND);
+    if (speed > 30)
+    {
+        nope::log::Log(Debug) << "SLow mode !!";
+        m_sound.playSound(core::ESound::SLOW_KART_SOUND);
+        m_sound.setVolumeSource(core::ESound::SLOW_KART_SOUND, 0.45f * m_sound.getVolume());
+    }
+    m_sound.playSound(core::ESound::IDLE_KART_SOUND);
+    m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
+    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND, 2.0f * m_sound.getVolume());
     m_data->car().move(0);
   }
 
   void LocalPlayer::slowDownReleased()
   {
+    m_sound.playSound(core::ESound::IDLE_KART_SOUND);
+    m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
+    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND, 2.0f * m_sound.getVolume());
     m_data->car().move(0);
   }
 

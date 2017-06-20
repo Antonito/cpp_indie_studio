@@ -89,9 +89,9 @@ SRC_FILES=		main.cpp			\
 
 GAME_FILES=		GameData.cpp		\
 			LocalPlayer.cpp			\
-			Ia.cpp                  \
 		    Timer.cpp               \
-			PlayerData.cpp
+			PlayerData.cpp          \
+			Ai.cpp
 
 GAME_LAYER_FILES=	ALayer.cpp			\
 			Chat.cpp			\

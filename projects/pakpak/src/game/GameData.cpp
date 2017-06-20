@@ -77,7 +77,7 @@ namespace game
     for (std::size_t i = 0; i < ranking.size(); ++i)
       {
 	if (ranking[i] < static_cast<std::int32_t>(m_players.size()))
-	  m_players[ranking[i]].setRank(i);
+	  m_players[static_cast<std::size_t>(ranking[i])].setRank(i);
       }
   }
 

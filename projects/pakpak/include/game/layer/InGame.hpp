@@ -306,24 +306,19 @@ namespace game
 	    {
 	      std::uint32_t position = static_cast<std::uint32_t>(
 	          m_players[playerIndex]->getRank());
-	      //       nope::log::Log(Debug) << " SetPosition = RANK :" <<
-	      //       position
-	      //                             << " PLAYER :" << playerIndex;
 
-	      if (position <= 9 && m_positionPrefix)
+	      if (position <= 9)
 		m_positionPrefix[playerIndex]->setProperty(
 		    image, gl_speedAssets[position]);
 	      if (position <= 3)
 		{
-		  if (m_positionSuffix)
-		    m_positionSuffix[playerIndex]->setProperty(
-		        image, gl_positionAssets[position]);
+		  m_positionSuffix[playerIndex]->setProperty(
+		      image, gl_positionAssets[position]);
 		}
 	      else
 		{
-		  if (m_positionSuffix)
-		    m_positionSuffix[playerIndex]->setProperty(
-		        image, gl_positionAssets[game::POSITIONS::TH]);
+		  m_positionSuffix[playerIndex]->setProperty(
+		      image, gl_positionAssets[game::POSITIONS::TH]);
 		}
 	    }
 	}

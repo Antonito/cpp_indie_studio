@@ -8,7 +8,7 @@ namespace core
 {
   SoundManager::SoundManager()
       : m_device(nullptr), m_context(nullptr), m_buffer(), m_source(),
-        m_state(AL_INITIAL), m_volume(1.0f)
+        m_state(AL_INITIAL), m_volume(0.5f)
   {
     nope::log::Log(Debug) << "**Initialization SoundManager**";
   }
@@ -46,8 +46,7 @@ namespace core
     // Open audio file with libsndfile
     SF_INFO FileInfos;
 
-
-      std::memset(&FileInfos, 0, sizeof(FileInfos));
+    std::memset(&FileInfos, 0, sizeof(FileInfos));
     nope::log::Log(Debug) << "Prepare open file sound";
     SNDFILE *File = sf_open(Filename.c_str(), SFM_READ, &FileInfos);
     if (!File)
@@ -235,7 +234,14 @@ namespace core
     m_volume = volume;
     for (std::vector<ALuint>::iterator it = m_source.begin();
          it != m_source.end(); ++it)
-      alSourcef(*it, AL_GAIN, volume);
+    {
+        alSourcef(*it, AL_GAIN, volume);
+    }
+  }
+
+  void SoundManager::setVolumeSource(std::size_t const idx, float volume)
+  {
+      alSourcef(m_source[idx], AL_GAIN, volume);
   }
 
   // Set the orientation of the sound to a specific direction
@@ -275,5 +281,18 @@ namespace core
     loadSound("deps/indie_resource/songs/splash.wav");
     loadSound("deps/indie_resource/songs/GUI/pass.wav");
     loadSound("deps/indie_resource/songs/GUI/click.wav");
+    loadSound("deps/indie_resource/songs/game.wav");
+    loadSound("deps/indie_resource/songs/Karts/kart_idle.wav");
+    loadSound("deps/indie_resource/songs/Karts/kart_speedUp.wav");
+    loadSound("deps/indie_resource/songs/Karts/kart_horn.wav");
+    loadSound("deps/indie_resource/songs/Karts/kart_dash.wav");
+    loadSound("deps/indie_resource/songs/start.wav");
+    loadSound("deps/indie_resource/songs/Karts/kart_speedDown.wav");
+    loadSound("deps/indie_resource/songs/solo.wav");
+    loadSound("deps/indie_resource/songs/score.wav");
+    loadSound("deps/indie_resource/songs/failed.wav");
+    loadSound("deps/indie_resource/songs/setting.wav");
+    loadSound("deps/indie_resource/songs/go.wav");
+    loadSound("deps/indie_resource/songs/back.wav");
   }
 }
