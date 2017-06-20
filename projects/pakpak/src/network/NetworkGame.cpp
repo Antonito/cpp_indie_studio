@@ -91,10 +91,7 @@ namespace core
 	    FD_ZERO(&writefds);
 
 	    FD_SET(sock, &readfds);
-	    if (!m_gamePckIn.empty())
-	      {
-		FD_SET(sock, &writefds);
-	      }
+	    FD_SET(sock, &writefds);
 
 	    ret = select(sock + 1, &readfds, &writefds, nullptr, &tv);
 	  }
