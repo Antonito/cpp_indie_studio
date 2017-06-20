@@ -50,7 +50,8 @@ network::IClient::ClientAction UDPClient::write(IPacket const &pck)
                   reinterpret_cast<sockaddr_t const *>(&m_addr),
                   sizeof(m_addr)) == false)
     {
-      nope::log::Log(Debug) << "Failed to write data [UDPClient]";
+      nope::log::Log(Debug)
+          << "Failed to write data " << std::strerror(errno) << "[UDPClient]";
       ret = network::IClient::ClientAction::FAILURE;
     }
   return (ret);

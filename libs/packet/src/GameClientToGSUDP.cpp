@@ -1,4 +1,3 @@
-#include <OGRE/OgreQuaternion.h>
 #include "packet_stdafx.hpp"
 
 GameClientToGSPacketUDP::GameClientToGSPacketUDP() : pck()
@@ -21,6 +20,20 @@ GameClientToGSPacketUDPRaw::GameClientToGSPacketUDPRaw(
     : pos(other.pos), dir(other.dir), speed(other.speed), id(other.id),
       playerCount(other.playerCount)
 {
+}
+
+GameClientToGSPacketUDPRaw &GameClientToGSPacketUDPRaw::
+    operator=(GameClientToGSPacketUDPRaw const &other)
+{
+  if (this != &other)
+    {
+      pos = other.pos;
+      dir = other.dir;
+      speed = other.speed;
+      id = other.id;
+      playerCount = other.playerCount;
+    }
+  return (*this);
 }
 
 std::unique_ptr<std::uint8_t[]>
@@ -106,4 +119,9 @@ void GameClientToGSPacketUDP::setPosition(std::vector<float> const &vec)
   pck.pos[0] = static_cast<std::uint32_t>(vec[0] * 1000.0f);
   pck.pos[1] = static_cast<std::uint32_t>(vec[1] * 1000.0f);
   pck.pos[2] = static_cast<std::uint32_t>(vec[2] * 1000.0f);
+}
+
+void GameClientToGSPacketUDP::reinit()
+{
+  pck = GameClientToGSPacketUDPRaw();
 }

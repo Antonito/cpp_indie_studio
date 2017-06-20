@@ -24,6 +24,8 @@ struct GameClientToGSPacketUDPRaw
   GameClientToGSPacketUDPRaw();
   GameClientToGSPacketUDPRaw(GameClientToGSPacketUDPRaw const &);
 
+  GameClientToGSPacketUDPRaw &operator=(GameClientToGSPacketUDPRaw const &);
+
   std::array<std::uint32_t, 3> pos;
   std::array<std::uint32_t, 4> dir;
   std::uint32_t speed;
@@ -45,6 +47,7 @@ struct GameClientToGSPacketUDP : public ISerializable
   std::vector<float> getPosition() const;
   void setDirection(std::vector<float> const &quat);
   void setPosition(std::vector<float> const &vec);
+  void reinit();
 };
 
 namespace packetSize

@@ -55,7 +55,7 @@ std::int32_t GameServer::gameServerUDPIO(std::int32_t const sock,
       if (m_gameSockUDP.rec(buff.get(), pckSize,
                             reinterpret_cast<sockaddr_t *>(&addr), &len))
 	{
-#if 0
+#if 1
 	  nope::log::Log(Debug) << "{GameServerUDP} Received packet ["
 	                        << inet_ntoa(addr.sin_addr) << ":"
 	                        << ntohs(addr.sin_port) << "]";
