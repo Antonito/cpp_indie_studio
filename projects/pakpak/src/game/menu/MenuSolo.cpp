@@ -134,19 +134,15 @@ namespace core
                          static_cast<float>(arg.state.Y.rel));
   }
 
-  bool MenuSolo::mousePressed(const OIS::MouseEvent &arg,
-                              OIS::MouseButtonID     id)
+  bool MenuSolo::mousePressed(const OIS::MouseEvent &, OIS::MouseButtonID id)
   {
-    (void)arg;
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
         .injectMouseButtonDown(convertButton(id));
   }
 
-  bool MenuSolo::mouseReleased(const OIS::MouseEvent &arg,
-                               OIS::MouseButtonID     id)
+  bool MenuSolo::mouseReleased(const OIS::MouseEvent &, OIS::MouseButtonID id)
   {
-    (void)arg;
     return CEGUI::System::getSingleton()
         .getDefaultGUIContext()
         .injectMouseButtonUp(convertButton(id));
