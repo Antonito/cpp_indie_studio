@@ -347,10 +347,7 @@ namespace game
     btVector3        v(p.x, p.y, p.z);
     Ogre::Quaternion q(_dir[3], _dir[0], _dir[1], _dir[2]);
 
-    if (rollbackOnly == false || (p - this->position()).length() > 10.0f ||
-        ((q * Ogre::Vector3::UNIT_Y) -
-         (this->direction() * Ogre::Vector3::UNIT_Y))
-                .length() > 10.0f)
+    if (rollbackOnly == false)
       {
 	tr.setIdentity();
 	btQuaternion quat;

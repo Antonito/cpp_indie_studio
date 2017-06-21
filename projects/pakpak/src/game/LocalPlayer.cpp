@@ -391,9 +391,9 @@ namespace game
 
   void LocalPlayer::display()
   {
-    for (std::uint32_t i = 0; i < m_layers.size(); ++i)
+    for (std::uint32_t i = 0; i < m_currentLayers.size(); ++i)
       {
-	m_layers[i]->display();
+	m_currentLayers[i]->display();
       }
   }
 

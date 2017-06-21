@@ -26,6 +26,12 @@ namespace game
     m_input->setKeyboardEventCallback(this);
     m_quit = false;
 
+    nope::log::Log(Debug) << "Creating HUD";
+    m_hud = std::make_unique<core::HUD>();
+
+    m_game.resetPhysicWorld();
+    m_game.setMap("test");
+
     std::size_t nbPlayer = m_settings.getPlayerCount();
 
     m_game.setPlayerNb(nbPlayer);
@@ -41,9 +47,6 @@ namespace game
       }
     m_game[0].setId((m_net.isConnected()) ? m_net.getId() : 0);
 
-    nope::log::Log(Debug) << "Creating HUD";
-    m_hud = std::make_unique<core::HUD>();
-
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
 	m_players.emplace_back(std::make_unique<LocalPlayer>(
@@ -52,24 +55,22 @@ namespace game
 	    nbLocalPlayer, (i == 0) ? m_net.getId() : i, m_sound,
 	    m_net.isConnected()));
 
-	/*for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
-	  {
-	    m_ia.emplace_back(
-	        std::make_unique<Ai>(m_game[i].car(),
-	  m_game.map().getNodes()));
-	  }*/
-	m_sound.playSound(core::ESound::GAME_SONG);
-	m_sound.loopSound(core::ESound::GAME_SONG);
-	m_sound.playSound(core::ESound::IDLE_KART_SOUND);
-	m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
-	m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND,
-	                        2.0f * m_sound.getVolume());
-	m_sound.setVolumeSource(core::ESound::GAME_SONG,
-	                        0.2f * m_sound.getVolume());
-	updateViewPort();
-
-	m_input->setPhysicWorld(m_game.physicWorld());
+	/*m_ia.emplace_back(
+	std::make_unique<Ai>(m_game[i].car(),
+	m_game.map().getNodes()));*/
       }
+    updateViewPort();
+
+    m_input->setPhysicWorld(m_game.physicWorld());
+
+    m_sound.playSound(core::ESound::GAME_SONG);
+    m_sound.loopSound(core::ESound::GAME_SONG);
+    m_sound.playSound(core::ESound::IDLE_KART_SOUND);
+    m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
+    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND,
+                            2.0f * m_sound.getVolume());
+    m_sound.setVolumeSource(core::ESound::GAME_SONG,
+                            0.2f * m_sound.getVolume());
   }
 
   void ContextGame::updateViewPort()
@@ -97,10 +98,12 @@ namespace game
   void ContextGame::disable()
   {
     nope::log::Log(Debug) << "Game context disabled";
+    m_game.setPlayerNb(0);
     m_players.clear();
     m_gameStart = false;
     m_sound.stopSound(core::ESound::GAME_SONG);
     m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
+    m_game.clearPhysicWorld();
     m_input->setPhysicWorld(nullptr);
     nope::log::Log(Debug) << "Disabling game.";
     if (m_net.isConnected())
@@ -151,11 +154,14 @@ namespace game
 	  {
 	    bool deleted = false;
 
-	    if (it->hasTimedOut())
+	    if (it->hasTimedOut() || false)
 	      {
+		bool last = (it == gameData.end() - 1);
+
 		nope::log::Log(Debug) << "Client time'd out, removing it";
 		gameData.erase(it);
 		deleted = true;
+		it = gameData.end();
 	      }
 	    if (!deleted)
 	      {
@@ -314,8 +320,8 @@ namespace game
 	    // Add new player
 	    std::size_t const i = gameData.size();
 
-	    nope::log::Log(Debug) << "Adding player [" << i
-	                          << "] - Id: " << packet.pck.id;
+	    nope::log::Log(Debug)
+	        << "Adding player [" << i << "] - Id: " << packet.pck.id;
 	    gameData.push_back(PlayerData());
 	    gameData.back().setCar(std::make_unique<EmptyCar>(
 	        m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
