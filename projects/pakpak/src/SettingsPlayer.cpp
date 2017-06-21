@@ -438,12 +438,14 @@ namespace core
     m_playerCount = playerCount;
   }
 
-  void SettingsPlayer::setSelectedMap(std::uint32_t selectedMap) {
-
+  void SettingsPlayer::setSelectedMap(std::uint32_t selectedMap)
+  {
+    m_selectedMap = selectedMap;
   }
 
-  std::uint32_t SettingsPlayer::getSelectedMap() const {
-    return 0;
+  std::uint32_t SettingsPlayer::getSelectedMap() const
+  {
+    return m_selectedMap;
   }
 
   SettingsPlayer::GameSettings::GameSettings() : key(), graphic()
