@@ -35,6 +35,7 @@ enum class GameClientToGSLobbyType : std::uint16_t
 struct GameClientToGSPAcketLobbyType
 {
   std::uint16_t type;
+  std::uint16_t id;
 };
 
 struct GameClientToGSPacketUDPRequ

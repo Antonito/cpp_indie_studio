@@ -30,6 +30,8 @@ namespace core
 
     bool isConnected() const;
 
+    std::uint16_t getId() const;
+
   private:
     std::string const &           m_ip;
     std::uint16_t const           m_port;
@@ -38,6 +40,7 @@ namespace core
     std::string const &           m_token;
     std::unique_ptr<NetworkGame> &m_game;
     std::thread                   m_udp;
+    std::uint16_t                 m_id;
 
     // Token exchange
     void authenticate();

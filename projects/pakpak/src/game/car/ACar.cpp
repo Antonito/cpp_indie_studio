@@ -331,4 +331,20 @@ namespace game
 
     ++id;
   }
+
+  void ACar::setDirection(Ogre::Quaternion &)
+  {
+    // TODO ludo implement
+  }
+
+  void ACar::setSpeed(double)
+  {
+    // TODO ludo implement
+  }
+
+  void ACar::setPosition(Ogre::Vector3 &p)
+  {
+    // TODO ludo implement
+    m_carNode->setPosition(p);
+  }
 }

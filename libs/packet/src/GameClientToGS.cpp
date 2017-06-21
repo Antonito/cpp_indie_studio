@@ -40,6 +40,7 @@ std::unique_ptr<std::uint8_t[]>
   else if (pck.eventType == GameClientToGSEvent::LOBBY_TYPE)
     {
       data->eventData.lobbyType.type = htons(pck.eventData.lobbyType.type);
+      data->eventData.lobbyType.id = htons(pck.eventData.lobbyType.id);
     }
 
   return (serial);
@@ -74,6 +75,7 @@ void GameClientToGSPacket::deserialize(std::size_t, std::uint8_t *data)
   else if (pck.eventType == GameClientToGSEvent::LOBBY_TYPE)
     {
       pck.eventData.lobbyType.type = ntohs(pck.eventData.lobbyType.type);
+      pck.eventData.lobbyType.id = ntohs(pck.eventData.lobbyType.id);
     }
   else
     {
