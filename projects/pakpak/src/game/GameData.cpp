@@ -146,4 +146,9 @@ namespace game
   {
     m_laps = laps;
   }
+
+  std::vector<PlayerData> &GameData::getPlayers()
+  {
+    return (m_players);
+  }
 }

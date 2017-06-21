@@ -37,6 +37,7 @@ struct GameClientToGSPacketUDP : public ISerializable
 {
   GameClientToGSPacketUDP();
   GameClientToGSPacketUDP(GameClientToGSPacketUDP const &);
+  GameClientToGSPacketUDP &  operator=(GameClientToGSPacketUDP const &);
   GameClientToGSPacketUDPRaw pck;
 
   virtual std::unique_ptr<std::uint8_t[]>

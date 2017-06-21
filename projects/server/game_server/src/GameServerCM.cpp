@@ -303,8 +303,7 @@ void GameServer::connectManagerCom()
 	{
 	  Packet<GameServerToCMPacket>   packet;
 	  GameServerToCMPacket           rep;
-	  network::IClient::ClientAction ret =
-	      network::IClient::ClientAction::FAILURE;
+	  network::IClient::ClientAction ret;
 
 	  // Update client list if timeout
 	  nope::log::Log(Debug) << "Time'd out !";
