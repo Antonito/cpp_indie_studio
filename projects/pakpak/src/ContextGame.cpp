@@ -48,7 +48,7 @@ namespace game
 	m_players.emplace_back(std::make_unique<LocalPlayer>(
 	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
 	    ((i == 0) ? m_hud.get() : nullptr), *this, m_players,
-	    nbLocalPlayer, i, m_sound));
+	    nbLocalPlayer, (i == 0) ? m_net.getId() : i, m_sound));
 	/*for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
 	  {
 	    m_ia.emplace_back(
@@ -276,7 +276,8 @@ namespace game
 
   void ContextGame::setPlayersFromUDPPackets()
   {
-    nope::log::Log(Debug) << "Processing server UDP packets";
+    nope::log::Log(Debug)
+        << "=========WRITTING======\nProcessing server UDP packets";
     for (GameClientToGSPacketUDP &packet : m_networkPacket)
       {
 	std::vector<std::unique_ptr<LocalPlayer>>::iterator player =
@@ -289,6 +290,7 @@ namespace game
 	  {
 	    game::EmptyCar &car =
 	        static_cast<game::EmptyCar &>((*player)->car());
+	    nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
 
 	    setDirectionFromUDP(car, packet);
 	    setPositionFromUDP(car, packet);
@@ -296,6 +298,7 @@ namespace game
 	    nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
 	  }
       }
+    nope::log::Log(Debug) << "*****************************";
   }
 
   void ContextGame::setDirectionFromUDP(game::EmptyCar &               car,
