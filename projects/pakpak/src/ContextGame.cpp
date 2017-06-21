@@ -308,10 +308,7 @@ namespace game
 	game::EmptyCar &car = static_cast<game::EmptyCar &>(player->car());
 	nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
 
-	if (player != gameData.begin())
-	  {
-	    car.setPacketData(packet);
-	  }
+	car.setPacketData(packet, player == gameData.begin());
 	nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
       }
     nope::log::Log(Debug) << "*****************************";
