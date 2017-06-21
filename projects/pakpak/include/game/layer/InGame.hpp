@@ -328,16 +328,24 @@ namespace game
     {
       if (m_gui)
 	{
+          std::uint16_t count = 0;
+
 	  for (std::uint8_t playerIndex = 0;
 	       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
 	    {
 	      if (m_players[playerIndex]->getFinished())
 		{
+                  ++count;
 		  m_gui->getRoot()
 		      ->getChild(screens[playerIndex] + "game")
 		      ->setVisible(true);
 		}
 	    }
+          if (count == m_players.size() && !game::Pauser::isPaused())
+          {
+            game::Pauser::pause();
+            m_layerStack.push(GameLayer::PostGame);
+          }
 	}
     }
 

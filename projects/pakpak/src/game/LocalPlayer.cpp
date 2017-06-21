@@ -172,6 +172,7 @@ namespace game
   void LocalPlayer::push(GameLayer layer)
   {
     m_currentLayers.push(m_layers[static_cast<std::size_t>(layer)].get());
+    m_currentLayers.top()->enable();
   }
 
   void LocalPlayer::popLayer()
@@ -240,7 +241,8 @@ namespace game
     m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
     m_sound.playSound(core::ESound::ACC_KART_SOUND);
     m_sound.loopSound(core::ESound::ACC_KART_SOUND);
-    m_sound.setVolumeSource(core::ESound::ACC_KART_SOUND, 0.45f * m_sound.getVolume());
+    m_sound.setVolumeSource(core::ESound::ACC_KART_SOUND,
+                            0.45f * m_sound.getVolume());
 
     m_data->car().move(-1);
   }
@@ -249,11 +251,12 @@ namespace game
   {
     m_sound.stopSound(core::ESound::ACC_KART_SOUND);
     if (m_data->car().speed() >= 5.0)
-    {
-        m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
-        m_sound.playSound(core::ESound::SLOW_KART_SOUND);
-        m_sound.setVolumeSource(core::ESound::SLOW_KART_SOUND, 0.45f * m_sound.getVolume());
-    }
+      {
+	m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
+	m_sound.playSound(core::ESound::SLOW_KART_SOUND);
+	m_sound.setVolumeSource(core::ESound::SLOW_KART_SOUND,
+	                        0.45f * m_sound.getVolume());
+      }
     m_data->car().move(1);
   }
 
@@ -310,19 +313,21 @@ namespace game
   {
     nope::log::Log(Debug) << "Idle mode !!";
     double        rawSpeed = m_data->car().speed();
-    std::uint32_t speed = static_cast<std::uint32_t>(
-              (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
+    std::uint32_t speed =
+        static_cast<std::uint32_t>((rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
 
     m_sound.stopSound(core::ESound::ACC_KART_SOUND);
     if (speed > 30)
-    {
-        nope::log::Log(Debug) << "SLow mode !!";
-        m_sound.playSound(core::ESound::SLOW_KART_SOUND);
-        m_sound.setVolumeSource(core::ESound::SLOW_KART_SOUND, 0.45f * m_sound.getVolume());
-    }
+      {
+	nope::log::Log(Debug) << "SLow mode !!";
+	m_sound.playSound(core::ESound::SLOW_KART_SOUND);
+	m_sound.setVolumeSource(core::ESound::SLOW_KART_SOUND,
+	                        0.45f * m_sound.getVolume());
+      }
     m_sound.playSound(core::ESound::IDLE_KART_SOUND);
     m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
-    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND, 2.0f * m_sound.getVolume());
+    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND,
+                            2.0f * m_sound.getVolume());
     m_data->car().move(0);
   }
 
@@ -330,7 +335,8 @@ namespace game
   {
     m_sound.playSound(core::ESound::IDLE_KART_SOUND);
     m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
-    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND, 2.0f * m_sound.getVolume());
+    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND,
+                            2.0f * m_sound.getVolume());
     m_data->car().move(0);
   }
 
