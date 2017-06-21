@@ -332,19 +332,26 @@ namespace game
     ++id;
   }
 
-  void ACar::setDirection(Ogre::Quaternion &)
+  void ACar::setPacketData(GameClientToGSPacketUDP const &pck)
   {
-    // TODO ludo implement
-  }
+    btTransform tr;
 
-  void ACar::setSpeed(double)
-  {
-    // TODO ludo implement
-  }
+    std::vector<float> _dir = pck.getDirection();
+    std::vector<float> _pos = pck.getPosition();
+    float              speed = pck.pck.speed / 1000.0f;
 
-  void ACar::setPosition(Ogre::Vector3 &p)
-  {
-    // TODO ludo implement
-    m_carNode->setPosition(p);
+    Ogre::Vector3    p(_pos[0], _pos[1], _pos[2]);
+    btVector3        v(p.x, p.y, p.z);
+    Ogre::Quaternion q(_dir[3], _dir[0], _dir[1], _dir[2]);
+
+    tr.setIdentity();
+    btQuaternion quat;
+    quat.setX(q.x);
+    quat.setY(q.y);
+    quat.setZ(q.z);
+    quat.setW(q.w);
+    tr.setRotation(quat);
+    tr.setOrigin(v);
+    m_body->getBulletRigidBody()->setCenterOfMassTransform(tr);
   }
 }

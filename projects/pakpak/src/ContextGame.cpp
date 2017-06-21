@@ -308,9 +308,7 @@ namespace game
 	game::EmptyCar &car = static_cast<game::EmptyCar &>(player->car());
 	nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
 
-	setDirectionFromUDP(car, packet);
-	setPositionFromUDP(car, packet);
-	car.setSpeed(packet.pck.speed / 1000.0);
+	car.setPacketData(packet);
 	nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
       }
     nope::log::Log(Debug) << "*****************************";
@@ -328,7 +326,8 @@ namespace game
                           << "\n\t\t\t w : " << dir[3];
 
     Ogre::Quaternion quat(dir[3], dir[0], dir[1], dir[2]);
-    car.setDirection(quat);
+    // car.setDirection(quat);
+    // TODO: remove this function?
   }
 
   void ContextGame::setPositionFromUDP(game::EmptyCar &               car,
@@ -341,6 +340,8 @@ namespace game
                           << "\n\t\t\t y : " << pos[1]
                           << "\n\t\t\t z : " << pos[2];
     Ogre::Vector3 vec(pos[0], pos[1], pos[2]);
-    car.setPosition(vec);
+    // car.setPosition(vec);
+
+    // TODO: remove this function?
   }
 }
