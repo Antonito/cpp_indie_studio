@@ -116,7 +116,10 @@ namespace game
 
     virtual void display()
     {
-      setStart();
+      if (!m_player.isConnected())
+	{
+	  setStart();
+	}
       setSpeed();
       setPosition();
       setFinish();
@@ -182,48 +185,41 @@ namespace game
 
     void setStart()
     {
-      if (!m_player.isConnected())
+      if (m_gui)
 	{
-	  if (m_gui)
+	  if (m_time.reached())
 	    {
-	      if (m_time.reached())
+	      m_startIdx++;
+	      if (m_startIdx <= 4)
 		{
-		  m_startIdx++;
-		  if (m_startIdx <= 4)
+		  for (std::uint8_t playerIndex = 0;
+		       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
 		    {
-		      for (std::uint8_t playerIndex = 0;
-		           playerIndex < PCOUNT && playerIndex < 4;
-		           ++playerIndex)
-			{
-			  nope::log::Log(Debug)
-			      << "Player index : "
-			      << static_cast<int>(playerIndex)
-			      << " StartIdx : " << m_startIdx - 1;
-			  m_start[playerIndex][m_startIdx - 1]->setVisible(
-			      true);
-			}
-		      nope::log::Log(Debug) << "Reset Time!";
-		      m_time.reset();
+		      nope::log::Log(Debug)
+		          << "Player index : " << static_cast<int>(playerIndex)
+		          << " StartIdx : " << m_startIdx - 1;
+		      m_start[playerIndex][m_startIdx - 1]->setVisible(true);
 		    }
-		  else if (m_startIdx == 5)
+		  nope::log::Log(Debug) << "Reset Time!";
+		  m_time.reset();
+		}
+	      else if (m_startIdx == 5)
+		{
+		  for (std::uint8_t playerIndex = 0;
+		       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
 		    {
-		      for (std::uint8_t playerIndex = 0;
-		           playerIndex < PCOUNT && playerIndex < 4;
-		           ++playerIndex)
-			{
-			  m_start[playerIndex][0]->setVisible(false);
-			  m_start[playerIndex][1]->setVisible(false);
-			  m_start[playerIndex][2]->setVisible(false);
-			  m_start[playerIndex][3]->setVisible(false);
-			}
+		      m_start[playerIndex][0]->setVisible(false);
+		      m_start[playerIndex][1]->setVisible(false);
+		      m_start[playerIndex][2]->setVisible(false);
+		      m_start[playerIndex][3]->setVisible(false);
 		    }
 		}
 	    }
-	  else if (m_time.reached() && m_startIdx < 5)
-	    {
-	      ++m_startIdx;
-	      m_time.reset();
-	    }
+	}
+      else if (m_time.reached() && m_startIdx < 5)
+	{
+	  ++m_startIdx;
+	  m_time.reset();
 	}
     }
 
