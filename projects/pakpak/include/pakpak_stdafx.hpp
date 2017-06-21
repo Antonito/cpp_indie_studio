@@ -120,6 +120,8 @@
 // Game.Map
 #include "Map.hpp"
 #include "PathPoint.hpp"
+//#include "tinyxml.h"
+#include "CheckPoint.hpp"
 
 //
 // Logger

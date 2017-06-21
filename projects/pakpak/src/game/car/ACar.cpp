@@ -34,10 +34,12 @@ namespace game
 
   void ACar::resetOrientation()
   {
-    Ogre::Vector3    p = m_carNode->getPosition() + Ogre::Vector3(0, 50, 0);
-    Ogre::Quaternion q(Ogre::Degree(0), Ogre::Vector3::UNIT_Y);
-    btTransform      tr;
-    btVector3        v(p.x, p.y, p.z);
+    Ogre::Vector3 p = m_carNode->getPosition() + Ogre::Vector3(0, 10, 0);
+    btTransform   tr;
+    btVector3     v(p.x, p.y, p.z);
+
+    Ogre::Quaternion q(m_carNode->getOrientation().getYaw(),
+                       Ogre::Vector3::UNIT_Y);
 
     tr.setIdentity();
     btQuaternion quat;
@@ -57,10 +59,31 @@ namespace game
     m_vehicle->debugDraw(m_gamedata.debugDrawer());
 #endif // !DEBUG
 
+    Ogre::Vector3 orient = this->direction() * Ogre::Vector3::UNIT_Y;
+
+    double maxOrient =
+        (Ogre::Quaternion(Ogre::Degree(45), Ogre::Vector3::UNIT_X) *
+         Ogre::Vector3::UNIT_Y)
+            .dotProduct(Ogre::Vector3::UNIT_Y);
+
+    if (orient.dotProduct(Ogre::Vector3::UNIT_Y) < maxOrient)
+      {
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(
+	        clock_t::now() - m_timeLastGoodOrientation)
+	        .count() > 2000)
+	  {
+	    this->resetOrientation();
+	  }
+      }
+    else
+      {
+	m_timeLastGoodOrientation = clock_t::now();
+      }
+
     // Get the car position
     Ogre::Vector3 p = m_carNode->getPosition();
 
-    double newSteering = m_tryTurning * 0.5;
+    double newSteering = m_tryTurning / 2;
     double accelerator = m_tryMoving * -5.0;
 
     // When steering, wake up the wheel rigidbodies so that their orientation
@@ -91,6 +114,11 @@ namespace game
     m_breakingForce = 0.0;
 
     // 2x wheel drive
+    for (int i = 0; i < 2; ++i)
+      {
+	m_vehicle->applyEngineForce(btScalar(m_engineForce / 5.0), i);
+	// m_vehicle->setBrake(m_breakingForce, i);
+      }
     for (int i = 2; i < 4; ++i)
       {
 	m_vehicle->applyEngineForce(btScalar(m_engineForce), i);
@@ -128,7 +156,8 @@ namespace game
         m_steeringIncrement(0.0), m_steeringClamp(0.0), m_wheelRadius(0.0),
         m_wheelWidth(0.0), m_wheelFriction(0.0), m_suspensionStiffness(0.0),
         m_suspensionDamping(0.0), m_suspensionCompression(0.0),
-        m_rollInfluence(0.0), m_suspensionRestLength(0.0)
+        m_rollInfluence(0.0), m_suspensionRestLength(0.0),
+        m_timeLastGoodOrientation()
   {
     static std::int32_t id = 0;
 
@@ -199,11 +228,11 @@ namespace game
     m_steeringIncrement = 1.0;
     m_steeringClamp = 0.1;
     m_steering = 0.0;
-    m_wheelRadius = 5.0;
-    m_wheelWidth = 10.0;
-    m_wheelFriction = 10.0;        // BT_LARGE_FLOAT;
+    m_wheelRadius = 0.3 * static_cast<double>(size.y);
+    m_wheelWidth = 0.2 * static_cast<double>(size.x);
+    m_wheelFriction = 12.0;        // BT_LARGE_FLOAT;
     m_suspensionStiffness = 10.0;  // 20.f;
-    m_suspensionDamping = 1.0;     // 2.3f;
+    m_suspensionDamping = 4.0;     // 2.3f;
     m_suspensionCompression = 3.0; // 4.4f;
     m_rollInfluence = 0.05;        // 1.0f;
     m_suspensionRestLength = 3.0;  // 0.6
@@ -224,7 +253,7 @@ namespace game
 
     m_hullbody->setDamping(0.2f, 0.5f);
 
-    double connectionHeight = -7;
+    double connectionHeight = -m_wheelRadius * 2;
 
     bool isFrontWheel = true;
 
@@ -234,13 +263,11 @@ namespace game
 
     Ogre::Vector3 v = size;
 
-    connectionHeight -= 7;
-
     // Add wheel 1
     connectionPoint =
         btVector3(btScalar(static_cast<double>(v.x) - (0.3 * m_wheelWidth)),
                   btScalar(connectionHeight),
-                  btScalar(static_cast<double>(2 * v.z) - m_wheelRadius));
+                  btScalar(static_cast<double>(v.z) - m_wheelRadius));
     m_vehicle->addWheel(connectionPoint, wheelDirection, wheelAxis,
                         btScalar(m_suspensionRestLength),
                         btScalar(m_wheelRadius), m_tuning, isFrontWheel);
@@ -249,7 +276,7 @@ namespace game
     connectionPoint =
         btVector3(btScalar(static_cast<double>(-v.x) + (0.3 * m_wheelWidth)),
                   btScalar(connectionHeight),
-                  btScalar(static_cast<double>(2 * v.z) - m_wheelRadius));
+                  btScalar(static_cast<double>(v.z) - m_wheelRadius));
     m_vehicle->addWheel(connectionPoint, wheelDirection, wheelAxis,
                         btScalar(m_suspensionRestLength),
                         btScalar(m_wheelRadius), m_tuning, isFrontWheel);
@@ -260,7 +287,7 @@ namespace game
     connectionPoint =
         btVector3(btScalar(static_cast<double>(-v.x) + (0.3 * m_wheelWidth)),
                   btScalar(connectionHeight),
-                  btScalar(static_cast<double>(-2 * v.z) + m_wheelRadius));
+                  btScalar(static_cast<double>(-v.z) + m_wheelRadius));
     m_vehicle->addWheel(connectionPoint, wheelDirection, wheelAxis,
                         btScalar(m_suspensionRestLength),
                         btScalar(m_wheelRadius), m_tuning, isFrontWheel);
@@ -269,7 +296,7 @@ namespace game
     connectionPoint =
         btVector3(btScalar(static_cast<double>(v.x) - (0.3 * m_wheelWidth)),
                   btScalar(connectionHeight),
-                  btScalar(static_cast<double>(-2 * v.z) + m_wheelRadius));
+                  btScalar(static_cast<double>(-v.z) + m_wheelRadius));
     m_vehicle->addWheel(connectionPoint, wheelDirection, wheelAxis,
                         btScalar(m_suspensionRestLength),
                         btScalar(m_wheelRadius), m_tuning, isFrontWheel);
@@ -296,6 +323,11 @@ namespace game
 
     nope::log::Log(Debug)
         << "Vehicle completed !\n=============================\n";
+
+#ifdef DEBUG
+    // Draw the vehicle
+    m_vehicle->debugDraw(m_gamedata.debugDrawer());
+#endif // !DEBUG
 
     ++id;
   }

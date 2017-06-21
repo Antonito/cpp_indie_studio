@@ -259,12 +259,12 @@ namespace game
 
   void LocalPlayer::turnLeft()
   {
-    m_data->car().turn(2);
+    m_data->car().turn(1);
   }
 
   void LocalPlayer::turnRight()
   {
-    m_data->car().turn(-2);
+    m_data->car().turn(-1);
   }
 
   void LocalPlayer::useObject()
@@ -392,5 +392,15 @@ namespace game
       {
 	m_layers[i]->display();
       }
+  }
+
+  std::size_t LocalPlayer::getRank() const
+  {
+    return (m_data->getRank());
+  }
+
+  bool LocalPlayer::getFinished() const
+  {
+    return (m_data->getFinished());
   }
 }

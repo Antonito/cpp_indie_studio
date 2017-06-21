@@ -27,6 +27,9 @@ namespace game
     TH
   };
 
+  static const std::vector<std::string> screens = {"player1/", "player2/",
+                                                   "player3/", "player4/"};
+
   template <std::uint8_t PCOUNT>
   class InGame           final : public ALayer
   {
@@ -67,9 +70,6 @@ namespace game
 	    default:
 	      m_gui->loadLayout("gui_ingame.layout");
 	    }
-
-	  static const std::vector<std::string> screens = {
-	      "player1/", "player2/", "player3/", "player4/"};
 
 	  for (std::uint8_t playerIndex = 0;
 	       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
@@ -113,12 +113,28 @@ namespace game
     {
       setStart();
       setSpeed();
+      setPosition();
+      setFinish();
     }
 
     virtual bool keyPressed(OIS::KeyEvent const &ke)
     {
       std::string action = m_player.settings().actionForKey(
           static_cast<std::size_t>(m_player.order()), ke.key);
+
+#if defined(INDIE_MAP_EDITOR)
+      switch (ke.key)
+	{
+	case OIS::KC_SPACE:
+	  m_gameData.map().addPoint(m_player.car().position());
+	  return true;
+	case OIS::KC_RETURN:
+	  m_gameData.map().save();
+	  return true;
+	default:
+	  break;
+	}
+#endif // !INDIE_MAP_EDITOR
 
       if (action == "NO_ACTION" || m_startIdx <= 3)
 	{
@@ -228,8 +244,8 @@ namespace game
 		  if (thousand)
 		    {
 		      m_speed[playerIndex][2]->setVisible(true);
-		      m_speed[playerIndex][2]->setProperty(
-		          image, gl_speedAssets[thousand]);
+		      m_speed[playerIndex]
+		             [2]->setProperty(image, gl_speedAssets[thousand]);
 		    }
 		  else
 		    {
@@ -239,8 +255,8 @@ namespace game
 		  if (decade)
 		    {
 		      m_speed[playerIndex][1]->setVisible(true);
-		      m_speed[playerIndex][1]->setProperty(
-		          image, gl_speedAssets[decade]);
+		      m_speed[playerIndex]
+		             [1]->setProperty(image, gl_speedAssets[decade]);
 		    }
 		  else if (thousand)
 		    {
@@ -280,31 +296,46 @@ namespace game
 	      "pakpak_pack/TH"};
 
 	  static std::vector<std::string> gl_speedAssets = {
-	      "pakpak_pack/0", "pakpak_pack/1", "pakpak_pack/2",
-	      "pakpak_pack/3", "pakpak_pack/4", "pakpak_pack/5",
-	      "pakpak_pack/6", "pakpak_pack/7", "pakpak_pack/8",
-	      "pakpak_pack/9"};
+	      "pakpak_pack/1", "pakpak_pack/2", "pakpak_pack/3",
+	      "pakpak_pack/4", "pakpak_pack/5", "pakpak_pack/6",
+	      "pakpak_pack/7", "pakpak_pack/8", "pakpak_pack/9",
+	      "pakpak_pack/0"};
 
 	  for (std::uint8_t playerIndex = 0;
 	       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
 	    {
-	      std::uint32_t position = playerIndex + 1;
-	      // TODO m_players[playerIndex]->getPosition();
+	      std::uint32_t position = static_cast<std::uint32_t>(
+	          m_players[playerIndex]->getRank());
 
-	      if (position <= 9 && m_positionPrefix)
+	      if (position <= 9)
 		m_positionPrefix[playerIndex]->setProperty(
 		    image, gl_speedAssets[position]);
 	      if (position <= 3)
 		{
-		  if (m_positionSuffix)
-		    m_positionSuffix[playerIndex]->setProperty(
-		        image, gl_positionAssets[position - 1]);
+		  m_positionSuffix[playerIndex]->setProperty(
+		      image, gl_positionAssets[position]);
 		}
 	      else
 		{
-		  if (m_positionSuffix)
-		    m_positionSuffix[playerIndex]->setProperty(
-		        image, gl_positionAssets[game::POSITIONS::TH]);
+		  m_positionSuffix[playerIndex]->setProperty(
+		      image, gl_positionAssets[game::POSITIONS::TH]);
+		}
+	    }
+	}
+    }
+
+    void setFinish()
+    {
+      if (m_gui)
+	{
+	  for (std::uint8_t playerIndex = 0;
+	       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
+	    {
+	      if (m_players[playerIndex]->getFinished())
+		{
+		  m_gui->getRoot()
+		      ->getChild(screens[playerIndex] + "game")
+		      ->setVisible(true);
 		}
 	    }
 	}

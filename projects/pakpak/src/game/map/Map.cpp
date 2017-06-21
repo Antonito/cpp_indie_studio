@@ -3,19 +3,21 @@
 namespace game
 {
   Map::Map(game::GameData &gamedata)
-      : m_gamedata(gamedata), m_points(), m_map(nullptr), m_mapbox(nullptr),
-        m_node(nullptr), m_body(nullptr)
+      : m_gamedata(gamedata), m_points(), m_checkpoints(), m_map(nullptr),
+        m_mapbox(nullptr), m_node(nullptr), m_body(nullptr)
 #if defined(INDIE_MAP_EDITOR)
-    , m_filename(""), m_selectedPoint(0)
+        ,
+        m_filename(""), m_selectedPoint(0)
 #endif // !INDIE_MAP_EDITOR
   {
   }
 
   Map::Map(game::GameData &gamedata, std::string const &filename)
-      : m_gamedata(gamedata), m_points(), m_map(nullptr), m_mapbox(nullptr),
-        m_node(nullptr), m_body(nullptr)
+      : m_gamedata(gamedata), m_points(), m_checkpoints(), m_map(nullptr),
+        m_mapbox(nullptr), m_node(nullptr), m_body(nullptr)
 #if defined(INDIE_MAP_EDITOR)
-    , m_filename(""), m_selectedPoint(0)
+        ,
+        m_filename(""), m_selectedPoint(0)
 #endif // !INDIE_MAP_EDITOR
   {
     this->loadFromFile(filename);
@@ -56,7 +58,6 @@ namespace game
     std::vector<MapData::Point> const &p = data.points;
 
     m_points.clear();
-    m_points.reserve(p.size());
     for (std::size_t i = 0; i < p.size(); ++i)
       {
 	m_points.emplace_back(p[i].x, p[i].y, p[i].z);
@@ -190,6 +191,45 @@ namespace game
 
     l2->setCastShadows(false);
 
+    if (m_points.size() >= 2)
+      {
+	m_checkpoints.emplace_back(m_points.front(), m_points.back());
+      }
+
+    for (std::int32_t i = 1; i < static_cast<std::int32_t>(m_points.size());
+         ++i)
+      {
+	m_checkpoints.emplace_back(m_points[static_cast<std::size_t>(i)],
+	                           m_points[static_cast<std::size_t>(i - 1)]);
+      }
+
+#if defined(INDIE_MAP_EDITOR)
+    m_points.clear();
+    m_checkpoints.clear();
+#endif // !INDIE_MAP_EDITOR
+
+#if defined(DEBUG)
+    for (Ogre::Vector3 const &pt : m_points)
+      {
+	ss.str("");
+	ss << "Checkpoint" << id;
+	Ogre::Entity *ent = m_map->clone(ss.str());
+	// m_gamedata.sceneMgr()->createEntity(
+	// ss.str(), Ogre::SceneManager::PT_CUBE);
+
+	ss.str("");
+	ss << "CheckpointNode" << id;
+	Ogre::SceneNode *node =
+	    m_gamedata.sceneMgr()->getRootSceneNode()->createChildSceneNode(
+	        ss.str(), pt);
+	node->attachObject(ent);
+	node->setScale(static_cast<Ogre::Real>(0.01),
+	               static_cast<Ogre::Real>(0.01),
+	               static_cast<Ogre::Real>(0.01));
+	++id;
+      }
+#endif // !DEBUG
+
     ++id;
   }
 
@@ -216,7 +256,6 @@ namespace game
 	nope::log::Log(Debug)
 	    << '\t' << nope::serialization::to_json(data.points.back());
       }
-
     nope::log::Log(Debug) << "";
 
     std::ofstream file(filename.c_str());
@@ -230,6 +269,7 @@ namespace game
 
     nope::log::Log(Debug) << "Save file size: " << v.size();
 
+    // file << nope::serialization::to_json(data);
     file.write(reinterpret_cast<const char *>(v.data()), v.size());
   }
 #endif // !INDIE_MAP_EDITOR
@@ -249,7 +289,7 @@ namespace game
   {
     nope::log::Log(Debug) << "Added point: {" << pt.x << ", " << pt.y << ", "
                           << pt.z << '}';
-    m_points.emplace_back(pt);
+    m_points.push_back(pt);
   }
 
   void Map::removePoint(std::size_t index)
@@ -263,6 +303,51 @@ namespace game
   }
 #endif // !INDIE_MAP_EDITOR
 
+  std::vector<std::int32_t> Map::getPlayerOrder()
+  {
+    if (m_checkpoints.size() < 2)
+      return (std::vector<std::int32_t>());
+
+    for (std::size_t i = 0; i < m_gamedata.getPlayerNb(); ++i)
+      {
+	std::int32_t chkpt = m_gamedata[i].getCheckPoint() + 1;
+
+	chkpt %= static_cast<std::int32_t>(m_checkpoints.size());
+
+	if (m_checkpoints[static_cast<std::size_t>(chkpt)].hasPassed(
+	        m_gamedata[i].car().position()))
+	  {
+	    nope::log::Log(Debug) << "Checkpoint done!";
+
+	    m_gamedata[i].nextCheckPoint();
+	    m_checkpoints[static_cast<std::size_t>(chkpt)].addCheck(
+	        static_cast<std::int32_t>(i));
+	  }
+      }
+
+    using info_t = std::pair<std::int32_t, std::int32_t>;
+
+    std::vector<std::int32_t> res;
+    std::vector<info_t>       curPos;
+
+    for (std::size_t i = 0; i < m_gamedata.getPlayerNb(); ++i)
+      {
+	curPos.emplace_back(i, m_gamedata[i].getCheckPoint());
+      }
+
+    std::sort(curPos.begin(), curPos.end(),
+              [](info_t const &left, info_t const &right) {
+                return (left.second > right.second);
+              });
+
+    for (info_t const &info : curPos)
+      {
+	res.push_back(info.first);
+      }
+
+    return (res);
+  }
+
   Map::MapData::MapData() : points(), elements()
   {
   }
@@ -271,8 +356,27 @@ namespace game
   {
   }
 
-  Map::MapData::Point::Point(float _x, float _y, float _z)
+  Map::MapData::Point::Point(Point &&that) : x(that.x), y(that.y), z(that.z)
+  {
+  }
+
+  Map::MapData::Point::Point(std::int32_t _x, std::int32_t _y, std::int32_t _z)
       : x(_x), y(_y), z(_z)
+  {
+  }
+
+  Map::MapData::Point &Map::MapData::Point::operator=(Point &&that)
+  {
+    if (this == &that)
+      return (*this);
+    x = that.x;
+    y = that.y;
+    z = that.z;
+    return (*this);
+  }
+
+  Map::MapData::Quaternion::Quaternion(Map::MapData::Quaternion &&that)
+      : x(that.x), y(that.y), z(that.z), w(that.w)
   {
   }
 
@@ -280,12 +384,46 @@ namespace game
   {
   }
 
-  Map::MapData::Quaternion::Quaternion(float _x, float _y, float _z, float _w)
+  Map::MapData::Quaternion::Quaternion(std::int32_t _x, std::int32_t _y,
+                                       std::int32_t _z, std::int32_t _w)
       : x(_x), y(_y), z(_z), w(_w)
   {
   }
 
+  Map::MapData::Quaternion &Map::MapData::Quaternion::
+      operator=(Map::MapData::Quaternion &&that)
+  {
+    if (this == &that)
+      return (*this);
+    x = that.x;
+    y = that.y;
+    z = that.z;
+    w = that.w;
+    return (*this);
+  }
+
   Map::MapData::Element::Element() : pos(), rot(), type(0)
   {
+  }
+
+  Map::MapData::Element::Element(Element &&that)
+      : pos(std::move(that.pos)), rot(std::move(that.rot)), type(that.type)
+  {
+  }
+
+  Map::MapData::Element &Map::MapData::Element::
+      operator=(Map::MapData::Element &&that)
+  {
+    if (this == &that)
+      return (*this);
+    pos = std::move(that.pos);
+    rot = std::move(that.rot);
+    type = that.type;
+    return (*this);
+  }
+
+  std::int32_t Map::getNbCheckPoint() const
+  {
+    return (static_cast<int32_t>(m_checkpoints.size()));
   }
 }

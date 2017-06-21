@@ -44,6 +44,31 @@ namespace nope
 	}
       };
 
+      // Serialize fundamental type into binary (integer, floating point)
+      template <typename T>
+      struct to_binary_impl<T, true>
+      {
+	// Function itself
+	static void to_binary(buf_t &v, T i)
+	{
+	  // Get the value to send in big endian
+	  auto toSend = host_to_net<T>(i);
+
+	  using toSend_t = decltype(toSend);
+
+	  nope::log::Log(Debug)
+	      << "Serialize a " << typeid(T).name() << " (fundamental) ("
+	      << sizeof(toSend_t) << ')';
+	  // Buffer
+	  std::array<std::uint8_t, sizeof(toSend_t)> buf;
+
+	  // Copy the value into the buffer
+	  std::memcpy(buf.data(), &toSend, sizeof(toSend_t));
+	  // Insert it
+	  v.insert(v.end(), buf.begin(), buf.end());
+	}
+      };
+
       // Serialize string into binary
       template <>
       struct to_binary_impl<std::string, false>
@@ -78,15 +103,7 @@ namespace nope
 	      << "Serialize a " << typeid(std::vector<T>).name()
 	      << " (vector)";
 	  // Get the string size and convert to big endian
-	  std::uint32_t toSend =
-	      host_to_net(static_cast<std::uint32_t>(s.size()));
-	  // Buffer
-	  std::array<std::uint8_t, sizeof(std::uint32_t)> buf;
-
-	  // Copy the number into the buffer
-	  std::memcpy(buf.data(), &toSend, sizeof(std::uint32_t));
-	  // Insert the size buffer
-	  v.insert(v.end(), buf.begin(), buf.end());
+	  detail::to_binary_impl<std::uint32_t>::to_binary(v, s.size());
 
 	  for (T const &e : s)
 	    {
@@ -94,30 +111,6 @@ namespace nope
 	          << "Serialize a " << typeid(T).name() << " (vector elem)";
 	      detail::to_binary_impl<T>::to_binary(v, e);
 	    }
-	}
-      };
-
-      // Serialize fundamental type into binary (integer, floating point)
-      template <typename T>
-      struct to_binary_impl<T, true>
-      {
-	// Function itself
-	static void to_binary(buf_t &v, T i)
-	{
-	  nope::log::Log(Debug)
-	      << "Serialize a " << typeid(T).name() << " (fundamental)";
-	  // Get the value to send in big endian
-	  auto toSend = host_to_net<T>(i);
-
-	  using toSend_t = decltype(toSend);
-
-	  // Buffer
-	  std::array<std::uint8_t, sizeof(toSend_t)> buf;
-
-	  // Copy the value into the buffer
-	  std::memcpy(buf.data(), &toSend, sizeof(toSend_t));
-	  // Insert it
-	  v.insert(v.end(), buf.begin(), buf.end());
 	}
       };
     }
@@ -157,6 +150,9 @@ namespace nope
 	  // Type to read
 	  using toRead_t = decltype(host_to_net<T>(e));
 	  toRead_t t;
+
+	  nope::log::Log(Debug)
+	      << "Reading fundamental (" << sizeof(toRead_t) << ')';
 
 	  // Get it from the buffer
 	  std::memcpy(&t, &buf[cursor], sizeof(toRead_t));
@@ -217,6 +213,20 @@ namespace nope
 	}
       };
 
+      // Deserialize fundamental type (integer, floating point) from binary
+      template <typename T>
+      struct from_binary_impl<T, true>
+      {
+	// Function itself
+	static void from_binary(T &t, buf_t const &v, std::size_t &cursor)
+	{
+	  nope::log::Log(Debug)
+	      << "Deserialize a " << typeid(T).name() << " (fundamental)";
+	  // Read fundamental type from buffer
+	  detail::read_bytes_impl<T>::read_bytes(v.data(), t, cursor);
+	}
+      };
+
       // Deserialize string from binary
       template <>
       struct from_binary_impl<std::string, false>
@@ -245,12 +255,9 @@ namespace nope
 	      << "Deserialize a " << typeid(std::vector<T>).name()
 	      << " (vector)";
 
-	  uint32_t tmp;
 	  uint32_t len;
 
-	  std::memcpy(&tmp, &v[cursor], sizeof(tmp));
-	  len = net_to_host<std::uint32_t>(tmp);
-	  cursor += sizeof(tmp);
+	  detail::from_binary_impl<std::uint32_t>::from_binary(len, v, cursor);
 
 	  s.resize(len);
 	  for (T &t : s)
@@ -259,20 +266,6 @@ namespace nope
 	                            << " (vector element)";
 	      detail::from_binary_impl<T>::from_binary(t, v, cursor);
 	    }
-	}
-      };
-
-      // Deserialize fundamental type (integer, floating point) from binary
-      template <typename T>
-      struct from_binary_impl<T, true>
-      {
-	// Function itself
-	static void from_binary(T &t, buf_t const &v, std::size_t &cursor)
-	{
-	  nope::log::Log(Debug)
-	      << "Deserialize a " << typeid(T).name() << " (fundamental)";
-	  // Read fundamental type from buffer
-	  detail::read_bytes_impl<T>::read_bytes(v.data(), t, cursor);
 	}
       };
     }

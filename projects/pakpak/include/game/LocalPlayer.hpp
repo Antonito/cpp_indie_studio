@@ -34,7 +34,8 @@ namespace game
     LocalPlayer() = delete;
     LocalPlayer(Ogre::RenderWindow *, GameData &, PlayerData *, int,
                 core::SettingsPlayer &, core::HUD *, game::ContextGame &,
-                std::vector<std::unique_ptr<LocalPlayer>> &, std::uint8_t, core::SoundManager &);
+                std::vector<std::unique_ptr<LocalPlayer>> &, std::uint8_t,
+                core::SoundManager &);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&);
     virtual ~LocalPlayer();
@@ -73,6 +74,10 @@ namespace game
                           actions(std::string const &);
     core::SettingsPlayer &settings();
 
+    std::size_t getRank() const;
+
+    bool getFinished() const;
+
   private:
     void setActionMap();
 
@@ -109,12 +114,12 @@ namespace game
     core::SettingsPlayer &m_settings;
     std::map<std::string,
              std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()>>
-                                               m_actions;
-    Ogre::RenderWindow *                       m_win;
-    int                                        m_order;
-    core::HUD *                                m_hud;
-    game::ContextGame &                        m_contextGame;
-    core::SoundManager &                       m_sound;
+                        m_actions;
+    Ogre::RenderWindow *m_win;
+    int                 m_order;
+    core::HUD *         m_hud;
+    game::ContextGame & m_contextGame;
+    core::SoundManager &m_sound;
   };
 }
 

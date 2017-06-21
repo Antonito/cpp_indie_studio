@@ -72,6 +72,9 @@ namespace game
     Map &      map();
     Map const &map() const;
 
+    std::int32_t getLaps() const;
+    void         setLaps(std::int32_t);
+
   private:
     Ogre::SceneManager *                               m_sceneMgr;
     std::vector<PlayerData>                            m_players;
@@ -84,6 +87,7 @@ namespace game
                                                                 m_shapes;
     Map                                                         m_map;
     std::chrono::time_point<std::chrono::high_resolution_clock> m_startTime;
+    std::int32_t                                                m_laps;
   };
 }
 
