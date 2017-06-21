@@ -1,4 +1,3 @@
-#include <chrono>
 #include "pakpak_stdafx.hpp"
 
 namespace game
@@ -7,9 +6,10 @@ namespace game
                            core::SettingsPlayer &settings,
                            core::NetworkManager &net,
                            core::SoundManager &  sound)
-      : core::AContext(win, input), m_game(), m_players(),
+      : core::AContext(win, input), m_game(), m_players(), m_ia(),
         m_settings(settings), m_quit(false), m_hud(nullptr), m_net(net),
-        m_networkPacket(), m_sound(sound), m_timer(850), m_gameStart(false)
+        m_sound(sound), m_timer(850), m_iaTimer(4850), m_gameStart(false),
+        m_networkPacket()
   {
   }
 
@@ -42,6 +42,7 @@ namespace game
     std::uint32_t nbLocalPlayer = m_settings.getPlayerCount();
 
     m_timer.start();
+    m_iaTimer.start();
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
 	m_game[i].setCar(std::make_unique<EmptyCar>(
@@ -57,13 +58,13 @@ namespace game
 	    m_settings, ((i == 0) ? m_hud.get() : nullptr), *this, m_players,
 	    nbLocalPlayer, (i == 0) ? m_net.getId() : i, m_sound,
 	    m_net.isConnected()));
+      }
 
 	/*m_ia.emplace_back(
 	std::make_unique<Ai>(m_game[i].car(),
 	m_game.map().getNodes()));*/
       }
     updateViewPort();
-
     m_input->setPhysicWorld(m_game.physicWorld());
 
     m_sound.playSound(core::ESound::GAME_SONG);
@@ -103,6 +104,7 @@ namespace game
     nope::log::Log(Debug) << "Game context disabled";
     m_game.setPlayerNb(0);
     m_players.clear();
+    m_ia.clear();
     m_gameStart = false;
     m_sound.stopSound(core::ESound::GAME_SONG);
     m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
@@ -172,7 +174,6 @@ namespace game
 	      }
 	  }
       }
-
     // Game process
     m_input->capture();
     m_game.update();
@@ -198,11 +199,14 @@ namespace game
 	m_players[i]->display();
       }
 
-    if (!m_net.isConnected())
+    std::size_t i(0);
+    if (!m_net.isConnected() && m_iaTimer.reached())
       {
 	for (std::unique_ptr<Ai> const &l_ia : m_ia)
 	  {
+	    nope::log::Log(Debug) << "AI[" << i << "]";
 	    l_ia->race();
+	    i++;
 	  }
       }
   }

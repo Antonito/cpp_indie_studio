@@ -224,9 +224,9 @@ namespace game
     m_actions.emplace("changeView",
                       std::make_pair(&LocalPlayer::changeView,
                                      &LocalPlayer::changeViewReleased));
-    m_actions.emplace("displayMap",
-                      std::make_pair(&LocalPlayer::displayMap,
-                                     &LocalPlayer::displayMapReleased));
+    m_actions.emplace("resetCar",
+                      std::make_pair(&LocalPlayer::resetCar,
+                                     &LocalPlayer::resetCarReleased));
     m_actions.emplace("openChat",
                       std::make_pair(&LocalPlayer::openChat,
                                      &LocalPlayer::openChatReleased));
@@ -287,9 +287,9 @@ namespace game
   {
   }
 
-  void LocalPlayer::displayMap()
+  void LocalPlayer::resetCar()
   {
-    // TODO: implement MiniMap
+    //Todo : Reset Car at last checkPoint position
   }
 
   void LocalPlayer::openChat()
@@ -367,7 +367,7 @@ namespace game
   {
   }
 
-  void LocalPlayer::displayMapReleased()
+  void LocalPlayer::resetCarReleased()
   {
   }
 

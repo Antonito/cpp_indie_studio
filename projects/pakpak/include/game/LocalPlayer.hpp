@@ -91,7 +91,7 @@ namespace game
     void turnRight();
     void useObject();
     void changeView();
-    void displayMap();
+    void resetCar();
     void openChat();
     void openMenu();
 
@@ -101,7 +101,7 @@ namespace game
     void turnRightReleased();
     void useObjectReleased();
     void changeViewReleased();
-    void displayMapReleased();
+    void resetCarReleased();
     void openChatReleased();
     void openMenuReleased();
 

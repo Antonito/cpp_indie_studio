@@ -352,6 +352,11 @@ namespace game
     ++id;
   }
 
+    GameData &ACar::getGameData()
+    {
+        return m_gamedata;
+    }
+
   void ACar::setPacketData(GameClientToGSPacketUDP const &pck,
                            bool                           rollbackOnly)
   {
