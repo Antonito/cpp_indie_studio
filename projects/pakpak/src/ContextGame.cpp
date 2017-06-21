@@ -17,6 +17,9 @@ namespace game
   {
   }
 
+  static const std::vector<std::string> gl_maps = {"test", "test2", "test2",
+                                                   "test"};
+
   void ContextGame::enable()
   {
     nope::log::Log(Debug) << "Game context enabled";
@@ -321,8 +324,8 @@ namespace game
 	    // Add new player
 	    std::size_t const i = gameData.size();
 
-	    nope::log::Log(Debug)
-	        << "Adding player [" << i << "] - Id: " << packet.pck.id;
+	    nope::log::Log(Debug) << "Adding player [" << i
+	                          << "] - Id: " << packet.pck.id;
 	    gameData.push_back(PlayerData());
 	    gameData.back().setCar(std::make_unique<EmptyCar>(
 	        m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
