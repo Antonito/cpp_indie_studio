@@ -68,7 +68,6 @@ namespace game
     std::uint32_t getFinalPlayerPosition(std::uint16_t id);
 
     void setMap(std::string const &mapName);
-    void clearPhysicalWorld();
 
 #ifdef DEBUG
     OgreBulletCollisions::DebugDrawer *debugDrawer();

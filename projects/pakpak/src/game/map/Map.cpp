@@ -36,9 +36,10 @@ namespace game
 
   void Map::loadFromFile(std::string filename)
   {
-    static std::int32_t id = 0;
+    static std::int32_t id_ = 0;
     std::stringstream   ss;
     std::ifstream       fs(filename.c_str());
+    std::string         id = ss.str();
 
 #if defined(INDIE_MAP_EDITOR)
     m_filename = filename;
@@ -105,18 +106,17 @@ namespace game
     std::fread(memstream->getPtr(), size, 1, meshFile);
     std::fclose(meshFile);
 
-    ss.str("");
-    ss << "MapMesh" << id;
-
     Ogre::MeshPtr meshptr = Ogre::MeshManager::getSingleton().createManual(
-        ss.str(), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+        "MapMesh" + id,
+        Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
     Ogre::MeshSerializer meshSerializer;
     Ogre::DataStreamPtr  stream(memstream);
 
     meshSerializer.importMesh(stream, meshptr.getPointer());
 
-    m_map = m_gamedata.sceneMgr()->createEntity(ss.str() + "_ent", ss.str());
+    m_map = m_gamedata.sceneMgr()->createEntity("MapMesh" + id + "_ent",
+                                                "MapMesh" + id);
 
     // Load the actual mesh
     meshFile = std::fopen(hitbox.c_str(), "rb");
@@ -135,23 +135,19 @@ namespace game
     std::fread(memstream->getPtr(), size, 1, meshFile);
     std::fclose(meshFile);
 
-    ss.str("");
-    ss << "MapBoxMesh" << id;
-
     meshptr = Ogre::MeshManager::getSingleton().createManual(
-        ss.str(), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+        "MapBoxMesh" + id,
+        Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
     Ogre::DataStreamPtr stream2(memstream);
 
     meshSerializer.importMesh(stream2, meshptr.getPointer());
 
-    m_mapbox =
-        m_gamedata.sceneMgr()->createEntity(ss.str() + "_ent", ss.str());
+    m_mapbox = m_gamedata.sceneMgr()->createEntity("MapBoxMesh" + id + "_ent",
+                                                   "MapBoxMesh" + id);
 
-    ss.str("");
-    ss << "MapNode" << id;
     m_node = m_gamedata.sceneMgr()->getRootSceneNode()->createChildSceneNode(
-        ss.str());
+        "MapNode" + id);
     m_node->attachObject(m_map);
 
     m_node->setScale(1, 1, 1);
@@ -171,10 +167,7 @@ namespace game
             static_cast<unsigned int>(indexCount));
     OgreBulletCollisions::TriangleMeshCollisionShape *_shape = shape.get();
 
-    ss.str("");
-    ss << "MapRigidBody" << id;
-
-    m_body = m_gamedata.addPhysicEntity(std::move(shape), ss.str());
+    m_body = m_gamedata.addPhysicEntity(std::move(shape), "MapRigidBody" + id);
 
 // body->setDebugDisplayEnabled(false);
 // body->showDebugShape(false);
@@ -221,13 +214,13 @@ namespace game
     for (Ogre::Vector3 const &pt : m_points)
       {
 	ss.str("");
-	ss << "Checkpoint" << id;
+	ss << "Checkpoint" << id_;
 	Ogre::Entity *ent = m_map->clone(ss.str());
 	// m_gamedata.sceneMgr()->createEntity(
 	// ss.str(), Ogre::SceneManager::PT_CUBE);
 
 	ss.str("");
-	ss << "CheckpointNode" << id;
+	ss << "CheckpointNode" << id_;
 	Ogre::SceneNode *node =
 	    m_gamedata.sceneMgr()->getRootSceneNode()->createChildSceneNode(
 	        ss.str(), pt);
@@ -235,11 +228,11 @@ namespace game
 	node->setScale(static_cast<Ogre::Real>(0.01),
 	               static_cast<Ogre::Real>(0.01),
 	               static_cast<Ogre::Real>(0.01));
-	++id;
+	++id_;
       }
 #endif // !DEBUG
 
-    ++id;
+    ++id_;
   }
 
   void Map::unload()
