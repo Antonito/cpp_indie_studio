@@ -146,7 +146,7 @@ namespace game
 
 	// Check timeout
 	std::vector<PlayerData> &gameData = m_game.getPlayers();
-	for (std::vector<PlayerData>::iterator it = gameData.begin();
+	for (std::vector<PlayerData>::iterator it = gameData.begin() + 1;
 	     it != gameData.end();)
 	  {
 	    bool deleted = false;
