@@ -310,7 +310,7 @@ void GameServer::connectManagerCom()
 	  rep.pck.eventData.nbClients =
 	      static_cast<std::uint16_t>(m_curClients);
 	  packet << rep;
-	  ret = write(packet);
+	  write(packet);
 	}
       else if (rc > 0)
 	{
