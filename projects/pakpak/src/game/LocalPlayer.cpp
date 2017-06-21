@@ -71,7 +71,8 @@ namespace game
   }
 
   LocalPlayer::LocalPlayer(LocalPlayer &&that)
-      : m_data(that.m_data), m_cameraMode(std::move(that.m_cameraMode)),
+      : m_data(that.m_data), m_playerIndex(that.m_playerIndex),
+        m_cameraMode(std::move(that.m_cameraMode)),
         m_layers(std::move(that.m_layers)),
         m_currentLayers(std::move(that.m_currentLayers)), m_cam(that.m_cam),
         m_viewport(that.m_viewport), m_rounds(that.m_rounds),
@@ -289,7 +290,7 @@ namespace game
 
   void LocalPlayer::resetCar()
   {
-    //Todo : Reset Car at last checkPoint position
+    // Todo : Reset Car at last checkPoint position
   }
 
   void LocalPlayer::openChat()

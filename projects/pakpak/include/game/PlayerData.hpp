@@ -4,6 +4,7 @@
 #include <chrono>
 #include <memory>
 #include <OGRE/OgreVector3.h>
+#include "CheckPoint.hpp"
 #include "Timer.hpp"
 
 namespace game

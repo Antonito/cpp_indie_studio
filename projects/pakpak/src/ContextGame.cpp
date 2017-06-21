@@ -63,7 +63,6 @@ namespace game
 	/*m_ia.emplace_back(
 	std::make_unique<Ai>(m_game[i].car(),
 	m_game.map().getNodes()));*/
-      }
     updateViewPort();
     m_input->setPhysicWorld(m_game.physicWorld());
 
@@ -159,9 +158,9 @@ namespace game
 	  {
 	    bool deleted = false;
 
-	    if (it->hasTimedOut() || false)
+	    if (it->hasTimedOut())
 	      {
-		bool last = (it == gameData.end() - 1);
+		//bool last = (it == gameData.end() - 1);
 
 		nope::log::Log(Debug) << "Client time'd out, removing it";
 		gameData.erase(it);
