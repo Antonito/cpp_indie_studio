@@ -47,7 +47,7 @@ namespace core
       std::int32_t, turnRight,
       std::int32_t, useObject,
       std::int32_t, changeView,
-      std::int32_t, displayMap,
+      std::int32_t, resetCar,
       std::int32_t, openChat,
       std::int32_t, openMenu)
 	// clang-format on
@@ -102,6 +102,8 @@ namespace core
     GameSettings &getPlayer(std::size_t const playerIndex);
     std::uint32_t getPlayerCount() const;
     void setPlayerCount(std::uint32_t playerCount);
+    void setSelectedMap(std::uint32_t selectedMap);
+    std::uint32_t getSelectedMap() const;
 
     std::vector<SaveData> m_data;
 
@@ -111,6 +113,7 @@ namespace core
     std::vector<bool> m_used;
     std::vector<bool> m_loaded;
     std::uint32_t     m_playerCount;
+    std::uint32_t     m_selectedMap;
   };
 }
 

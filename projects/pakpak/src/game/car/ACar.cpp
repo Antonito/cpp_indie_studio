@@ -52,6 +52,25 @@ namespace game
     m_body->getBulletRigidBody()->setCenterOfMassTransform(tr);
   }
 
+  void ACar::resetPositions()
+  {
+    Ogre::Vector3 p = Ogre::Vector3(0, 10, 0);
+    btTransform   tr;
+    btVector3     v(p.x, p.y, p.z);
+
+    Ogre::Quaternion q(Ogre::Radian(0), Ogre::Vector3::UNIT_Y);
+
+    tr.setIdentity();
+    btQuaternion quat;
+    quat.setX(q.x);
+    quat.setY(q.y);
+    quat.setZ(q.z);
+    quat.setW(q.w);
+    tr.setRotation(quat);
+    tr.setOrigin(v);
+    m_body->getBulletRigidBody()->setCenterOfMassTransform(tr);
+  }
+
   void ACar::update(double)
   {
 #ifdef DEBUG
@@ -333,6 +352,11 @@ namespace game
     ++id;
   }
 
+    GameData &ACar::getGameData()
+    {
+        return m_gamedata;
+    }
+
   void ACar::setPacketData(GameClientToGSPacketUDP const &pck,
                            bool                           rollbackOnly)
   {
@@ -359,5 +383,26 @@ namespace game
 	tr.setOrigin(v);
 	m_body->getBulletRigidBody()->setCenterOfMassTransform(tr);
       }
+  }
+
+  void ACar::resetToCheckPoint(CheckPoint const &checkpoint)
+  {
+    Ogre::Vector3 p = checkpoint.position();
+    btTransform   tr;
+    btVector3     v(p.x, p.y, p.z);
+
+    Ogre::Vector3 dir = checkpoint.direction();
+
+    Ogre::Quaternion q = -1 * dir.getRotationTo(Ogre::Vector3::UNIT_Y);
+
+    tr.setIdentity();
+    btQuaternion quat;
+    quat.setX(q.x);
+    quat.setY(q.y);
+    quat.setZ(q.z);
+    quat.setW(q.w);
+    tr.setRotation(quat);
+    tr.setOrigin(v);
+    m_body->getBulletRigidBody()->setCenterOfMassTransform(tr);
   }
 }

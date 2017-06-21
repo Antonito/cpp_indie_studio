@@ -46,7 +46,7 @@ namespace core
     SoundManager &     m_sound;
     std::uint32_t      m_playerCount;
     SettingsPlayer &   m_settings;
-    std::int32_t m_curMap;
+    std::int32_t       m_curMap;
 
     bool onBackClick(CEGUI::EventArgs const &);
     bool onPlayClick(CEGUI::EventArgs const &);

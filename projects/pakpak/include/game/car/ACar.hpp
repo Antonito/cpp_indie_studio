@@ -1,7 +1,12 @@
 #ifndef ACAR_HPP_
 #define ACAR_HPP_
 
+#include <OgreBullet/Dynamics/OgreBulletDynamics.h>
+#include <bullet/BulletDynamics/Dynamics/btRigidBody.h>
+#include <bullet/BulletDynamics/Vehicle/btRaycastVehicle.h>
 #include <OGRE/OgreVector3.h>
+#include "GameData.hpp"
+#include "pakpak_stdafx.hpp"
 
 namespace game
 {
@@ -25,12 +30,17 @@ namespace game
     void move(double);
     void turn(double);
     void resetOrientation();
+    void resetPositions();
+
+    GameData &getGameData();
 
     void update(double);
 
     Ogre::Camera *getCamera() const;
     void          setPacketData(GameClientToGSPacketUDP const &pck,
                                 bool                           rollbackOnly = false);
+
+    void resetToCheckPoint(CheckPoint const &checkpoint);
 
   protected:
     ACar(game::GameData &gamedata, std::string const &mesh,

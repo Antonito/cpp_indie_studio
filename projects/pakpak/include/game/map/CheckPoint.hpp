@@ -31,6 +31,9 @@ namespace game
     std::chrono::time_point<std::chrono::high_resolution_clock>
         getLastTime(std::int32_t player) const;
 
+    Ogre::Vector3 const &position() const;
+    Ogre::Vector3 const &direction() const;
+
   private:
     using info_t =
         std::pair<std::int32_t,

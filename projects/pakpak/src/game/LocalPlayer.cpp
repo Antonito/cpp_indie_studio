@@ -71,7 +71,8 @@ namespace game
   }
 
   LocalPlayer::LocalPlayer(LocalPlayer &&that)
-      : m_data(that.m_data), m_cameraMode(std::move(that.m_cameraMode)),
+      : m_data(that.m_data), m_playerIndex(that.m_playerIndex),
+        m_cameraMode(std::move(that.m_cameraMode)),
         m_layers(std::move(that.m_layers)),
         m_currentLayers(std::move(that.m_currentLayers)), m_cam(that.m_cam),
         m_viewport(that.m_viewport), m_rounds(that.m_rounds),
@@ -224,9 +225,9 @@ namespace game
     m_actions.emplace("changeView",
                       std::make_pair(&LocalPlayer::changeView,
                                      &LocalPlayer::changeViewReleased));
-    m_actions.emplace("displayMap",
-                      std::make_pair(&LocalPlayer::displayMap,
-                                     &LocalPlayer::displayMapReleased));
+    m_actions.emplace("resetCar",
+                      std::make_pair(&LocalPlayer::resetCar,
+                                     &LocalPlayer::resetCarReleased));
     m_actions.emplace("openChat",
                       std::make_pair(&LocalPlayer::openChat,
                                      &LocalPlayer::openChatReleased));
@@ -287,9 +288,9 @@ namespace game
   {
   }
 
-  void LocalPlayer::displayMap()
+  void LocalPlayer::resetCar()
   {
-    // TODO: implement MiniMap
+    // Todo : Reset Car at last checkPoint position
   }
 
   void LocalPlayer::openChat()
@@ -367,7 +368,7 @@ namespace game
   {
   }
 
-  void LocalPlayer::displayMapReleased()
+  void LocalPlayer::resetCarReleased()
   {
   }
 

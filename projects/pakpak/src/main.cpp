@@ -33,7 +33,7 @@ int main(int, char **)
 {
   int ret = EXIT_SUCCESS;
 
-  nope::log::Logger::start("nope.log");
+  nope::log::Logger::start("pakpak_racing.log");
   nope::log::Logger::logLevel = nope::log::LogLevel::LOG_DEBUG;
   core::AppLauncher app;
 

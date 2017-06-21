@@ -189,6 +189,7 @@ namespace core
     m_curState = GameState::InGame;
     m_gui.hideCursor();
     m_settings.setPlayerCount(m_playerCount);
+    m_settings.setSelectedMap(static_cast<std::uint32_t>(m_curMap));
     return true;
   }
 
