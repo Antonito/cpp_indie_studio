@@ -122,7 +122,7 @@ namespace game
 	// Process network I/O
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(now -
 	                                                          lastTimePck)
-	        .count() >= 17 * 2)
+	        .count() >= 17)
 	  {
 	    std::vector<GameClientToGSPacketUDP> pck;
 	    GameClientToGSPacketUDP              pckContent;
