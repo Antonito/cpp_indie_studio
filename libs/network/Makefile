@@ -39,4 +39,8 @@ INC_DIR=	$(DIR_LIST:$(SRC_DIR)%=$(INCLUDE_DIR)%)
 PRECOMPILED_HEADER= $(addprefix $(INCLUDE_DIR),$(HEADER))
 
 # Rules
+ifeq ($(shell uname -s),Darwin)
+include $(MK_COMMON_DIR)rules_osx.mk
+else
 include $(MK_COMMON_DIR)rules.mk
+endif

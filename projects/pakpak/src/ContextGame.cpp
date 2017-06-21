@@ -121,7 +121,7 @@ namespace game
 	// Process network I/O
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(now -
 	                                                          lastTimePck)
-	        .count() >= 17 * 2)
+	        .count() >= 17)
 	  {
 	    std::vector<GameClientToGSPacketUDP> pck;
 	    GameClientToGSPacketUDP              pckContent;
@@ -181,11 +181,15 @@ namespace game
 	                            0.4f * m_sound.getVolume());
 	    m_gameStart = true;
 	  }
+      }
 
-	for (std::uint8_t i = 0; i < m_players.size(); ++i)
-	  {
-	    m_players[i]->display();
-	  }
+    for (std::uint8_t i = 0; i < m_players.size(); ++i)
+      {
+	m_players[i]->display();
+      }
+
+    if (!m_net.isConnected())
+      {
 	for (std::unique_ptr<Ai> const &l_ia : m_ia)
 	  {
 	    l_ia->race();
