@@ -55,12 +55,17 @@ namespace game
 
     void update();
 
+    std::vector<PlayerData> &getPlayers();
+
     Ogre::Camera *createCamera(std::string const &name);
     Ogre::Entity *createEntity(std::string const &name);
     Ogre::SceneNode *createSceneNode();
 
     Ogre::SceneManager *               sceneMgr();
     OgreBulletDynamics::DynamicsWorld *physicWorld();
+
+    void addFinalPlayer(std::uint16_t id);
+    std::uint32_t getFinalPlayerPosition(std::uint16_t id);
 
 #ifdef DEBUG
     OgreBulletCollisions::DebugDrawer *debugDrawer();
@@ -88,6 +93,7 @@ namespace game
     Map                                                         m_map;
     std::chrono::time_point<std::chrono::high_resolution_clock> m_startTime;
     std::int32_t                                                m_laps;
+    std::vector<std::uint32_t>                                  m_finalRanking;
   };
 }
 

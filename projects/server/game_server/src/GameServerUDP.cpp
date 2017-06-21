@@ -11,7 +11,7 @@ network::IClient::ClientAction GameServer::writeUDP(IPacket const &      pck,
                          reinterpret_cast<sockaddr_t const *>(addr),
                          sizeof(*addr)) == false)
     {
-      nope::log::Log(Debug) << "Failed to write data [GameClient]";
+      nope::log::Log(Debug) << "Failed to write data [GameServerUDP]";
       ret = network::IClient::ClientAction::FAILURE;
     }
   return (ret);
@@ -44,41 +44,79 @@ std::int32_t GameServer::gameServerUDPIO(std::int32_t const sock,
 {
   if (FD_ISSET(sock, &readfds))
     {
-      nope::log::Log(Debug) << "There's data to read [UDP]";
       // TODO: Use memory pool
       std::size_t const pckSize = packetSize::GameClientToGSPacketUDPSize;
       std::unique_ptr<uint8_t[]> buff =
           std::make_unique<std::uint8_t[]>(pckSize);
-      sockaddr_in_t addr;
-      socklen_t     len;
+      sockaddr_in_t cliAddr;
+      socklen_t     len = sizeof(cliAddr);
 
       if (m_gameSockUDP.rec(buff.get(), pckSize,
-                            reinterpret_cast<sockaddr_t *>(&addr), &len))
+                            reinterpret_cast<sockaddr_t *>(&cliAddr), &len))
 	{
-	  nope::log::Log(Debug)
-	      << "**UDP** Received packet [" << inet_ntoa(addr.sin_addr) << ":"
-	      << ntohs(addr.sin_port) << "]";
+	  nope::log::Log(Debug) << "{GameServerUDP} Received packet ["
+	                        << inet_ntoa(cliAddr.sin_addr) << ":"
+	                        << ntohs(cliAddr.sin_port) << "]";
 	  m_pckUDP.setData(pckSize, std::move(buff));
-	  m_pckUDP >> m_repUDP;
+
 	  // Check if client exist
+	  std::vector<UDPClient>::iterator ite =
+	      std::find(m_clientUDP.begin(), m_clientUDP.end(), cliAddr);
+	  if (ite == m_clientUDP.end())
+	    {
+	      GameClientToGSPacketUDP tmp;
+
+	      m_pckUDP >> tmp;
+	      // Client is new, add it to vector
+	      m_clientUDP.push_back(
+	          UDPClient(cliAddr, m_gameSockUDP, tmp.pck.id));
+	      nope::log::Log(Info)
+	          << "Added new client to server. [GameServerUDP]";
+	      ite = m_clientUDP.end() - 1; // Get iterator on added element
+	    }
+
+	  // 'ite' is now the current client
+	  (*ite) << m_pckUDP;
+	  ite->updateAction(); // Update timeout
 	}
       else
 	{
 	  nope::log::Log(Error)
-	      << "Cannot read [UDP] : " << std::strerror(errno);
+	      << "Cannot read [GameServerUDP] : " << std::strerror(errno);
 	}
     }
+  // Loop over all clients and broadcast
   return (0);
+}
+
+void GameServer::deleteUDPClient(UDPClient &cli)
+{
+  nope::log::Log(Info) << "Removing UDP Client [GameServerUDP]";
+  cli.disconnect();
+
+  // Remove asked element
+  m_clientUDP.erase(
+      std::remove_if(m_clientUDP.begin(), m_clientUDP.end(),
+                     [&](UDPClient const &o) { return (o == cli); }),
+      m_clientUDP.end());
+}
+
+void GameServer::updateUDPTick()
+{
+  m_tickUDP = std::chrono::system_clock::now();
 }
 
 void GameServer::gameServerUDP()
 {
   std::int32_t const sock = m_gameSockUDP.getSocket();
 
-  nope::log::Log(Info) << "Game Server UDP started";
+  nope::log::Log(Info) << "Game Server UDP started [GameServerUDP]";
   assert(sock >= 0);
+  updateUDPTick();
   while (1)
     {
+      std::chrono::system_clock::time_point const now =
+          std::chrono::system_clock::now();
       // Check activity
       fd_set             readfds, writefds, exceptfds;
       std::int32_t const rc =
@@ -87,14 +125,51 @@ void GameServer::gameServerUDP()
       if (rc < 0)
 	{
 	  // There was an error
-	  nope::log::Log(Error) << "select() failed [UDP]";
+	  nope::log::Log(Error) << "select() failed [GameServerUDP]";
 	  break;
 	}
       else if (rc > 0)
 	{
 	  // Treat I/O
-	  nope::log::Log(Debug) << "Treating I/O [UDP]";
 	  gameServerUDPIO(sock, readfds, writefds, exceptfds);
+	}
+
+      // Check server's tick
+      if (std::chrono::duration_cast<std::chrono::milliseconds>(now -
+                                                                m_tickUDP)
+              .count() >= 17 * 2)
+	{
+	  // Loop over each client to send its packet
+	  for (std::vector<UDPClient>::iterator ite = m_clientUDP.begin();
+	       ite != m_clientUDP.end();)
+	    {
+	      bool       deleted = false;
+	      UDPClient &cli = *ite;
+
+	      if (cli.hasTimedOut())
+		{
+		  deleteUDPClient(cli);
+		  deleted = true;
+		}
+	      else if (!deleted)
+		{
+		  // Serialize current packet
+		  m_pckUDP << cli.getData();
+		  // Loop over all clients
+		  for (UDPClient &_cli : m_clientUDP)
+		    {
+		      // Send packet to client
+		      nope::log::Log(Debug)
+		          << "Sending packet from client " << ite->getId()
+		          << " to client " << _cli.getId();
+		      _cli.write(m_pckUDP);
+		    }
+		}
+	      if (!deleted)
+		{
+		  ++ite;
+		}
+	    }
 	}
     }
 }

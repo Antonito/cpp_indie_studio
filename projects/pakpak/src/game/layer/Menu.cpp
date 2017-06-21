@@ -66,13 +66,16 @@ namespace game
   {
   }
 
-  bool Menu::keyPressed(OIS::KeyEvent const &e)
+  bool Menu::keyPressed(OIS::KeyEvent const &arg)
   {
-    if (e.key == OIS::KC_ESCAPE)
-      {
+    if (arg.key == OIS::KC_ESCAPE)
+    {
 	nope::log::Log(Debug) << "Closing pause menu";
+        Pauser::unpause();
 	m_layerStack.popLayer();
       }
+    CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyDown(
+        static_cast<CEGUI::Key::Scan>(arg.key));
     return (false);
   }
 

@@ -17,6 +17,7 @@
 #include "ACar.hpp"
 #include "ILayer.hpp"
 #include "SettingsPlayer.hpp"
+#include "Timer.hpp"
 
 // Disable clang warning for templated class padding
 #if defined(__clang__)
@@ -32,10 +33,11 @@ namespace game
   {
   public:
     LocalPlayer() = delete;
-    LocalPlayer(Ogre::RenderWindow *, GameData &, PlayerData *, int,
-                core::SettingsPlayer &, core::HUD *, game::ContextGame &,
+    LocalPlayer(Ogre::RenderWindow *, GameData &, std::vector<PlayerData> &,
+                int, int, core::SettingsPlayer &, core::HUD *,
+                game::ContextGame &,
                 std::vector<std::unique_ptr<LocalPlayer>> &, std::uint8_t,
-                core::SoundManager &);
+                std::uint16_t, core::SoundManager &, bool);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&);
     virtual ~LocalPlayer();
@@ -53,9 +55,7 @@ namespace game
                                OIS::MouseButtonID     id);
 
     virtual void push(GameLayer layer);
-    virtual void          popLayer();
-    virtual std::uint32_t getSpeed() const;
-    virtual std::uint32_t getPosition() const;
+    virtual void popLayer();
 
     void setViewPort(Ogre::Real left, Ogre::Real top, Ogre::Real width,
                      Ogre::Real height);
@@ -73,10 +73,14 @@ namespace game
     std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()> &
                           actions(std::string const &);
     core::SettingsPlayer &settings();
+    std::uint16_t         getID() const;
+    void                  setID(std::uint16_t id);
+    bool                  operator==(std::uint16_t id) const;
 
     std::size_t getRank() const;
 
-    bool getFinished() const;
+    bool         getFinished() const;
+    bool isConnected() const;
 
   private:
     void setActionMap();
@@ -101,14 +105,15 @@ namespace game
     void openChatReleased();
     void openMenuReleased();
 
-    PlayerData *                 m_data;
+    std::vector<PlayerData> &    m_data;
+    int                          m_playerIndex;
     CameraMode                   m_cameraMode;
     static constexpr std::size_t nbLayer =
         static_cast<std::size_t>(GameLayer::NbLayer);
     std::array<std::unique_ptr<ILayer>, nbLayer> m_layers;
-    core::FastStack<ILayer *> m_currentLayers;
-    Ogre::Camera *            m_cam;
-    Ogre::Viewport *          m_viewport;
+    core::FastStack<ILayer *>                    m_currentLayers;
+    Ogre::Camera *                               m_cam;
+    Ogre::Viewport *                             m_viewport;
     std::vector<std::chrono::time_point<std::chrono::high_resolution_clock>>
                           m_rounds;
     core::SettingsPlayer &m_settings;
@@ -119,7 +124,9 @@ namespace game
     int                 m_order;
     core::HUD *         m_hud;
     game::ContextGame & m_contextGame;
+    std::uint16_t       m_id;
     core::SoundManager &m_sound;
+    bool                m_connected;
   };
 }
 

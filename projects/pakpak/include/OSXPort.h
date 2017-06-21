@@ -148,12 +148,10 @@ MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now,
 }
 
 - (void)shutdown {
-  // TODO
   [NSApp terminate:nil];
 }
 
 - (void)renderOneFrame:(id)sender {
-  // TODO
 }
 
 @end

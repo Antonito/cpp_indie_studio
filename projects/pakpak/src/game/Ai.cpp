@@ -21,6 +21,10 @@ namespace game
   void Ai::race()
   {
     m_curNode = m_data->getCheckPoint() + 1;
+    if (m_curNode == m_nodes.size() - 1)
+    {
+        m_curNode = 0;
+    }
     nope::log::Log(Debug) << "CUR NODE[" << m_curNode << "] POS : {"
                           << m_nodes[m_curNode].x << ", "
                           << m_nodes[m_curNode].y << ", "

@@ -47,7 +47,7 @@ public:
   bool   canWrite() const;
   void   toggleWrite();
 
-  std::int32_t getId() const;
+  std::uint16_t getId() const;
 
   bool operator==(GameClient const &other) const;
 
@@ -57,7 +57,7 @@ private:
   State                        m_state;
   Packet<GameClientToGSPacket> m_packet;
   std::vector<Token> &         m_tokenList;
-  std::int32_t                 m_id;
+  std::uint16_t                m_id;
   std::uint16_t                m_udpPort;
 
   bool                           checkMaps();

@@ -84,6 +84,11 @@ namespace game
 	          screens[playerIndex] + "place_postfix");
 	      m_positionPrefix[playerIndex] = m_gui->getRoot()->getChild(
 	          screens[playerIndex] + "place_suffix");
+	      if (m_player.isConnected())
+		{
+		  m_positionSuffix[playerIndex]->setVisible(false);
+		  m_positionPrefix[playerIndex]->setVisible(false);
+		}
 	      m_start[playerIndex][0] =
 	          m_gui->getRoot()->getChild(screens[playerIndex] + "3");
 	      m_start[playerIndex][0]->setVisible(false);
@@ -111,7 +116,10 @@ namespace game
 
     virtual void display()
     {
-      setStart();
+      if (!m_player.isConnected())
+	{
+	  setStart();
+	}
       setSpeed();
       setPosition();
       setFinish();
@@ -136,7 +144,8 @@ namespace game
 	}
 #endif // !INDIE_MAP_EDITOR
 
-      if (action == "NO_ACTION" || m_startIdx <= 3)
+      if (action == "NO_ACTION" ||
+          (m_startIdx <= 3 && !m_player.isConnected()))
 	{
 	  return false;
 	}
@@ -149,7 +158,8 @@ namespace game
     {
       std::string action = m_player.settings().actionForKey(
           static_cast<std::size_t>(m_player.order()), ke.key);
-      if (action == "NO_ACTION" || m_startIdx <= 3)
+      if (action == "NO_ACTION" ||
+          (m_startIdx <= 3 && !m_player.isConnected()))
 	{
 	  return false;
 	}
@@ -206,7 +216,7 @@ namespace game
 		}
 	    }
 	}
-      else if (m_time.reached())
+      else if (m_time.reached() && m_startIdx < 5)
 	{
 	  ++m_startIdx;
 	  m_time.reset();
@@ -228,7 +238,12 @@ namespace game
 	  for (std::uint8_t playerIndex = 0;
 	       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
 	    {
-	      double        rawSpeed = m_players[playerIndex]->car().speed();
+	      nope::log::Log(Debug) << "PLAYER INDEX: "
+	                            << static_cast<std::uint32_t>(playerIndex);
+	      nope::log::Log(Debug)
+	          << "CarAddr: " << &m_players[playerIndex]->car();
+	      double rawSpeed = m_players[playerIndex]->car().speed();
+	      nope::log::Log(Debug) << "PASSED PLAYER INDEX";
 	      std::uint32_t speed = static_cast<std::uint32_t>(
 	          (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
 
@@ -243,7 +258,7 @@ namespace game
 		    {
 		      m_speed[playerIndex][2]->setVisible(true);
 		      m_speed[playerIndex][2]->setProperty(
-		          image, gl_speedAssets[thousand - 1]);
+		          image, gl_speedAssets[thousand]);
 		    }
 		  else
 		    {
@@ -254,7 +269,7 @@ namespace game
 		    {
 		      m_speed[playerIndex][1]->setVisible(true);
 		      m_speed[playerIndex][1]->setProperty(
-		          image, gl_speedAssets[decade - 1]);
+		          image, gl_speedAssets[decade]);
 		    }
 		  else if (thousand)
 		    {
@@ -271,7 +286,7 @@ namespace game
 		  if (unit)
 		    {
 		      m_speed[playerIndex][0]->setProperty(
-		          image, gl_speedAssets[unit - 1]);
+		          image, gl_speedAssets[unit]);
 		    }
 		  else
 		    {
@@ -285,7 +300,7 @@ namespace game
 
     void setPosition()
     {
-      if (m_gui)
+      if (m_gui && !m_player.isConnected())
 	{
 	  static const std::string image("Image");
 
@@ -324,20 +339,30 @@ namespace game
 
     void setFinish()
     {
-      if (m_gui)
+      if (m_gui && !m_player.isConnected())
 	{
+	  std::uint16_t count = 0;
+
 	  for (std::uint8_t playerIndex = 0;
 	       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
 	    {
+	      CEGUI::Window *finishedSplash =
+	          m_gui->getRoot()->getChild(screens[playerIndex] + "game");
 	      if (m_players[playerIndex]->getFinished())
 		{
-		  m_gui->getRoot()
-		      ->getChild(screens[playerIndex] + "game")
-		      ->setVisible(true);
-		  m_gui->getRoot()
-		      ->getChild(screens[playerIndex] + "over")
-		      ->setVisible(true);
+		  ++count;
+		  if (!finishedSplash->isVisible())
+		    {
+		      m_gameData.addFinalPlayer(
+		          m_players[playerIndex]->getID());
+		      finishedSplash->setVisible(true);
+		    }
 		}
+	    }
+	  if (count == m_players.size() && !game::Pauser::isPaused())
+	    {
+	      game::Pauser::pause();
+	      m_layerStack.push(GameLayer::PostGame);
 	    }
 	}
     }

@@ -18,6 +18,7 @@
 #include "Ai.hpp"
 #include "AContext.hpp"
 #include "LocalPlayer.hpp"
+#include "EmptyCar.hpp"
 #include "Timer.hpp"
 
 // Disable clang warning for templated class padding
@@ -65,6 +66,14 @@ namespace game
     game::Timer                               m_timer;
     game::Timer                               m_iaTimer;
     bool                                      m_gameStart;
+    std::vector<GameClientToGSPacketUDP>      m_networkPacket;
+
+    void setUDPPacket(GameClientToGSPacketUDP &packet, LocalPlayer &player);
+    void setUDPPacketDirection(GameClientToGSPacketUDP &,
+                               Ogre::Quaternion const &);
+    void setUDPPatcketPosition(GameClientToGSPacketUDP &,
+                               Ogre::Vector3 const &);
+    void setPlayersFromUDPPackets();
   };
 }
 

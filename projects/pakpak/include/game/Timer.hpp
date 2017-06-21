@@ -9,19 +9,22 @@
 
 namespace game
 {
-    class Timer
-    {
-    public:
-        Timer(int p_duree);
-        bool reached() const;
-        void reset();
-        void start();
+  class Timer
+  {
+  public:
+    Timer(int p_duree);
+    bool reached() const;
+    void reset();
+    void start();
+    void save();
+    std::chrono::milliseconds elapsedTime();
 
-    private:
-        bool m_started;
-        std::chrono::milliseconds m_duree;
-        std::chrono::system_clock::time_point m_starting_point;
-    };
+  private:
+    bool                                  m_started;
+    std::chrono::milliseconds             m_duree;
+    std::chrono::system_clock::time_point m_starting_point;
+    std::chrono::system_clock::time_point m_save_point;
+  };
 }
 
-#endif //CPP_PLAZZA_TIMER_HPP
+#endif // CPP_PLAZZA_TIMER_HPP

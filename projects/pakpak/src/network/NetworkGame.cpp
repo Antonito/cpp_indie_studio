@@ -3,7 +3,8 @@
 namespace core
 {
   NetworkGame::NetworkGame()
-      : m_sock(nullptr), m_pck(), m_pckContent(), m_running(false)
+      : m_sock(nullptr), m_pck(), m_pckContent(), m_running(false),
+        m_gamePckIn(), m_gamePckOut()
   {
   }
 
@@ -48,32 +49,105 @@ namespace core
     m_running = false;
   }
 
+  void NetworkGame::sendPacket(GameClientToGSPacketUDP const &pck)
+  {
+    m_gamePckIn.push(pck);
+  }
+
+  std::vector<GameClientToGSPacketUDP> NetworkGame::getPacket()
+  {
+    std::vector<GameClientToGSPacketUDP> events;
+
+    // Poll out events
+    while (!m_gamePckOut.empty())
+      {
+	events.push_back(m_gamePckOut.front());
+	m_gamePckOut.pop();
+      }
+    return (events);
+  }
+
   void NetworkGame::run()
   {
     nope::log::Log(Debug) << "Starting UDP exchanges";
     sockaddr_in_t const *addr = &m_sock->getSockAddr();
 
-    m_pckContent.pck.eventType = GameClientToGSEventUDP::SIMPLE_EVENT;
-    m_pckContent.pck.eventData.i = 23;
-    m_pck << m_pckContent;
-
-    // TODO: rm
-    for (int i = 0; i < 20; ++i)
-      {
-	if (writeUDP(m_pck, addr))
-	  {
-	    nope::log::Log(Debug) << "Send UDP packet";
-	  }
-      }
-
-    // TODO
     m_running = true;
+    std::vector<GameClientToGSPacketUDP> gameEvents;
     while (m_running)
       {
-	// Get Game events
-	// Send game events to server
-	// Read Server events
-	// Send server events to game
+	// Monitoring socket
+	fd_set       readfds, writefds;
+	sock_t const sock = m_sock->getSocket();
+	std::int32_t ret = 0;
+
+	do
+	  {
+	    struct timeval tv;
+
+	    tv.tv_sec = 5;
+	    tv.tv_usec = 0;
+	    FD_ZERO(&readfds);
+	    FD_ZERO(&writefds);
+
+	    FD_SET(sock, &readfds);
+	    FD_SET(sock, &writefds);
+
+	    ret = select(sock + 1, &readfds, &writefds, nullptr, &tv);
+	  }
+	while (ret == -1 && errno == EINTR);
+
+	if (ret == -1)
+	  {
+	    nope::log::Log(Error) << "Select failed " << std::strerror(errno)
+	                          << " [NetworkGame]";
+	    break;
+	  }
+	else if (ret > 0)
+	  {
+	    // Treat inputs
+	    if (FD_ISSET(sock, &readfds))
+	      {
+		std::unique_ptr<std::uint8_t[]> buff =
+		    std::make_unique<std::uint8_t[]>(
+		        packetSize::GameClientToGSPacketUDPSize);
+
+		Packet<GameClientToGSPacketUDP> pck;
+		GameClientToGSPacketUDP         packetUDP;
+
+		socklen_t     len = sizeof(*addr);
+		sockaddr_in_t addrCpy;
+
+		std::memcpy(&addrCpy, addr, sizeof(*addr));
+		if (m_sock->rec(
+		        buff.get(), packetSize::GameClientToGSPacketUDPSize,
+		        reinterpret_cast<sockaddr_t *>(&addrCpy), &len))
+		  {
+		    nope::log::Log(Debug) << "Received packet {UDP}";
+		    pck.setData(packetSize::GameClientToGSPacketUDPSize,
+		                std::move(buff));
+		    pck >> packetUDP;
+		    m_gamePckOut.push(packetUDP);
+		  }
+	      }
+
+	    // Treat output
+	    if (FD_ISSET(sock, &writefds))
+	      {
+		// Get Game events
+		while (!m_gamePckIn.empty())
+		  {
+		    GameClientToGSPacketUDP &ev = m_gamePckIn.front();
+		    m_pck << ev;
+		    if (writeUDP(m_pck, addr) !=
+		        network::IClient::ClientAction::SUCCESS)
+		      {
+			nope::log::Log(Warning) << "Couldn't send UDP packet";
+		      }
+		    m_gamePckIn.pop();
+		  }
+	      }
+	  }
       }
   }
 }

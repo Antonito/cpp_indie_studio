@@ -2,15 +2,18 @@
 
 namespace game
 {
-  LocalPlayer::LocalPlayer(Ogre::RenderWindow *win, GameData &g, PlayerData *p,
+  LocalPlayer::LocalPlayer(Ogre::RenderWindow *win, GameData &g,
+                           std::vector<PlayerData> &p, int playerIndex,
                            int order, core::SettingsPlayer &settings,
                            core::HUD *hud, game::ContextGame &contextGame,
                            std::vector<std::unique_ptr<LocalPlayer>> &players,
-                           std::uint8_t nbplayers, core::SoundManager &sound)
-      : m_data(p), m_cameraMode(CameraMode::Top), m_layers(),
-        m_currentLayers(), m_cam(nullptr), m_viewport(nullptr), m_rounds(),
-        m_settings(settings), m_actions(), m_win(win), m_order(order),
-        m_hud(hud), m_contextGame(contextGame), m_sound(sound)
+                           std::uint8_t nbplayers, std::uint16_t id,
+                           core::SoundManager &sound, bool connected)
+      : m_data(p), m_playerIndex(playerIndex), m_cameraMode(CameraMode::Top),
+        m_layers(), m_currentLayers(), m_cam(nullptr), m_viewport(nullptr),
+        m_rounds(), m_settings(settings), m_actions(), m_win(win),
+        m_order(order), m_hud(hud), m_contextGame(contextGame), m_id(id),
+        m_sound(sound), m_connected(connected)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
         std::make_unique<Loading>(g, *this, hud, players);
@@ -49,11 +52,15 @@ namespace game
     m_layers[static_cast<std::size_t>(GameLayer::Menu)] =
         std::make_unique<Menu>(g, *this, hud, players);
 
-    m_currentLayers.push(m_layers[static_cast<std::size_t>(GameLayer::InGame)]
-                             .get()); // TODO: insert LOADING instead
+    m_currentLayers.push(
+        m_layers[static_cast<std::size_t>(GameLayer::InGame)].get());
     m_currentLayers.top()->enable();
-    m_cam = m_data->car().getCamera();
+    m_cam = m_data[static_cast<std::size_t>(m_playerIndex)].car().getCamera();
     m_cam->setNearClipDistance(3);
+    // CHECK IF SERVER UDP BROKEN AFTER MERGE
+    if (!connected)
+      g[static_cast<std::size_t>(order)].setId(id);
+    // ENDCHECK
 
     Log(nope::log::Debug) << "Adding viewport '" << m_order << "' to window";
     m_viewport = m_win->addViewport(m_cam, m_order);
@@ -70,7 +77,8 @@ namespace game
         m_viewport(that.m_viewport), m_rounds(that.m_rounds),
         m_settings(that.m_settings), m_actions(that.m_actions),
         m_win(that.m_win), m_order(that.m_order), m_hud(that.m_hud),
-        m_contextGame(that.m_contextGame), m_sound(that.m_sound)
+        m_contextGame(that.m_contextGame), m_id(that.m_id),
+        m_sound(that.m_sound), m_connected(that.m_connected)
   {
     that.m_cam = nullptr;
     that.m_viewport = nullptr;
@@ -172,6 +180,7 @@ namespace game
   void LocalPlayer::push(GameLayer layer)
   {
     m_currentLayers.push(m_layers[static_cast<std::size_t>(layer)].get());
+    m_currentLayers.top()->enable();
   }
 
   void LocalPlayer::popLayer()
@@ -182,12 +191,12 @@ namespace game
 
   ACar &LocalPlayer::car()
   {
-    return (m_data->car());
+    return (m_data[static_cast<std::size_t>(m_playerIndex)].car());
   }
 
   ACar const &LocalPlayer::car() const
   {
-    return (m_data->car());
+    return (m_data[static_cast<std::size_t>(m_playerIndex)].car());
   }
 
   core::SettingsPlayer &LocalPlayer::settings()
@@ -240,31 +249,33 @@ namespace game
     m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
     m_sound.playSound(core::ESound::ACC_KART_SOUND);
     m_sound.loopSound(core::ESound::ACC_KART_SOUND);
-    m_sound.setVolumeSource(core::ESound::ACC_KART_SOUND, 0.45f * m_sound.getVolume());
+    m_sound.setVolumeSource(core::ESound::ACC_KART_SOUND,
+                            0.45f * m_sound.getVolume());
 
-    m_data->car().move(-1);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().move(-1);
   }
 
   void LocalPlayer::slowDown()
   {
     m_sound.stopSound(core::ESound::ACC_KART_SOUND);
-    if (m_data->car().speed() >= 5.0)
-    {
-        m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
-        m_sound.playSound(core::ESound::SLOW_KART_SOUND);
-        m_sound.setVolumeSource(core::ESound::SLOW_KART_SOUND, 0.45f * m_sound.getVolume());
-    }
-    m_data->car().move(1);
+    if (m_data[static_cast<std::size_t>(m_playerIndex)].car().speed() >= 5.0)
+      {
+	m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
+	m_sound.playSound(core::ESound::SLOW_KART_SOUND);
+	m_sound.setVolumeSource(core::ESound::SLOW_KART_SOUND,
+	                        0.45f * m_sound.getVolume());
+      }
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().move(1);
   }
 
   void LocalPlayer::turnLeft()
   {
-    m_data->car().turn(1);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().turn(1);
   }
 
   void LocalPlayer::turnRight()
   {
-    m_data->car().turn(-1);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().turn(-1);
   }
 
   void LocalPlayer::useObject()
@@ -309,39 +320,43 @@ namespace game
   void LocalPlayer::speedUpReleased()
   {
     nope::log::Log(Debug) << "Idle mode !!";
-    double        rawSpeed = m_data->car().speed();
-    std::uint32_t speed = static_cast<std::uint32_t>(
-              (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
+    double rawSpeed =
+        m_data[static_cast<std::size_t>(m_playerIndex)].car().speed();
+    std::uint32_t speed =
+        static_cast<std::uint32_t>((rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
 
     m_sound.stopSound(core::ESound::ACC_KART_SOUND);
     if (speed > 30)
-    {
-        nope::log::Log(Debug) << "SLow mode !!";
-        m_sound.playSound(core::ESound::SLOW_KART_SOUND);
-        m_sound.setVolumeSource(core::ESound::SLOW_KART_SOUND, 0.45f * m_sound.getVolume());
-    }
+      {
+	nope::log::Log(Debug) << "SLow mode !!";
+	m_sound.playSound(core::ESound::SLOW_KART_SOUND);
+	m_sound.setVolumeSource(core::ESound::SLOW_KART_SOUND,
+	                        0.45f * m_sound.getVolume());
+      }
     m_sound.playSound(core::ESound::IDLE_KART_SOUND);
     m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
-    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND, 2.0f * m_sound.getVolume());
-    m_data->car().move(0);
+    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND,
+                            2.0f * m_sound.getVolume());
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().move(0);
   }
 
   void LocalPlayer::slowDownReleased()
   {
     m_sound.playSound(core::ESound::IDLE_KART_SOUND);
     m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
-    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND, 2.0f * m_sound.getVolume());
-    m_data->car().move(0);
+    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND,
+                            2.0f * m_sound.getVolume());
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().move(0);
   }
 
   void LocalPlayer::turnLeftReleased()
   {
-    m_data->car().turn(0);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().turn(0);
   }
 
   void LocalPlayer::turnRightReleased()
   {
-    m_data->car().turn(0);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().turn(0);
   }
 
   void LocalPlayer::useObjectReleased()
@@ -374,18 +389,6 @@ namespace game
     m_order = order;
   }
 
-  std::uint32_t LocalPlayer::getSpeed() const
-  {
-    // TODO return car speed
-    return 20;
-  }
-
-  std::uint32_t LocalPlayer::getPosition() const
-  {
-    // TODO return car position
-    return 1;
-  }
-
   void LocalPlayer::display()
   {
     for (std::uint32_t i = 0; i < m_layers.size(); ++i)
@@ -394,13 +397,33 @@ namespace game
       }
   }
 
+  std::uint16_t LocalPlayer::getID() const
+  {
+    return m_id;
+  }
+
+  void LocalPlayer::setID(std::uint16_t id)
+  {
+    m_id = id;
+  }
+
+  bool LocalPlayer::operator==(std::uint16_t id) const
+  {
+    return m_id == id;
+  }
+
   std::size_t LocalPlayer::getRank() const
   {
-    return (m_data->getRank());
+    return (m_data[static_cast<std::size_t>(m_playerIndex)].getRank());
   }
 
   bool LocalPlayer::getFinished() const
   {
-    return (m_data->getFinished());
+    return (m_data[static_cast<std::size_t>(m_playerIndex)].getFinished());
+  }
+
+  bool LocalPlayer::isConnected() const
+  {
+    return m_connected;
   }
 }

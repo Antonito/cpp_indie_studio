@@ -143,6 +143,8 @@ bool GameServer::authenticateToConnectManager()
   data.pck.eventData.licence.port = m_gameServerPort;
   data.pck.eventData.licence.maxClients =
       static_cast<std::uint16_t>(m_maxClients);
+  data.pck.eventData.licence.curClients =
+      static_cast<std::uint16_t>(m_curClients);
   pck << data;
   if (write(pck) != network::IClient::ClientAction::SUCCESS)
     {
@@ -260,6 +262,10 @@ network::IClient::ClientAction
 	      rep.pck.eventData.token.port = m_gameServerPort;
 	      std::copy(tokenStr.begin(), tokenStr.end(),
 	                rep.pck.eventData.token.tokenData.data());
+	      nope::log::Log(Debug)
+	          << "There are " << m_curClients << " clients.";
+	      rep.pck.eventData.token.curClients =
+	          static_cast<std::uint16_t>(m_curClients);
 	    }
 	}
     }
@@ -292,6 +298,20 @@ void GameServer::connectManagerCom()
 	  // There was an error
 	  nope::log::Log(Error) << "select() failed [ConnectManager]";
 	  break;
+	}
+      else if (rc == 0)
+	{
+	  Packet<GameServerToCMPacket>   packet;
+	  GameServerToCMPacket           rep;
+	  network::IClient::ClientAction ret;
+
+	  // Update client list if timeout
+	  nope::log::Log(Debug) << "Time'd out !";
+	  rep.pck.eventType = GameServerToCMEvent::NB_CLIENTS;
+	  rep.pck.eventData.nbClients =
+	      static_cast<std::uint16_t>(m_curClients);
+	  packet << rep;
+	  ret = write(packet);
 	}
       else if (rc > 0)
 	{

@@ -34,6 +34,7 @@
 #include "GameClient.hpp"
 #include "json.hpp"
 #include "GenNetwork.hpp"
+#include "UDPClient.hpp"
 #include "MapError.hpp"
 
 #if defined(_WIN32)

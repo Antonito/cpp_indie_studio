@@ -214,6 +214,7 @@ network::IClient::ClientAction GameServer::treatIncomingData()
 	      }
 	    m_port = rep.pck.eventData.licence.port;
 	    m_maxClients = rep.pck.eventData.licence.maxClients;
+	    m_curClients = rep.pck.eventData.licence.curClients;
 	  }
       }
       break;
@@ -221,6 +222,21 @@ network::IClient::ClientAction GameServer::treatIncomingData()
       nope::log::Log(Info)
           << "GameServer " << getSocket()
           << " in authenticated state."; // TODO: Put here or output ?
+      ret = read(m_packet);
+      if (ret == network::IClient::ClientAction::SUCCESS)
+	{
+	  m_packet >> rep;
+	  if (rep.pck.eventType == GameServerToCMEvent::NB_CLIENTS)
+	    {
+	      nope::log::Log(Info) << "Updating number of clients. ["
+	                           << rep.pck.eventData.nbClients << "]";
+	      m_curClients = rep.pck.eventData.nbClients;
+	    }
+	}
+      if (ret == network::IClient::ClientAction::FAILURE)
+	{
+	  ret = network::IClient::ClientAction::SUCCESS;
+	}
       break;
     case State::TOKEN:
       {
@@ -240,6 +256,7 @@ network::IClient::ClientAction GameServer::treatIncomingData()
 		token.getData().treated = rep.pck.eventData.token.treated;
 		token.getData().port = rep.pck.eventData.token.port;
 		token.getData().tokenData = rep.pck.eventData.token.tokenData;
+		m_curClients = rep.pck.eventData.token.curClients;
 		nope::log::Log(Info)
 		    << "Received token from distant game server !";
 	      }
