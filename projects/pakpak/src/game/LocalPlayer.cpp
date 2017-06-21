@@ -55,10 +55,11 @@ namespace game
     m_currentLayers.push(
         m_layers[static_cast<std::size_t>(GameLayer::InGame)].get());
     m_currentLayers.top()->enable();
-    m_cam = m_data[m_playerIndex].car().getCamera();
+    m_cam = m_data[static_cast<std::size_t>(m_playerIndex)].car().getCamera();
     m_cam->setNearClipDistance(3);
     // CHECK IF SERVER UDP BROKEN AFTER MERGE
-    g[order].setId(id);
+    if (!connected)
+      g[order].setId(id);
     // ENDCHECK
 
     Log(nope::log::Debug) << "Adding viewport '" << m_order << "' to window";
@@ -190,12 +191,12 @@ namespace game
 
   ACar &LocalPlayer::car()
   {
-    return (m_data[m_playerIndex].car());
+    return (m_data[static_cast<std::size_t>(m_playerIndex)].car());
   }
 
   ACar const &LocalPlayer::car() const
   {
-    return (m_data[m_playerIndex].car());
+    return (m_data[static_cast<std::size_t>(m_playerIndex)].car());
   }
 
   core::SettingsPlayer &LocalPlayer::settings()
@@ -251,30 +252,30 @@ namespace game
     m_sound.setVolumeSource(core::ESound::ACC_KART_SOUND,
                             0.45f * m_sound.getVolume());
 
-    m_data[m_playerIndex].car().move(-1);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().move(-1);
   }
 
   void LocalPlayer::slowDown()
   {
     m_sound.stopSound(core::ESound::ACC_KART_SOUND);
-    if (m_data[m_playerIndex].car().speed() >= 5.0)
+    if (m_data[static_cast<std::size_t>(m_playerIndex)].car().speed() >= 5.0)
       {
 	m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
 	m_sound.playSound(core::ESound::SLOW_KART_SOUND);
 	m_sound.setVolumeSource(core::ESound::SLOW_KART_SOUND,
 	                        0.45f * m_sound.getVolume());
       }
-    m_data[m_playerIndex].car().move(1);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().move(1);
   }
 
   void LocalPlayer::turnLeft()
   {
-    m_data[m_playerIndex].car().turn(1);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().turn(1);
   }
 
   void LocalPlayer::turnRight()
   {
-    m_data[m_playerIndex].car().turn(-1);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().turn(-1);
   }
 
   void LocalPlayer::useObject()
@@ -319,7 +320,8 @@ namespace game
   void LocalPlayer::speedUpReleased()
   {
     nope::log::Log(Debug) << "Idle mode !!";
-    double        rawSpeed = m_data[m_playerIndex].car().speed();
+    double rawSpeed =
+        m_data[static_cast<std::size_t>(m_playerIndex)].car().speed();
     std::uint32_t speed =
         static_cast<std::uint32_t>((rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
 
@@ -335,7 +337,7 @@ namespace game
     m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
     m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND,
                             2.0f * m_sound.getVolume());
-    m_data[m_playerIndex].car().move(0);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().move(0);
   }
 
   void LocalPlayer::slowDownReleased()
@@ -344,17 +346,17 @@ namespace game
     m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
     m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND,
                             2.0f * m_sound.getVolume());
-    m_data[m_playerIndex].car().move(0);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().move(0);
   }
 
   void LocalPlayer::turnLeftReleased()
   {
-    m_data[m_playerIndex].car().turn(0);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().turn(0);
   }
 
   void LocalPlayer::turnRightReleased()
   {
-    m_data[m_playerIndex].car().turn(0);
+    m_data[static_cast<std::size_t>(m_playerIndex)].car().turn(0);
   }
 
   void LocalPlayer::useObjectReleased()
@@ -412,12 +414,12 @@ namespace game
 
   std::size_t LocalPlayer::getRank() const
   {
-    return (m_data[m_playerIndex].getRank());
+    return (m_data[static_cast<std::size_t>(m_playerIndex)].getRank());
   }
 
   bool LocalPlayer::getFinished() const
   {
-    return (m_data[m_playerIndex].getFinished());
+    return (m_data[static_cast<std::size_t>(m_playerIndex)].getFinished());
   }
 
   bool LocalPlayer::isConnected() const
