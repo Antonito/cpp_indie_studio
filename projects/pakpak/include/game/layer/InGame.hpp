@@ -116,10 +116,7 @@ namespace game
 
     virtual void display()
     {
-      if (!m_player.isConnected())
-	{
-	  setStart();
-	}
+      setStart();
       setSpeed();
       setPosition();
       setFinish();
@@ -240,13 +237,11 @@ namespace game
 	    {
 	      nope::log::Log(Debug) << "PLAYER INDEX: "
 	                            << static_cast<std::uint32_t>(playerIndex);
-	      nope::log::Log(Debug)
-	          << "CarAddr: " << &m_players[playerIndex]->car();
+	      nope::log::Log(Debug) << "CarAddr: "
+	                            << &m_players[playerIndex]->car();
 	      double rawSpeed = m_players[playerIndex]->car().speed();
-	      nope::log::Log(Debug) << "PASSED PLAYER INDEX";
 	      std::uint32_t speed = static_cast<std::uint32_t>(
 	          (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
-
 	      if (speed < 1000)
 		{
 
@@ -257,8 +252,8 @@ namespace game
 		  if (thousand)
 		    {
 		      m_speed[playerIndex][2]->setVisible(true);
-		      m_speed[playerIndex][2]->setProperty(
-		          image, gl_speedAssets[thousand]);
+		      m_speed[playerIndex]
+		             [2]->setProperty(image, gl_speedAssets[thousand]);
 		    }
 		  else
 		    {
@@ -268,8 +263,8 @@ namespace game
 		  if (decade)
 		    {
 		      m_speed[playerIndex][1]->setVisible(true);
-		      m_speed[playerIndex][1]->setProperty(
-		          image, gl_speedAssets[decade]);
+		      m_speed[playerIndex]
+		             [1]->setProperty(image, gl_speedAssets[decade]);
 		    }
 		  else if (thousand)
 		    {
@@ -285,8 +280,8 @@ namespace game
 
 		  if (unit)
 		    {
-		      m_speed[playerIndex][0]->setProperty(
-		          image, gl_speedAssets[unit]);
+		      m_speed[playerIndex]
+		             [0]->setProperty(image, gl_speedAssets[unit]);
 		    }
 		  else
 		    {

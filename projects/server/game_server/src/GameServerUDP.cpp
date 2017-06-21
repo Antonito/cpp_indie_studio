@@ -128,6 +128,10 @@ void GameServer::gameServerUDP()
 	  nope::log::Log(Error) << "select() failed [GameServerUDP]";
 	  break;
 	}
+      else if (rc == 0)
+	{
+	  nope::log::Log(Debug) << "Select time'd out [GameServerUDP]";
+	}
       else if (rc > 0)
 	{
 	  // Treat I/O
@@ -137,7 +141,7 @@ void GameServer::gameServerUDP()
       // Check server's tick
       if (std::chrono::duration_cast<std::chrono::milliseconds>(now -
                                                                 m_tickUDP)
-              .count() >= 17 * 2)
+              .count() >= 17)
 	{
 	  // Loop over each client to send its packet
 	  for (std::vector<UDPClient>::iterator ite = m_clientUDP.begin();
