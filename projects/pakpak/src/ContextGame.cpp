@@ -122,7 +122,7 @@ namespace game
 	// Process network I/O
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(now -
 	                                                          lastTimePck)
-	        .count() >= 17)
+	        .count() >= 17 * 2)
 	  {
 	    std::vector<GameClientToGSPacketUDP> pck;
 	    GameClientToGSPacketUDP              pckContent;
@@ -314,8 +314,8 @@ namespace game
 	    // Add new player
 	    std::size_t const i = gameData.size();
 
-	    nope::log::Log(Debug) << "Adding player [" << i
-	                          << "] - Id: " << packet.pck.id;
+	    nope::log::Log(Debug)
+	        << "Adding player [" << i << "] - Id: " << packet.pck.id;
 	    gameData.push_back(PlayerData());
 	    gameData.back().setCar(std::make_unique<EmptyCar>(
 	        m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
