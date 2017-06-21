@@ -49,7 +49,8 @@ namespace game
 	m_players.emplace_back(std::make_unique<LocalPlayer>(
 	    m_win, m_game, m_game.getPlayers(), i, static_cast<int>(i),
 	    m_settings, ((i == 0) ? m_hud.get() : nullptr), *this, m_players,
-	    nbLocalPlayer, (i == 0) ? m_net.getId() : i, m_sound));
+	    nbLocalPlayer, (i == 0) ? m_net.getId() : i, m_sound,
+	    m_net.isConnected()));
 
 	/*for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
 	  {
@@ -141,6 +142,25 @@ namespace game
 	    // Processing Packets
 	    setPlayersFromUDPPackets();
 	    m_networkPacket.clear();
+	  }
+
+	// Check timeout
+	std::vector<PlayerData> &gameData = m_game.getPlayers();
+	for (std::vector<PlayerData>::iterator it = gameData.begin();
+	     it != gameData.end();)
+	  {
+	    bool deleted = false;
+
+	    if (it->hasTimedOut())
+	      {
+		nope::log::Log(Debug) << "Client time'd out, removing it";
+		gameData.erase(it);
+		deleted = true;
+	      }
+	    if (!deleted)
+	      {
+		++it;
+	      }
 	  }
       }
 
@@ -294,8 +314,8 @@ namespace game
 	    // Add new player
 	    std::size_t const i = gameData.size();
 
-	    nope::log::Log(Debug)
-	        << "Adding player [" << i << "] - Id: " << packet.pck.id;
+	    nope::log::Log(Debug) << "Adding player [" << i
+	                          << "] - Id: " << packet.pck.id;
 	    gameData.push_back(PlayerData());
 	    gameData.back().setCar(std::make_unique<EmptyCar>(
 	        m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
@@ -305,6 +325,7 @@ namespace game
 	    player = gameData.end() - 1;
 	  }
 
+	player->updateLastAction();
 	game::EmptyCar &car = static_cast<game::EmptyCar &>(player->car());
 	nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
 
@@ -312,36 +333,5 @@ namespace game
 	nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
       }
     nope::log::Log(Debug) << "*****************************";
-  }
-
-  void ContextGame::setDirectionFromUDP(game::EmptyCar &               car,
-                                        GameClientToGSPacketUDP const &packet)
-  {
-    std::vector<float> dir(packet.getDirection());
-
-    nope::log::Log(Debug) << "Direction :"
-                          << "\n\t\t\t x : " << dir[0]
-                          << "\n\t\t\t y : " << dir[1]
-                          << "\n\t\t\t z : " << dir[2]
-                          << "\n\t\t\t w : " << dir[3];
-
-    Ogre::Quaternion quat(dir[3], dir[0], dir[1], dir[2]);
-    // car.setDirection(quat);
-    // TODO: remove this function?
-  }
-
-  void ContextGame::setPositionFromUDP(game::EmptyCar &               car,
-                                       GameClientToGSPacketUDP const &packet)
-  {
-    std::vector<float> pos(packet.getPosition());
-
-    nope::log::Log(Debug) << "Position :"
-                          << "\n\t\t\t x : " << pos[0]
-                          << "\n\t\t\t y : " << pos[1]
-                          << "\n\t\t\t z : " << pos[2];
-    Ogre::Vector3 vec(pos[0], pos[1], pos[2]);
-    // car.setPosition(vec);
-
-    // TODO: remove this function?
   }
 }

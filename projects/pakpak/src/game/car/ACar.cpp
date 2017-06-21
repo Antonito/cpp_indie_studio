@@ -61,12 +61,13 @@ namespace game
 
     Ogre::Vector3 orient = this->direction() * Ogre::Vector3::UNIT_Y;
 
-    double maxOrient =
+    double maxOrient = static_cast<double>(
         (Ogre::Quaternion(Ogre::Degree(45), Ogre::Vector3::UNIT_X) *
          Ogre::Vector3::UNIT_Y)
-            .dotProduct(Ogre::Vector3::UNIT_Y);
+            .dotProduct(Ogre::Vector3::UNIT_Y));
 
-    if (orient.dotProduct(Ogre::Vector3::UNIT_Y) < maxOrient)
+    if (static_cast<double>(orient.dotProduct(Ogre::Vector3::UNIT_Y)) <
+        maxOrient)
       {
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(
 	        clock_t::now() - m_timeLastGoodOrientation)
@@ -339,7 +340,8 @@ namespace game
 
     std::vector<float> _dir = pck.getDirection();
     std::vector<float> _pos = pck.getPosition();
-    float              speed = pck.pck.speed / 1000.0f;
+    //    float              speed = pck.pck.speed / 1000.0f;
+    // TODO : speed ?
 
     Ogre::Vector3    p(_pos[0], _pos[1], _pos[2]);
     btVector3        v(p.x, p.y, p.z);

@@ -1,6 +1,9 @@
 #ifndef MENU_HPP_
 #define MENU_HPP_
 
+#include <CEGUI/InputEvent.h>
+#include "LocalPlayer.hpp"
+#include "HUD.hpp"
 #include "ALayer.hpp"
 
 namespace game

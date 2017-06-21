@@ -74,9 +74,6 @@ namespace game
     void setUDPPatcketPosition(GameClientToGSPacketUDP &,
                                Ogre::Vector3 const &);
     void setPlayersFromUDPPackets();
-    void setDirectionFromUDP(game::EmptyCar &,
-                             GameClientToGSPacketUDP const &);
-    void setPositionFromUDP(game::EmptyCar &, GameClientToGSPacketUDP const &);
   };
 }
 
