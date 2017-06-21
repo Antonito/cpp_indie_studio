@@ -35,7 +35,7 @@ namespace game
     LocalPlayer(Ogre::RenderWindow *, GameData &, PlayerData *, int,
                 core::SettingsPlayer &, core::HUD *, game::ContextGame &,
                 std::vector<std::unique_ptr<LocalPlayer>> &, std::uint8_t,
-                core::SoundManager &);
+                std::uint16_t, core::SoundManager &);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&);
     virtual ~LocalPlayer();
@@ -53,9 +53,7 @@ namespace game
                                OIS::MouseButtonID     id);
 
     virtual void push(GameLayer layer);
-    virtual void          popLayer();
-    virtual std::uint32_t getSpeed() const;
-    virtual std::uint32_t getPosition() const;
+    virtual void popLayer();
 
     void setViewPort(Ogre::Real left, Ogre::Real top, Ogre::Real width,
                      Ogre::Real height);
@@ -73,6 +71,9 @@ namespace game
     std::pair<void (LocalPlayer::*)(), void (LocalPlayer::*)()> &
                           actions(std::string const &);
     core::SettingsPlayer &settings();
+    std::uint16_t         getID() const;
+    void setID(std::uint16_t id);
+    bool operator==(std::uint16_t id) const;
 
     std::size_t getRank() const;
 
@@ -119,6 +120,7 @@ namespace game
     int                 m_order;
     core::HUD *         m_hud;
     game::ContextGame & m_contextGame;
+    std::uint16_t       m_id;
     core::SoundManager &m_sound;
   };
 }

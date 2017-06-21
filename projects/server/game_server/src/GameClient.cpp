@@ -3,9 +3,11 @@
 GameClient::GameClient(sock_t const fd, std::vector<Token> &tokenList,
                        std::size_t const ndx)
     : m_sock(fd), m_canWrite(false), m_state(GameClient::State::CONNECTED),
-      m_packet(), m_tokenList(tokenList), m_id(static_cast<std::int32_t>(ndx)),
+      m_packet(), m_tokenList(tokenList),
+      m_id(static_cast<std::uint16_t>(ndx)),
       m_udpPort(Config::getInstance().getUDPGameServerPort())
 {
+  nope::log::Log(Debug) << "Client #" << m_id;
 }
 
 GameClient::~GameClient()
@@ -125,7 +127,7 @@ void GameClient::toggleWrite()
   m_canWrite = !m_canWrite;
 }
 
-std::int32_t GameClient::getId() const
+std::uint16_t GameClient::getId() const
 {
   return (m_id);
 }
@@ -322,10 +324,12 @@ network::IClient::ClientAction GameClient::treatOutgoingData()
       // TODO: Detect if PLAYING or SPECTATOR
       rep.pck.eventData.lobbyType.type =
           static_cast<std::uint16_t>(GameClientToGSLobbyType::PLAYING);
+      rep.pck.eventData.lobbyType.id = m_id;
       m_packet << rep;
       ret = write(m_packet);
       m_state = State::WAITING;
-      nope::log::Log(Debug) << "Sent Lobby Type, switching to State::WAITING";
+      nope::log::Log(Debug) << "Sent Lobby Type to client " << m_id
+                            << ", switching to State::WAITING";
       break;
 
     // Lobby

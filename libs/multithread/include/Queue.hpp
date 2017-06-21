@@ -28,7 +28,7 @@ namespace multithread
     T &back()
     {
       std::unique_lock<std::mutex> lock(m_mut);
-      return (m_queue.bakc());
+      return (m_queue.back());
     }
 
     bool empty()
