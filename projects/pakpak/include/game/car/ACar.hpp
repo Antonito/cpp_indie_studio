@@ -29,7 +29,8 @@ namespace game
     void update(double);
 
     Ogre::Camera *getCamera() const;
-    void          setPacketData(GameClientToGSPacketUDP const &pck);
+    void          setPacketData(GameClientToGSPacketUDP const &pck,
+                                bool                           rollbackOnly = false);
 
   protected:
     ACar(game::GameData &gamedata, std::string const &mesh,
