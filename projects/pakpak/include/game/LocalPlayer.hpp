@@ -74,8 +74,8 @@ namespace game
                           actions(std::string const &);
     core::SettingsPlayer &settings();
     std::uint16_t         getID() const;
-    void                  setID(std::uint16_t id);
-    bool                  operator==(std::uint16_t id) const;
+    void setID(std::uint16_t id);
+    bool operator==(std::uint16_t id) const;
 
     std::size_t getRank() const;
 
@@ -111,9 +111,9 @@ namespace game
     static constexpr std::size_t nbLayer =
         static_cast<std::size_t>(GameLayer::NbLayer);
     std::array<std::unique_ptr<ILayer>, nbLayer> m_layers;
-    core::FastStack<ILayer *>                    m_currentLayers;
-    Ogre::Camera *                               m_cam;
-    Ogre::Viewport *                             m_viewport;
+    core::FastStack<ILayer *> m_currentLayers;
+    Ogre::Camera *            m_cam;
+    Ogre::Viewport *          m_viewport;
     std::vector<std::chrono::time_point<std::chrono::high_resolution_clock>>
                           m_rounds;
     core::SettingsPlayer &m_settings;
@@ -127,6 +127,7 @@ namespace game
     std::uint16_t       m_id;
     core::SoundManager &m_sound;
     bool                m_connected;
+    GameData &          m_gameData;
   };
 }
 
