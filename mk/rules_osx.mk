@@ -13,7 +13,16 @@ OBJ_DIR_LIST=	$(DIR_LIST:$(SRC_DIR)%=$(OBJ_DIR)%)
 
 NAME_EXTENSION=	$(suffix $(NAME))
 
-$(NAME):	$(PRECOMPILED_OBJ) $(MAIN_OBJ_DIR) $(OBJ_DIR_LIST) $(OBJ)
+$(NAME):
+ifneq ($(HEADER),)
+		@$(MAKE) $(PRECOMPILED_OBJ)
+endif
+		@$(foreach dir, $(MAIN_OBJ_DIR) $(OBJ_DIR_LIST), $(MKDIR) $(dir) &> /dev/null && \
+		$(ECHO) "$(WHITE)[$(PURPLE)MKDIR$(WHITE)] Created obj directory $(CYAN)"$(dir)"\n$(CLEAR)" || \
+		$(ECHO) "$(WHITE)[$(PURPLE)MKDIR$(WHITE)] Cannot create obj directory $(CYAN)"$(dir)"\n$(CLEAR)";)
+		@$(MAKE) binary
+
+binary:	 $(OBJ)
 ifeq ($(NAME_EXTENSION),.a)
 		@$(RANLIB) $(NAME) $(OBJ) && \
 		$(ECHO) "$(WHITE)[$(GREEN)OK$(WHITE)] Generated $(CYAN)"$(NAME)"\n$(CLEAR)" || \
@@ -84,7 +93,9 @@ fclean:		clean
 		@$(RM) $(NAME)
 		@$(ECHO) "$(WHITE)[$(YELLOW)RM$(WHITE)] Removed $(CYAN)"$(NAME)"\n$(CLEAR)"
 
-re:		fclean all
+re:
+		@$(MAKE) fclean
+		@$(MAKE) all
 
 run:
 		./$(NAME)
