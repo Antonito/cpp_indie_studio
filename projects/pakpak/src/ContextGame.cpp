@@ -39,6 +39,7 @@ namespace game
 	    m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
 	    Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)));
       }
+    m_game[0].setId((m_net.isConnected()) ? m_net.getId() : 0);
 
     nope::log::Log(Debug) << "Creating HUD";
     m_hud = std::make_unique<core::HUD>();
@@ -49,6 +50,7 @@ namespace game
 	    m_win, m_game, &m_game[i], static_cast<int>(i), m_settings,
 	    ((i == 0) ? m_hud.get() : nullptr), *this, m_players,
 	    nbLocalPlayer, (i == 0) ? m_net.getId() : i, m_sound));
+
 	/*for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
 	  {
 	    m_ia.emplace_back(
@@ -280,23 +282,37 @@ namespace game
         << "=========WRITTING======\nProcessing server UDP packets";
     for (GameClientToGSPacketUDP &packet : m_networkPacket)
       {
-	std::vector<std::unique_ptr<LocalPlayer>>::iterator player =
-	    std::find_if(m_players.begin(), m_players.end(),
-	                 [&packet](std::unique_ptr<LocalPlayer> &pl) {
-	                   return (pl->getID() == packet.pck.id);
-	                 });
+	std::vector<PlayerData> &gameData = m_game.getPlayers();
 
-	if (player != m_players.end())
+	std::vector<PlayerData>::iterator player = std::find_if(
+	    gameData.begin(), gameData.end(), [&packet](PlayerData &pl) {
+	      return (pl.getId() == packet.pck.id);
+	    });
+
+	if (player == gameData.end())
 	  {
-	    game::EmptyCar &car =
-	        static_cast<game::EmptyCar &>((*player)->car());
-	    nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
+	    // Add new player
 
-	    setDirectionFromUDP(car, packet);
-	    setPositionFromUDP(car, packet);
-	    car.setSpeed(packet.pck.speed / 1000.0);
-	    nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
+	    std::size_t const i = gameData.size();
+
+	    nope::log::Log(Debug)
+	        << "Adding player [" << i << "] - Id: " << packet.pck.id;
+	    gameData.push_back(PlayerData());
+	    m_game[i].setCar(std::make_unique<EmptyCar>(
+	        m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
+	        Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)));
+	    m_game[i].setId(packet.pck.id);
+
+	    player = gameData.end() - 1;
 	  }
+
+	game::EmptyCar &car = static_cast<game::EmptyCar &>(player->car());
+	nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
+
+	setDirectionFromUDP(car, packet);
+	setPositionFromUDP(car, packet);
+	car.setSpeed(packet.pck.speed / 1000.0);
+	nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
       }
     nope::log::Log(Debug) << "*****************************";
   }

@@ -6,7 +6,8 @@ UDPClient::UDPClient(sockaddr_in_t const &addr, network::UDPSocket &sock,
       m_lastAction(std::chrono::system_clock::now()), m_id(id)
 {
   nope::log::Log(Debug) << "Creating client [UDPClient - "
-                        << inet_ntoa(m_addr.sin_addr) << "]";
+                        << inet_ntoa(m_addr.sin_addr) << " - #" << m_id
+                        << " ]";
 }
 
 UDPClient::~UDPClient()
@@ -14,7 +15,8 @@ UDPClient::~UDPClient()
 }
 
 UDPClient::UDPClient(UDPClient const &other)
-    : m_addr(other.m_addr), m_sock(other.m_sock)
+    : m_addr(other.m_addr), m_sock(other.m_sock),
+      m_lastAction(other.m_lastAction), m_id(other.m_id)
 {
 }
 
@@ -23,6 +25,8 @@ UDPClient &UDPClient::operator=(UDPClient const &other)
   if (this != &other)
     {
       m_addr = other.m_addr;
+      m_id = other.m_id;
+      m_lastAction = other.m_lastAction;
     }
   return (*this);
 }

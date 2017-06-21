@@ -35,12 +35,16 @@ namespace game
     bool getFinished() const;
     void setFinished(bool);
 
+    void setId(std::uint16_t const id);
+    std::uint16_t getId() const;
+
   private:
     std::unique_ptr<ACar> m_car;
     int                   m_score;
     std::int32_t          m_currentCheckpoint;
     std::size_t           m_rank;
     bool                  m_finished;
+    std::uint16_t         m_id;
   };
 }
 

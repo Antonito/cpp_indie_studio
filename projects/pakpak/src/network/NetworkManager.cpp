@@ -104,6 +104,10 @@ namespace core
 
   std::uint16_t NetworkManager::getId() const
   {
+    if (!isConnected())
+      {
+	return (0);
+      }
     return (m_conn->getId());
   }
 }

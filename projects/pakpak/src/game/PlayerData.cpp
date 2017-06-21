@@ -4,14 +4,14 @@ namespace game
 {
   PlayerData::PlayerData()
       : m_car(nullptr), m_score(0), m_currentCheckpoint(0), m_rank(0),
-        m_finished(false)
+        m_finished(false), m_id(0)
   {
   }
 
   PlayerData::PlayerData(PlayerData &&that)
       : m_car(std::move(that.m_car)), m_score(0),
         m_currentCheckpoint(that.m_currentCheckpoint), m_rank(that.m_rank),
-        m_finished(that.m_finished)
+        m_finished(that.m_finished), m_id(that.m_id)
   {
   }
 
@@ -81,5 +81,15 @@ namespace game
   {
     nope::log::Log(Debug) << "FINISHED !!!!";
     m_finished = finished;
+  }
+
+  void PlayerData::setId(std::uint16_t const id)
+  {
+    m_id = id;
+  }
+
+  std::uint16_t PlayerData::getId() const
+  {
+    return (m_id);
   }
 }

@@ -68,8 +68,8 @@ std::int32_t GameServer::gameServerUDPIO(std::int32_t const sock,
 
 	      m_pckUDP >> tmp;
 	      // Client is new, add it to vector
-	      m_clientUDP.push_back(UDPClient(cliAddr, m_gameSockUDP,
-	                                      tmp.pck.id)); // TODO: get ID
+	      m_clientUDP.push_back(
+	          UDPClient(cliAddr, m_gameSockUDP, tmp.pck.id));
 	      nope::log::Log(Info)
 	          << "Added new client to server. [GameServerUDP]";
 	      ite = m_clientUDP.end() - 1; // Get iterator on added element
@@ -159,6 +159,9 @@ void GameServer::gameServerUDP()
 		  for (UDPClient &_cli : m_clientUDP)
 		    {
 		      // Send packet to client
+		      nope::log::Log(Debug)
+		          << "Sending packet from client " << ite->getId()
+		          << " to client " << _cli.getId();
 		      _cli.write(m_pckUDP);
 		    }
 		}
