@@ -31,7 +31,9 @@ int main(int, char **)
 #endif
 
 {
-  nope::log::Logger::start("nope.log");
+  int ret = EXIT_SUCCESS;
+
+  nope::log::Logger::start("pakpak_racing.log");
   nope::log::Logger::logLevel = nope::log::LogLevel::LOG_DEBUG;
   core::AppLauncher app;
 
@@ -54,8 +56,13 @@ int main(int, char **)
       std::cerr << "An exception has occured: " <<
 
           e.getFullDescription().c_str() << std::endl;
-
 #endif
+      ret = EXIT_FAILURE;
     }
-  return 0;
+  catch (std::exception const &e)
+    {
+      nope::log::Log(Error) << e.what();
+      ret = EXIT_FAILURE;
+    }
+  return ret;
 }

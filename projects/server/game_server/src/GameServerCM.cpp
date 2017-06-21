@@ -301,9 +301,8 @@ void GameServer::connectManagerCom()
 	}
       else if (rc == 0)
 	{
-	  Packet<GameServerToCMPacket>   packet;
-	  GameServerToCMPacket           rep;
-	  network::IClient::ClientAction ret;
+	  Packet<GameServerToCMPacket> packet;
+	  GameServerToCMPacket         rep;
 
 	  // Update client list if timeout
 	  nope::log::Log(Debug) << "Time'd out ! [ConnectManager]";
