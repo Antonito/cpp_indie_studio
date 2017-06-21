@@ -140,4 +140,18 @@ namespace game
   {
     m_lastAction = std::chrono::system_clock::now();
   }
+
+  void PlayerData::resetToLastCheckPoint(
+      std::vector<CheckPoint> const &checkpoints)
+  {
+    if (checkpoints.size() > 0)
+      {
+	m_car->resetToCheckPoint(
+	    checkpoints[m_currentCheckpoint % checkpoints.size()]);
+      }
+    else
+      {
+	m_car->resetPositions();
+      }
+  }
 }

@@ -74,4 +74,14 @@ namespace game
       }
     return (last);
   }
+
+  Ogre::Vector3 const &CheckPoint::position() const
+  {
+    return (m_point);
+  }
+
+  Ogre::Vector3 const &CheckPoint::direction() const
+  {
+    return (m_normale);
+  }
 }

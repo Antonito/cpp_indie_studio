@@ -25,12 +25,15 @@ namespace game
     void move(double);
     void turn(double);
     void resetOrientation();
+    void resetPositions();
 
     void update(double);
 
     Ogre::Camera *getCamera() const;
     void          setPacketData(GameClientToGSPacketUDP const &pck,
                                 bool                           rollbackOnly = false);
+
+    void resetToCheckPoint(CheckPoint const &checkpoint);
 
   protected:
     ACar(game::GameData &gamedata, std::string const &mesh,

@@ -34,15 +34,17 @@ namespace game
     std::size_t getRank() const;
     void        setRank(std::size_t);
 
-    bool getFinished() const;
-    void setFinished(bool);
+    bool         getFinished() const;
+    void         setFinished(bool);
     game::Timer &getTimer();
 
-    void setId(std::uint16_t const id);
+    void          setId(std::uint16_t const id);
     std::uint16_t getId() const;
 
     bool hasTimedOut() const;
     void updateLastAction();
+
+    void resetToLastCheckPoint(std::vector<CheckPoint> const &checkpoints);
 
   private:
     std::unique_ptr<ACar>                 m_car;
@@ -52,7 +54,7 @@ namespace game
     bool                                  m_finished;
     std::uint16_t                         m_id;
     std::chrono::system_clock::time_point m_lastAction;
-    game::Timer				  m_timer;
+    game::Timer                           m_timer;
   };
 }
 
