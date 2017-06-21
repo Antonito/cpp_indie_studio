@@ -152,7 +152,39 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\GUIError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="src\IOError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\MapError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\NetworkConnectionError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\NetworkInvalidAddressError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\NetworkInvalidMapError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\NetworkInvalidPacketError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\NetworkReadPacketError.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\NetworkWritePacketError.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">exceptions_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
@@ -193,7 +225,15 @@
     <ClInclude Include="include\AException.hpp" />
     <ClInclude Include="include\exceptions_stdafx.hpp" />
     <ClInclude Include="include\exceptions_targetver.h" />
+    <ClInclude Include="include\GUIError.hpp" />
     <ClInclude Include="include\IOError.hpp" />
+    <ClInclude Include="include\MapError.hpp" />
+    <ClInclude Include="include\NetworkConnectionError.hpp" />
+    <ClInclude Include="include\NetworkInvalidAddressError.hpp" />
+    <ClInclude Include="include\NetworkInvalidMapError.hpp" />
+    <ClInclude Include="include\NetworkInvalidPacketError.hpp" />
+    <ClInclude Include="include\NetworkReadPacketError.hpp" />
+    <ClInclude Include="include\NetworkWritePacketError.hpp" />
     <ClInclude Include="include\PyFunctionArgError.hpp" />
     <ClInclude Include="include\PyFunctionInitializationError.hpp" />
     <ClInclude Include="include\PyFunctionReturnError.hpp" />

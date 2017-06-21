@@ -41,7 +41,12 @@ namespace network
     assert(isStarted());
     do
       {
+#if defined(_WIN32)
+	ret = sendto(m_socket, reinterpret_cast<const char *>(data), len, 0,
+	             dest, destLen);
+#else
 	ret = sendto(m_socket, data, len, 0, dest, destLen);
+#endif // !_WIN32
       }
     while (ret == -1 && errno == EINTR);
     return (ret != -1);
@@ -61,7 +66,12 @@ namespace network
     assert(isStarted());
     do
       {
+#if defined(_WIN32)
+	ret = recvfrom(m_socket, reinterpret_cast<char *>(buffer), rlen, 0,
+	               addr, addrLen);
+#else
 	ret = recvfrom(m_socket, buffer, rlen, 0, addr, addrLen);
+#endif // !_WIN32
       }
     while (ret == -1 && errno == EINTR);
     return (ret != -1);

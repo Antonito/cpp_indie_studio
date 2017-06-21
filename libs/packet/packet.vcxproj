@@ -158,6 +158,10 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">packet_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">packet_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\GameClientToGSUDP.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">packet_stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">packet_stdafx.hpp</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="src\GameServerToCM.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">packet_stdafx.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">packet_stdafx.hpp</PrecompiledHeaderFile>
@@ -184,6 +188,7 @@
   <ItemGroup>
     <ClInclude Include="include\GameClientCMPacket.hpp" />
     <ClInclude Include="include\GameClientGSPacket.hpp" />
+    <ClInclude Include="include\GameClientGSPacketUDP.hpp" />
     <ClInclude Include="include\GameServerCMPacket.hpp" />
     <ClInclude Include="include\IPacket.hpp" />
     <ClInclude Include="include\ISerializable.hpp" />

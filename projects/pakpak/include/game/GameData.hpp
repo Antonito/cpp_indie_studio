@@ -55,6 +55,8 @@ namespace game
 
     void update();
 
+    std::vector<PlayerData> &getPlayers();
+
     Ogre::Camera *createCamera(std::string const &name);
     Ogre::Entity *createEntity(std::string const &name);
     Ogre::SceneNode *createSceneNode();

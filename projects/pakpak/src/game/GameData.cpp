@@ -161,4 +161,9 @@ namespace game
     }
     return 0;
   }
+
+    std::vector<PlayerData> &GameData::getPlayers()
+  {
+    return (m_players);
+  }
 }
