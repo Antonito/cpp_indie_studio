@@ -128,6 +128,10 @@ void GameServer::gameServerUDP()
 	  nope::log::Log(Error) << "select() failed [GameServerUDP]";
 	  break;
 	}
+      else if (rc == 0)
+	{
+	  nope::log::Log(Debug) << "Select time'd out [GameServerUDP]";
+	}
       else if (rc > 0)
 	{
 	  // Treat I/O

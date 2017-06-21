@@ -306,7 +306,7 @@ void GameServer::connectManagerCom()
 	  network::IClient::ClientAction ret;
 
 	  // Update client list if timeout
-	  nope::log::Log(Debug) << "Time'd out !";
+	  nope::log::Log(Debug) << "Time'd out ! [ConnectManager]";
 	  rep.pck.eventType = GameServerToCMEvent::NB_CLIENTS;
 	  rep.pck.eventData.nbClients =
 	      static_cast<std::uint16_t>(m_curClients);
