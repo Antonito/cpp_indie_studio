@@ -4,14 +4,16 @@ namespace game
 {
   PlayerData::PlayerData()
       : m_car(nullptr), m_score(0), m_currentCheckpoint(0), m_rank(0),
-        m_finished(false)
+        m_finished(false), m_timer(0)
   {
+    nope::log::Log(Debug) << "Starting chrono";
+    m_timer.start();
   }
 
   PlayerData::PlayerData(PlayerData &&that)
       : m_car(std::move(that.m_car)), m_score(0),
         m_currentCheckpoint(that.m_currentCheckpoint), m_rank(that.m_rank),
-        m_finished(that.m_finished)
+        m_finished(that.m_finished), m_timer(that.m_timer)
   {
   }
 
@@ -79,7 +81,17 @@ namespace game
 
   void PlayerData::setFinished(bool finished)
   {
-    nope::log::Log(Debug) << "FINISHED !!!!";
+    if (finished)
+      {
+	nope::log::Log(Debug) << "saving chrono";
+	m_timer.save();
+      }
+    nope::log::Log(Debug) << "FINISHED !!!!" << m_timer.elapsedTime().count();
     m_finished = finished;
+  }
+
+  game::Timer &PlayerData::getTimer()
+  {
+    return m_timer;
   }
 }

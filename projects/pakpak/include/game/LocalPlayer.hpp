@@ -17,6 +17,7 @@
 #include "ACar.hpp"
 #include "ILayer.hpp"
 #include "SettingsPlayer.hpp"
+#include "Timer.hpp"
 
 // Disable clang warning for templated class padding
 #if defined(__clang__)
@@ -77,7 +78,7 @@ namespace game
 
     std::size_t getRank() const;
 
-    bool getFinished() const;
+    bool         getFinished() const;
 
   private:
     void setActionMap();

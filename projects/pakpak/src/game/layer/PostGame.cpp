@@ -29,17 +29,69 @@ namespace game
 	        CEGUI::PushButton::EventClicked,
 	        CEGUI::Event::Subscriber(&PostGame::onQuitClick, this));
 	  }
+
+	CEGUI::ItemListbox *timeList = static_cast<CEGUI::ItemListbox *>(
+	    m_gui->getRoot()->getChild("ranking/panel/time_list"));
+	CEGUI::ItemListbox *xpList = static_cast<CEGUI::ItemListbox *>(
+	    m_gui->getRoot()->getChild("ranking/panel/xp_list"));
+	CEGUI::ItemListbox *idList = static_cast<CEGUI::ItemListbox *>(
+	    m_gui->getRoot()->getChild("ranking/panel/player_list"));
+	CEGUI::ItemListbox *rankList = static_cast<CEGUI::ItemListbox *>(
+	    m_gui->getRoot()->getChild("ranking/panel/position_list"));
+	timeList->setAutoResizeEnabled(true);
+	xpList->setAutoResizeEnabled(true);
+	rankList->setAutoResizeEnabled(true);
+	idList->setAutoResizeEnabled(true);
+	timeList->disable();
+	xpList->disable();
+	rankList->disable();
+	idList->disable();
+
+	CEGUI::WindowManager *winManager =
+	    CEGUI::WindowManager::getSingletonPtr();
+	for (std::uint32_t i = 0; i < m_gameData.getPlayerNb(); ++i)
+	  {
+	    nope::log::Log(Debug) << "Adding Rank Item";
+	    CEGUI::ItemEntry *id = static_cast<CEGUI::ItemEntry *>(
+	        winManager->createWindow("TaharezLook/ListboxItem"));
+	    CEGUI::ItemEntry *time = static_cast<CEGUI::ItemEntry *>(
+	        winManager->createWindow("TaharezLook/ListboxItem"));
+	    CEGUI::ItemEntry *rank = static_cast<CEGUI::ItemEntry *>(
+	        winManager->createWindow("TaharezLook/ListboxItem"));
+	    CEGUI::ItemEntry *xp = static_cast<CEGUI::ItemEntry *>(
+	        winManager->createWindow("TaharezLook/ListboxItem"));
+
+	    // Set + Add player id TODO merge with antonito
+	    id->setText(std::to_string(i + 1));
+
+	    // Set + Add player time
+	    long elapsedTime = m_gameData[i].getTimer().elapsedTime().count();
+	    time->setText(std::to_string(elapsedTime));
+
+	    // Set + Add player rank
+	    rank->setText(std::to_string(m_gameData[i].getRank() + 1));
+
+	    // Set + Add player xp
+	    nope::log::Log(Debug) << "Elapsed time " << elapsedTime;
+
+	    xp->setText(std::to_string((100000 / elapsedTime) + 1 +
+	                               20 / (m_gameData[i].getRank() + 1)));
+	    xpList->addItem(xp);
+	    rankList->addItem(rank);
+	    timeList->addItem(time);
+	    idList->addItem(id);
+	  }
       }
   }
 
   void PostGame::disable()
   {
     if (m_gui)
-    {
-      nope::log::Log(Debug) << "disabling ranking menu";
-      m_gui->removeLayout("ranking.layout");
-      m_gui->hideCursor(true);
-    }
+      {
+	nope::log::Log(Debug) << "disabling ranking menu";
+	m_gui->removeLayout("ranking.layout");
+	m_gui->hideCursor(true);
+      }
   }
 
   void PostGame::update()
@@ -73,7 +125,8 @@ namespace game
     return (true);
   }
 
-  bool PostGame::mousePressed(OIS::MouseEvent const &, OIS::MouseButtonID button)
+  bool PostGame::mousePressed(OIS::MouseEvent const &,
+                              OIS::MouseButtonID button)
   {
     CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(
         convertButton(button));
@@ -90,7 +143,6 @@ namespace game
 
   bool PostGame::onQuitClick(CEGUI::EventArgs const &)
   {
-    //game::Pauser::unpause();
     m_gui->setQuit(true);
     return (true);
   }

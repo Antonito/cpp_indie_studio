@@ -4,6 +4,7 @@
 #include <memory>
 #include <OGRE/OgreVector3.h>
 #include "ACar.hpp"
+#include "Timer.hpp"
 
 namespace game
 {
@@ -34,6 +35,7 @@ namespace game
 
     bool getFinished() const;
     void setFinished(bool);
+    game::Timer &getTimer();
 
   private:
     std::unique_ptr<ACar> m_car;
@@ -41,6 +43,7 @@ namespace game
     std::int32_t          m_currentCheckpoint;
     std::size_t           m_rank;
     bool                  m_finished;
+    game::Timer           m_timer;
   };
 }
 

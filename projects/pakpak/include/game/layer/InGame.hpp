@@ -208,7 +208,7 @@ namespace game
 		}
 	    }
 	}
-      else if (m_time.reached())
+      else if (m_time.reached() && m_startIdx < 5)
 	{
 	  ++m_startIdx;
 	  m_time.reset();
