@@ -16,7 +16,7 @@ namespace game
 #endif
         m_bodies(), m_shapes(),
         m_map(*this, "./deps/indie_resource/maps/test/map.dat"), m_startTime(),
-        m_laps(1)
+        m_laps(1), m_finalRanking()
   {
     // todo: move in Map
     m_sceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
@@ -145,5 +145,20 @@ namespace game
   void GameData::setLaps(std::int32_t laps)
   {
     m_laps = laps;
+  }
+
+  void GameData::addFinalPlayer(std::uint16_t id)
+  {
+    m_finalRanking.push_back(static_cast<std::uint32_t>(id));
+  }
+
+  std::uint32_t GameData::getFinalPlayerPosition(std::uint16_t id)
+  {
+    for (std::uint32_t i = 0; i < m_finalRanking.size(); ++i)
+    {
+      if (m_finalRanking[i] == id)
+        return (i + 1);
+    }
+    return 0;
   }
 }

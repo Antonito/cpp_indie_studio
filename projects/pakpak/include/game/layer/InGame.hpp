@@ -328,24 +328,27 @@ namespace game
     {
       if (m_gui)
 	{
-          std::uint16_t count = 0;
+	  std::uint16_t count = 0;
 
 	  for (std::uint8_t playerIndex = 0;
 	       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
 	    {
-	      if (m_players[playerIndex]->getFinished())
+	      CEGUI::Window *finishedSplash =
+	          m_gui->getRoot()->getChild(screens[playerIndex] + "game");
+
+	      if (m_players[playerIndex]->getFinished() &&
+	          !finishedSplash->isVisible())
 		{
-                  ++count;
-		  m_gui->getRoot()
-		      ->getChild(screens[playerIndex] + "game")
-		      ->setVisible(true);
+		  ++count;
+		  m_gameData.addFinalPlayer(m_players[playerIndex]->getID());
+                  finishedSplash->setVisible(true);
 		}
 	    }
-          if (count == m_players.size() && !game::Pauser::isPaused())
-          {
-            game::Pauser::pause();
-            m_layerStack.push(GameLayer::PostGame);
-          }
+	  if (count == m_players.size() && !game::Pauser::isPaused())
+	    {
+	      game::Pauser::pause();
+	      m_layerStack.push(GameLayer::PostGame);
+	    }
 	}
     }
 
