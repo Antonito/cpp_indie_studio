@@ -8,12 +8,12 @@ namespace game
                            core::HUD *hud, game::ContextGame &contextGame,
                            std::vector<std::unique_ptr<LocalPlayer>> &players,
                            std::uint8_t nbplayers, std::uint16_t id,
-                           core::SoundManager &sound)
+                           core::SoundManager &sound, bool connected)
       : m_data(p), m_playerIndex(playerIndex), m_cameraMode(CameraMode::Top),
         m_layers(), m_currentLayers(), m_cam(nullptr), m_viewport(nullptr),
         m_rounds(), m_settings(settings), m_actions(), m_win(win),
         m_order(order), m_hud(hud), m_contextGame(contextGame), m_id(id),
-        m_sound(sound)
+        m_sound(sound), m_connected(connected)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
         std::make_unique<Loading>(g, *this, hud, players);
@@ -52,11 +52,14 @@ namespace game
     m_layers[static_cast<std::size_t>(GameLayer::Menu)] =
         std::make_unique<Menu>(g, *this, hud, players);
 
-    m_currentLayers.push(m_layers[static_cast<std::size_t>(GameLayer::InGame)]
-                             .get()); // TODO: insert LOADING instead
+    m_currentLayers.push(
+        m_layers[static_cast<std::size_t>(GameLayer::InGame)].get());
     m_currentLayers.top()->enable();
     m_cam = m_data[m_playerIndex].car().getCamera();
     m_cam->setNearClipDistance(3);
+    // CHECK IF SERVER UDP BROKEN AFTER MERGE
+    g[order].setId(id);
+    // ENDCHECK
 
     Log(nope::log::Debug) << "Adding viewport '" << m_order << "' to window";
     m_viewport = m_win->addViewport(m_cam, m_order);
@@ -74,7 +77,7 @@ namespace game
         m_settings(that.m_settings), m_actions(that.m_actions),
         m_win(that.m_win), m_order(that.m_order), m_hud(that.m_hud),
         m_contextGame(that.m_contextGame), m_id(that.m_id),
-        m_sound(that.m_sound)
+        m_sound(that.m_sound), m_connected(that.m_connected)
   {
     that.m_cam = nullptr;
     that.m_viewport = nullptr;
@@ -415,5 +418,10 @@ namespace game
   bool LocalPlayer::getFinished() const
   {
     return (m_data[m_playerIndex].getFinished());
+  }
+
+  bool LocalPlayer::isConnected() const
+  {
+    return m_connected;
   }
 }

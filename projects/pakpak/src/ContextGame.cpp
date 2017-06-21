@@ -49,7 +49,8 @@ namespace game
 	m_players.emplace_back(std::make_unique<LocalPlayer>(
 	    m_win, m_game, m_game.getPlayers(), i, static_cast<int>(i),
 	    m_settings, ((i == 0) ? m_hud.get() : nullptr), *this, m_players,
-	    nbLocalPlayer, (i == 0) ? m_net.getId() : i, m_sound));
+	    nbLocalPlayer, (i == 0) ? m_net.getId() : i, m_sound,
+	    m_net.isConnected()));
 
 	/*for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
 	  {
@@ -294,8 +295,8 @@ namespace game
 	    // Add new player
 	    std::size_t const i = gameData.size();
 
-	    nope::log::Log(Debug)
-	        << "Adding player [" << i << "] - Id: " << packet.pck.id;
+	    nope::log::Log(Debug) << "Adding player [" << i
+	                          << "] - Id: " << packet.pck.id;
 	    gameData.push_back(PlayerData());
 	    gameData.back().setCar(std::make_unique<EmptyCar>(
 	        m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),

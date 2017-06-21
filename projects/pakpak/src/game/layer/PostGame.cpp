@@ -62,20 +62,36 @@ namespace game
 	        winManager->createWindow("TaharezLook/ListboxItem"));
 
 	    // Set + Add player id TODO merge with antonito
-	    id->setText(std::to_string(i + 1));
+	    id->setText(std::to_string(m_gameData[i].getId() + 1));
 
 	    // Set + Add player time
 	    long elapsedTime = m_gameData[i].getTimer().elapsedTime().count();
-	    time->setText(std::to_string(elapsedTime));
+
+	    std::string outime;
+	    if (elapsedTime / 60000)
+	      {
+		outime = std::to_string(elapsedTime / 60000) + "m " +
+		         std::to_string((elapsedTime - (elapsedTime / 60000)) %
+		                        60) +
+		         "s " + std::to_string(elapsedTime % 1000) + "ms";
+	      }
+	    else
+	      {
+		outime = std::to_string(elapsedTime / 1000) +
+		         " s " + std::to_string(elapsedTime % 1000) + "ms";
+	      }
+	    time->setText(outime);
 
 	    // Set + Add player rank
-	    rank->setText(std::to_string(m_gameData[i].getRank() + 1));
+	    rank->setText(std::to_string(
+	        m_gameData.getFinalPlayerPosition(m_gameData[i].getId())));
 
 	    // Set + Add player xp
 	    nope::log::Log(Debug) << "Elapsed time " << elapsedTime;
 
 	    xp->setText(std::to_string((100000 / elapsedTime) + 1 +
-	                               20 / (m_gameData[i].getRank() + 1)));
+	                               20 / (m_gameData.getFinalPlayerPosition(
+	                                        m_gameData[i].getId()))));
 	    xpList->addItem(xp);
 	    rankList->addItem(rank);
 	    timeList->addItem(time);

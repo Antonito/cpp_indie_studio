@@ -37,7 +37,7 @@ namespace game
                 int, int, core::SettingsPlayer &, core::HUD *,
                 game::ContextGame &,
                 std::vector<std::unique_ptr<LocalPlayer>> &, std::uint8_t,
-                std::uint16_t, core::SoundManager &);
+                std::uint16_t, core::SoundManager &, bool);
     LocalPlayer(LocalPlayer const &) = delete;
     LocalPlayer(LocalPlayer &&);
     virtual ~LocalPlayer();
@@ -80,6 +80,7 @@ namespace game
     std::size_t getRank() const;
 
     bool         getFinished() const;
+    bool isConnected() const;
 
   private:
     void setActionMap();
@@ -125,6 +126,7 @@ namespace game
     game::ContextGame & m_contextGame;
     std::uint16_t       m_id;
     core::SoundManager &m_sound;
+    bool                m_connected;
   };
 }
 
