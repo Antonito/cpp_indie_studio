@@ -144,6 +144,25 @@ namespace game
 	  }
       }
 
+    // Check timeout
+    std::vector<PlayerData> &gameData = m_game.getPlayers();
+    for (std::vector<PlayerData>::iterator it = gameData.begin();
+         it != gameData.end();)
+      {
+	bool deleted = false;
+
+	if (it->hasTimedOut())
+	  {
+	    nope::log::Log(Debug) << "Client time'd out, removing it";
+	    gameData.erase(it);
+	    deleted = true;
+	  }
+	if (!deleted)
+	  {
+	    ++it;
+	  }
+      }
+
     // Game process
     m_input->capture();
     m_game.update();
@@ -305,6 +324,7 @@ namespace game
 	    player = gameData.end() - 1;
 	  }
 
+	player->updateLastAction();
 	game::EmptyCar &car = static_cast<game::EmptyCar &>(player->car());
 	nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
 
