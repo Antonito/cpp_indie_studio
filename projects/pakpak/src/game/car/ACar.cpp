@@ -333,7 +333,8 @@ namespace game
     ++id;
   }
 
-  void ACar::setPacketData(GameClientToGSPacketUDP const &pck)
+  void ACar::setPacketData(GameClientToGSPacketUDP const &pck,
+                           bool                           rollbackOnly)
   {
     btTransform tr;
 
@@ -346,14 +347,17 @@ namespace game
     btVector3        v(p.x, p.y, p.z);
     Ogre::Quaternion q(_dir[3], _dir[0], _dir[1], _dir[2]);
 
-    tr.setIdentity();
-    btQuaternion quat;
-    quat.setX(q.x);
-    quat.setY(q.y);
-    quat.setZ(q.z);
-    quat.setW(q.w);
-    tr.setRotation(quat);
-    tr.setOrigin(v);
-    m_body->getBulletRigidBody()->setCenterOfMassTransform(tr);
+    if (rollbackOnly == false)
+      {
+	tr.setIdentity();
+	btQuaternion quat;
+	quat.setX(q.x);
+	quat.setY(q.y);
+	quat.setZ(q.z);
+	quat.setW(q.w);
+	tr.setRotation(quat);
+	tr.setOrigin(v);
+	m_body->getBulletRigidBody()->setCenterOfMassTransform(tr);
+      }
   }
 }

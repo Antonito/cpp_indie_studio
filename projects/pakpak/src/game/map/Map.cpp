@@ -4,7 +4,7 @@ namespace game
 {
   Map::Map(game::GameData &gamedata)
       : m_gamedata(gamedata), m_points(), m_checkpoints(), m_map(nullptr),
-        m_mapbox(nullptr), m_node(nullptr), m_body(nullptr)
+        m_mapbox(nullptr), m_node(nullptr), m_body(nullptr), m_lights()
 #if defined(INDIE_MAP_EDITOR)
         ,
         m_filename(""), m_selectedPoint(0)
@@ -14,7 +14,7 @@ namespace game
 
   Map::Map(game::GameData &gamedata, std::string const &filename)
       : m_gamedata(gamedata), m_points(), m_checkpoints(), m_map(nullptr),
-        m_mapbox(nullptr), m_node(nullptr), m_body(nullptr)
+        m_mapbox(nullptr), m_node(nullptr), m_body(nullptr), m_lights()
 #if defined(INDIE_MAP_EDITOR)
         ,
         m_filename(""), m_selectedPoint(0)
@@ -25,6 +25,13 @@ namespace game
 
   Map::~Map()
   {
+    for (Ogre::Light *l : m_lights)
+      {
+	m_gamedata.sceneMgr()->destroyLight(l->getName());
+      }
+    m_lights.clear();
+    m_node->removeAndDestroyAllChildren();
+    m_gamedata.sceneMgr()->destroySceneNode(m_node->getName());
   }
 
   void Map::loadFromFile(std::string filename)
@@ -182,14 +189,16 @@ namespace game
     m_gamedata.sceneMgr()->setAmbientLight(
         Ogre::ColourValue(0.5f, 0.5f, 0.5f));
 
-    Ogre::Light *l = m_gamedata.sceneMgr()->createLight("MainLight");
+    Ogre::Light *l = m_gamedata.sceneMgr()->createLight("MainLight" + id);
     l->setType(Ogre::Light::LightTypes::LT_DIRECTIONAL);
     l->setDirection(Ogre::Vector3(1.0, -1.0, 0.5));
 
-    Ogre::Light *l2 = m_gamedata.sceneMgr()->createLight("MainLight2");
+    Ogre::Light *l2 = m_gamedata.sceneMgr()->createLight("MainLight_" + id);
     l2->setPosition(200, 150, -150);
 
     l2->setCastShadows(false);
+    m_lights.push_back(l);
+    m_lights.push_back(l2);
 
     if (m_points.size() >= 2)
       {
@@ -391,7 +400,7 @@ namespace game
   }
 
   Map::MapData::Quaternion &Map::MapData::Quaternion::
-      operator=(Map::MapData::Quaternion &&that)
+                            operator=(Map::MapData::Quaternion &&that)
   {
     if (this == &that)
       return (*this);
@@ -412,7 +421,7 @@ namespace game
   }
 
   Map::MapData::Element &Map::MapData::Element::
-      operator=(Map::MapData::Element &&that)
+                         operator=(Map::MapData::Element &&that)
   {
     if (this == &that)
       return (*this);
