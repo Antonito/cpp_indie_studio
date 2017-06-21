@@ -16,10 +16,10 @@
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #endif
 
-#include <OgreBulletDynamicsWorld.h>
-#include <Debug/OgreBulletCollisionsDebugDrawer.h>
-#include <OgreBulletDynamicsRigidBody.h>
-#include <OgreBulletCollisionsShape.h>
+#include <OgreBullet/Dynamics/OgreBulletDynamicsWorld.h>
+#include <OgreBullet/Collisions/Debug/OgreBulletCollisionsDebugDrawer.h>
+#include <OgreBullet/Dynamics/OgreBulletDynamicsRigidBody.h>
+#include <OgreBullet/Collisions/OgreBulletCollisionsShape.h>
 #include <game/map/Map.hpp>
 
 // Disable clang warning for templated class padding
@@ -29,11 +29,11 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include "PlayerData.hpp"
 #include "Map.hpp"
 
 namespace game
 {
+    class PlayerData;
   class GameData
   {
   public:

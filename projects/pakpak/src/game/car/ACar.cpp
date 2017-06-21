@@ -331,4 +331,9 @@ namespace game
 
     ++id;
   }
+
+    GameData &ACar::getGameData()
+    {
+        return m_gamedata;
+    }
 }

@@ -34,7 +34,8 @@ namespace game
   {
   public:
     ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
-                core::SettingsPlayer &, core::NetworkManager &, core::SoundManager &);
+                core::SettingsPlayer &, core::NetworkManager &,
+                core::SoundManager &);
     virtual ~ContextGame();
     ContextGame &operator=(ContextGame const &) = delete;
     ContextGame &operator=(ContextGame &&) = delete;
@@ -45,9 +46,9 @@ namespace game
     void                    updateViewPort();
     virtual core::GameState update();
     virtual void            display();
-    bool                    keyPressed(const OIS::KeyEvent &arg);
-    bool                    keyReleased(const OIS::KeyEvent &arg);
-    bool                    mouseMoved(const OIS::MouseEvent &arg);
+    bool keyPressed(const OIS::KeyEvent &arg);
+    bool keyReleased(const OIS::KeyEvent &arg);
+    bool mouseMoved(const OIS::MouseEvent &arg);
     bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     void setQuit(bool);
@@ -62,7 +63,8 @@ namespace game
     core::NetworkManager &                    m_net;
     core::SoundManager &                      m_sound;
     game::Timer                               m_timer;
-bool                                          m_gameStart;
+    game::Timer                               m_iaTimer;
+    bool                                      m_gameStart;
   };
 }
 

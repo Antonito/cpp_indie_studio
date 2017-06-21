@@ -8,7 +8,7 @@ namespace game
                            core::SoundManager &  sound)
       : core::AContext(win, input), m_game(), m_players(), m_ia(),
         m_settings(settings), m_quit(false), m_hud(nullptr), m_net(net),
-        m_sound(sound), m_timer(850), m_gameStart(false)
+        m_sound(sound), m_timer(850), m_iaTimer(4850),m_gameStart(false)
   {
   }
 
@@ -25,13 +25,14 @@ namespace game
     m_input->setKeyboardEventCallback(this);
     m_quit = false;
 
-    std::size_t nbPlayer = 4;//m_settings.getPlayerCount();
+    std::size_t nbPlayer = 2;//m_settings.getPlayerCount();
 
     m_game.setPlayerNb(nbPlayer);
 
     std::uint32_t nbLocalPlayer = m_settings.getPlayerCount();
 
     m_timer.start();
+      m_iaTimer.start();
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
 	m_game[i].setCar(std::make_unique<EmptyCar>(
@@ -52,7 +53,7 @@ namespace game
     for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
       {
 	m_ia.emplace_back(
-	    std::make_unique<Ai>(m_game[i].car(), m_game.map().getNodes()));
+	    std::make_unique<Ai>(m_game[i].car(), m_game.map().getNodes(), &m_game[i]));
       }
     m_sound.playSound(core::ESound::GAME_SONG);
     m_sound.loopSound(core::ESound::GAME_SONG);
@@ -93,11 +94,13 @@ namespace game
   {
     nope::log::Log(Debug) << "Game context disabled";
     m_players.clear();
+    m_ia.clear();
     m_gameStart = false;
     m_sound.stopSound(core::ESound::GAME_SONG);
     m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
     m_input->setPhysicWorld(nullptr);
-    nope::log::Log(Debug) << "Disabling game.";
+    nope::log::Log(Debug) <<
+                          "Disabling game.";
     if (m_net.isConnected())
       {
 	nope::log::Log(Debug) << "Game is connected to Game Server.";
@@ -127,10 +130,16 @@ namespace game
       {
 	m_players[i]->display();
       }
-    for (std::unique_ptr<Ai> const &l_ia : m_ia)
-      {
-          l_ia->race();
-      }
+     std::size_t i(0);
+    if (m_iaTimer.reached())
+    {
+        for (std::unique_ptr<Ai> const &l_ia : m_ia)
+        {
+            nope::log::Log(Debug) << "AI[" << i << "]";
+            l_ia->race();
+            i++;
+        }
+    }
   }
 
   bool ContextGame::keyPressed(OIS::KeyEvent const &ke)

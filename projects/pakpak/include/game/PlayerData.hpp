@@ -3,10 +3,10 @@
 
 #include <memory>
 #include <OGRE/OgreVector3.h>
-#include "ACar.hpp"
 
 namespace game
 {
+    class ACar;
   class PlayerData
   {
   public:
