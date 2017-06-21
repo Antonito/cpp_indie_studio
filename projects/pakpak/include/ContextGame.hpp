@@ -17,7 +17,6 @@
 #include "HUD.hpp"
 #include "Ai.hpp"
 #include "AContext.hpp"
-#include "LocalPlayer.hpp"
 #include "EmptyCar.hpp"
 #include "Timer.hpp"
 
@@ -29,6 +28,7 @@
 
 namespace game
 {
+  class LocalPlayer;
   class ContextGame final : public core::AContext,
                             public OIS::KeyListener,
                             public OIS::MouseListener

@@ -1,4 +1,3 @@
-#include <chrono>
 #include "pakpak_stdafx.hpp"
 
 namespace game
@@ -7,7 +6,7 @@ namespace game
                            core::SettingsPlayer &settings,
                            core::NetworkManager &net,
                            core::SoundManager &  sound)
-      : core::AContext(win, input), m_game(), m_players(),
+      : core::AContext(win, input), m_game(), m_players(), m_ia(),
         m_settings(settings), m_quit(false), m_hud(nullptr), m_net(net),
         m_sound(sound), m_timer(850), m_iaTimer(4850), m_gameStart(false),
         m_networkPacket()
@@ -165,7 +164,6 @@ namespace game
 	      }
 	  }
       }
-
     // Game process
     m_input->capture();
     m_game.update();
@@ -202,149 +200,151 @@ namespace game
 	  }
       }
   }
-}
 
-bool ContextGame::keyPressed(OIS::KeyEvent const &ke)
-{
-  std::size_t i = 0;
-  for (std::unique_ptr<LocalPlayer> &p : m_players)
-    {
-      nope::log::Log(Debug) << "\t\tPressed for player " << i;
-      p->keyPressed(ke);
-      ++i;
-    }
-  nope::log::Log(Debug) << "\n";
-  return (true);
-}
+  bool ContextGame::keyPressed(OIS::KeyEvent const &ke)
+  {
+    std::size_t i = 0;
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
+      {
+	nope::log::Log(Debug) << "\t\tPressed for player " << i;
+	p->keyPressed(ke);
+	++i;
+      }
+    nope::log::Log(Debug) << "\n";
+    return (true);
+  }
 
-bool ContextGame::keyReleased(OIS::KeyEvent const &ke)
-{
-  for (std::unique_ptr<LocalPlayer> &p : m_players)
-    {
-      p->keyReleased(ke);
-    }
-  return (true);
-}
+  bool ContextGame::keyReleased(OIS::KeyEvent const &ke)
+  {
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
+      {
+	p->keyReleased(ke);
+      }
+    return (true);
+  }
 
-bool ContextGame::mouseMoved(OIS::MouseEvent const &me)
-{
-  for (std::unique_ptr<LocalPlayer> &p : m_players)
-    {
-      p->mouseMoved(me);
-    }
-  return (true);
-}
+  bool ContextGame::mouseMoved(OIS::MouseEvent const &me)
+  {
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
+      {
+	p->mouseMoved(me);
+      }
+    return (true);
+  }
 
-bool ContextGame::mousePressed(OIS::MouseEvent const &me,
-                               OIS::MouseButtonID     id)
-{
-  for (std::unique_ptr<LocalPlayer> &p : m_players)
-    {
-      p->mousePressed(me, id);
-    }
-  return (true);
-}
+  bool ContextGame::mousePressed(OIS::MouseEvent const &me,
+                                 OIS::MouseButtonID     id)
+  {
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
+      {
+	p->mousePressed(me, id);
+      }
+    return (true);
+  }
 
-bool ContextGame::mouseReleased(OIS::MouseEvent const &me,
-                                OIS::MouseButtonID     id)
-{
-  for (std::unique_ptr<LocalPlayer> &p : m_players)
-    {
-      p->mouseReleased(me, id);
-    }
-  return (true);
-}
+  bool ContextGame::mouseReleased(OIS::MouseEvent const &me,
+                                  OIS::MouseButtonID     id)
+  {
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
+      {
+	p->mouseReleased(me, id);
+      }
+    return (true);
+  }
 
-void ContextGame::setQuit(bool quit)
-{
-  m_quit = quit;
-}
+  void ContextGame::setQuit(bool quit)
+  {
+    m_quit = quit;
+  }
 
-void ContextGame::setUDPPacket(GameClientToGSPacketUDP &packet,
-                               LocalPlayer &            player)
-{
-  packet.reinit();
-  packet.pck.id = player.getID();
-  nope::log::Log(Debug) << "================= SENDING ======\nSetting up "
-                           "UDP packet for player : "
-                        << packet.pck.id;
+  void ContextGame::setUDPPacket(GameClientToGSPacketUDP &packet,
+                                 LocalPlayer &            player)
+  {
+    packet.reinit();
+    packet.pck.id = player.getID();
+    nope::log::Log(Debug) << "================= SENDING ======\nSetting up "
+                             "UDP packet for player : "
+                          << packet.pck.id;
 
-  game::EmptyCar &car = static_cast<game::EmptyCar &>(player.car());
-  setUDPPatcketPosition(packet, car.position());
-  setUDPPacketDirection(packet, car.direction());
-  nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
-  packet.pck.speed = static_cast<std::uint32_t>(car.speed() * 1000.0);
-  nope::log::Log(Debug) << "=====================";
-}
+    game::EmptyCar &car = static_cast<game::EmptyCar &>(player.car());
+    setUDPPatcketPosition(packet, car.position());
+    setUDPPacketDirection(packet, car.direction());
+    nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
+    packet.pck.speed = static_cast<std::uint32_t>(car.speed() * 1000.0);
+    nope::log::Log(Debug) << "=====================";
+  }
 
-void ContextGame::setUDPPacketDirection(GameClientToGSPacketUDP &packet,
-                                        Ogre::Quaternion const & dir)
-{
-  std::vector<float> vec;
+  void ContextGame::setUDPPacketDirection(GameClientToGSPacketUDP &packet,
+                                          Ogre::Quaternion const & dir)
+  {
+    std::vector<float> vec;
 
-  nope::log::Log(Debug) << "Direction :"
-                        << "\n\t\t\t x : " << dir.x << "\n\t\t\t y : " << dir.y
-                        << "\n\t\t\t z : " << dir.z
-                        << "\n\t\t\t w : " << dir.w;
-  vec.push_back(dir.x);
-  vec.push_back(dir.y);
-  vec.push_back(dir.z);
-  vec.push_back(dir.w);
-  packet.setDirection(vec);
-}
+    nope::log::Log(Debug) << "Direction :"
+                          << "\n\t\t\t x : " << dir.x
+                          << "\n\t\t\t y : " << dir.y
+                          << "\n\t\t\t z : " << dir.z
+                          << "\n\t\t\t w : " << dir.w;
+    vec.push_back(dir.x);
+    vec.push_back(dir.y);
+    vec.push_back(dir.z);
+    vec.push_back(dir.w);
+    packet.setDirection(vec);
+  }
 
-void ContextGame::setUDPPatcketPosition(GameClientToGSPacketUDP &packet,
-                                        Ogre::Vector3 const &    pos)
-{
-  std::vector<float> vec;
+  void ContextGame::setUDPPatcketPosition(GameClientToGSPacketUDP &packet,
+                                          Ogre::Vector3 const &    pos)
+  {
+    std::vector<float> vec;
 
-  nope::log::Log(Debug) << "Position :"
-                        << "\n\t\t\t x : " << pos.x << "\n\t\t\t y : " << pos.y
-                        << "\n\t\t\t z : " << pos.z;
-  vec.push_back(pos.x);
-  vec.push_back(pos.y);
-  vec.push_back(pos.z);
-  packet.setPosition(vec);
-}
+    nope::log::Log(Debug) << "Position :"
+                          << "\n\t\t\t x : " << pos.x
+                          << "\n\t\t\t y : " << pos.y
+                          << "\n\t\t\t z : " << pos.z;
+    vec.push_back(pos.x);
+    vec.push_back(pos.y);
+    vec.push_back(pos.z);
+    packet.setPosition(vec);
+  }
 
-void ContextGame::setPlayersFromUDPPackets()
-{
-  nope::log::Log(Debug)
-      << "=========WRITTING======\nProcessing server UDP packets";
-  for (GameClientToGSPacketUDP &packet : m_networkPacket)
-    {
-      std::vector<PlayerData> &gameData = m_game.getPlayers();
+  void ContextGame::setPlayersFromUDPPackets()
+  {
+    nope::log::Log(Debug)
+        << "=========WRITTING======\nProcessing server UDP packets";
+    for (GameClientToGSPacketUDP &packet : m_networkPacket)
+      {
+	std::vector<PlayerData> &gameData = m_game.getPlayers();
 
-      std::vector<PlayerData>::iterator player = std::find_if(
-          gameData.begin(), gameData.end(),
-          [&packet](PlayerData &pl) { return (pl.getId() == packet.pck.id); });
+	std::vector<PlayerData>::iterator player = std::find_if(
+	    gameData.begin(), gameData.end(), [&packet](PlayerData &pl) {
+	      return (pl.getId() == packet.pck.id);
+	    });
 
-      if (player == gameData.end())
-	{
-	  // Add new player
-	  std::size_t const i = gameData.size();
+	if (player == gameData.end())
+	  {
+	    // Add new player
+	    std::size_t const i = gameData.size();
 
-	  nope::log::Log(Debug) << "Adding player [" << i
-	                        << "] - Id: " << packet.pck.id;
-	  gameData.push_back(PlayerData());
-	  gameData.back().setCar(std::make_unique<EmptyCar>(
-	      m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
-	      Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)));
-	  gameData.back().setId(packet.pck.id);
+	    nope::log::Log(Debug) << "Adding player [" << i
+	                          << "] - Id: " << packet.pck.id;
+	    gameData.push_back(PlayerData());
+	    gameData.back().setCar(std::make_unique<EmptyCar>(
+	        m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
+	        Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)));
+	    gameData.back().setId(packet.pck.id);
 
-	  player = gameData.end() - 1;
-	}
+	    player = gameData.end() - 1;
+	  }
 
-      player->updateLastAction();
-      game::EmptyCar &car = static_cast<game::EmptyCar &>(player->car());
-      nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
+	player->updateLastAction();
+	game::EmptyCar &car = static_cast<game::EmptyCar &>(player->car());
+	nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
 
-      if (player != gameData.begin())
-	{
-	  car.setPacketData(packet);
-	}
-      nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
-    }
-  nope::log::Log(Debug) << "*****************************";
-}
+	if (player != gameData.begin())
+	  {
+	    car.setPacketData(packet);
+	  }
+	nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
+      }
+    nope::log::Log(Debug) << "*****************************";
+  }
 }
