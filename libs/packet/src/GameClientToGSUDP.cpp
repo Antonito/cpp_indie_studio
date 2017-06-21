@@ -15,6 +15,16 @@ GameClientToGSPacketUDP::GameClientToGSPacketUDP(
 {
 }
 
+GameClientToGSPacketUDP &GameClientToGSPacketUDP::
+    operator=(GameClientToGSPacketUDP const &other)
+{
+  if (&other != this)
+    {
+      pck = other.pck;
+    }
+  return (*this);
+}
+
 GameClientToGSPacketUDPRaw::GameClientToGSPacketUDPRaw(
     GameClientToGSPacketUDPRaw const &other)
     : pos(other.pos), dir(other.dir), speed(other.speed), id(other.id),

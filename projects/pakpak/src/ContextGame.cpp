@@ -289,30 +289,33 @@ namespace game
 	      return (pl.getId() == packet.pck.id);
 	    });
 
+#if 0
 	if (player == gameData.end())
 	  {
 	    // Add new player
-
 	    std::size_t const i = gameData.size();
 
 	    nope::log::Log(Debug)
 	        << "Adding player [" << i << "] - Id: " << packet.pck.id;
 	    gameData.push_back(PlayerData());
-	    m_game[i].setCar(std::make_unique<EmptyCar>(
+	    gameData[i].setCar(std::make_unique<EmptyCar>(
 	        m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
 	        Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y)));
-	    m_game[i].setId(packet.pck.id);
+	    gameData[i].setId(packet.pck.id);
 
 	    player = gameData.end() - 1;
 	  }
+#endif
+	if (player != gameData.end())
+	  {
+	    game::EmptyCar &car = static_cast<game::EmptyCar &>(player->car());
+	    nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
 
-	game::EmptyCar &car = static_cast<game::EmptyCar &>(player->car());
-	nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
-
-	setDirectionFromUDP(car, packet);
-	setPositionFromUDP(car, packet);
-	car.setSpeed(packet.pck.speed / 1000.0);
-	nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
+	    setDirectionFromUDP(car, packet);
+	    setPositionFromUDP(car, packet);
+	    car.setSpeed(packet.pck.speed / 1000.0);
+	    nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
+	  }
       }
     nope::log::Log(Debug) << "*****************************";
   }

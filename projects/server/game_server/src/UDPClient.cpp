@@ -16,7 +16,7 @@ UDPClient::~UDPClient()
 
 UDPClient::UDPClient(UDPClient const &other)
     : m_addr(other.m_addr), m_sock(other.m_sock),
-      m_lastAction(other.m_lastAction), m_id(other.m_id)
+      m_lastAction(other.m_lastAction), m_data(), m_id(other.m_id)
 {
 }
 
