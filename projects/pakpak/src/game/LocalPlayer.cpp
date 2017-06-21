@@ -59,7 +59,7 @@ namespace game
     m_cam->setNearClipDistance(3);
     // CHECK IF SERVER UDP BROKEN AFTER MERGE
     if (!connected)
-      g[order].setId(id);
+      g[static_cast<std::size_t>(order)].setId(id);
     // ENDCHECK
 
     Log(nope::log::Debug) << "Adding viewport '" << m_order << "' to window";

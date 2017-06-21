@@ -223,7 +223,7 @@ namespace game
     // Set the car properties
     m_engineForce = 0.0;
     m_breakingForce = 0.0;
-    m_maxEngineForce = 2500.0; // this should be engine/velocity dependent
+    m_maxEngineForce = 1900.0; // this should be engine/velocity dependent
     m_maxBreakingForce = 100.0;
     m_vehicleSteering = 0.0;
     m_steeringIncrement = 1.0;

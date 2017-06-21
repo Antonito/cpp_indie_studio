@@ -203,7 +203,7 @@ namespace core
                                 : m_curMap - 1;
     m_gui.getRoot()
         ->getChild("map_holder")
-        ->setProperty("Image", gl_map[m_curMap]);
+        ->setProperty("Image", gl_map[static_cast<std::size_t>(m_curMap)]);
     return true;
   }
 
@@ -215,7 +215,7 @@ namespace core
                    : m_curMap + 1;
     m_gui.getRoot()
         ->getChild("map_holder")
-        ->setProperty("Image", gl_map[m_curMap]);
+        ->setProperty("Image", gl_map[static_cast<std::size_t>(m_curMap)]);
     return true;
   }
   bool MenuSolo::onArea(const CEGUI::EventArgs &)

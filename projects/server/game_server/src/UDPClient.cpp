@@ -85,7 +85,7 @@ bool UDPClient::hasTimedOut() const
   std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 
   if (std::chrono::duration_cast<std::chrono::seconds>(now - m_lastAction)
-          .count() >= 5)
+          .count() >= 2)
     {
       nope::log::Log(Info) << "{ " << m_id
                            << "} Client time'd out. [UDPClient - "

@@ -149,7 +149,7 @@ namespace game
 
 	// Check timeout
 	std::vector<PlayerData> &gameData = m_game.getPlayers();
-	for (std::vector<PlayerData>::iterator it = gameData.begin();
+	for (std::vector<PlayerData>::iterator it = gameData.begin() + 1;
 	     it != gameData.end();)
 	  {
 	    bool deleted = false;
@@ -179,21 +179,28 @@ namespace game
 
   void ContextGame::display()
   {
-    if (m_timer.reached() && !m_gameStart)
+    if (!m_net.isConnected())
       {
-	m_sound.playSound(core::ESound::START_SONG);
-	m_sound.setVolumeSource(core::ESound::START_SONG,
-	                        0.4f * m_sound.getVolume());
-	m_gameStart = true;
+	if (m_timer.reached() && !m_gameStart)
+	  {
+	    m_sound.playSound(core::ESound::START_SONG);
+	    m_sound.setVolumeSource(core::ESound::START_SONG,
+	                            0.4f * m_sound.getVolume());
+	    m_gameStart = true;
+	  }
       }
 
     for (std::uint8_t i = 0; i < m_players.size(); ++i)
       {
 	m_players[i]->display();
       }
-    for (std::unique_ptr<Ai> const &l_ia : m_ia)
+
+    if (!m_net.isConnected())
       {
-	l_ia->race();
+	for (std::unique_ptr<Ai> const &l_ia : m_ia)
+	  {
+	    l_ia->race();
+	  }
       }
   }
 
