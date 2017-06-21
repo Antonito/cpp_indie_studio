@@ -79,7 +79,7 @@ namespace game
 
     std::size_t getRank() const;
 
-    bool         getFinished() const;
+    bool getFinished() const;
     bool isConnected() const;
 
   private:
