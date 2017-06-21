@@ -96,9 +96,6 @@
     <ClCompile Include="src\game\layer\GameGUI.cpp">
       <Filter>Source Files\game\layer</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\layer\InGame.cpp">
-      <Filter>Source Files\game\layer</Filter>
-    </ClCompile>
     <ClCompile Include="src\game\layer\Loading.cpp">
       <Filter>Source Files\game\layer</Filter>
     </ClCompile>
@@ -207,6 +204,21 @@
     <ClCompile Include="src\Config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\Ai.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\Timer.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\NetworkGame.cpp">
+      <Filter>Source Files\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\map\CheckPoint.cpp">
+      <Filter>Source Files\game\map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\menu\MenuPopError.cpp">
+      <Filter>Source Files\game\menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\pakpak_stdafx.hpp">
@@ -276,9 +288,6 @@
       <Filter>Header Files\game\layer</Filter>
     </ClInclude>
     <ClInclude Include="include\game\layer\ILayerStack.hpp">
-      <Filter>Header Files\game\layer</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\layer\InGame.hpp">
       <Filter>Header Files\game\layer</Filter>
     </ClInclude>
     <ClInclude Include="include\game\layer\Loading.hpp">
@@ -391,6 +400,33 @@
     </ClInclude>
     <ClInclude Include="include\ConfigTools.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\layer\InGame.hpp">
+      <Filter>Header Files\game\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Data.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OSXPort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SoundManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\Ai.hpp">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\Timer.hpp">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\network\NetworkGame.hpp">
+      <Filter>Header Files\network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\map\CheckPoint.hpp">
+      <Filter>Header Files\game\map</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\menu\MenuPopError.hpp">
+      <Filter>Header Files\game\menu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

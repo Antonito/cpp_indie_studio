@@ -21,22 +21,34 @@ enum class GameClientToGSEventUDP : std::uint16_t
 
 struct GameClientToGSPacketUDPRaw
 {
-  GameClientToGSEventUDP eventType;
-  union
-  {
-    int i; // TODO: rm
-  } eventData;
+  GameClientToGSPacketUDPRaw();
+  GameClientToGSPacketUDPRaw(GameClientToGSPacketUDPRaw const &);
+
+  GameClientToGSPacketUDPRaw &operator=(GameClientToGSPacketUDPRaw const &);
+
+  std::array<std::uint32_t, 3> pos;
+  std::array<std::uint32_t, 4> dir;
+  std::uint32_t speed;
+  std::uint16_t id;
+  std::uint16_t playerCount;
 };
 
 struct GameClientToGSPacketUDP : public ISerializable
 {
   GameClientToGSPacketUDP();
+  GameClientToGSPacketUDP(GameClientToGSPacketUDP const &);
+  GameClientToGSPacketUDP &  operator=(GameClientToGSPacketUDP const &);
   GameClientToGSPacketUDPRaw pck;
 
   virtual std::unique_ptr<std::uint8_t[]>
       serialize(std::size_t &sizeToFill) const;
 
   virtual void deserialize(std::size_t size, std::uint8_t *data);
+  std::vector<float> getDirection() const;
+  std::vector<float> getPosition() const;
+  void setDirection(std::vector<float> const &quat);
+  void setPosition(std::vector<float> const &vec);
+  void reinit();
 };
 
 namespace packetSize

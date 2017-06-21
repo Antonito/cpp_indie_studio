@@ -14,10 +14,100 @@ namespace game
 
   void PostGame::enable()
   {
+    if (m_gui)
+      {
+	nope::log::Log(Debug) << "Enabling menu ranking";
+	m_gui->addLayout("ranking.layout");
+	m_gui->showCursor(true);
+	m_gui->grabMouse();
+
+	CEGUI::Window *button =
+	    m_gui->getRoot()->getChildRecursive("quit_button");
+	if (button)
+	  {
+	    button->subscribeEvent(
+	        CEGUI::PushButton::EventClicked,
+	        CEGUI::Event::Subscriber(&PostGame::onQuitClick, this));
+	  }
+
+	CEGUI::ItemListbox *timeList = static_cast<CEGUI::ItemListbox *>(
+	    m_gui->getRoot()->getChild("ranking/panel/time_list"));
+	CEGUI::ItemListbox *xpList = static_cast<CEGUI::ItemListbox *>(
+	    m_gui->getRoot()->getChild("ranking/panel/xp_list"));
+	CEGUI::ItemListbox *idList = static_cast<CEGUI::ItemListbox *>(
+	    m_gui->getRoot()->getChild("ranking/panel/player_list"));
+	CEGUI::ItemListbox *rankList = static_cast<CEGUI::ItemListbox *>(
+	    m_gui->getRoot()->getChild("ranking/panel/position_list"));
+	timeList->setAutoResizeEnabled(true);
+	xpList->setAutoResizeEnabled(true);
+	rankList->setAutoResizeEnabled(true);
+	idList->setAutoResizeEnabled(true);
+	timeList->disable();
+	xpList->disable();
+	rankList->disable();
+	idList->disable();
+
+	CEGUI::WindowManager *winManager =
+	    CEGUI::WindowManager::getSingletonPtr();
+	for (std::uint32_t i = 0; i < m_gameData.getPlayerNb(); ++i)
+	  {
+	    nope::log::Log(Debug) << "Adding Rank Item";
+	    CEGUI::ItemEntry *id = static_cast<CEGUI::ItemEntry *>(
+	        winManager->createWindow("TaharezLook/ListboxItem"));
+	    CEGUI::ItemEntry *time = static_cast<CEGUI::ItemEntry *>(
+	        winManager->createWindow("TaharezLook/ListboxItem"));
+	    CEGUI::ItemEntry *rank = static_cast<CEGUI::ItemEntry *>(
+	        winManager->createWindow("TaharezLook/ListboxItem"));
+	    CEGUI::ItemEntry *xp = static_cast<CEGUI::ItemEntry *>(
+	        winManager->createWindow("TaharezLook/ListboxItem"));
+
+	    // Set + Add player id TODO merge with antonito
+	    id->setText(std::to_string(m_gameData[i].getId() + 1));
+
+	    // Set + Add player time
+	    long elapsedTime = m_gameData[i].getTimer().elapsedTime().count();
+
+	    std::string outime;
+	    if (elapsedTime / 60000)
+	      {
+		outime = std::to_string(elapsedTime / 60000) + "m " +
+		         std::to_string((elapsedTime - (elapsedTime / 60000)) %
+		                        60) +
+		         "s " + std::to_string(elapsedTime % 1000) + "ms";
+	      }
+	    else
+	      {
+		outime = std::to_string(elapsedTime / 1000) +
+		         " s " + std::to_string(elapsedTime % 1000) + "ms";
+	      }
+	    time->setText(outime);
+
+	    // Set + Add player rank
+	    rank->setText(std::to_string(
+	        m_gameData.getFinalPlayerPosition(m_gameData[i].getId())));
+
+	    // Set + Add player xp
+	    nope::log::Log(Debug) << "Elapsed time " << elapsedTime;
+
+	    xp->setText(std::to_string((100000 / elapsedTime) + 1 +
+	                               20 / (m_gameData.getFinalPlayerPosition(
+	                                        m_gameData[i].getId()))));
+	    xpList->addItem(xp);
+	    rankList->addItem(rank);
+	    timeList->addItem(time);
+	    idList->addItem(id);
+	  }
+      }
   }
 
   void PostGame::disable()
   {
+    if (m_gui)
+      {
+	nope::log::Log(Debug) << "disabling ranking menu";
+	m_gui->removeLayout("ranking.layout");
+	m_gui->hideCursor(true);
+      }
   }
 
   void PostGame::update()
@@ -28,28 +118,66 @@ namespace game
   {
   }
 
-  bool PostGame::keyPressed(OIS::KeyEvent const &)
+  bool PostGame::keyPressed(OIS::KeyEvent const &arg)
   {
+    CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyDown(
+        static_cast<CEGUI::Key::Scan>(arg.key));
     return (false);
   }
 
-  bool PostGame::keyReleased(OIS::KeyEvent const &)
+  bool PostGame::keyReleased(OIS::KeyEvent const &arg)
   {
-    return (false);
+    CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(
+        static_cast<CEGUI::Key::Scan>(arg.key));
+    return (true);
   }
 
-  bool PostGame::mouseMoved(OIS::MouseEvent const &)
+  bool PostGame::mouseMoved(OIS::MouseEvent const &arg)
   {
-    return (false);
+    CEGUI::GUIContext &context =
+        CEGUI::System::getSingleton().getDefaultGUIContext();
+    context.injectMouseMove(static_cast<float>(arg.state.X.rel),
+                            static_cast<float>(arg.state.Y.rel));
+    return (true);
   }
 
-  bool PostGame::mousePressed(OIS::MouseEvent const &, OIS::MouseButtonID)
+  bool PostGame::mousePressed(OIS::MouseEvent const &,
+                              OIS::MouseButtonID button)
   {
-    return (false);
+    CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(
+        convertButton(button));
+    return (true);
   }
 
-  bool PostGame::mouseReleased(OIS::MouseEvent const &, OIS::MouseButtonID)
+  bool PostGame::mouseReleased(OIS::MouseEvent const &,
+                               OIS::MouseButtonID button)
   {
-    return (false);
+    CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(
+        convertButton(button));
+    return (true);
+  }
+
+  bool PostGame::onQuitClick(CEGUI::EventArgs const &)
+  {
+    m_gui->setQuit(true);
+    return (true);
+  }
+
+  CEGUI::MouseButton PostGame::convertButton(OIS::MouseButtonID buttonID)
+  {
+    switch (buttonID)
+      {
+      case OIS::MB_Left:
+	return CEGUI::LeftButton;
+
+      case OIS::MB_Right:
+	return CEGUI::RightButton;
+
+      case OIS::MB_Middle:
+	return CEGUI::MiddleButton;
+
+      default:
+	return CEGUI::LeftButton;
+      }
   }
 }

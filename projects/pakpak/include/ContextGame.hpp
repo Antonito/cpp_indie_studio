@@ -18,6 +18,7 @@
 #include "Ai.hpp"
 #include "AContext.hpp"
 #include "LocalPlayer.hpp"
+#include "EmptyCar.hpp"
 #include "Timer.hpp"
 
 // Disable clang warning for templated class padding
@@ -34,7 +35,8 @@ namespace game
   {
   public:
     ContextGame(Ogre::RenderWindow *win, core::InputListener *input,
-                core::SettingsPlayer &, core::NetworkManager &, core::SoundManager &);
+                core::SettingsPlayer &, core::NetworkManager &,
+                core::SoundManager &);
     virtual ~ContextGame();
     ContextGame &operator=(ContextGame const &) = delete;
     ContextGame &operator=(ContextGame &&) = delete;
@@ -45,9 +47,9 @@ namespace game
     void                    updateViewPort();
     virtual core::GameState update();
     virtual void            display();
-    bool                    keyPressed(const OIS::KeyEvent &arg);
-    bool                    keyReleased(const OIS::KeyEvent &arg);
-    bool                    mouseMoved(const OIS::MouseEvent &arg);
+    bool keyPressed(const OIS::KeyEvent &arg);
+    bool keyReleased(const OIS::KeyEvent &arg);
+    bool mouseMoved(const OIS::MouseEvent &arg);
     bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     void setQuit(bool);
@@ -60,9 +62,18 @@ namespace game
     bool                                      m_quit;
     std::unique_ptr<core::HUD>                m_hud;
     core::NetworkManager &                    m_net;
-    core::SoundManager &                      m_sound;
-    game::Timer                               m_timer;
-bool                                          m_gameStart;
+
+    std::vector<GameClientToGSPacketUDP> m_networkPacket;
+    core::SoundManager &                 m_sound;
+    game::Timer                          m_timer;
+    bool                                 m_gameStart;
+
+    void setUDPPacket(GameClientToGSPacketUDP &packet, LocalPlayer &player);
+    void setUDPPacketDirection(GameClientToGSPacketUDP &,
+                               Ogre::Quaternion const &);
+    void setUDPPatcketPosition(GameClientToGSPacketUDP &,
+                               Ogre::Vector3 const &);
+    void setPlayersFromUDPPackets();
   };
 }
 

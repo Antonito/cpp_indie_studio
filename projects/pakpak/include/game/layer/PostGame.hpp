@@ -1,6 +1,9 @@
 #ifndef POSTGAME_HPP_
 #define POSTGAME_HPP_
 
+#include <CEGUI/InputEvent.h>
+#include "LocalPlayer.hpp"
+#include "HUD.hpp"
 #include "ALayer.hpp"
 
 namespace game
@@ -34,6 +37,8 @@ namespace game
                                OIS::MouseButtonID     id);
 
   private:
+    bool               onQuitClick(CEGUI::EventArgs const &);
+    CEGUI::MouseButton convertButton(OIS::MouseButtonID);
   };
 }
 
