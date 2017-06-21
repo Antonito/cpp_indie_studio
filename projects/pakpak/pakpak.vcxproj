@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(ProjectDir)include\network\;$(SolutionDir)libs\crypto\include\;$(SNDFILE_HOME)\include\;$(OPENAL_HOME)\include\;$(ProjectDir)include\game\menu\;$(SolutionDir)libs\exceptions\include\;$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\game\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)libs\multithread\include\;$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(ProjectDir)include\network\;$(SolutionDir)libs\crypto\include\;$(SNDFILE_HOME)\include\;$(OPENAL_HOME)\include\;$(ProjectDir)include\game\menu\;$(SolutionDir)libs\exceptions\include\;$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\game\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)build\;$(SNDFILE_HOME)\lib\;$(OPENAL_HOME)\libs\Win64\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
@@ -90,7 +90,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(ProjectDir)include\network\;$(SolutionDir)libs\crypto\include\;$(SNDFILE_HOME)\include\;$(OPENAL_HOME)\include\;$(ProjectDir)include\game\menu\;$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\game\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)libs\multithread\include\;$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(ProjectDir)include\network\;$(SolutionDir)libs\crypto\include\;$(SNDFILE_HOME)\include\;$(OPENAL_HOME)\include\;$(ProjectDir)include\game\menu\;$(BULLET_ROOT)\src\;$(OGRE_BULLET_ROOT)\Collisions\include\;$(OGRE_BULLET_ROOT)\Dynamics\include\;$(SolutionDir)libs\logger\include\;$(SolutionDir)libs\serializer\include\;$(ProjectDir)include\game\map\;$(ProjectDir)include\game\car\;$(ProjectDir)include\game\layer\;$(ProjectDir)include\game\;$(ProjectDir)include\game\tools\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <OutDir>$(SolutionDir)</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)build\;$(SNDFILE_HOME)\lib\;$(OPENAL_HOME)\libs\Win64\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
@@ -107,7 +107,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(CEGUI_LIB)\;$(BULLET_ROOT)\lib\Debug\;$(OGRE_BULLET_ROOT)\lib\Debug\;$(BOOST_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libindie_ini.lib;libindie_crypto.lib;network.lib;packet.lib;exceptions.lib;OpenAL32.lib;libsndfile-1.lib;OgreOverlay_d.lib;OgreMain_d.lib;OIS_d.lib;OgreBulletCollisions_d.lib;OgreBulletDynamics_d.lib;bulletcollision_Debug.lib;bulletdynamics_Debug.lib;LinearMath_Debug.lib;GIMPACTutils_Debug.lib;ConvexDecomposition_Debug.lib;%(AdditionalDependencies);CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;</AdditionalDependencies>
+      <AdditionalDependencies>multithread.lib;libindie_ini.lib;libindie_crypto.lib;network.lib;packet.lib;exceptions.lib;OpenAL32.lib;libsndfile-1.lib;OgreOverlay_d.lib;OgreMain_d.lib;OIS_d.lib;OgreBulletCollisions_d.lib;OgreBulletDynamics_d.lib;bulletcollision_Debug.lib;bulletdynamics_Debug.lib;LinearMath_Debug.lib;GIMPACTutils_Debug.lib;ConvexDecomposition_Debug.lib;%(AdditionalDependencies);CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -182,7 +182,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(BULLET_ROOT)\lib\Release\;$(OGRE_BULLET_ROOT)\lib\Release\;$(BOOST_HOME)\lib;$(OGRE_HOME)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libindie_ini.lib;libindie_crypto.lib;network.lib;packet.lib;exceptions.lib;OpenAL32.lib;libsndfile-1.lib;OgreOverlay.lib;OgreMain.lib;OIS.lib;bulletcollision.lib;bulletdynamics.lib;LinearMath.lib;GIMPACTutils.lib;ConvexDecomposition.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>multithread.lib;libindie_ini.lib;libindie_crypto.lib;network.lib;packet.lib;exceptions.lib;OpenAL32.lib;libsndfile-1.lib;OgreOverlay.lib;OgreMain.lib;OIS.lib;bulletcollision.lib;bulletdynamics.lib;LinearMath.lib;GIMPACTutils.lib;ConvexDecomposition.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -234,6 +234,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\game\Ai.cpp" />
     <ClCompile Include="src\game\car\ACar.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -295,16 +296,6 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="src\game\layer\HUD.cpp" />
-    <ClCompile Include="src\game\layer\InGame.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
-    </ClCompile>
     <ClCompile Include="src\game\layer\Loading.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -386,6 +377,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\game\map\CheckPoint.cpp" />
     <ClCompile Include="src\game\map\Map.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -468,6 +460,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\game\menu\MenuPopError.cpp" />
     <ClCompile Include="src\game\menu\MenuScores.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -490,6 +483,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\game\Timer.cpp" />
     <ClCompile Include="src\game\tools\Tools.cpp" />
     <ClCompile Include="src\InputListener.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pakpak_stdafx.hpp</PrecompiledHeaderFile>
@@ -513,6 +507,7 @@
     </ClCompile>
     <ClCompile Include="src\network\NetworkAuth.cpp" />
     <ClCompile Include="src\network\NetworkConnect.cpp" />
+    <ClCompile Include="src\network\NetworkGame.cpp" />
     <ClCompile Include="src\network\NetworkGameServer.cpp" />
     <ClCompile Include="src\network\NetworkManager.cpp" />
     <ClCompile Include="src\SaveData.cpp" />
@@ -547,9 +542,11 @@
     <ClInclude Include="include\ContextGame.hpp" />
     <ClInclude Include="include\ContextMenu.hpp" />
     <ClInclude Include="include\ContextSplash.hpp" />
+    <ClInclude Include="include\Data.hpp" />
     <ClInclude Include="include\FastList.hpp" />
     <ClInclude Include="include\FastStack.hpp" />
     <ClInclude Include="include\GameState.hpp" />
+    <ClInclude Include="include\game\Ai.hpp" />
     <ClInclude Include="include\game\CameraMode.hpp" />
     <ClInclude Include="include\game\car\ACar.hpp" />
     <ClInclude Include="include\game\car\EmptyCar.hpp" />
@@ -571,6 +568,7 @@
     <ClInclude Include="include\game\layer\SpecGUI.hpp" />
     <ClInclude Include="include\game\layer\Spectator.hpp" />
     <ClInclude Include="include\game\LocalPlayer.hpp" />
+    <ClInclude Include="include\game\map\CheckPoint.hpp" />
     <ClInclude Include="include\game\map\Map.hpp" />
     <ClInclude Include="include\game\map\PathPoint.hpp" />
     <ClInclude Include="include\game\menu\AssetResizer.hpp" />
@@ -586,20 +584,25 @@
     <ClInclude Include="include\game\menu\MenuManager.hpp" />
     <ClInclude Include="include\game\menu\MenuMultiplayer.hpp" />
     <ClInclude Include="include\game\menu\MenuOptions.hpp" />
+    <ClInclude Include="include\game\menu\MenuPopError.hpp" />
     <ClInclude Include="include\game\menu\MenuScores.hpp" />
     <ClInclude Include="include\game\menu\MenuSolo.hpp" />
     <ClInclude Include="include\game\PlayerData.hpp" />
+    <ClInclude Include="include\game\Timer.hpp" />
     <ClInclude Include="include\game\tools\Tools.hpp" />
     <ClInclude Include="include\IEventHandler.hpp" />
     <ClInclude Include="include\IContext.hpp" />
     <ClInclude Include="include\InputListener.hpp" />
     <ClInclude Include="include\network\NetworkAuth.hpp" />
     <ClInclude Include="include\network\NetworkConnect.hpp" />
+    <ClInclude Include="include\network\NetworkGame.hpp" />
     <ClInclude Include="include\network\NetworkGameServer.hpp" />
     <ClInclude Include="include\network\NetworkManager.hpp" />
+    <ClInclude Include="include\OSXPort.h" />
     <ClInclude Include="include\pakpak_stdafx.hpp" />
     <ClInclude Include="include\SaveData.hpp" />
     <ClInclude Include="include\SettingsPlayer.hpp" />
+    <ClInclude Include="include\SoundManager.hpp" />
     <ClInclude Include="include\targetver.h" />
   </ItemGroup>
   <ItemGroup>

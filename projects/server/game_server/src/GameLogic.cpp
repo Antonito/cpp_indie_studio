@@ -89,7 +89,7 @@ void GameLogic::playingState()
       //   Get packets
       //   GameLogic process
       //   Send packets
-      sleep(1); // TODO: rm
+      //      sleep(1); // TODO: rm
     }
 
   // Load next game
