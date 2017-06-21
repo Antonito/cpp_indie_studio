@@ -33,10 +33,10 @@ namespace game
     m_hud = std::make_unique<core::HUD>();
 
     m_game.resetPhysicWorld();
-    m_game.setMap("test");
+    m_game.setMap(gl_maps[m_settings.getSelectedMap()]);
 
     std::size_t nbPlayer = m_settings.getPlayerCount();
-
+    m_game.setPlayerNb(0);
     m_game.setPlayerNb(nbPlayer);
 
     std::uint32_t nbLocalPlayer = m_settings.getPlayerCount();
