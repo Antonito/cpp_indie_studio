@@ -289,7 +289,6 @@ namespace game
 	      return (pl.getId() == packet.pck.id);
 	    });
 
-#if 0
 	if (player == gameData.end())
 	  {
 	    // Add new player
@@ -305,17 +304,14 @@ namespace game
 
 	    player = gameData.end() - 1;
 	  }
-#endif
-	if (player != gameData.end())
-	  {
-	    game::EmptyCar &car = static_cast<game::EmptyCar &>(player->car());
-	    nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
 
-	    setDirectionFromUDP(car, packet);
-	    setPositionFromUDP(car, packet);
-	    car.setSpeed(packet.pck.speed / 1000.0);
-	    nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
-	  }
+	game::EmptyCar &car = static_cast<game::EmptyCar &>(player->car());
+	nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
+
+	setDirectionFromUDP(car, packet);
+	setPositionFromUDP(car, packet);
+	car.setSpeed(packet.pck.speed / 1000.0);
+	nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
       }
     nope::log::Log(Debug) << "*****************************";
   }
