@@ -17,7 +17,6 @@
 #include "HUD.hpp"
 #include "Ai.hpp"
 #include "AContext.hpp"
-#include "LocalPlayer.hpp"
 #include "EmptyCar.hpp"
 #include "Timer.hpp"
 
@@ -29,6 +28,7 @@
 
 namespace game
 {
+  class LocalPlayer;
   class ContextGame final : public core::AContext,
                             public OIS::KeyListener,
                             public OIS::MouseListener
@@ -62,11 +62,11 @@ namespace game
     bool                                      m_quit;
     std::unique_ptr<core::HUD>                m_hud;
     core::NetworkManager &                    m_net;
-
-    std::vector<GameClientToGSPacketUDP> m_networkPacket;
-    core::SoundManager &                 m_sound;
-    game::Timer                          m_timer;
-    bool                                 m_gameStart;
+    core::SoundManager &                      m_sound;
+    game::Timer                               m_timer;
+    game::Timer                               m_iaTimer;
+    bool                                      m_gameStart;
+    std::vector<GameClientToGSPacketUDP>      m_networkPacket;
 
     void setUDPPacket(GameClientToGSPacketUDP &packet, LocalPlayer &player);
     void setUDPPacketDirection(GameClientToGSPacketUDP &,

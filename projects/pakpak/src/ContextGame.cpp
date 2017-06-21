@@ -1,4 +1,3 @@
-#include <chrono>
 #include "pakpak_stdafx.hpp"
 
 namespace game
@@ -7,9 +6,10 @@ namespace game
                            core::SettingsPlayer &settings,
                            core::NetworkManager &net,
                            core::SoundManager &  sound)
-      : core::AContext(win, input), m_game(), m_players(),
+      : core::AContext(win, input), m_game(), m_players(), m_ia(),
         m_settings(settings), m_quit(false), m_hud(nullptr), m_net(net),
-        m_networkPacket(), m_sound(sound), m_timer(850), m_gameStart(false)
+        m_sound(sound), m_timer(850), m_iaTimer(4850), m_gameStart(false),
+        m_networkPacket()
   {
   }
 
@@ -26,13 +26,14 @@ namespace game
     m_input->setKeyboardEventCallback(this);
     m_quit = false;
 
-    std::size_t nbPlayer = m_settings.getPlayerCount();
+    std::size_t nbPlayer = 2; // m_settings.getPlayerCount();
 
     m_game.setPlayerNb(nbPlayer);
 
     std::uint32_t nbLocalPlayer = m_settings.getPlayerCount();
 
     m_timer.start();
+    m_iaTimer.start();
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
 	m_game[i].setCar(std::make_unique<EmptyCar>(
@@ -51,25 +52,24 @@ namespace game
 	    m_settings, ((i == 0) ? m_hud.get() : nullptr), *this, m_players,
 	    nbLocalPlayer, (i == 0) ? m_net.getId() : i, m_sound,
 	    m_net.isConnected()));
-
-	/*for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
-	  {
-	    m_ia.emplace_back(
-	        std::make_unique<Ai>(m_game[i].car(),
-	  m_game.map().getNodes()));
-	  }*/
-	m_sound.playSound(core::ESound::GAME_SONG);
-	m_sound.loopSound(core::ESound::GAME_SONG);
-	m_sound.playSound(core::ESound::IDLE_KART_SOUND);
-	m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
-	m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND,
-	                        2.0f * m_sound.getVolume());
-	m_sound.setVolumeSource(core::ESound::GAME_SONG,
-	                        0.2f * m_sound.getVolume());
-	updateViewPort();
-
-	m_input->setPhysicWorld(m_game.physicWorld());
       }
+
+    for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
+      {
+	m_ia.emplace_back(std::make_unique<Ai>(
+	    m_game[i].car(), m_game.map().getNodes(), &m_game[i]));
+      }
+    m_sound.playSound(core::ESound::GAME_SONG);
+    m_sound.loopSound(core::ESound::GAME_SONG);
+    m_sound.playSound(core::ESound::IDLE_KART_SOUND);
+    m_sound.loopSound(core::ESound::IDLE_KART_SOUND);
+    m_sound.setVolumeSource(core::ESound::IDLE_KART_SOUND,
+                            2.0f * m_sound.getVolume());
+    m_sound.setVolumeSource(core::ESound::GAME_SONG,
+                            0.2f * m_sound.getVolume());
+    updateViewPort();
+
+    m_input->setPhysicWorld(m_game.physicWorld());
   }
 
   void ContextGame::updateViewPort()
@@ -98,6 +98,7 @@ namespace game
   {
     nope::log::Log(Debug) << "Game context disabled";
     m_players.clear();
+    m_ia.clear();
     m_gameStart = false;
     m_sound.stopSound(core::ESound::GAME_SONG);
     m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
@@ -146,7 +147,7 @@ namespace game
 
 	// Check timeout
 	std::vector<PlayerData> &gameData = m_game.getPlayers();
-	for (std::vector<PlayerData>::iterator it = gameData.begin();
+	for (std::vector<PlayerData>::iterator it = gameData.begin() + 1;
 	     it != gameData.end();)
 	  {
 	    bool deleted = false;
@@ -204,21 +205,31 @@ namespace game
 
   void ContextGame::display()
   {
-    if (m_timer.reached() && !m_gameStart)
+    if (!m_net.isConnected())
       {
-	m_sound.playSound(core::ESound::START_SONG);
-	m_sound.setVolumeSource(core::ESound::START_SONG,
-	                        0.4f * m_sound.getVolume());
-	m_gameStart = true;
+	if (m_timer.reached() && !m_gameStart)
+	  {
+	    m_sound.playSound(core::ESound::START_SONG);
+	    m_sound.setVolumeSource(core::ESound::START_SONG,
+	                            0.4f * m_sound.getVolume());
+	    m_gameStart = true;
+	  }
       }
 
     for (std::uint8_t i = 0; i < m_players.size(); ++i)
       {
 	m_players[i]->display();
       }
-    for (std::unique_ptr<Ai> const &l_ia : m_ia)
+
+    std::size_t i(0);
+    if (!m_net.isConnected() && m_iaTimer.reached())
       {
-	l_ia->race();
+	for (std::unique_ptr<Ai> const &l_ia : m_ia)
+	  {
+	    nope::log::Log(Debug) << "AI[" << i << "]";
+	    l_ia->race();
+	    i++;
+	  }
       }
   }
 

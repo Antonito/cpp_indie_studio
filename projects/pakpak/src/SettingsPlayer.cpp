@@ -248,8 +248,8 @@ namespace core
         "useObject";
     m_keycodes[playerIndex][m_players[playerIndex].key.changeView] =
         "changeView";
-    m_keycodes[playerIndex][m_players[playerIndex].key.displayMap] =
-        "displayMap";
+    m_keycodes[playerIndex][m_players[playerIndex].key.resetCar] =
+        "resetCar";
     m_keycodes[playerIndex][m_players[playerIndex].key.openChat] = "openChat";
     m_keycodes[playerIndex][m_players[playerIndex].key.openMenu] = "openMenu";
   }
@@ -268,7 +268,7 @@ namespace core
         used;
     m_used[static_cast<std::size_t>(m_players[playerIndex].key.changeView)] =
         used;
-    m_used[static_cast<std::size_t>(m_players[playerIndex].key.displayMap)] =
+    m_used[static_cast<std::size_t>(m_players[playerIndex].key.resetCar)] =
         used;
     m_used[static_cast<std::size_t>(m_players[playerIndex].key.openChat)] =
         used;
@@ -319,7 +319,7 @@ namespace core
         m_used[static_cast<std::size_t const>(
             m_players[playerIndex].key.changeView)] == true ||
         m_used[static_cast<std::size_t const>(
-            m_players[playerIndex].key.displayMap)] == true ||
+            m_players[playerIndex].key.resetCar)] == true ||
         m_used[static_cast<std::size_t const>(
             m_players[playerIndex].key.openChat)] == true ||
         m_used[static_cast<std::size_t const>(
@@ -482,7 +482,7 @@ namespace core
     this->turnRight = that.turnRight;
     this->useObject = that.useObject;
     this->changeView = that.changeView;
-    this->displayMap = that.displayMap;
+    this->resetCar = that.resetCar;
     this->openChat = that.openChat;
     this->openMenu = that.openMenu;
     return (*this);
@@ -497,7 +497,7 @@ namespace core
     this->turnRight = that.turnRight;
     this->useObject = that.useObject;
     this->changeView = that.changeView;
-    this->displayMap = that.displayMap;
+    this->resetCar = that.resetCar;
     this->openChat = that.openChat;
     this->openMenu = that.openMenu;
     return (*this);
@@ -507,7 +507,7 @@ namespace core
       : speedUp(that.speedUp), slowDown(that.slowDown),
         turnLeft(that.turnLeft), turnRight(that.turnRight),
         useObject(that.useObject), changeView(that.changeView),
-        displayMap(that.displayMap), openChat(that.openChat),
+        resetCar(that.resetCar), openChat(that.openChat),
         openMenu(that.openMenu)
   {
   }
@@ -516,7 +516,7 @@ namespace core
       : speedUp(that.speedUp), slowDown(that.slowDown),
         turnLeft(that.turnLeft), turnRight(that.turnRight),
         useObject(that.useObject), changeView(that.changeView),
-        displayMap(that.displayMap), openChat(that.openChat),
+        resetCar(that.resetCar), openChat(that.openChat),
         openMenu(that.openMenu)
   {
   }
@@ -553,7 +553,7 @@ namespace core
       : speedUp(OIS::KeyCode::KC_UP), slowDown(OIS::KeyCode::KC_DOWN),
         turnLeft(OIS::KeyCode::KC_LEFT), turnRight(OIS::KeyCode::KC_RIGHT),
         useObject(OIS::KeyCode::KC_T), changeView(OIS::KeyCode::KC_V),
-        displayMap(OIS::KeyCode::KC_M), openChat(OIS::KeyCode::KC_C),
+        resetCar(OIS::KeyCode::KC_M), openChat(OIS::KeyCode::KC_C),
         openMenu(OIS::KeyCode::KC_ESCAPE)
   {
   }

@@ -47,7 +47,7 @@ namespace core
       std::int32_t, turnRight,
       std::int32_t, useObject,
       std::int32_t, changeView,
-      std::int32_t, displayMap,
+      std::int32_t, resetCar,
       std::int32_t, openChat,
       std::int32_t, openMenu)
 	// clang-format on

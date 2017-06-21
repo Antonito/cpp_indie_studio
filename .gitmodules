@@ -1,3 +1,6 @@
+[submodule "deps/indie_deployment"]
+	path = deps/indie_deployment
+	url = git@git.epitech.eu:/petren_l/indie_deployment
 [submodule "deps/indie_resource"]
 	path = deps/indie_resource
 	url = git@git.epitech.eu:/petren_l/indie_resource

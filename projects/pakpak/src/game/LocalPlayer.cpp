@@ -59,7 +59,7 @@ namespace game
     m_cam->setNearClipDistance(3);
     // CHECK IF SERVER UDP BROKEN AFTER MERGE
     if (!connected)
-      g[order].setId(id);
+      g[static_cast<std::size_t>(order)].setId(id);
     // ENDCHECK
 
     Log(nope::log::Debug) << "Adding viewport '" << m_order << "' to window";
@@ -225,9 +225,9 @@ namespace game
     m_actions.emplace("changeView",
                       std::make_pair(&LocalPlayer::changeView,
                                      &LocalPlayer::changeViewReleased));
-    m_actions.emplace("displayMap",
-                      std::make_pair(&LocalPlayer::displayMap,
-                                     &LocalPlayer::displayMapReleased));
+    m_actions.emplace("resetCar",
+                      std::make_pair(&LocalPlayer::resetCar,
+                                     &LocalPlayer::resetCarReleased));
     m_actions.emplace("openChat",
                       std::make_pair(&LocalPlayer::openChat,
                                      &LocalPlayer::openChatReleased));
@@ -288,9 +288,9 @@ namespace game
   {
   }
 
-  void LocalPlayer::displayMap()
+  void LocalPlayer::resetCar()
   {
-    // TODO: implement MiniMap
+    //Todo : Reset Car at last checkPoint position
   }
 
   void LocalPlayer::openChat()
@@ -373,7 +373,7 @@ namespace game
   {
   }
 
-  void LocalPlayer::displayMapReleased()
+  void LocalPlayer::resetCarReleased()
   {
   }
 

@@ -4,11 +4,11 @@
 #include <chrono>
 #include <memory>
 #include <OGRE/OgreVector3.h>
-#include "ACar.hpp"
 #include "Timer.hpp"
 
 namespace game
 {
+    class ACar;
   class PlayerData
   {
   public:
