@@ -50,6 +50,7 @@ namespace game
     tr.setRotation(quat);
     tr.setOrigin(v);
     m_body->getBulletRigidBody()->setCenterOfMassTransform(tr);
+    m_totalCrash++;
   }
 
   void ACar::update(double)
@@ -158,7 +159,7 @@ namespace game
         m_wheelWidth(0.0), m_wheelFriction(0.0), m_suspensionStiffness(0.0),
         m_suspensionDamping(0.0), m_suspensionCompression(0.0),
         m_rollInfluence(0.0), m_suspensionRestLength(0.0),
-        m_timeLastGoodOrientation()
+        m_timeLastGoodOrientation(), m_totalCrash(0)
   {
     static std::int32_t id = 0;
 
@@ -355,5 +356,10 @@ namespace game
     tr.setRotation(quat);
     tr.setOrigin(v);
     m_body->getBulletRigidBody()->setCenterOfMassTransform(tr);
+  }
+
+  std::int32_t ACar::getTotalCrash()
+  {
+    return (m_totalCrash);
   }
 }

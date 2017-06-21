@@ -10,91 +10,51 @@
 
 struct Data
 {
-  float        s_bestTime[10];
-  std::int32_t s_maxSpeed[10];
-  std::int32_t s_trackFinished[10];
-  std::int32_t s_totalKm[10];
-  std::int32_t s_collisionCount[10];
+  std::string  s_bestTime;
+  std::int32_t s_maxSpeed;
+  std::int32_t s_trackFinished;
+  std::int32_t s_totalKm;
+  std::int32_t s_collisionCount;
 
   Data()
+      : s_bestTime(""), s_maxSpeed(0), s_trackFinished(0), s_totalKm(0),
+        s_collisionCount(0)
   {
     reset();
   }
 
   Data(Data const &cpy)
+      : s_bestTime(cpy.s_bestTime), s_maxSpeed(cpy.s_maxSpeed),
+        s_trackFinished(cpy.s_trackFinished), s_totalKm(cpy.s_totalKm),
+        s_collisionCount(cpy.s_collisionCount)
   {
-    for (std::int32_t i = 0; i < 10; ++i)
-      {
-	s_bestTime[i] = cpy.s_bestTime[i];
-      }
-    for (std::int32_t i = 0; i < 10; ++i)
-      {
-	s_maxSpeed[i] = cpy.s_maxSpeed[i];
-      }
-    for (std::int32_t i = 0; i < 10; ++i)
-      {
-	s_trackFinished[i] = cpy.s_trackFinished[i];
-      }
-    for (std::int32_t i = 0; i < 10; ++i)
-      {
-	s_totalKm[i] = cpy.s_totalKm[i];
-      }
-    for (std::int32_t i = 0; i < 10; ++i)
-      {
-	s_collisionCount[i] = cpy.s_collisionCount[i];
-      }
+    s_bestTime = cpy.s_bestTime;
+    s_maxSpeed = cpy.s_maxSpeed;
+    s_trackFinished = cpy.s_trackFinished;
+    s_totalKm = cpy.s_totalKm;
+    s_collisionCount = cpy.s_collisionCount;
   }
 
   Data &operator=(Data &that)
   {
     if (&that != this)
       {
-	for (std::int32_t i = 0; i < 10; ++i)
-	  {
-	    s_bestTime[i] = that.s_bestTime[i];
-	  }
-	for (std::int32_t i = 0; i < 10; ++i)
-	  {
-	    s_maxSpeed[i] = that.s_maxSpeed[i];
-	  }
-	for (std::int32_t i = 0; i < 10; ++i)
-	  {
-	    s_trackFinished[i] = that.s_trackFinished[i];
-	  }
-	for (std::int32_t i = 0; i < 10; ++i)
-	  {
-	    s_totalKm[i] = that.s_totalKm[i];
-	  }
-	for (std::int32_t i = 0; i < 10; ++i)
-	  {
-	    s_collisionCount[i] = that.s_collisionCount[i];
-	  }
+	s_bestTime = that.s_bestTime;
+	s_maxSpeed = that.s_maxSpeed;
+	s_trackFinished = that.s_trackFinished;
+	s_totalKm = that.s_totalKm;
+	s_collisionCount = that.s_collisionCount;
       }
     return *this;
   }
 
   void reset()
   {
-    for (std::int32_t i = 0; i < 10; ++i)
-      {
-	s_bestTime[i] = 0.0f;
-      }
-    for (std::int32_t i = 0; i < 10; ++i)
-      {
-	s_maxSpeed[i] = 0;
-      }
-    for (std::int32_t i = 0; i < 10; ++i)
-      {
-	s_trackFinished[i] = 0;
-      }
-    for (std::int32_t i = 0; i < 10; ++i)
-      {
-	s_totalKm[i] = 0;
-      }
-    for (std::int32_t i = 0; i < 10; ++i)
-      {
-	s_collisionCount[i] = 0;
-      }
+    s_bestTime = "0s";
+    s_maxSpeed = 0;
+    s_trackFinished = 0;
+    s_totalKm = 0;
+    s_collisionCount = 0;
   }
 };
 

@@ -103,9 +103,10 @@ namespace core
     std::uint32_t getPlayerCount() const;
     void setPlayerCount(std::uint32_t playerCount);
 
-    std::vector<SaveData> m_data;
+    std::vector<SaveData> &getSaveData();
 
   private:
+    std::vector<SaveData>     m_data;
     std::vector<GameSettings> m_players;
     std::vector<std::map<std::int32_t, std::string>> m_keycodes;
     std::vector<bool> m_used;

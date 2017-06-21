@@ -91,7 +91,7 @@ namespace core
         ->disable();
     CEGUI::WindowManager *winManager = CEGUI::WindowManager::getSingletonPtr();
 
-    for (std::int32_t i = 0; i < 10; ++i)
+    for (std::int32_t i = 0; i < m_settings.getSaveData().size(); ++i)
       {
 	CEGUI::ItemEntry *itm = static_cast<CEGUI::ItemEntry *>(
 	    winManager->createWindow("TaharezLook/ListboxItem"));
@@ -104,25 +104,25 @@ namespace core
 	CEGUI::ItemEntry *itm5 = static_cast<CEGUI::ItemEntry *>(
 	    winManager->createWindow("TaharezLook/ListboxItem"));
 
-	itm->setText(
-	    "Place " + std::to_string(i + 1) + " : " +
-	    std::to_string(m_settings.m_data[0].getData().s_bestTime[i]) +
-	    " seconds");
-	itm2->setText("Place " + std::to_string(i + 1) + " : " +
-	              std::to_string(
-	                  m_settings.m_data[0].getData().s_collisionCount[i]) +
-	              " collisions");
+	itm->setText("Player " + std::to_string(i + 1) + " : " +
+	             m_settings.getSaveData()[i].getData().s_bestTime);
+	itm2->setText(
+	    "Player " + std::to_string(i + 1) + " : " +
+	    std::to_string(
+	        m_settings.getSaveData()[i].getData().s_collisionCount) +
+	    " collisions");
 	itm3->setText(
-	    "Place " + std::to_string(i + 1) + " : " +
-	    std::to_string(m_settings.m_data[0].getData().s_maxSpeed[i]) +
+	    "Player " + std::to_string(i + 1) + " : " +
+	    std::to_string(m_settings.getSaveData()[i].getData().s_maxSpeed) +
 	    " Km/h");
 	itm4->setText(
-	    "Place " + std::to_string(i + 1) + " : " +
-	    std::to_string(m_settings.m_data[0].getData().s_totalKm[i]) +
+	    "Player " + std::to_string(i + 1) + " : " +
+	    std::to_string(m_settings.getSaveData()[i].getData().s_totalKm) +
 	    " Km");
 	itm5->setText(
-	    "Place " + std::to_string(i + 1) + " : " +
-	    std::to_string(m_settings.m_data[0].getData().s_trackFinished[i]) +
+	    "Player " + std::to_string(i + 1) + " : " +
+	    std::to_string(
+	        m_settings.getSaveData()[i].getData().s_trackFinished) +
 	    " track finished");
 
 	static_cast<CEGUI::ItemListbox *>(

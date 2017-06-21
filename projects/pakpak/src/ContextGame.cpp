@@ -164,10 +164,41 @@ namespace game
 	  }
       }
 
+    // Update saveData
+    std::int32_t i = 0;
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
+      {
+	double rawSpeed = p->car().speed();
+
+	std::int32_t speed = static_cast<std::int32_t>(
+	    (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
+
+	if (speed > m_settings.getSaveData()[i].getData().s_maxSpeed)
+	  {
+	    m_settings.getSaveData()[i].getData().s_maxSpeed = speed;
+	  }
+	if (p->getFinished() && !p->getSaved())
+	  {
+	    p->setSaved(true);
+	    m_settings.getSaveData()[i].getData().s_trackFinished++;
+	    m_settings.getSaveData()[i].getData().s_totalKm += 3;
+	    m_settings.getSaveData()[i].getData().s_collisionCount +=
+	        p->car().getTotalCrash();
+	  }
+
+	++i;
+      }
+
     // Game process
     m_input->capture();
     m_game.update();
     m_quit = m_hud->getQuit();
+    if (m_quit)
+      {
+	for (int32_t i = 0; i < m_settings.getSaveData().size(); ++i)
+	  m_settings.getSaveData()[i].saveInFile(
+	      "settings/player" + std::to_string(i) + "_scores");
+      }
     return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }
 
@@ -314,8 +345,8 @@ namespace game
 	    // Add new player
 	    std::size_t const i = gameData.size();
 
-	    nope::log::Log(Debug) << "Adding player [" << i
-	                          << "] - Id: " << packet.pck.id;
+	    nope::log::Log(Debug)
+	        << "Adding player [" << i << "] - Id: " << packet.pck.id;
 	    gameData.push_back(PlayerData());
 	    gameData.back().setCar(std::make_unique<EmptyCar>(
 	        m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),

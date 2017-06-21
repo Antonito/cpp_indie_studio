@@ -29,7 +29,8 @@ namespace game
     void update(double);
 
     Ogre::Camera *getCamera() const;
-    void          setPacketData(GameClientToGSPacketUDP const &pck);
+    void setPacketData(GameClientToGSPacketUDP const &pck);
+    std::int32_t getTotalCrash();
 
   protected:
     ACar(game::GameData &gamedata, std::string const &mesh,
@@ -74,6 +75,7 @@ namespace game
     using clock_t = std::chrono::high_resolution_clock;
 
     std::chrono::time_point<clock_t> m_timeLastGoodOrientation;
+    std::int32_t                     m_totalCrash;
   };
 }
 

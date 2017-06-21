@@ -438,6 +438,11 @@ namespace core
     m_playerCount = playerCount;
   }
 
+  std::vector<SaveData> &SettingsPlayer::getSaveData()
+  {
+    return (m_data);
+  }
+
   SettingsPlayer::GameSettings::GameSettings() : key(), graphic()
   {
   }

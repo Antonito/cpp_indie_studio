@@ -72,7 +72,9 @@ namespace game
 
 	if (!p.getFinished() && m_map.getNbCheckPoint() != 0 &&
 	    (checkpt / m_map.getNbCheckPoint()) >= m_laps)
-	  p.setFinished(true);
+	  {
+	    p.setFinished(true);
+	  }
       }
     std::vector<int32_t> ranking = m_map.getPlayerOrder();
     for (std::size_t i = 0; i < ranking.size(); ++i)
@@ -155,14 +157,14 @@ namespace game
   std::uint32_t GameData::getFinalPlayerPosition(std::uint16_t id)
   {
     for (std::uint32_t i = 0; i < m_finalRanking.size(); ++i)
-    {
-      if (m_finalRanking[i] == id)
-        return (i + 1);
-    }
+      {
+	if (m_finalRanking[i] == id)
+	  return (i + 1);
+      }
     return 0;
   }
 
-    std::vector<PlayerData> &GameData::getPlayers()
+  std::vector<PlayerData> &GameData::getPlayers()
   {
     return (m_players);
   }
