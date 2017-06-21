@@ -182,15 +182,15 @@ namespace game
 	                            0.4f * m_sound.getVolume());
 	    m_gameStart = true;
 	  }
+      }
 
-	for (std::uint8_t i = 0; i < m_players.size(); ++i)
-	  {
-	    m_players[i]->display();
-	  }
-	for (std::unique_ptr<Ai> const &l_ia : m_ia)
-	  {
-	    l_ia->race();
-	  }
+    for (std::uint8_t i = 0; i < m_players.size(); ++i)
+      {
+	m_players[i]->display();
+      }
+    for (std::unique_ptr<Ai> const &l_ia : m_ia)
+      {
+	l_ia->race();
       }
   }
 
@@ -317,8 +317,8 @@ namespace game
 	    // Add new player
 	    std::size_t const i = gameData.size();
 
-	    nope::log::Log(Debug)
-	        << "Adding player [" << i << "] - Id: " << packet.pck.id;
+	    nope::log::Log(Debug) << "Adding player [" << i
+	                          << "] - Id: " << packet.pck.id;
 	    gameData.push_back(PlayerData());
 	    gameData.back().setCar(std::make_unique<EmptyCar>(
 	        m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
