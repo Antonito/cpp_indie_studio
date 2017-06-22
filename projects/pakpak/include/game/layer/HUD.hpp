@@ -42,11 +42,11 @@ namespace core
     bool           getQuit() const;
 
   private:
-    CEGUI::Window *      m_rootWindow;
-    CEGUI::GUIContext *  m_context;
-    OIS::ParamList       m_param;
+    CEGUI::Window *                        m_rootWindow;
+    CEGUI::GUIContext *                    m_context;
+    OIS::ParamList                         m_param;
     std::map<std::string, CEGUI::Window *> m_windows;
-    bool m_quit;
+    bool                                   m_quit;
   };
 }
 

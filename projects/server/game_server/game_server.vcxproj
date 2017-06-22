@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)include\dirent\;$(SolutionDir)libs\serializer\include\;$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\crypto\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)libs\exceptions\include\;$(ProjectDir)include\dirent\;$(SolutionDir)libs\serializer\include\;$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\crypto\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -82,7 +82,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)include\dirent\;$(SolutionDir)libs\exceptions\include\;$(SolutionDir)libs\serializer\include\;$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\crypto\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)libs\exceptions\include\;$(ProjectDir)include\dirent\;$(SolutionDir)libs\exceptions\include\;$(SolutionDir)libs\serializer\include\;$(SolutionDir)libs\ini\include\;$(SolutionDir)libs\crypto\include\;$(SolutionDir)libs\packet\include\;$(SolutionDir)libs\network\include\;$(SolutionDir)libs\logger\include\;$(ProjectDir)include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <OutDir>$(SolutionDir)build\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
