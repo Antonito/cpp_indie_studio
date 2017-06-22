@@ -22,7 +22,6 @@ namespace game
     virtual ~Ai();
     void        race();
     game::ACar &car();
-    void        distNode();
 
   private:
     std::int32_t                   m_curNode;

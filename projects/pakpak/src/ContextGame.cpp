@@ -242,7 +242,6 @@ namespace game
       {
 	for (std::unique_ptr<Ai> const &l_ia : m_ia)
 	  {
-	    nope::log::Log(Debug) << "AI[" << i << "]";
 	    l_ia->race();
 	    i++;
 	  }
