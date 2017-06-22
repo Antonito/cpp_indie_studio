@@ -17,7 +17,8 @@ namespace game
     void reset();
     void start();
     void save();
-    std::chrono::milliseconds elapsedTime();
+    std::chrono::milliseconds elapsedTime() const;
+    bool isStarted() const;
 
   private:
     bool                                  m_started;

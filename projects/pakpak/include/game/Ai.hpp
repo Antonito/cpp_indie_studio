@@ -16,20 +16,13 @@ namespace game
   {
   public:
     explicit Ai(ACar &, std::vector<Ogre::Vector3> const &, PlayerData *);
-
     Ai(Ai const &) = delete;
-
     Ai(Ai &&) = delete;
-
     Ai &operator=(Ai &) = delete;
-
     virtual ~Ai();
-
-    void race();
-
+    void        race();
     game::ACar &car();
-
-    void distNode();
+    void        distNode();
 
   private:
     std::int32_t                      m_curNode;
@@ -38,6 +31,7 @@ namespace game
     float                             m_dir;
     float                             m_curAng;
     PlayerData *                      m_data;
+    game::Timer                       m_timeout;
   };
 }
 #endif // CPP_INDIE_STUDIO_IA_HPP

@@ -14,7 +14,7 @@ namespace game
   Ai::Ai(ACar &car, std::vector<Ogre::Vector3> const &nodes,
          PlayerData *player)
       : m_curNode(0), m_nodes(nodes), m_car(car), m_dir(0.0f),
-        m_curAng(100.0f), m_data(player)
+        m_curAng(100.0f), m_data(player), m_timeout(3000)
   {
   }
 
@@ -22,9 +22,20 @@ namespace game
   {
     m_curNode = m_data->getCheckPoint() + 1;
     if (static_cast<std::uint32_t>(m_curNode) == m_nodes.size() - 1)
-    {
-        m_curNode = 0;
-    }
+      {
+	m_curNode = 0;
+      }
+    if (m_data->car().speed() < 10)
+      {
+	if (!m_timeout.isStarted())
+	  {
+	    m_timeout.start();
+	  }
+	else if (m_timeout.reached())
+	  {
+            m_data->resetToLastCheckPoint()
+	  }
+      }
     nope::log::Log(Debug) << "CUR NODE[" << m_curNode << "] POS : {"
                           << m_nodes[m_curNode].x << ", "
                           << m_nodes[m_curNode].y << ", "
