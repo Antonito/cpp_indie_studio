@@ -25,7 +25,6 @@ namespace game
 
   Map::~Map()
   {
-    nope::log::Log(Debug) << "DESTROYING MAAAAAAAAAAAAAAAAAAP";
     for (Ogre::Light *l : m_lights)
       {
 	m_gamedata.sceneMgr()->destroyLight(l->getName());

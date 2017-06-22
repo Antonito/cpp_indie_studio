@@ -13,7 +13,8 @@ namespace game
         m_layers(), m_currentLayers(), m_cam(nullptr), m_viewport(nullptr),
         m_rounds(), m_settings(settings), m_actions(), m_win(win),
         m_order(order), m_hud(hud), m_contextGame(contextGame), m_id(id),
-        m_sound(sound), m_connected(connected), m_saved(false), m_gameData(g)
+        m_sound(sound), m_connected(connected), m_saved(false), m_gameData(g),
+        m_falling(false)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
         std::make_unique<Loading>(g, *this, hud, players);
@@ -57,10 +58,8 @@ namespace game
     m_currentLayers.top()->enable();
     m_cam = m_data[static_cast<std::size_t>(m_playerIndex)].car().getCamera();
     m_cam->setNearClipDistance(3);
-    // CHECK IF SERVER UDP BROKEN AFTER MERGE
     if (!connected)
       g[static_cast<std::size_t>(order)].setId(id);
-    // ENDCHECK
 
     Log(nope::log::Debug) << "Adding viewport '" << m_order << "' to window";
     m_viewport = m_win->addViewport(m_cam, m_order);
@@ -80,7 +79,8 @@ namespace game
         m_win(that.m_win), m_order(that.m_order), m_hud(that.m_hud),
         m_contextGame(that.m_contextGame), m_id(that.m_id),
         m_sound(that.m_sound), m_connected(that.m_connected),
-        m_saved(that.m_saved), m_gameData(that.m_gameData)
+        m_saved(that.m_saved), m_gameData(that.m_gameData),
+        m_falling(that.m_falling)
   {
     that.m_cam = nullptr;
     that.m_viewport = nullptr;
@@ -400,6 +400,19 @@ namespace game
 
   void LocalPlayer::display()
   {
+    if (car().position().y < -200 && !m_falling)
+      {
+	m_sound.stopSound(core::ESound::GAME_SONG);
+	m_sound.playSound(core::ESound::SHOOTING_STAR);
+	m_falling = true;
+      }
+    if (car().position().y > -200 && m_falling)
+      {
+	m_sound.stopSound(core::ESound::SHOOTING_STAR);
+	m_sound.playSound(core::ESound::GAME_SONG);
+	m_falling = false;
+      }
+
     for (std::uint32_t i = 0; i < m_currentLayers.size(); ++i)
       {
 	m_currentLayers[i]->display();

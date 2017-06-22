@@ -35,9 +35,21 @@ namespace game
     m_save_point = std::chrono::system_clock::now();
   }
 
-  std::chrono::milliseconds Timer::elapsedTime()
+  std::chrono::milliseconds Timer::elapsedTime() const
   {
     return std::chrono::duration_cast<std::chrono::milliseconds>(
         m_save_point - m_starting_point);
+  }
+
+  bool Timer::isStarted() const
+  {
+    return m_started;
+  }
+
+  void Timer::reset(int duree)
+  {
+    std::chrono::milliseconds newDurre(duree);
+    m_duree = std::move(newDurre);
+    start();
   }
 }

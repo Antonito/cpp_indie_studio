@@ -11,9 +11,9 @@ namespace game
   {
   }
 
-  Ai::Ai(ACar &car, std::vector<Ogre::Vector3> const &nodes,
-         PlayerData *player)
-      : m_curNode(0), m_nodes(nodes), m_car(car), m_dir(0.0f), m_data(player)
+  Ai::Ai(ACar &car, std::vector<CheckPoint> const &nodes, PlayerData *player)
+      : m_curNode(0), m_nodes(nodes), m_car(car), m_dir(0.0f), m_data(player),
+        m_timeout(5000)
   {
   }
 
@@ -30,76 +30,64 @@ namespace game
       {
 	m_curNode = 0;
       }
-    nope::log::Log(Debug) << "CUR NODE[" << m_curNode << "] POS : {"
-                          << m_nodes[static_cast<std::size_t>(m_curNode)].x
-                          << ", "
-                          << m_nodes[static_cast<std::size_t>(m_curNode)].y
-                          << ", "
-                          << m_nodes[static_cast<std::size_t>(m_curNode)].z
-                          << "}.";
-    // distNode();
-    nope::log::Log(Debug) << "POS CAR : {" << m_car.position().x << ", "
-                          << m_car.position().y << ", " << m_car.position().z
-                          << "}.";
+
+    double        rawSpeed(m_data->car().speed());
+    std::uint32_t speed(static_cast<std::uint32_t>(
+        (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50));
+
+    if (speed < 5 || m_data->car().position().y < 1000)
+      {
+	if (m_data->car().position().y < -1000)
+	  {
+	    nope::log::Log(Debug)
+	        << "Resetting IA pos = " << m_data->car().position().y;
+	    m_data->resetToLastCheckPoint(m_nodes);
+	  }
+
+	if (!m_timeout.isStarted())
+	  {
+	    m_timeout.start();
+	  }
+	else if (m_timeout.reached())
+	  {
+	    nope::log::Log(Debug) << "Resetting IA";
+	    m_data->resetToLastCheckPoint(m_nodes);
+	    m_timeout.reset();
+	  }
+      }
+    else
+      {
+	m_timeout.reset();
+      }
+
     Ogre::Vector3 l_mastDir =
-        m_car.position() - m_nodes[static_cast<std::size_t>(m_curNode)];
-    nope::log::Log(Debug) << "DIrection to next Point : {" << l_mastDir.x
-                          << ", " << l_mastDir.y << ", " << l_mastDir.z
-                          << "}.";
+        m_car.position() -
+        m_nodes[static_cast<std::size_t>(m_curNode)].position();
     Ogre::Vector3 l_dirCar =
         m_car.direction() * Ogre::Vector3::NEGATIVE_UNIT_Z;
-    nope::log::Log(Debug) << "Direction of car : {" << l_dirCar.x << ", "
-                          << l_dirCar.y << ", " << l_dirCar.z << "}.";
-    nope::log::Log(Debug) << "Normalize next checkpoint : : "
-                          << l_dirCar.normalise()
-                          << " ==> Car dir normalize : "
-                          << l_mastDir.normalise();
     double l_angle =
         atan2(static_cast<double>(l_dirCar.x * l_mastDir.z) -
                   static_cast<double>(l_dirCar.z * l_mastDir.x),
               l_mastDir.x * l_dirCar.x + l_mastDir.z * l_dirCar.z);
-    // acos(l_dirCar.dotProduct(l_mastDir) / (l_dirCar.normalise() *
-    // l_mastDir.normalise()));
-    nope::log::Log(Debug) << "Angle calculation => Radian : " << l_angle;
-    // Ogre::Radian l_angle = l_dirCar.angleBetween(l_mastDir);
     l_angle = (l_angle * 180.0) / M_PI;
-    nope::log::Log(Debug) << " => Degree : " << l_angle;
 
     if (l_angle < 10 && l_angle > -10)
       {
 	m_dir = 0.0f;
-	nope::log::Log(Debug) << "Dir : FORWARD";
       }
     else
       {
 	if (l_angle >= 10)
 	  {
 	    m_dir = -0.6f;
-	    nope::log::Log(Debug) << "Turn RIGHT";
 	  }
 	else
 	  {
 	    m_dir = 0.6f;
-	    nope::log::Log(Debug) << "Turn LEFT";
 	  }
       }
     m_car.turn(static_cast<double>(m_dir));
     m_car.move(-0.4);
-  }
-
-  void Ai::distNode()
-  {
-    Ogre::Vector3 m_relativeVector =
-        m_car.position() - m_nodes[static_cast<std::size_t>(m_curNode)];
-    nope::log::Log(Debug) << "Relative distance length to node : "
-                          << static_cast<double>(m_relativeVector.length());
-    if (static_cast<double>(m_relativeVector.length()) < 50)
-      {
-	if (m_curNode == static_cast<std::int32_t>(m_nodes.size() - 1))
-	  m_curNode = 0;
-	else
-	  m_curNode++;
-      }
   }
 
   game::ACar &Ai::car()

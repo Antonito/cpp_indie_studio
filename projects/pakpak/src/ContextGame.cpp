@@ -68,7 +68,7 @@ namespace game
 	  {
 	    nope::log::Log(Debug) << "Creating AI ...";
 	    m_ia.emplace_back(std::make_unique<Ai>(
-	        m_game[i].car(), m_game.map().getNodes(), &m_game[i]));
+	        m_game[i].car(), m_game.map().getCheckPoints(), &m_game[i]));
 	  }
       }
 
@@ -248,7 +248,6 @@ namespace game
       {
 	for (std::unique_ptr<Ai> const &l_ia : m_ia)
 	  {
-	    nope::log::Log(Debug) << "AI[" << i << "]";
 	    l_ia->race();
 	    i++;
 	  }

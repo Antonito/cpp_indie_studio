@@ -15,9 +15,11 @@ namespace game
     Timer(int p_duree);
     bool reached() const;
     void reset();
+    void reset(int duree);
     void start();
     void save();
-    std::chrono::milliseconds elapsedTime();
+    std::chrono::milliseconds elapsedTime() const;
+    bool isStarted() const;
 
   private:
     bool                                  m_started;
