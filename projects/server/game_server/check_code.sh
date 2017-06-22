@@ -12,5 +12,6 @@ cppcheck -I./include/ -I../../../libs/network/include -I../../../libs/logger/inc
 	 -I../../../libs/ini/include \
 	 -I../../../libs/serializer/include \
 	 --enable=all --force --language=c++ --std=c++11 -q --suppress=missingIncludeSystem \
+	 --inline-suppr	\
 	 --error-exitcode=1 .
 exit $?

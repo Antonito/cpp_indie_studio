@@ -20,6 +20,7 @@ UDPClient::UDPClient(UDPClient const &other)
 {
 }
 
+// cppcheck-suppress operatorEqVarError
 UDPClient &UDPClient::operator=(UDPClient const &other)
 {
   if (this != &other)

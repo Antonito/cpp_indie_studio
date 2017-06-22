@@ -155,8 +155,8 @@ namespace core
 
     // Game context
     m_contexts[static_cast<std::size_t>(GameState::InGame)] =
-        std::make_unique<game::ContextGame>(m_window, m_inputListener,
-                                            m_settings, m_network, m_soundManager);
+        std::make_unique<game::ContextGame>(
+            m_window, m_inputListener, m_settings, m_network, m_soundManager);
 
     nope::log::Log(Debug) << "Game context loaded";
 
@@ -175,13 +175,17 @@ namespace core
       {
 	GameState state;
 
+// Events handling
 #if defined(_WIN32) || defined(__linux__)
 	Ogre::WindowEventUtilities::messagePump();
 #elif defined(__APPLE__)
+	// cppcheck-suppress uninitvar
 	NSEvent *event = [NSApp nextEventMatchingMask:NSAnyEventMask
 	                                    untilDate:nil
 	                                       inMode:NSDefaultRunLoopMode
 	                                      dequeue:YES];
+
+	// cppcheck-suppress uninitvar
 	[NSApp sendEvent:event];
 	[event release];
 #endif

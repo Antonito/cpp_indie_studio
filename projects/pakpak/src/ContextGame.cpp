@@ -244,13 +244,11 @@ namespace game
 	m_players[i]->display();
       }
 
-    std::size_t i(0);
     if (!m_net.isConnected() && m_iaTimer.reached())
       {
 	for (std::unique_ptr<Ai> const &l_ia : m_ia)
 	  {
 	    l_ia->race();
-	    i++;
 	  }
       }
   }
