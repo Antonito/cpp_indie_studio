@@ -51,6 +51,9 @@ namespace game
     void        setPlayerNb(std::size_t);
     std::size_t getPlayerNb() const;
 
+      void      setLocalPlayerNb(std::size_t);
+      std::size_t getLocalPlayerNb() const;
+
     void startTime();
 
     void update();
@@ -99,6 +102,7 @@ namespace game
     std::chrono::time_point<std::chrono::high_resolution_clock> m_startTime;
     std::int32_t                                                m_laps;
     std::vector<std::uint32_t>                                  m_finalRanking;
+    std::size_t                                                 m_localPlayerNb;
   };
 }
 

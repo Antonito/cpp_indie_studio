@@ -10,7 +10,7 @@ namespace game
         m_debugDrawer(nullptr),
 #endif
         m_bodies(), m_shapes(), m_map(), m_startTime(), m_laps(1),
-        m_finalRanking()
+        m_finalRanking(), m_localPlayerNb(0)
   {
     m_sceneMgr->getRootSceneNode()->createChildSceneNode("debugDrawer",
                                                          Ogre::Vector3::ZERO);
@@ -187,4 +187,14 @@ namespace game
   {
     return (m_players);
   }
+
+    void GameData::setLocalPlayerNb(std::size_t nb)
+    {
+      m_localPlayerNb = nb;
+    }
+
+    std::size_t GameData::getLocalPlayerNb() const
+    {
+      return m_localPlayerNb;
+    }
 }

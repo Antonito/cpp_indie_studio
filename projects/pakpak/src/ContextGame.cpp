@@ -35,12 +35,12 @@ namespace game
     m_game.resetPhysicWorld();
     m_game.setMap(gl_maps[m_settings.getSelectedMap()]);
 
-    std::size_t nbPlayer = m_settings.getPlayerCount();
+    std::size_t nbPlayer = 4;
     m_game.setPlayerNb(0);
     m_game.setPlayerNb(nbPlayer);
 
     std::uint32_t nbLocalPlayer = m_settings.getPlayerCount();
-
+    m_game.setLocalPlayerNb(nbLocalPlayer);
     m_timer.start();
     m_iaTimer.start();
     for (std::size_t i = 0; i < nbPlayer; ++i)
@@ -60,9 +60,12 @@ namespace game
 	    m_net.isConnected()));
       }
 
-	/*m_ia.emplace_back(
-	std::make_unique<Ai>(m_game[i].car(),
-	m_game.map().getNodes()));*/
+    for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
+      {
+        nope::log::Log(Debug) << "Creating AI ...";
+	m_ia.emplace_back(std::make_unique<Ai>(
+	    m_game[i].car(), m_game.map().getNodes(), &m_game[i]));
+      }
     updateViewPort();
     m_input->setPhysicWorld(m_game.physicWorld());
 
@@ -161,7 +164,7 @@ namespace game
 
 	    if (it->hasTimedOut())
 	      {
-		//bool last = (it == gameData.end() - 1);
+		// bool last = (it == gameData.end() - 1);
 
 		nope::log::Log(Debug) << "Client time'd out, removing it";
 		gameData.erase(it);
@@ -207,11 +210,11 @@ namespace game
     if (m_quit)
       {
 	for (std::size_t i = 0; i < m_settings.getSaveData().size(); ++i)
-        {
-            m_settings.getSaveData()[i].generate();
-            m_settings.getSaveData()[i].saveInFile(
-                    "settings/player" + std::to_string(i) + "_scores");
-        }
+	  {
+	    m_settings.getSaveData()[i].generate();
+	    m_settings.getSaveData()[i].saveInFile(
+	        "settings/player" + std::to_string(i) + "_scores");
+	  }
       }
     return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }
@@ -369,8 +372,8 @@ namespace game
 	    // Add new player
 	    std::size_t const i = gameData.size();
 
-	    nope::log::Log(Debug)
-	        << "Adding player [" << i << "] - Id: " << packet.pck.id;
+	    nope::log::Log(Debug) << "Adding player [" << i
+	                          << "] - Id: " << packet.pck.id;
 	    gameData.push_back(PlayerData());
 	    gameData.back().setCar(std::make_unique<EmptyCar>(
 	        m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),

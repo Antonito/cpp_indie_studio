@@ -49,7 +49,7 @@ namespace game
 
 	CEGUI::WindowManager *winManager =
 	    CEGUI::WindowManager::getSingletonPtr();
-	for (std::uint32_t i = 0; i < m_gameData.getPlayerNb(); ++i)
+	for (std::uint32_t i = 0; i < m_gameData.getLocalPlayerNb(); ++i)
 	  {
 	    nope::log::Log(Debug) << "Adding Rank Item";
 	    CEGUI::ItemEntry *id = static_cast<CEGUI::ItemEntry *>(
