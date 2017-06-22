@@ -105,9 +105,10 @@ namespace core
     void setSelectedMap(std::uint32_t selectedMap);
     std::uint32_t getSelectedMap() const;
 
-    std::vector<SaveData> m_data;
+    std::vector<SaveData> &getSaveData();
 
   private:
+    std::vector<SaveData>     m_data;
     std::vector<GameSettings> m_players;
     std::vector<std::map<std::int32_t, std::string>> m_keycodes;
     std::vector<bool> m_used;

@@ -37,6 +37,7 @@ namespace game
     void update(double);
 
     Ogre::Camera *getCamera() const;
+    std::int32_t getTotalCrash();
     void          setPacketData(GameClientToGSPacketUDP const &pck,
                                 bool                           rollbackOnly = false);
 
@@ -85,6 +86,7 @@ namespace game
     using clock_t = std::chrono::high_resolution_clock;
 
     std::chrono::time_point<clock_t> m_timeLastGoodOrientation;
+    std::int32_t                     m_totalCrash;
   };
 }
 

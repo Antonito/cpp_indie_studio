@@ -49,7 +49,7 @@ namespace game
 
 	CEGUI::WindowManager *winManager =
 	    CEGUI::WindowManager::getSingletonPtr();
-	for (std::uint32_t i = 0; i < m_gameData.getPlayerNb(); ++i)
+	for (std::uint32_t i = 0; i < m_gameData.getLocalPlayerNb(); ++i)
 	  {
 	    nope::log::Log(Debug) << "Adding Rank Item";
 	    CEGUI::ItemEntry *id = static_cast<CEGUI::ItemEntry *>(
@@ -77,9 +77,11 @@ namespace game
 	      }
 	    else
 	      {
-		outime = std::to_string(elapsedTime / 1000) +
-		         " s " + std::to_string(elapsedTime % 1000) + "ms";
+		outime = std::to_string(elapsedTime / 1000) + " s " +
+		         std::to_string(elapsedTime % 1000) + "ms";
 	      }
+	    m_players[i]->settings().getSaveData()[i].getData().s_bestTime =
+	        elapsedTime;
 	    time->setText(outime);
 
 	    // Set + Add player rank

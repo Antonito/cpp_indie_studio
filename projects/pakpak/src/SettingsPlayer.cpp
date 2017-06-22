@@ -439,6 +439,11 @@ namespace core
     m_playerCount = playerCount;
   }
 
+  std::vector<SaveData> &SettingsPlayer::getSaveData()
+    {
+        return (m_data);
+    }
+
   void SettingsPlayer::setSelectedMap(std::uint32_t selectedMap)
   {
     m_selectedMap = selectedMap;

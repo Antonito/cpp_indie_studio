@@ -10,7 +10,7 @@ namespace game
         m_debugDrawer(nullptr),
 #endif
         m_bodies(), m_shapes(), m_map(), m_startTime(), m_laps(1),
-        m_finalRanking()
+        m_finalRanking(), m_localPlayerNb(0)
   {
     m_sceneMgr->getRootSceneNode()->createChildSceneNode("debugDrawer",
                                                          Ogre::Vector3::ZERO);
@@ -54,13 +54,15 @@ namespace game
 
 	if (!p.getFinished() && m_map->getNbCheckPoint() != 0 &&
 	    (checkpt / m_map->getNbCheckPoint()) >= m_laps)
-	  p.setFinished(true);
-      }
-    std::vector<int32_t> ranking = m_map->getPlayerOrder();
-    for (std::size_t i = 0; i < ranking.size(); ++i)
-      {
-	if (ranking[i] < static_cast<std::int32_t>(m_players.size()))
-	  m_players[static_cast<std::size_t>(ranking[i])].setRank(i);
+	  {
+	    p.setFinished(true);
+	  }
+	std::vector<int32_t> ranking = m_map->getPlayerOrder();
+	for (std::size_t i = 0; i < ranking.size(); ++i)
+	  {
+	    if (ranking[i] < static_cast<std::int32_t>(m_players.size()))
+	      m_players[static_cast<std::size_t>(ranking[i])].setRank(i);
+	  }
       }
   }
 
@@ -181,9 +183,18 @@ namespace game
     m_map = std::make_unique<Map>(*this, "./deps/indie_resource/maps/" +
                                              mapName + "/map.dat");
   }
-
   std::vector<PlayerData> &GameData::getPlayers()
   {
     return (m_players);
+  }
+
+  void GameData::setLocalPlayerNb(std::size_t nb)
+  {
+    m_localPlayerNb = nb;
+  }
+
+  std::size_t GameData::getLocalPlayerNb() const
+  {
+    return m_localPlayerNb;
   }
 }

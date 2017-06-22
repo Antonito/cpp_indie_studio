@@ -43,8 +43,16 @@ namespace core
 	ofs.open(file, std::ios::trunc);
 	if (ofs.is_open())
 	  {
+	    nope::log::Log(Debug) << "Key save in File : " << m_key;
 	    ofs.write(toXor(m_key).c_str(),
 	              static_cast<std::streamsize>(m_key.length()));
+            nope::log::Log(Debug) << "Key with xor : " << toXor(m_key);
+	    nope::log::Log(Debug)
+	        << "Save in file => Struct : \nBest Time : " << m_data.s_bestTime
+	        << "\nMax Speed : " << m_data.s_maxSpeed
+	        << "\nTrackFinished : " << m_data.s_trackFinished
+                << "\nTotal Km : " << m_data.s_totalKm
+                << "\nCollision count : " << m_data.s_collisionCount;
 	    char *structToXor =
 	        toXor(reinterpret_cast<char *>(&m_data), sizeof(m_data));
 	    ofs.write(structToXor, sizeof(m_data));
@@ -90,12 +98,18 @@ namespace core
 	buf = ss.str().substr(32);
 	key = toXor(key);
 	char *xorToStruct = toXor(buf.c_str(), sizeof(m_data));
-	nope::log::Log(Debug) << "Recup from file : " << file
+	nope::log::Log(Debug) << "Recup from file " << file
 	                      << " Key : " << key;
 	std::memcpy(reinterpret_cast<char *>(&m_data), xorToStruct,
 	            sizeof(m_data));
 	delete[] xorToStruct;
 	ifs.close();
+	nope::log::Log(Debug)
+	        << "Recup form file => Struct : \nBest Time : " << m_data.s_bestTime
+	        << "\nMax Speed : " << m_data.s_maxSpeed
+	        << "\nTrackFinished : " << m_data.s_trackFinished
+                << "\nTotal Km : " << m_data.s_totalKm
+                << "\nCollision count : " << m_data.s_collisionCount;
 	generate();
 	nope::log::Log(Debug) << "END GENERATE KEY";
 

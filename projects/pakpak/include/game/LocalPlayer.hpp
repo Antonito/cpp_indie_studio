@@ -82,6 +82,11 @@ namespace game
     bool getFinished() const;
     bool isConnected() const;
 
+    PlayerData &getData(std::int32_t playerIndex);
+
+    bool getSaved() const;
+    void setSaved(bool);
+
   private:
     void setActionMap();
 
@@ -127,6 +132,7 @@ namespace game
     std::uint16_t       m_id;
     core::SoundManager &m_sound;
     bool                m_connected;
+    bool                m_saved;
     GameData &          m_gameData;
   };
 }

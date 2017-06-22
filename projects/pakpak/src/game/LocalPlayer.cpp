@@ -13,7 +13,7 @@ namespace game
         m_layers(), m_currentLayers(), m_cam(nullptr), m_viewport(nullptr),
         m_rounds(), m_settings(settings), m_actions(), m_win(win),
         m_order(order), m_hud(hud), m_contextGame(contextGame), m_id(id),
-        m_sound(sound), m_connected(connected), m_gameData(g)
+        m_sound(sound), m_connected(connected), m_saved(false), m_gameData(g)
   {
     m_layers[static_cast<std::size_t>(GameLayer::Loading)] =
         std::make_unique<Loading>(g, *this, hud, players);
@@ -80,7 +80,7 @@ namespace game
         m_win(that.m_win), m_order(that.m_order), m_hud(that.m_hud),
         m_contextGame(that.m_contextGame), m_id(that.m_id),
         m_sound(that.m_sound), m_connected(that.m_connected),
-        m_gameData(that.m_gameData)
+        m_saved(that.m_saved), m_gameData(that.m_gameData)
   {
     that.m_cam = nullptr;
     that.m_viewport = nullptr;
@@ -321,6 +321,11 @@ namespace game
       }
   }
 
+  PlayerData &LocalPlayer::getData(std::int32_t playerIndex)
+  {
+    return (m_data[playerIndex]);
+  }
+
   void LocalPlayer::speedUpReleased()
   {
     nope::log::Log(Debug) << "Idle mode !!";
@@ -429,5 +434,15 @@ namespace game
   bool LocalPlayer::isConnected() const
   {
     return m_connected;
+  }
+
+  bool LocalPlayer::getSaved() const
+  {
+    return (m_saved);
+  }
+
+  void LocalPlayer::setSaved(bool saved)
+  {
+    m_saved = saved;
   }
 }

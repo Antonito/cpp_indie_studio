@@ -35,12 +35,12 @@ namespace game
     m_game.resetPhysicWorld();
     m_game.setMap(gl_maps[m_settings.getSelectedMap()]);
 
-    std::size_t nbPlayer = m_settings.getPlayerCount();
+    std::size_t nbPlayer = 4;
     m_game.setPlayerNb(0);
     m_game.setPlayerNb(nbPlayer);
 
     std::uint32_t nbLocalPlayer = m_settings.getPlayerCount();
-
+    m_game.setLocalPlayerNb(nbLocalPlayer);
     m_timer.start();
     m_iaTimer.start();
     for (std::size_t i = 0; i < nbPlayer; ++i)
@@ -60,9 +60,12 @@ namespace game
 	    m_net.isConnected()));
       }
 
-	/*m_ia.emplace_back(
-	std::make_unique<Ai>(m_game[i].car(),
-	m_game.map().getNodes()));*/
+    for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
+      {
+	nope::log::Log(Debug) << "Creating AI ...";
+	m_ia.emplace_back(std::make_unique<Ai>(
+	    m_game[i].car(), m_game.map().getNodes(), &m_game[i]));
+      }
     updateViewPort();
     m_input->setPhysicWorld(m_game.physicWorld());
 
@@ -161,7 +164,7 @@ namespace game
 
 	    if (it->hasTimedOut())
 	      {
-		//bool last = (it == gameData.end() - 1);
+		// bool last = (it == gameData.end() - 1);
 
 		nope::log::Log(Debug) << "Client time'd out, removing it";
 		gameData.erase(it);
@@ -174,10 +177,45 @@ namespace game
 	      }
 	  }
       }
+
+    // Update saveData
+    std::size_t i = 0;
+    for (std::unique_ptr<LocalPlayer> &p : m_players)
+      {
+	double rawSpeed = p->car().speed();
+
+	std::int32_t speed = static_cast<std::int32_t>(
+	    (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
+
+	if (speed > m_settings.getSaveData()[i].getData().s_maxSpeed)
+	  {
+	    m_settings.getSaveData()[i].getData().s_maxSpeed = speed;
+	  }
+	if (p->getFinished() && !p->getSaved())
+	  {
+	    p->setSaved(true);
+	    m_settings.getSaveData()[i].getData().s_trackFinished++;
+	    m_settings.getSaveData()[i].getData().s_totalKm += 3;
+	    m_settings.getSaveData()[i].getData().s_collisionCount +=
+	        p->car().getTotalCrash();
+	  }
+
+	++i;
+      }
+
     // Game process
     m_input->capture();
     m_game.update();
     m_quit = m_hud->getQuit();
+    if (m_quit)
+      {
+	for (std::size_t j = 0; j < m_settings.getSaveData().size(); ++j)
+	  {
+	    m_settings.getSaveData()[j].generate();
+	    m_settings.getSaveData()[j].saveInFile(
+	        "settings/player" + std::to_string(j) + "_scores");
+	  }
+      }
     return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }
 
