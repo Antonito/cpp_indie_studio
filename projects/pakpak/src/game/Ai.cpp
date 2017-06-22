@@ -22,13 +22,16 @@ namespace game
   {
     m_curNode = m_data->getCheckPoint() + 1;
     if (static_cast<std::uint32_t>(m_curNode) == m_nodes.size() - 1)
-    {
-        m_curNode = 0;
-    }
+      {
+	m_curNode = 0;
+      }
     nope::log::Log(Debug) << "CUR NODE[" << m_curNode << "] POS : {"
-                          << m_nodes[m_curNode].x << ", "
-                          << m_nodes[m_curNode].y << ", "
-                          << m_nodes[m_curNode].z << "}.";
+                          << m_nodes[static_cast<std::size_t>(m_curNode)].x
+                          << ", "
+                          << m_nodes[static_cast<std::size_t>(m_curNode)].y
+                          << ", "
+                          << m_nodes[static_cast<std::size_t>(m_curNode)].z
+                          << "}.";
     // distNode();
     nope::log::Log(Debug) << "POS CAR : {" << m_car.position().x << ", "
                           << m_car.position().y << ", " << m_car.position().z
@@ -47,7 +50,8 @@ namespace game
                           << " ==> Car dir normalize : "
                           << l_mastDir.normalise();
     double l_angle =
-        atan2(l_dirCar.x * l_mastDir.z - l_dirCar.z * l_mastDir.x,
+        atan2(static_cast<double>(l_dirCar.x * l_mastDir.z) -
+                  static_cast<double>(l_dirCar.z * l_mastDir.x),
               l_mastDir.x * l_dirCar.x + l_mastDir.z * l_dirCar.z);
     // acos(l_dirCar.dotProduct(l_mastDir) / (l_dirCar.normalise() *
     // l_mastDir.normalise()));

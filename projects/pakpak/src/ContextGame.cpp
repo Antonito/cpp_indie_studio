@@ -185,7 +185,7 @@ namespace game
       }
 
     // Update saveData
-    std::int32_t i = 0;
+    std::size_t i = 0;
     for (std::unique_ptr<LocalPlayer> &p : m_players)
       {
 	double rawSpeed = p->car().speed();
@@ -215,11 +215,11 @@ namespace game
     m_quit = m_hud->getQuit();
     if (m_quit)
       {
-	for (std::size_t i = 0; i < m_settings.getSaveData().size(); ++i)
+	for (std::size_t j = 0; j < m_settings.getSaveData().size(); ++j)
 	  {
-	    m_settings.getSaveData()[i].generate();
-	    m_settings.getSaveData()[i].saveInFile(
-	        "settings/player" + std::to_string(i) + "_scores");
+	    m_settings.getSaveData()[j].generate();
+	    m_settings.getSaveData()[j].saveInFile(
+	        "settings/player" + std::to_string(j) + "_scores");
 	  }
       }
     return (m_quit ? core::GameState::Menu : core::GameState::InGame);
