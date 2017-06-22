@@ -39,10 +39,10 @@ int main(int, char **)
 #else
   nope::log::Logger::logLevel = nope::log::LogLevel::LOG_INFO;
 #endif
-  core::AppLauncher app;
 
   try
     {
+      core::AppLauncher app;
 
       app.start();
     }

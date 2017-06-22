@@ -36,7 +36,6 @@ namespace game
     std::vector<Ogre::Vector3> const &m_nodes;
     game::ACar &                      m_car;
     float                             m_dir;
-    float                             m_curAng;
     PlayerData *                      m_data;
   };
 }

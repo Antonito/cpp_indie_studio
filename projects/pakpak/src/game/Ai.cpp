@@ -13,8 +13,7 @@ namespace game
 
   Ai::Ai(ACar &car, std::vector<Ogre::Vector3> const &nodes,
          PlayerData *player)
-      : m_curNode(0), m_nodes(nodes), m_car(car), m_dir(0.0f),
-        m_curAng(100.0f), m_data(player)
+      : m_curNode(0), m_nodes(nodes), m_car(car), m_dir(0.0f), m_data(player)
   {
   }
 

@@ -116,7 +116,7 @@ namespace core
 
     void erase(std::size_t n)
     {
-      m_data.erase(m_data.begin() + n);
+      m_data.erase(m_data.begin() + static_cast<long>(n));
     }
 
     void erase(std::size_t n, std::size_t m)
