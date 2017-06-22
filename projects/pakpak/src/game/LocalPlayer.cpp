@@ -292,7 +292,7 @@ namespace game
   void LocalPlayer::resetCar()
   {
     nope::log::Log(Debug) << "Pressing reset";
-    m_data[m_playerIndex].resetToLastCheckPoint(
+    m_data[static_cast<std::size_t>(m_playerIndex)].resetToLastCheckPoint(
         m_gameData.map().getCheckPoints());
   }
 
@@ -323,7 +323,7 @@ namespace game
 
   PlayerData &LocalPlayer::getData(std::int32_t playerIndex)
   {
-    return (m_data[playerIndex]);
+    return (m_data[static_cast<std::size_t>(playerIndex)]);
   }
 
   void LocalPlayer::speedUpReleased()

@@ -147,7 +147,8 @@ namespace game
     if (checkpoints.size() > 0)
       {
 	m_car->resetToCheckPoint(
-	    checkpoints[m_currentCheckpoint % checkpoints.size()]);
+	    checkpoints[static_cast<std::uint32_t>(m_currentCheckpoint) %
+	                checkpoints.size()]);
       }
     else
       {

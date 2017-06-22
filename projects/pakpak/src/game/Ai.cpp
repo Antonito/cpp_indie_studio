@@ -65,10 +65,10 @@ namespace game
         m_nodes[static_cast<std::size_t>(m_curNode)].position();
     Ogre::Vector3 l_dirCar =
         m_car.direction() * Ogre::Vector3::NEGATIVE_UNIT_Z;
-    double l_angle =
-        atan2(static_cast<double>(l_dirCar.x * l_mastDir.z) -
-                  static_cast<double>(l_dirCar.z * l_mastDir.x),
-              l_mastDir.x * l_dirCar.x + l_mastDir.z * l_dirCar.z);
+    double l_angle = atan2(static_cast<double>(l_dirCar.x * l_mastDir.z) -
+                               static_cast<double>(l_dirCar.z * l_mastDir.x),
+                           static_cast<double>(l_mastDir.x * l_dirCar.x +
+                                               l_mastDir.z * l_dirCar.z));
     l_angle = (l_angle * 180.0) / M_PI;
 
     if (l_angle < 10 && l_angle > -10)
