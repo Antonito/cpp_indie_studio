@@ -171,8 +171,6 @@ namespace game
 
 	    if (it->hasTimedOut())
 	      {
-		// bool last = (it == gameData.end() - 1);
-
 		nope::log::Log(Debug) << "Client time'd out, removing it";
 		gameData.erase(it);
 		deleted = true;

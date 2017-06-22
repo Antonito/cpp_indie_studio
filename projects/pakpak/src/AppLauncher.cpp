@@ -88,7 +88,7 @@ namespace core
     // TODO: Render System dynamiques
     Ogre::RenderSystem *rs =
         m_root->getRenderSystemByName("OpenGL Rendering Subsystem");
-    // Pour DirectX : "Direct3D9 Rendering Subsystem
+    // For DirectX : "Direct3D9 Rendering Subsystem
     m_root->setRenderSystem(rs);
     rs->setConfigOption("Full Screen", "No");
     rs->setConfigOption("Video Mode", "1280 x 800 @ 32-bit colour");
@@ -104,34 +104,6 @@ namespace core
     m_window->removeAllViewports();
 
     initOpenAl(NULL);
-    //// Create the Scene Manager
-    // m_sceneMgr =
-    //    m_root->createSceneManager("DefaultSceneManager", "Mon Scene
-    //    Manager");
-
-    //// Set A light
-    // m_sceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
-
-    //// Create Camera
-    // m_camera =
-    //    std::unique_ptr<Ogre::Camera>(m_sceneMgr->createCamera("PlayerCam"));
-    // m_camera->setPosition(Ogre::Vector3(0, 0, 100));
-    // m_camera->lookAt(Ogre::Vector3(0, 0, 0));
-    // m_camera->setNearClipDistance(5);
-
-    //// Set View Port
-    // Ogre::Viewport *vp = m_window->addViewport(m_camera.get());
-    // vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
-    // m_camera->setAspectRatio(Ogre::Real(vp->getActualWidth()) /
-    //                         Ogre::Real(vp->getActualHeight()));
-
-    //// Create Entity
-    // Ogre::Entity *ent = m_sceneMgr->createEntity("pinguin", "penguin.mesh");
-
-    //// Attach the mesh to the scene
-    // Ogre::SceneNode *node =
-    //    m_sceneMgr->getRootSceneNode()->createChildSceneNode();
-    // node->attachObject(ent);
 
     createFrameListener();
 

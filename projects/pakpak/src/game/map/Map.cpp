@@ -40,7 +40,7 @@ namespace game
     std::stringstream   ss;
     std::ifstream       fs(filename.c_str());
     ss << id_;
-    std::string         id = ss.str();
+    std::string id = ss.str();
     ss.str("");
 
 #if defined(INDIE_MAP_EDITOR)
@@ -171,15 +171,11 @@ namespace game
 
     m_body = m_gamedata.addPhysicEntity(std::move(shape), "MapRigidBody" + id);
 
-// body->setDebugDisplayEnabled(false);
-// body->showDebugShape(false);
-
 #ifdef DEBUG
     // Small trick to allow debug drawing
     m_body->setShape(m_node, _shape, 0.6f, 0.6f, 0.0f, Ogre::Vector3::ZERO);
 #endif
     m_body->setStaticShape(_shape, 0.0f, 0.6f, Ogre::Vector3(0, 0, 0));
-    // m_body->setKinematicObject(true);
 
     m_gamedata.sceneMgr()->setAmbientLight(
         Ogre::ColourValue(0.5f, 0.5f, 0.5f));
@@ -218,8 +214,6 @@ namespace game
 	ss.str("");
 	ss << "Checkpoint" << id_;
 	Ogre::Entity *ent = m_map->clone(ss.str());
-	// m_gamedata.sceneMgr()->createEntity(
-	// ss.str(), Ogre::SceneManager::PT_CUBE);
 
 	ss.str("");
 	ss << "CheckpointNode" << id_;
@@ -273,7 +267,6 @@ namespace game
 
     nope::log::Log(Debug) << "Save file size: " << v.size();
 
-    // file << nope::serialization::to_json(data);
     file.write(reinterpret_cast<const char *>(v.data()), v.size());
   }
 #endif // !INDIE_MAP_EDITOR
@@ -395,7 +388,7 @@ namespace game
   }
 
   Map::MapData::Quaternion &Map::MapData::Quaternion::
-                            operator=(Map::MapData::Quaternion &&that)
+      operator=(Map::MapData::Quaternion &&that)
   {
     if (this == &that)
       return (*this);
@@ -416,7 +409,7 @@ namespace game
   }
 
   Map::MapData::Element &Map::MapData::Element::
-                         operator=(Map::MapData::Element &&that)
+      operator=(Map::MapData::Element &&that)
   {
     if (this == &that)
       return (*this);

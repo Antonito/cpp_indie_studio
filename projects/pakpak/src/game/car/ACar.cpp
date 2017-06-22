@@ -138,12 +138,10 @@ namespace game
     for (int i = 0; i < 2; ++i)
       {
 	m_vehicle->applyEngineForce(btScalar(m_engineForce / 5.0), i);
-	// m_vehicle->setBrake(m_breakingForce, i);
       }
     for (int i = 2; i < 4; ++i)
       {
 	m_vehicle->applyEngineForce(btScalar(m_engineForce), i);
-	// m_vehicle->setBrake(m_breakingForce, i);
       }
 
     constexpr double alpha = 0.1;
@@ -353,10 +351,10 @@ namespace game
     ++id;
   }
 
-    GameData &ACar::getGameData()
-    {
-        return m_gamedata;
-    }
+  GameData &ACar::getGameData()
+  {
+    return m_gamedata;
+  }
 
   void ACar::setPacketData(GameClientToGSPacketUDP const &pck,
                            bool                           rollbackOnly)
@@ -365,7 +363,6 @@ namespace game
 
     std::vector<float> _dir = pck.getDirection();
     std::vector<float> _pos = pck.getPosition();
-    //    float              speed = pck.pck.speed / 1000.0f;
     // TODO : speed ?
 
     Ogre::Vector3    p(_pos[0], _pos[1], _pos[2]);

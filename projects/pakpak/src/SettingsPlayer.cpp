@@ -249,8 +249,7 @@ namespace core
         "useObject";
     m_keycodes[playerIndex][m_players[playerIndex].key.changeView] =
         "changeView";
-    m_keycodes[playerIndex][m_players[playerIndex].key.resetCar] =
-        "resetCar";
+    m_keycodes[playerIndex][m_players[playerIndex].key.resetCar] = "resetCar";
     m_keycodes[playerIndex][m_players[playerIndex].key.openChat] = "openChat";
     m_keycodes[playerIndex][m_players[playerIndex].key.openMenu] = "openMenu";
   }
@@ -282,7 +281,6 @@ namespace core
     Log(nope::log::Debug) << "SettingsPlayer::unload -> " << playerIndex
                           << " : "
                           << playerFile[static_cast<int>(playerIndex)];
-    // save(playerIndex);
     setUsed(playerIndex, false);
     m_players.erase(m_players.begin() +
                     static_cast<CEGUI::String::difference_type>(playerIndex));
@@ -440,9 +438,9 @@ namespace core
   }
 
   std::vector<SaveData> &SettingsPlayer::getSaveData()
-    {
-        return (m_data);
-    }
+  {
+    return (m_data);
+  }
 
   void SettingsPlayer::setSelectedMap(std::uint32_t selectedMap)
   {

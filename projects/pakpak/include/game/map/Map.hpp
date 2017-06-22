@@ -121,9 +121,6 @@ namespace game
     std::string m_filename;
     std::size_t m_selectedPoint;
 #endif // !INDIE_MAP_EDITOR
-
-    // std::vector<MapElement> m_elements;
-    // std::vector<MapBonus> m_bonus;
   };
 }
 
