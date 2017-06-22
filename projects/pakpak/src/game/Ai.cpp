@@ -35,7 +35,7 @@ namespace game
     std::uint32_t speed(static_cast<std::uint32_t>(
         (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50));
 
-    if (speed < 5 || m_data->car().position().y < 1000)
+    if (speed < 2 || m_data->car().position().y < -1000)
       {
 	if (m_data->car().position().y < -1000)
 	  {
@@ -79,11 +79,11 @@ namespace game
       {
 	if (l_angle >= 10)
 	  {
-	    m_dir = -0.6f;
+	    m_dir = -1.0f;
 	  }
 	else
 	  {
-	    m_dir = 0.6f;
+	    m_dir = 1.0f;
 	  }
       }
     m_car.turn(static_cast<double>(m_dir));
