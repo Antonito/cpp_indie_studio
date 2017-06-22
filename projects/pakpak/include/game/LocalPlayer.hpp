@@ -134,6 +134,7 @@ namespace game
     bool                m_connected;
     bool                m_saved;
     GameData &          m_gameData;
+    bool                m_falling;
   };
 }
 
