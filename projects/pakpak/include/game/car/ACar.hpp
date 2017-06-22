@@ -1,9 +1,15 @@
 #ifndef ACAR_HPP_
 #define ACAR_HPP_
 
+#if defined(_WIN32)
+#include <OgreBulletDynamics.h>
+#include <BulletDynamics/Dynamics/btRigidBody.h>
+#include <BulletDynamics/Vehicle/btRaycastVehicle.h>
+#else
 #include <OgreBullet/Dynamics/OgreBulletDynamics.h>
 #include <bullet/BulletDynamics/Dynamics/btRigidBody.h>
 #include <bullet/BulletDynamics/Vehicle/btRaycastVehicle.h>
+#endif // !_WIN32
 #include <OGRE/OgreVector3.h>
 #include "GameData.hpp"
 #include "pakpak_stdafx.hpp"
@@ -37,7 +43,7 @@ namespace game
     void update(double);
 
     Ogre::Camera *getCamera() const;
-    std::int32_t getTotalCrash();
+    std::int32_t  getTotalCrash();
     void          setPacketData(GameClientToGSPacketUDP const &pck,
                                 bool                           rollbackOnly = false);
 
