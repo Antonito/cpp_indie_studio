@@ -64,7 +64,7 @@ namespace game
       {
 	nope::log::Log(Debug) << "Creating AI ...";
 	m_ia.emplace_back(std::make_unique<Ai>(
-	    m_game[i].car(), m_game.map().getNodes(), &m_game[i]));
+	    m_game[i].car(), m_game.map().getCheckPoints(), &m_game[i]));
       }
     updateViewPort();
     m_input->setPhysicWorld(m_game.physicWorld());

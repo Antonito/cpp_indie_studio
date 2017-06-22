@@ -13,7 +13,7 @@ namespace game
 
   Ai::Ai(ACar &car, std::vector<CheckPoint> const &nodes, PlayerData *player)
       : m_curNode(0), m_nodes(nodes), m_car(car), m_dir(0.0f),
-        m_curAng(100.0f), m_data(player), m_timeout(3000)
+        m_curAng(100.0f), m_data(player), m_timeout(5000)
   {
   }
 
@@ -29,10 +29,14 @@ namespace game
     std::uint32_t speed(static_cast<std::uint32_t>(
         (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50));
 
-    if (speed < 5 || m_nodes[m_curNode].position().y < 1000)
+    if (speed < 5 || m_data->car().position().y < 1000)
       {
-	if (m_nodes[m_curNode].position().y < 1000)
-	  m_data->resetToLastCheckPoint(m_nodes);
+	if (m_data->car().position().y < -1000)
+        {
+          nope::log::Log(Debug) << "Resetting IA pos = " <<
+          m_data->car().position().y;
+          m_data->resetToLastCheckPoint(m_nodes);
+        }
 
 	if (!m_timeout.isStarted())
 	  {
@@ -40,6 +44,7 @@ namespace game
 	  }
 	else if (m_timeout.reached())
 	  {
+            nope::log::Log(Debug) << "Resetting IA";
 	    m_data->resetToLastCheckPoint(m_nodes);
 	    m_timeout.reset();
 	  }
@@ -48,6 +53,7 @@ namespace game
       {
 	m_timeout.reset();
       }
+
     Ogre::Vector3 l_mastDir =
         m_car.position() -
         m_nodes[static_cast<std::size_t>(m_curNode)].position();
