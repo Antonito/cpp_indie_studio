@@ -16,10 +16,17 @@
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #endif
 
+#if defined(_WIN32)
+#include <OgreBulletDynamicsWorld.h>
+#include <Debug/OgreBulletCollisionsDebugDrawer.h>
+#include <OgreBulletDynamicsRigidBody.h>
+#include <OgreBulletCollisionsShape.h>
+#else
 #include <OgreBullet/Dynamics/OgreBulletDynamicsWorld.h>
 #include <OgreBullet/Collisions/Debug/OgreBulletCollisionsDebugDrawer.h>
 #include <OgreBullet/Dynamics/OgreBulletDynamicsRigidBody.h>
 #include <OgreBullet/Collisions/OgreBulletCollisionsShape.h>
+#endif // !_WIN32
 #include <game/map/Map.hpp>
 
 // Disable clang warning for templated class padding
@@ -33,7 +40,7 @@
 
 namespace game
 {
-    class PlayerData;
+  class PlayerData;
   class GameData
   {
   public:
@@ -51,8 +58,8 @@ namespace game
     void        setPlayerNb(std::size_t);
     std::size_t getPlayerNb() const;
 
-      void      setLocalPlayerNb(std::size_t);
-      std::size_t getLocalPlayerNb() const;
+    void        setLocalPlayerNb(std::size_t);
+    std::size_t getLocalPlayerNb() const;
 
     void startTime();
 
@@ -102,7 +109,7 @@ namespace game
     std::chrono::time_point<std::chrono::high_resolution_clock> m_startTime;
     std::int32_t                                                m_laps;
     std::vector<std::uint32_t>                                  m_finalRanking;
-    std::size_t                                                 m_localPlayerNb;
+    std::size_t m_localPlayerNb;
   };
 }
 

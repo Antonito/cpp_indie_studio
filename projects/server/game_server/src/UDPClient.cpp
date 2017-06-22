@@ -34,11 +34,7 @@ UDPClient &UDPClient::operator=(UDPClient const &other)
 
 bool UDPClient::operator==(sockaddr_in_t const &addr) const
 {
-#if defined _WIN32
-  if (addr.sin_addr.S_addr != m_addr.sin_addr.S_addr)
-#else
   if (addr.sin_addr.s_addr != m_addr.sin_addr.s_addr)
-#endif
     {
       return (false);
     }
