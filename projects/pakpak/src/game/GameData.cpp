@@ -188,13 +188,13 @@ namespace game
     return (m_players);
   }
 
-    void GameData::setLocalPlayerNb(std::size_t nb)
-    {
-      m_localPlayerNb = nb;
-    }
+  void GameData::setLocalPlayerNb(std::size_t nb)
+  {
+    m_localPlayerNb = nb;
+  }
 
-    std::size_t GameData::getLocalPlayerNb() const
-    {
-      return m_localPlayerNb;
-    }
+  std::size_t GameData::getLocalPlayerNb() const
+  {
+    return m_localPlayerNb;
+  }
 }
