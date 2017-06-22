@@ -54,8 +54,8 @@ namespace core
 	    reinterpret_cast<std::uint8_t const *>(finalBuff.c_str()),
 	    finalBuff.length());
 	md5Hash = crypt.getHash();
-	nope::log::Log(Debug) << "File: " << ent->d_name
-	                      << ", MD5: " << md5Hash;
+	nope::log::Log(Debug)
+	    << "File: " << ent->d_name << ", MD5: " << md5Hash;
 	fileReader.close();
 	md5[ent->d_name] = md5Hash;
       }
@@ -82,7 +82,7 @@ namespace core
   {
     DIR *             dir;
     struct dirent *   ent;
-    std::string const mapFoler = "./maps/";
+    std::string const mapFoler = "maps/";
     dir = opendir(mapFoler.c_str());
     if (!dir)
       {

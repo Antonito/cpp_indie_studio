@@ -19,6 +19,12 @@ namespace game
 
   void Ai::race()
   {
+    // Work only if there are checkpoints
+    if (m_nodes.size() == 0)
+      {
+	return;
+      }
+
     m_curNode = m_data->getCheckPoint() + 1;
     if (static_cast<std::uint32_t>(m_curNode) == m_nodes.size() - 1)
       {

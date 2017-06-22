@@ -35,7 +35,7 @@ namespace game
     m_game.resetPhysicWorld();
     m_game.setMap(gl_maps[m_settings.getSelectedMap()]);
 
-    std::size_t nbPlayer = 4;
+    std::size_t nbPlayer = (m_net.isConnected()) ? 1 : 4;
     m_game.setPlayerNb(0);
     m_game.setPlayerNb(nbPlayer);
 
@@ -43,6 +43,7 @@ namespace game
     m_game.setLocalPlayerNb(nbLocalPlayer);
     m_timer.start();
     m_iaTimer.start();
+
     for (std::size_t i = 0; i < nbPlayer; ++i)
       {
 	m_game[i].setCar(std::make_unique<EmptyCar>(
@@ -60,12 +61,17 @@ namespace game
 	    m_net.isConnected()));
       }
 
-    for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
+    if (!m_net.isConnected())
       {
-	nope::log::Log(Debug) << "Creating AI ...";
-	m_ia.emplace_back(std::make_unique<Ai>(
-	    m_game[i].car(), m_game.map().getCheckPoints(), &m_game[i]));
+	// Creating AI if local game
+	for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
+	  {
+	    nope::log::Log(Debug) << "Creating AI ...";
+	    m_ia.emplace_back(std::make_unique<Ai>(
+	        m_game[i].car(), m_game.map().getCheckPoints(), &m_game[i]));
+	  }
       }
+
     updateViewPort();
     m_input->setPhysicWorld(m_game.physicWorld());
 
@@ -371,8 +377,8 @@ namespace game
 	    // Add new player
 	    std::size_t const i = gameData.size();
 
-	    nope::log::Log(Debug) << "Adding player [" << i
-	                          << "] - Id: " << packet.pck.id;
+	    nope::log::Log(Debug)
+	        << "Adding player [" << i << "] - Id: " << packet.pck.id;
 	    gameData.push_back(PlayerData());
 	    gameData.back().setCar(std::make_unique<EmptyCar>(
 	        m_game, Ogre::Vector3(0, 10, -100.0f * static_cast<float>(i)),
