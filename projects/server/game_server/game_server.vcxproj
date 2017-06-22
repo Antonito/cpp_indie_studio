@@ -183,6 +183,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">game_server_stdafx.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\UDPClient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Config.hpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="include\game_server_stdafx.hpp" />
     <ClInclude Include="include\game_server_targetver.h" />
     <ClInclude Include="include\Token.hpp" />
+    <ClInclude Include="include\UDPClient.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\crypto\Hash.vcxproj">
