@@ -25,6 +25,7 @@ namespace game
 
   Map::~Map()
   {
+    nope::log::Log(Debug) << "DESTROYING MAAAAAAAAAAAAAAAAAAP";
     for (Ogre::Light *l : m_lights)
       {
 	m_gamedata.sceneMgr()->destroyLight(l->getName());
@@ -39,7 +40,9 @@ namespace game
     static std::int32_t id_ = 0;
     std::stringstream   ss;
     std::ifstream       fs(filename.c_str());
+    ss << id_;
     std::string         id = ss.str();
+    ss.str("");
 
 #if defined(INDIE_MAP_EDITOR)
     m_filename = filename;
