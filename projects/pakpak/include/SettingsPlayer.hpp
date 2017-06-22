@@ -102,6 +102,8 @@ namespace core
     GameSettings &getPlayer(std::size_t const playerIndex);
     std::uint32_t getPlayerCount() const;
     void setPlayerCount(std::uint32_t playerCount);
+    void setSelectedMap(std::uint32_t selectedMap);
+    std::uint32_t getSelectedMap() const;
 
     std::vector<SaveData> &getSaveData();
 
@@ -112,6 +114,7 @@ namespace core
     std::vector<bool> m_used;
     std::vector<bool> m_loaded;
     std::uint32_t     m_playerCount;
+    std::uint32_t     m_selectedMap;
   };
 }
 

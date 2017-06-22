@@ -81,7 +81,7 @@ namespace game
 		         std::to_string(elapsedTime % 1000) + "ms";
 	      }
 	    m_players[i]->settings().getSaveData()[i].getData().s_bestTime =
-	        outime;
+	        elapsedTime;
 	    time->setText(outime);
 
 	    // Set + Add player rank

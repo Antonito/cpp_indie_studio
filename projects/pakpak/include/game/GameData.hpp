@@ -45,7 +45,7 @@ namespace game
     GameData &operator=(GameData const &) = delete;
     GameData &operator=(GameData &&) = delete;
 
-    PlayerData &operator[](std::size_t);
+    PlayerData &      operator[](std::size_t);
     PlayerData const &operator[](std::size_t) const;
 
     void        setPlayerNb(std::size_t);
@@ -57,28 +57,34 @@ namespace game
 
     std::vector<PlayerData> &getPlayers();
 
-    Ogre::Camera *createCamera(std::string const &name);
-    Ogre::Entity *createEntity(std::string const &name);
+    Ogre::Camera *   createCamera(std::string const &name);
+    Ogre::Entity *   createEntity(std::string const &name);
     Ogre::SceneNode *createSceneNode();
 
     Ogre::SceneManager *               sceneMgr();
     OgreBulletDynamics::DynamicsWorld *physicWorld();
 
-    void addFinalPlayer(std::uint16_t id);
+    void          addFinalPlayer(std::uint16_t id);
     std::uint32_t getFinalPlayerPosition(std::uint16_t id);
+
+    void setMap(std::string const &mapName);
+    void clearPhysicalWorld();
 
 #ifdef DEBUG
     OgreBulletCollisions::DebugDrawer *debugDrawer();
 #endif // !DEBUG
 
     OgreBulletDynamics::RigidBody *
-        addPhysicEntity(std::unique_ptr<OgreBulletCollisions::CollisionShape>,
-                        std::string const &);
+               addPhysicEntity(std::unique_ptr<OgreBulletCollisions::CollisionShape>,
+                               std::string const &);
     Map &      map();
     Map const &map() const;
 
     std::int32_t getLaps() const;
     void         setLaps(std::int32_t);
+
+    void resetPhysicWorld();
+    void clearPhysicWorld();
 
   private:
     Ogre::SceneManager *                               m_sceneMgr;
@@ -90,7 +96,7 @@ namespace game
     std::vector<std::unique_ptr<OgreBulletDynamics::RigidBody>> m_bodies;
     std::vector<std::unique_ptr<OgreBulletCollisions::CollisionShape>>
                                                                 m_shapes;
-    Map                                                         m_map;
+    std::unique_ptr<Map>                                        m_map;
     std::chrono::time_point<std::chrono::high_resolution_clock> m_startTime;
     std::int32_t                                                m_laps;
     std::vector<std::uint32_t>                                  m_finalRanking;

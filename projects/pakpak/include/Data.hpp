@@ -10,14 +10,14 @@
 
 struct Data
 {
-  std::string  s_bestTime;
+  long         s_bestTime;
   std::int32_t s_maxSpeed;
   std::int32_t s_trackFinished;
   std::int32_t s_totalKm;
   std::int32_t s_collisionCount;
 
   Data()
-      : s_bestTime(""), s_maxSpeed(0), s_trackFinished(0), s_totalKm(0),
+      : s_bestTime(0), s_maxSpeed(0), s_trackFinished(0), s_totalKm(0),
         s_collisionCount(0)
   {
     reset();
@@ -50,7 +50,7 @@ struct Data
 
   void reset()
   {
-    s_bestTime = "0s";
+    s_bestTime = 0;
     s_maxSpeed = 0;
     s_trackFinished = 0;
     s_totalKm = 0;

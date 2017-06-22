@@ -21,7 +21,7 @@ namespace game
   void Ai::race()
   {
     m_curNode = m_data->getCheckPoint() + 1;
-    if (m_curNode == m_nodes.size() - 1)
+    if (static_cast<std::uint32_t>(m_curNode) == m_nodes.size() - 1)
     {
         m_curNode = 0;
     }

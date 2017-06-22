@@ -91,7 +91,7 @@ namespace core
         ->disable();
     CEGUI::WindowManager *winManager = CEGUI::WindowManager::getSingletonPtr();
 
-    for (std::int32_t i = 0; i < m_settings.getSaveData().size(); ++i)
+    for (std::size_t i = 0; i < m_settings.getSaveData().size() - 1; ++i)
       {
 	CEGUI::ItemEntry *itm = static_cast<CEGUI::ItemEntry *>(
 	    winManager->createWindow("TaharezLook/ListboxItem"));
@@ -104,8 +104,21 @@ namespace core
 	CEGUI::ItemEntry *itm5 = static_cast<CEGUI::ItemEntry *>(
 	    winManager->createWindow("TaharezLook/ListboxItem"));
 
-	itm->setText("Player " + std::to_string(i + 1) + " : " +
-	             m_settings.getSaveData()[i].getData().s_bestTime);
+          long elapsedTime = m_settings.getSaveData()[i].getData().s_bestTime;
+          std::string outime;
+          if (elapsedTime / 60000)
+          {
+              outime = std::to_string(elapsedTime / 60000) + "m " +
+                       std::to_string((elapsedTime - (elapsedTime / 60000)) %
+                                      60) +
+                       "s " + std::to_string(elapsedTime % 1000) + "ms";
+          }
+          else
+          {
+              outime = std::to_string(elapsedTime / 1000) + " s " +
+                       std::to_string(elapsedTime % 1000) + "ms";
+          }
+	itm->setText("Player " + std::to_string(i + 1) + " : " + outime);
 	itm2->setText(
 	    "Player " + std::to_string(i + 1) + " : " +
 	    std::to_string(

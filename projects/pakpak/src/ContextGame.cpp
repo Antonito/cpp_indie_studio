@@ -17,6 +17,9 @@ namespace game
   {
   }
 
+  static const std::vector<std::string> gl_maps = {"test", "test2", "test2",
+                                                   "test"};
+
   void ContextGame::enable()
   {
     nope::log::Log(Debug) << "Game context enabled";
@@ -26,8 +29,14 @@ namespace game
     m_input->setKeyboardEventCallback(this);
     m_quit = false;
 
-    std::size_t nbPlayer = 2; // m_settings.getPlayerCount();
+    nope::log::Log(Debug) << "Creating HUD";
+    m_hud = std::make_unique<core::HUD>();
 
+    m_game.resetPhysicWorld();
+    m_game.setMap(gl_maps[m_settings.getSelectedMap()]);
+
+    std::size_t nbPlayer = m_settings.getPlayerCount();
+    m_game.setPlayerNb(0);
     m_game.setPlayerNb(nbPlayer);
 
     std::uint32_t nbLocalPlayer = m_settings.getPlayerCount();
@@ -42,9 +51,6 @@ namespace game
       }
     m_game[0].setId((m_net.isConnected()) ? m_net.getId() : 0);
 
-    nope::log::Log(Debug) << "Creating HUD";
-    m_hud = std::make_unique<core::HUD>();
-
     for (std::size_t i = 0; i < nbLocalPlayer; ++i)
       {
 	m_players.emplace_back(std::make_unique<LocalPlayer>(
@@ -54,11 +60,12 @@ namespace game
 	    m_net.isConnected()));
       }
 
-    for (std::size_t i = nbLocalPlayer; i < nbPlayer; ++i)
-      {
-	m_ia.emplace_back(std::make_unique<Ai>(
-	    m_game[i].car(), m_game.map().getNodes(), &m_game[i]));
-      }
+	/*m_ia.emplace_back(
+	std::make_unique<Ai>(m_game[i].car(),
+	m_game.map().getNodes()));*/
+    updateViewPort();
+    m_input->setPhysicWorld(m_game.physicWorld());
+
     m_sound.playSound(core::ESound::GAME_SONG);
     m_sound.loopSound(core::ESound::GAME_SONG);
     m_sound.playSound(core::ESound::IDLE_KART_SOUND);
@@ -67,9 +74,6 @@ namespace game
                             2.0f * m_sound.getVolume());
     m_sound.setVolumeSource(core::ESound::GAME_SONG,
                             0.2f * m_sound.getVolume());
-    updateViewPort();
-
-    m_input->setPhysicWorld(m_game.physicWorld());
   }
 
   void ContextGame::updateViewPort()
@@ -97,11 +101,14 @@ namespace game
   void ContextGame::disable()
   {
     nope::log::Log(Debug) << "Game context disabled";
+    m_game.setPlayerNb(0);
     m_players.clear();
     m_ia.clear();
     m_gameStart = false;
     m_sound.stopSound(core::ESound::GAME_SONG);
     m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
+    m_sound.stopSound(core::ESound::ACC_KART_SOUND);
+    m_game.clearPhysicWorld();
     m_input->setPhysicWorld(nullptr);
     nope::log::Log(Debug) << "Disabling game.";
     if (m_net.isConnected())
@@ -154,9 +161,12 @@ namespace game
 
 	    if (it->hasTimedOut())
 	      {
+		//bool last = (it == gameData.end() - 1);
+
 		nope::log::Log(Debug) << "Client time'd out, removing it";
 		gameData.erase(it);
 		deleted = true;
+		it = gameData.end();
 	      }
 	    if (!deleted)
 	      {
@@ -196,9 +206,12 @@ namespace game
     m_quit = m_hud->getQuit();
     if (m_quit)
       {
-	for (int32_t i = 0; i < m_settings.getSaveData().size(); ++i)
-	  m_settings.getSaveData()[i].saveInFile(
-	      "settings/player" + std::to_string(i) + "_scores");
+	for (std::size_t i = 0; i < m_settings.getSaveData().size(); ++i)
+        {
+            m_settings.getSaveData()[i].generate();
+            m_settings.getSaveData()[i].saveInFile(
+                    "settings/player" + std::to_string(i) + "_scores");
+        }
       }
     return (m_quit ? core::GameState::Menu : core::GameState::InGame);
   }
@@ -371,10 +384,7 @@ namespace game
 	game::EmptyCar &car = static_cast<game::EmptyCar &>(player->car());
 	nope::log::Log(Debug) << "====> PlayerID: " << packet.pck.id;
 
-	if (player != gameData.begin())
-	  {
-	    car.setPacketData(packet);
-	  }
+	car.setPacketData(packet, player == gameData.begin());
 	nope::log::Log(Debug) << "Speed:\n\t\t\t speed :" << car.speed();
       }
     nope::log::Log(Debug) << "*****************************";
