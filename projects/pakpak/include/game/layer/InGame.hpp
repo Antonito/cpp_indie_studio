@@ -116,7 +116,10 @@ namespace game
 
     virtual void display()
     {
-      setStart();
+      if (!m_player.isConnected())
+	{
+	  setStart();
+	}
       setSpeed();
       setPosition();
       setFinish();
