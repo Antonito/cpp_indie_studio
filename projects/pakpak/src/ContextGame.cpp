@@ -117,6 +117,7 @@ namespace game
     m_sound.stopSound(core::ESound::GAME_SONG);
     m_sound.stopSound(core::ESound::IDLE_KART_SOUND);
     m_sound.stopSound(core::ESound::ACC_KART_SOUND);
+    m_sound.stopSound(core::ESound::SHOOTING_STAR);
     m_game.clearPhysicWorld();
     m_input->setPhysicWorld(nullptr);
     nope::log::Log(Debug) << "Disabling game.";
