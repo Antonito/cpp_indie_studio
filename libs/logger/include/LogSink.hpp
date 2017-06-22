@@ -21,7 +21,7 @@ namespace nope
 
       LogSink &operator=(LogSink const &) = default;
       LogSink &operator=(LogSink &&) = default;
-      void     operator()(LogMessage const &msg, LogLevel) const;
+      void operator()(LogMessage const &msg, LogLevel) const;
 
       static LogSink makeOstream(std::ostream &os);
       static LogSink makeFile(std::string const &filename);
@@ -29,7 +29,6 @@ namespace nope
     private:
       explicit LogSink(
           std::function<void(LogMessage const &, LogLevel)> const &func);
-      // operator LogSink(std::function<void(LogMessage const &)>);
 
       std::function<void(LogMessage const &, LogLevel)> m_func;
     };
