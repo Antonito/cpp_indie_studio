@@ -46,6 +46,7 @@ namespace core
         SETTING_LAUNCH_SOUND,
         GO_RACE_SOUND,
         BACK_RACE_SOUND,
+        SHOOTING_STAR,
         NUMBER_SOUND
     };
   class SoundManager

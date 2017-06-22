@@ -294,5 +294,6 @@ namespace core
     loadSound("deps/indie_resource/songs/setting.wav");
     loadSound("deps/indie_resource/songs/go.wav");
     loadSound("deps/indie_resource/songs/back.wav");
+    loadSound("deps/indie_resource/songs/shooting_stars_cutting.wav");
   }
 }
