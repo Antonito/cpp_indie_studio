@@ -34,7 +34,11 @@ int main(int, char **)
   int ret = EXIT_SUCCESS;
 
   nope::log::Logger::start("pakpak_racing.log");
+#if defined DEBUG
   nope::log::Logger::logLevel = nope::log::LogLevel::LOG_DEBUG;
+#else
+  nope::log::Logger::logLevel = nope::log::LogLevel::LOG_INFO;
+#endif
   core::AppLauncher app;
 
   try
