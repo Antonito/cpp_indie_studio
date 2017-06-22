@@ -45,4 +45,11 @@ namespace game
   {
     return m_started;
   }
+
+  void Timer::reset(int duree)
+  {
+    std::chrono::milliseconds newDurre(duree);
+    m_duree = std::move(newDurre);
+    start();
+  }
 }

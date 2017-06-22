@@ -15,7 +15,7 @@ namespace game
   class Ai
   {
   public:
-    explicit Ai(ACar &, std::vector<Ogre::Vector3> const &, PlayerData *);
+    explicit Ai(ACar &, std::vector<CheckPoint> const &, PlayerData *);
     Ai(Ai const &) = delete;
     Ai(Ai &&) = delete;
     Ai &operator=(Ai &) = delete;
@@ -25,13 +25,13 @@ namespace game
     void        distNode();
 
   private:
-    std::int32_t                      m_curNode;
-    std::vector<Ogre::Vector3> const &m_nodes;
-    game::ACar &                      m_car;
-    float                             m_dir;
-    float                             m_curAng;
-    PlayerData *                      m_data;
-    game::Timer                       m_timeout;
+    std::int32_t                   m_curNode;
+    std::vector<CheckPoint> const &m_nodes;
+    game::ACar &                   m_car;
+    float                          m_dir;
+    float                          m_curAng;
+    PlayerData *                   m_data;
+    game::Timer                    m_timeout;
   };
 }
 #endif // CPP_INDIE_STUDIO_IA_HPP

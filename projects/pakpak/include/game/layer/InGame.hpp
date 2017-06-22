@@ -244,7 +244,6 @@ namespace game
 	          (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
 	      if (speed < 1000)
 		{
-
 		  std::uint32_t unit = speed % 10;
 		  std::uint32_t decade = (speed / 10) % 10;
 		  std::uint32_t thousand = (speed / 100) % 10;
