@@ -393,7 +393,7 @@ namespace game
 
     Ogre::Vector3 dir = checkpoint.direction();
 
-    Ogre::Quaternion q = -1 * dir.getRotationTo(Ogre::Vector3::UNIT_Y);
+    Ogre::Quaternion q = -1 * dir.getRotationTo(-Ogre::Vector3::UNIT_Z);
 
     tr.setIdentity();
     btQuaternion quat;

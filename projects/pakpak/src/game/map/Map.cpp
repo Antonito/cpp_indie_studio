@@ -428,4 +428,9 @@ namespace game
   {
     return (static_cast<int32_t>(m_checkpoints.size()));
   }
+
+  std::vector<CheckPoint> const &Map::getCheckPoints() const
+  {
+    return m_checkpoints;
+  }
 }

@@ -25,7 +25,7 @@ namespace game
     Map &operator=(Map const &) = delete;
     Map &operator=(Map &&) = delete;
 
-    void                              loadFromFile(std::string filename);
+    void loadFromFile(std::string filename);
     void                              unload();
     std::vector<Ogre::Vector3> const &getNodes() const;
     OgreBulletDynamics::RigidBody *   rigidBody();
@@ -38,8 +38,9 @@ namespace game
     void removeSelectedPoint();
 #endif // !INDIE_MAP_EDITOR
 
-    std::vector<std::int32_t> getPlayerOrder();
-    std::int32_t              getNbCheckPoint() const;
+    std::vector<std::int32_t>      getPlayerOrder();
+    std::int32_t                   getNbCheckPoint() const;
+    std::vector<CheckPoint> const &getCheckPoints() const;
 
   private:
     struct MapData

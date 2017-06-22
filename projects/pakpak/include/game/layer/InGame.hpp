@@ -235,7 +235,8 @@ namespace game
 	  for (std::uint8_t playerIndex = 0;
 	       playerIndex < PCOUNT && playerIndex < 4; ++playerIndex)
 	    {
-	      double        rawSpeed = m_players[playerIndex]->car().speed();
+	      double rawSpeed = m_players[playerIndex]->car().speed();
+
 	      std::uint32_t speed = static_cast<std::uint32_t>(
 	          (rawSpeed > 0 ? rawSpeed : -rawSpeed) / 50);
 	      if (speed < 1000)
