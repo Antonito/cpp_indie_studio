@@ -133,6 +133,7 @@ namespace game
     core::SoundManager &m_sound;
     bool                m_connected;
     bool                m_saved;
+    GameData &          m_gameData;
   };
 }
 
